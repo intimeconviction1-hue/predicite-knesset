@@ -18,20 +18,23 @@ docs/     Notes de conception + historique du pivot depuis Base44
 
 ## Installation
 
-Deux terminaux, comme pour PILOTE.
+Deux terminaux, comme pour PILOTE. **Sous PowerShell 5.1 (Windows), `&&` ne
+fonctionne pas comme séparateur** — une commande à la fois, comme ci-dessous.
 
 **Terminal 1 — serveur :**
 ```
 cd server
 npm install
-cp .env.example .env
-# éditer .env : SESSION_SECRET, éventuellement ANTHROPIC_API_KEY pour le
-# collecteur de sondages
+copy .env.example .env
+```
+Éditer `.env` : `SESSION_SECRET`, éventuellement `ANTHROPIC_API_KEY` pour le
+collecteur de sondages. Puis :
+```
 npm run dev
 ```
 Le serveur écoute sur `http://localhost:8788` (port modifiable via `.env`).
 
-**Terminal 2 — client :**
+**Terminal 2 — client (nouveau terminal séparé, le serveur doit rester lancé) :**
 ```
 cd client
 npm install
@@ -58,9 +61,16 @@ la note en tête du fichier JSON.
 ## Build production
 
 ```
-cd client && npm run build
-cd ../server && NODE_ENV=production npm start
+cd client
+npm run build
 ```
+Puis, dans un autre terminal :
+```
+cd server
+$env:NODE_ENV="production"
+npm start
+```
+(Sous macOS/Linux : `cd server && NODE_ENV=production npm start` fonctionne normalement.)
 En production, Express sert directement `client/dist/` — plus besoin du
 serveur Vite séparé.
 

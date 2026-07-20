@@ -9,7 +9,6 @@ import {
   User, LogOut, BarChart2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import SurveyBanner from '@/components/surveys/SurveyBanner';
 import { useQuery } from '@tanstack/react-query';
 
 export default function Layout({ children, currentPageName }) {
@@ -60,12 +59,9 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Learn', label: 'Comprendre', icon: BookOpen },
   ];
 
-  // Menu "Plus"
+  // Menu "Plus" — réduit aux pages réellement routées pour l'instant
   const moreNavItems = [
-    { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
-    { name: 'Predictions', label: 'Mes pronostics', icon: Vote },
-    { name: 'PollMap', label: 'Carte', icon: BarChart2 },
-    { name: 'Leagues', label: 'Cercles', icon: Users },
+    { name: 'Methodologie', label: 'Sources', icon: BarChart2 },
   ];
 
   const isActive = (name) => currentPageName === name;
@@ -221,11 +217,6 @@ export default function Layout({ children, currentPageName }) {
                           className="absolute top-full right-0 mt-1 w-44 rounded-xl border border-white/10 py-1 z-50"
                           style={{ background: 'rgba(7,18,42,0.97)', backdropFilter: 'blur(12px)' }}
                         >
-                          <Link to={createPageUrl('Profile')} className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-white/70 hover:text-white hover:bg-white/6">
-                            <User className="w-4 h-4 text-white/30" />
-                            Mon profil
-                          </Link>
-                          <div className="h-px bg-white/10 mx-2 my-1" />
                           <button
                             onClick={() => base44.auth.logout()}
                             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 w-full text-left"
@@ -251,7 +242,6 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
         </div>
-        <SurveyBanner />
       </header>
 
       {/* ── Mobile Header ── */}
@@ -267,11 +257,9 @@ export default function Layout({ children, currentPageName }) {
             </Link>
             <div className="flex items-center gap-2">
               {user && (
-                <Link to={createPageUrl('Profile')}>
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#1E3A8A' }}>
-                    {user.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
-                  </div>
-                </Link>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#1E3A8A' }}>
+                  {user.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
+                </div>
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -292,7 +280,7 @@ export default function Layout({ children, currentPageName }) {
                 className="border-t border-white/8 overflow-hidden"
               >
                 <div className="p-3 space-y-0.5">
-                  {[...mainNavItems, { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen }, { name: 'Voter', label: 'Comment voter ?', icon: Vote }, ...moreNavItems].map((item) => {
+                  {[...mainNavItems, { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen }, ...moreNavItems].map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link
@@ -322,7 +310,6 @@ export default function Layout({ children, currentPageName }) {
             )}
           </AnimatePresence>
         </div>
-        <SurveyBanner />
       </nav>
 
       {/* Page content */}
@@ -351,7 +338,6 @@ export default function Layout({ children, currentPageName }) {
               <ul className="space-y-2 text-sm text-white/50">
                 <li><Link to={createPageUrl('Listes')} className="hover:text-white transition-colors">Listes</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-white transition-colors">Premier ministre</Link></li>
-                <li><Link to={createPageUrl('Quiz')} className="hover:text-white transition-colors">Quiz</Link></li>
                 <li><Link to={createPageUrl('Leaderboard')} className="hover:text-white transition-colors">Classement</Link></li>
               </ul>
             </div>
@@ -362,7 +348,6 @@ export default function Layout({ children, currentPageName }) {
                 <li><Link to={createPageUrl('Learn')} className="hover:text-white transition-colors">Les législatives israéliennes</Link></li>
                 <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-white transition-colors">Comment on vote à la Knesset</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-white transition-colors">Formation du gouvernement</Link></li>
-                <li><Link to={createPageUrl('Voter')} className="hover:text-white transition-colors">Comment voter ?</Link></li>
               </ul>
             </div>
 
@@ -370,8 +355,6 @@ export default function Layout({ children, currentPageName }) {
               <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Transparence</h4>
               <ul className="space-y-2 text-sm text-white/50">
                 <li><Link to={createPageUrl('Methodologie')} className="hover:text-white transition-colors">Sources & Méthodologie</Link></li>
-                <li><Link to={createPageUrl('Surveys')} className="hover:text-white transition-colors">Tous les sondages</Link></li>
-                <li><Link to={createPageUrl('Predictions')} className="hover:text-white transition-colors">Pronostics</Link></li>
                 <li><Link to={createPageUrl('Leaderboard')} className="hover:text-white transition-colors">Classement</Link></li>
               </ul>
             </div>

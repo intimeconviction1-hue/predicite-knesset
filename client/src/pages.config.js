@@ -47,48 +47,32 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import AdminSync from './pages/AdminSync';
 import Listes from './pages/Listes';
 import Liste from './pages/Liste';
 import PremierMinistre from './pages/PremierMinistre';
-import ElectionNight from './pages/ElectionNight';
-import FinalRecap from './pages/FinalRecap';
 import Home from './pages/Home';
 import Leaderboard from './pages/Leaderboard';
-import Leagues from './pages/Leagues';
 import Learn from './pages/Learn';
 import Methodologie from './pages/Methodologie';
-import PollMap from './pages/PollMap';
-import Predictions from './pages/Predictions';
-import Profile from './pages/Profile';
-import Quiz from './pages/Quiz';
-import Surveys from './pages/Surveys';
-import Voter from './pages/Voter';
 import ReglesDuJeu from './pages/ReglesDuJeu';
 import __Layout from './Layout.jsx';
 
-// NB : Cities/City/ScrutinMunicipal/ScrutinPLM (édition municipales 2026)
-// sont conservées sur disque mais retirées du routage — cf. fichiers .bak.jsx.txt
-// et README-KNESSET.md pour le détail du pivot.
+// NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
+// Profile, Quiz, Surveys, Voter, Cities, City, ScrutinMunicipal, ScrutinPLM
+// (édition municipales 2026) ont été supprimées — elles appelaient des
+// entités qui n'existent plus dans le nouveau schéma (City, RealPoll,
+// Prediction, ElectionResult, PollSource, League, Quiz, LearningMoment...).
+// Toujours récupérables dans l'historique git si besoin de les réadapter —
+// voir docs/HISTORIQUE-PIVOT-BASE44.md.
 
 export const PAGES = {
-    "AdminSync": AdminSync,
     "Listes": Listes,
     "Liste": Liste,
     "PremierMinistre": PremierMinistre,
-    "ElectionNight": ElectionNight,
-    "FinalRecap": FinalRecap,
     "Home": Home,
     "Leaderboard": Leaderboard,
-    "Leagues": Leagues,
     "Learn": Learn,
     "Methodologie": Methodologie,
-    "PollMap": PollMap,
-    "Predictions": Predictions,
-    "Profile": Profile,
-    "Quiz": Quiz,
-    "Surveys": Surveys,
-    "Voter": Voter,
     "ReglesDuJeu": ReglesDuJeu,
 }
 

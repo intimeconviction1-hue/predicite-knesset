@@ -1,0 +1,14 @@
+{
+  "name": "PronosticPM",
+  "type": "object",
+  "properties": {
+    "user_email": { "type": "string" },
+    "candidat_pm_id": { "type": "string", "description": "ou la valeur littérale \"autre\"" },
+    "submitted_at": { "type": "string", "format": "date-time" },
+    "locked_at": { "type": "string", "format": "date-time" },
+    "resolved_at": { "type": "string", "format": "date-time", "description": "null tant que personne n'est investi" },
+    "resolved_value": { "type": "string" },
+    "points_earned": { "type": "number", "default": 0 }
+  },
+  "required": ["user_email", "candidat_pm_id"]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Liste",
+  "type": "object",
+  "properties": {
+    "name_fr": { "type": "string", "description": "Nom d'usage en français, ex. Likoud" },
+    "name_he": { "type": "string", "description": "Nom hébreu" },
+    "slug": { "type": "string", "description": "identifiant URL, ex. likoud" },
+    "ballot_letters": { "type": "string", "description": "Lettres du bulletin de vote, ex. מחל — optionnel tant que non attribuées" },
+    "leader_name": { "type": "string", "description": "Tête de liste actuelle" },
+    "bloc": {
+      "type": "string",
+      "enum": ["coalition", "opposition", "liste_arabe", "non_alignee"],
+      "description": "Classification descriptive vis-à-vis de la coalition sortante, jamais un jugement de valeur"
+    },
+    "color": { "type": "string", "description": "Couleur hex pour les graphiques, ex. #0038B8" },
+    "founded_or_merged_note": { "type": "string", "description": "Traçabilité des fusions/scissions, ex. Fusion Bennett-Lapid, juillet 2026" },
+    "is_active": { "type": "boolean", "default": true, "description": "false si dissoute/fusionnée avant le dépôt officiel des listes" },
+    "predecessor_ids": { "type": "array", "items": { "type": "string" }, "description": "Listes dont celle-ci est issue (fusion)" },
+    "current_knesset_seats": { "type": "number", "description": "Sièges sortants (25e Knesset), à vérifier depuis une source officielle avant saisie" },
+    "logo_url": { "type": "string" }
+  },
+  "required": ["name_fr", "slug", "bloc"]
+}

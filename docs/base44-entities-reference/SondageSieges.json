@@ -1,0 +1,25 @@
+{
+  "name": "SondageSieges",
+  "type": "object",
+  "properties": {
+    "institute": { "type": "string", "description": "ex. i24NEWS, Midgam, Direct Polls, Kantar" },
+    "publisher_media": { "type": "string", "description": "ex. Kan 11, Maariv, Channel 14 — souvent différent de l'institut" },
+    "poll_date": { "type": "string", "format": "date", "description": "date de terrain, pas date de publication" },
+    "sample_size": { "type": "number" },
+    "margin_error_pct": { "type": "number" },
+    "source_url": { "type": "string", "description": "obligatoire, source réelle" },
+    "source_language": { "type": "string", "enum": ["fr", "he"] },
+    "seats_by_liste": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "liste_id": { "type": "string" },
+          "seats": { "type": "number" }
+        }
+      }
+    },
+    "checksum": { "type": "string", "description": "anti-doublon" }
+  },
+  "required": ["institute", "poll_date", "source_url", "seats_by_liste"]
+}

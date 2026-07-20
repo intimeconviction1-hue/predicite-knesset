@@ -1,0 +1,12 @@
+{
+  "name": "CandidatPM",
+  "type": "object",
+  "properties": {
+    "name_fr": { "type": "string" },
+    "name_he": { "type": "string" },
+    "liste_id": { "type": "string", "description": "nullable, un outsider peut ne pas encore avoir de liste" },
+    "photo_url": { "type": "string" },
+    "is_active": { "type": "boolean", "default": true }
+  },
+  "required": ["name_fr"]
+}

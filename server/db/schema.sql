@@ -1,0 +1,124 @@
+-- Schéma PrédiCité — édition Knesset 2026
+-- Une table par entité. Les champs "tableau" (ex. seats_by_liste) sont stockés
+-- en JSON texte et (dé)sérialisés côté serveur (voir db/index.js).
+
+CREATE TABLE IF NOT EXISTS users (
+  id TEXT PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  full_name TEXT,
+  role TEXT NOT NULL DEFAULT 'user', -- 'user' | 'admin'
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS listes (
+  id TEXT PRIMARY KEY,
+  name_fr TEXT NOT NULL,
+  name_he TEXT,
+  slug TEXT UNIQUE NOT NULL,
+  ballot_letters TEXT,
+  leader_name TEXT,
+  bloc TEXT NOT NULL CHECK (bloc IN ('coalition','opposition','liste_arabe','non_alignee')),
+  color TEXT,
+  founded_or_merged_note TEXT,
+  is_active INTEGER NOT NULL DEFAULT 1,
+  predecessor_ids TEXT, -- JSON array de liste_id
+  current_knesset_seats INTEGER,
+  logo_url TEXT,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS sondages_sieges (
+  id TEXT PRIMARY KEY,
+  institute TEXT NOT NULL,
+  publisher_media TEXT,
+  poll_date TEXT NOT NULL,
+  sample_size INTEGER,
+  margin_error_pct REAL,
+  source_url TEXT NOT NULL,
+  source_language TEXT CHECK (source_language IN ('fr','he')) DEFAULT 'fr',
+  seats_by_liste TEXT NOT NULL, -- JSON array [{liste_id, seats}]
+  checksum TEXT UNIQUE,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS resultats_sieges (
+  id TEXT PRIMARY KEY,
+  election_date TEXT NOT NULL DEFAULT '2026-10-27',
+  seats_by_liste TEXT NOT NULL, -- JSON array [{liste_id, seats, vote_pct}]
+  turnout_pct REAL,
+  threshold_pct REAL NOT NULL DEFAULT 3.25,
+  source_url TEXT,
+  is_final INTEGER NOT NULL DEFAULT 0,
+  collected_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS pronostics_sieges (
+  id TEXT PRIMARY KEY,
+  user_email TEXT NOT NULL,
+  liste_id TEXT NOT NULL REFERENCES listes(id),
+  predicted_seats INTEGER NOT NULL,
+  predicted_above_threshold INTEGER NOT NULL DEFAULT 0,
+  justification TEXT,
+  points_earned INTEGER NOT NULL DEFAULT 0,
+  is_correct INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_email, liste_id)
+);
+
+CREATE TABLE IF NOT EXISTS candidats_pm (
+  id TEXT PRIMARY KEY,
+  name_fr TEXT NOT NULL,
+  name_he TEXT,
+  liste_id TEXT REFERENCES listes(id),
+  photo_url TEXT,
+  is_active INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS pronostics_pm (
+  id TEXT PRIMARY KEY,
+  user_email TEXT NOT NULL UNIQUE,
+  candidat_pm_id TEXT NOT NULL, -- id de candidats_pm, ou littéralement "autre"
+  submitted_at TEXT NOT NULL DEFAULT (datetime('now')),
+  locked_at TEXT,
+  resolved_at TEXT,
+  resolved_value TEXT,
+  points_earned INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS campaign_settings (
+  key TEXT PRIMARY KEY,
+  predictions_deadline_utc TEXT,
+  pm_resolution_deadline_utc TEXT
+);
+
+CREATE TABLE IF NOT EXISTS user_progress (
+  id TEXT PRIMARY KEY,
+  user_email TEXT UNIQUE NOT NULL,
+  total_points INTEGER NOT NULL DEFAULT 0,
+  seats_points INTEGER NOT NULL DEFAULT 0,
+  pm_points INTEGER NOT NULL DEFAULT 0,
+  learning_points INTEGER NOT NULL DEFAULT 0,
+  regularity_points INTEGER NOT NULL DEFAULT 0,
+  predictions_count INTEGER NOT NULL DEFAULT 0,
+  correct_predictions INTEGER NOT NULL DEFAULT 0,
+  current_streak INTEGER NOT NULL DEFAULT 0,
+  last_active_date TEXT
+);
+
+CREATE TABLE IF NOT EXISTS badges (
+  id TEXT PRIMARY KEY,
+  code TEXT UNIQUE NOT NULL, -- 'analyste_precis' | 'politologue' | 'faiseur_de_rois' | ...
+  label TEXT NOT NULL,
+  description TEXT,
+  icon TEXT
+);
+
+CREATE TABLE IF NOT EXISTS user_badges (
+  id TEXT PRIMARY KEY,
+  user_email TEXT NOT NULL,
+  badge_code TEXT NOT NULL REFERENCES badges(code),
+  earned_at TEXT NOT NULL DEFAULT (datetime('now')),
+  UNIQUE(user_email, badge_code)
+);

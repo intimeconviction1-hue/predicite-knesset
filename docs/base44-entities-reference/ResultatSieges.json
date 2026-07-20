@@ -1,0 +1,24 @@
+{
+  "name": "ResultatSieges",
+  "type": "object",
+  "properties": {
+    "election_date": { "type": "string", "format": "date", "default": "2026-10-27" },
+    "seats_by_liste": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "liste_id": { "type": "string" },
+          "seats": { "type": "number" },
+          "vote_pct": { "type": "number" }
+        }
+      }
+    },
+    "turnout_pct": { "type": "number" },
+    "threshold_pct": { "type": "number", "default": 3.25 },
+    "source_url": { "type": "string", "description": "bechirot.gov.il / data.gov.il" },
+    "is_final": { "type": "boolean", "default": false, "description": "vs résultats partiels le soir du scrutin" },
+    "collected_at": { "type": "string", "format": "date-time" }
+  },
+  "required": ["election_date", "seats_by_liste"]
+}

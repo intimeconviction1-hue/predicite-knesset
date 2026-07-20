@@ -1,0 +1,14 @@
+{
+  "name": "PronosticSieges",
+  "type": "object",
+  "properties": {
+    "user_email": { "type": "string" },
+    "liste_id": { "type": "string" },
+    "predicted_seats": { "type": "number", "minimum": 0, "maximum": 120 },
+    "predicted_above_threshold": { "type": "boolean" },
+    "justification": { "type": "string", "maxLength": 500 },
+    "points_earned": { "type": "number", "default": 0 },
+    "is_correct": { "type": "boolean", "default": false }
+  },
+  "required": ["user_email", "liste_id", "predicted_seats"]
+}

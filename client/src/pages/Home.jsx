@@ -1,0 +1,219 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/client';
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import { Vote, Crown, ChevronRight, Trophy } from 'lucide-react';
+
+function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
+  const belowThreshold = seats === 0;
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -12 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.04, duration: 0.3 }}
+      className="flex items-center gap-3 py-2"
+    >
+      <span className="text-xs w-32 shrink-0 truncate" style={{ color: 'rgba(245,240,232,0.6)' }}>{liste.name_fr}</span>
+      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(245,240,232,0.06)' }}>
+        <motion.div
+          className="h-full rounded-full"
+          style={{ backgroundColor: liste.color || '#6B7280', opacity: belowThreshold ? 0.25 : 0.9 }}
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.max(2, ((seats || 0) / maxSeats) * 100)}%` }}
+          transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
+        />
+      </div>
+      <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'rgba(245,240,232,0.25)' : (liste.color || '#D4AF37') }}>
+        {belowThreshold ? 'seuil' : `${seats} sièges`}
+      </span>
+    </motion.div>
+  );
+}
+
+export default function Home() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    base44.auth.me().then(async (u) => {
+      setUser(u);
+      if (u) {
+        const key = `progress_init_${u.email}`;
+        if (!sessionStorage.getItem(key)) {
+          try { await base44.functions.invoke('ensureUserProgress', {}); sessionStorage.setItem(key, '1'); } catch (_) {}
+        }
+      }
+    }).catch(() => {});
+  }, []);
+
+  const { data: listes = [] } = useQuery({
+    queryKey: ['home-listes'],
+    queryFn: () => base44.entities.Liste.filter({ is_active: true }),
+  });
+
+  const { data: sondages = [] } = useQuery({
+    queryKey: ['home-sondages-latest'],
+    queryFn: () => base44.entities.SondageSieges.list('-poll_date', 1),
+  });
+
+  const { data: progress } = useQuery({
+    queryKey: ['home-user-progress', user?.email],
+    queryFn: () => base44.entities.UserProgress.filter({ user_email: user.email }),
+    enabled: !!user?.email,
+    select: d => d[0],
+  });
+
+  const latestPoll = sondages?.[0] || null;
+  const seatsByListe = new Map((latestPoll?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
+  const rankedListes = [...listes]
+    .map(l => ({ ...l, _seats: seatsByListe.get(l.id) ?? 0 }))
+    .sort((a, b) => b._seats - a._seats)
+    .slice(0, 10);
+  const maxSeats = Math.max(20, ...rankedListes.map(l => l._seats));
+
+  const coalitionSeats = rankedListes.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
+  const oppositionSeats = rankedListes.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
+
+  return (
+    <div className="min-h-screen" style={{ background: '#050A18' }}>
+
+      {/* Hero */}
+      <div className="relative flex flex-col items-center justify-center text-center px-4 py-24 md:py-32"
+        style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)' }}>
+
+        <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full"
+          style={{ background: 'rgba(212,175,55,0.1)', border: '0.5px solid rgba(212,175,55,0.3)' }}>
+          <motion.div className="w-1.5 h-1.5 rounded-full"
+            style={{ background: '#D4AF37' }}
+            animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
+          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#D4AF37' }}>
+            Scrutin du 27 octobre 2026 · Knesset
+          </span>
+        </div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-5xl md:text-7xl font-black mb-4"
+          style={{ fontFamily: "'Syne', sans-serif", color: 'white', letterSpacing: '-0.02em', lineHeight: 1 }}>
+          PrédiCité
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="text-lg md:text-xl mb-10 max-w-md"
+          style={{ color: 'rgba(245,240,232,0.5)', fontWeight: 400 }}>
+          Pronostiquez les législatives israéliennes, en français
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.18 }}
+          className="flex flex-col sm:flex-row items-center gap-3">
+          <Link to={createPageUrl('Listes')}>
+            <button className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white"
+              style={{ background: '#1E3A8A' }}>
+              <Vote className="w-4 h-4" /> Voir les listes
+            </button>
+          </Link>
+          <Link to={createPageUrl('PremierMinistre')}>
+            <button className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm"
+              style={{ background: '#D4AF37', color: '#050A18' }}>
+              <Crown className="w-4 h-4" /> Pronostic Premier ministre
+            </button>
+          </Link>
+        </motion.div>
+
+        {user && progress && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 flex items-center gap-3 px-4 py-2.5 rounded-xl"
+            style={{ background: 'rgba(212,175,55,0.08)', border: '0.5px solid rgba(212,175,55,0.2)' }}>
+            <Trophy className="w-3.5 h-3.5" style={{ color: '#D4AF37' }} />
+            <span className="text-sm" style={{ color: 'rgba(245,240,232,0.6)' }}>
+              Bonjour {user.full_name?.split(' ')[0] || user.email?.split('@')[0]} ·
+            </span>
+            <span className="font-bold text-sm" style={{ fontFamily: 'monospace', color: '#D4AF37' }}>
+              {(progress.total_points || 0).toLocaleString('fr-FR')} pts
+            </span>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Bloc coalition / opposition */}
+      {(coalitionSeats > 0 || oppositionSeats > 0) && (
+        <div className="max-w-3xl mx-auto px-4 pb-10">
+          <div className="rounded-2xl p-5 flex items-center justify-between"
+            style={{ background: 'rgba(10,18,38,0.8)', border: '0.5px solid rgba(245,240,232,0.07)' }}>
+            <div className="text-center flex-1">
+              <p className="text-[10px] uppercase tracking-wide mb-1" style={{ color: 'rgba(59,130,246,0.7)' }}>Bloc coalition</p>
+              <p className="text-3xl font-black font-mono text-[#3B82F6]">{coalitionSeats}</p>
+            </div>
+            <div className="text-center px-4">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>sur 120 · majorité 61</p>
+            </div>
+            <div className="text-center flex-1">
+              <p className="text-[10px] uppercase tracking-wide mb-1" style={{ color: 'rgba(217,43,43,0.7)' }}>Bloc opposition</p>
+              <p className="text-3xl font-black font-mono text-[#D92B2B]">{oppositionSeats}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Classement des listes */}
+      <div className="max-w-3xl mx-auto px-4 pb-16">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-bold text-base text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
+            Dernière projection sièges
+          </h2>
+          <Link to={createPageUrl('Listes')}
+            className="text-xs flex items-center gap-1 hover:text-white transition-colors"
+            style={{ color: 'rgba(245,240,232,0.35)' }}>
+            Toutes les listes <ChevronRight className="w-3 h-3" />
+          </Link>
+        </div>
+
+        {rankedListes.length === 0 ? (
+          <div className="rounded-2xl p-8 text-center" style={{ background: 'rgba(10,18,38,0.6)' }}>
+            <p className="text-sm" style={{ color: 'rgba(245,240,232,0.3)' }}>Sondages à venir…</p>
+          </div>
+        ) : (
+          <div className="rounded-2xl p-5" style={{ background: 'rgba(10,18,38,0.8)', border: '0.5px solid rgba(245,240,232,0.07)' }}>
+            {rankedListes.map((l, i) => (
+              <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
+            ))}
+            {latestPoll && (
+              <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'rgba(245,240,232,0.25)', borderColor: 'rgba(245,240,232,0.05)' }}>
+                {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Liens secondaires */}
+        <div className="flex items-center justify-center gap-6 mt-12 pt-10"
+          style={{ borderTop: '0.5px solid rgba(245,240,232,0.06)' }}>
+          {[
+            { label: 'Classement', to: 'Leaderboard' },
+            { label: 'Comprendre', to: 'Learn' },
+            { label: 'Quiz', to: 'Quiz' },
+            { label: 'Règles du jeu', to: 'ReglesDuJeu' },
+          ].map(({ label, to }) => (
+            <Link key={to} to={createPageUrl(to)}
+              className="text-sm hover:text-white transition-colors"
+              style={{ color: 'rgba(245,240,232,0.3)' }}>
+              {label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

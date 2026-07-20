@@ -76,6 +76,13 @@ serveur Vite séparé.
 
 ## Points d'attention avant d'aller plus loin
 
+- **Base de données** : `node:sqlite`, le module intégré à Node (pas de compilation
+  native, donc pas besoin de Visual Studio Build Tools sous Windows). Toujours
+  marqué "expérimental" par Node lui-même (avertissement bénin au démarrage),
+  mais testé de bout en bout pour ce projet. Disponible sans flag depuis
+  Node ≈22.22 / 24.15 — si `npm run dev` échoue avec une erreur `node:sqlite`
+  introuvable, c'est que votre version de Node est plus ancienne : mettre à
+  jour Node réglera le problème plus proprement qu'un flag.
 - **Auth minimale** (email seul) — à durcir avant toute ouverture au-delà d'un
   usage personnel/petit cercle.
 - **`resultatsKnessetCollector` ne fait pas de vrai parsing** — le site

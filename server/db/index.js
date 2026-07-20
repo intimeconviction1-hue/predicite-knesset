@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -13,9 +13,15 @@ const DB_PATH = path.join(DATA_DIR, 'predicite-knesset.sqlite3');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
-export const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+// node:sqlite (module SQLite intégré à Node, sans compilation native) plutôt
+// que better-sqlite3 : ce dernier nécessite node-gyp + Visual Studio Build
+// Tools sous Windows pour compiler son binaire natif, ce qu'on veut éviter
+// ici. node:sqlite est disponible sans flag depuis Node 24.15 environ —
+// toujours marqué "expérimental" par Node lui-même, mais stable à l'usage
+// pour une appli de cette taille.
+export const db = new DatabaseSync(DB_PATH);
+db.exec('PRAGMA journal_mode = WAL;');
+db.exec('PRAGMA foreign_keys = ON;');
 
 const schemaPath = path.join(__dirname, 'schema.sql');
 db.exec(fs.readFileSync(schemaPath, 'utf8'));

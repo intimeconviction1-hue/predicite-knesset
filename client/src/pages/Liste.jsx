@@ -127,14 +127,14 @@ export default function ListePage() {
 
   if (isLoading || !liste) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#050A18' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--p-night)' }}>
         <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white/70 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#050A18' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-white transition-colors" style={{ color: 'rgba(245,240,232,0.4)' }}>
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
@@ -172,7 +172,7 @@ export default function ListePage() {
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.35)' }}>Dernière projection</p>
               {latest ? (
-                <p className="text-xl font-bold font-mono" style={{ color: liste.color || '#D4AF37' }}>{latest.seats} sièges</p>
+                <p className="text-xl font-bold font-mono" style={{ color: liste.color || 'var(--p-gold)' }}>{latest.seats} sièges</p>
               ) : (
                 <p className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.3)' }}>Pas encore de sondage</p>
               )}
@@ -191,10 +191,10 @@ export default function ListePage() {
             <div className="flex items-end gap-2 h-32 mb-3">
               {history.map((h, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group relative">
-                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || '#D4AF37' }}>{h.seats}</span>
+                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold)' }}>{h.seats}</span>
                   <div
                     className="w-full rounded-t-sm transition-all"
-                    style={{ height: `${(h.seats / maxSeats) * 100}%`, backgroundColor: liste.color || '#D4AF37', opacity: 0.7 }}
+                    style={{ height: `${(h.seats / maxSeats) * 100}%`, backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.7 }}
                   />
                 </div>
               ))}
@@ -229,7 +229,7 @@ export default function ListePage() {
           </div>
 
           <div className={`flex items-center gap-2 px-6 py-2.5 text-xs ${deadlineClosed ? '' : ''}`}
-            style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : '#D4AF37' }}>
+            style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : 'var(--p-gold)' }}>
             {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
             {deadlineClosed ? 'Pronostics clôturés' : <span>Clôture : <strong>{formatLocalDeadline(deadlineUtc)}</strong></span>}
           </div>
@@ -259,7 +259,7 @@ export default function ListePage() {
             ) : (
               <div className="space-y-5">
                 <div className="text-center">
-                  <span className="text-5xl font-black font-mono" style={{ color: liste.color || '#D4AF37' }}>{seats[0]}</span>
+                  <span className="text-5xl font-black font-mono" style={{ color: liste.color || 'var(--p-gold)' }}>{seats[0]}</span>
                   <p className="text-sm mt-2" style={{ color: 'rgba(245,240,232,0.4)' }}>sièges sur 120</p>
                 </div>
                 <Slider value={seats} onValueChange={setSeats} min={0} max={maxSeats} step={1} />

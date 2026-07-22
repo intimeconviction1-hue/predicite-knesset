@@ -67,7 +67,7 @@ export default function Methodologie() {
 
         <div className="rounded-2xl border p-6 md:p-8" style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.05)' }}>
           <div className="flex items-center gap-3 mb-3">
-            <FileWarning className="w-5 h-5" style={{ color: '#D4AF37' }} />
+            <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold)' }} />
             <h2 className="text-lg font-bold text-white">Transparence sur une limite actuelle</h2>
           </div>
           <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,240,232,0.6)' }}>

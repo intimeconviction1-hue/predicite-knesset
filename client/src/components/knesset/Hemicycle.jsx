@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 
 const TOTAL_SEATS = 120;
 const MAJORITY = 61;
-const NEUTRAL_COLOR = 'rgba(245,240,232,0.12)';
+const NEUTRAL_COLOR = 'var(--p-text-10)';
 
 /**
  * Dispose N points en arcs concentriques façon hémicycle parlementaire réel
@@ -79,8 +79,8 @@ export default function Hemicycle({ seatsByListe = [], listes = [], height = 240
     <svg viewBox="0 0 500 240" width="100%" height={height} style={{ overflow: 'visible' }}>
       {showMajorityLine && (
         <g opacity="0.5">
-          <line x1="250" y1="220" x2={lineX2} y2={lineY2} stroke="#D4AF37" strokeWidth="1" strokeDasharray="3 4" />
-          <text x={lineX2 + (lineX2 > 250 ? 6 : -6)} y={lineY2 - 4} fill="#D4AF37" fontSize="10" textAnchor={lineX2 > 250 ? 'start' : 'end'} fontFamily="'JetBrains Mono',monospace">
+          <line x1="250" y1="220" x2={lineX2} y2={lineY2} stroke="var(--p-gold)" strokeWidth="1" strokeDasharray="3 4" />
+          <text x={lineX2 + (lineX2 > 250 ? 6 : -6)} y={lineY2 - 4} fill="var(--p-gold)" fontSize="10" textAnchor={lineX2 > 250 ? 'start' : 'end'} fontFamily="var(--font-mono)">
             61
           </text>
         </g>

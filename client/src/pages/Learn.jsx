@@ -7,7 +7,7 @@ import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
 
 export default function Learn() {
   return (
-    <div className="min-h-screen" style={{ background: '#050A18' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       <div className="relative border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
         <div className="max-w-4xl mx-auto px-4 py-16">
           <div className="flex items-center gap-2 text-white/30 text-sm mb-6">
@@ -16,8 +16,8 @@ export default function Learn() {
             <span className="text-white/60">Comprendre</span>
           </div>
           <div className="flex items-center gap-2 mb-3">
-            <BookOpen className="w-4 h-4" style={{ color: '#D4AF37' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: '#D4AF37' }}>Comprendre avant de pronostiquer</p>
+            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold)' }} />
+            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold)' }}>Comprendre avant de pronostiquer</p>
           </div>
           <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>
             Les législatives israéliennes, expliquées

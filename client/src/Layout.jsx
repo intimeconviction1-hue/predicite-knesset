@@ -72,7 +72,7 @@ export default function Layout({ children, currentPageName }) {
   const navLinkDark = (active) =>
     `flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
       active
-        ? 'text-[#D4AF37] bg-white/8'
+        ? 'text-[var(--p-gold)] bg-white/8'
         : 'text-white/60 hover:text-white hover:bg-white/8'
     }`;
 
@@ -80,16 +80,16 @@ export default function Layout({ children, currentPageName }) {
     <svg width="28" height="28" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="lgold" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#D4AF37"/>
+          <stop offset="0%" stopColor="var(--p-gold)"/>
           <stop offset="100%" stopColor="#C8A84A"/>
         </linearGradient>
         <linearGradient id="lar" x1="0" y1="1" x2="1" y2="0">
-          <stop offset="0%" stopColor="#D4AF37"/>
+          <stop offset="0%" stopColor="var(--p-gold)"/>
           <stop offset="100%" stopColor="#F0D060"/>
         </linearGradient>
       </defs>
-      <rect x="6" y="6" width="8" height="52" rx="2" fill="#D4AF37" opacity="0.9"/>
-      <path d="M14 6 Q34 6 34 18 Q34 30 14 30" fill="none" stroke="#D4AF37" strokeWidth="8" strokeLinecap="round" opacity="0.9"/>
+      <rect x="6" y="6" width="8" height="52" rx="2" fill="var(--p-gold)" opacity="0.9"/>
+      <path d="M14 6 Q34 6 34 18 Q34 30 14 30" fill="none" stroke="var(--p-gold)" strokeWidth="8" strokeLinecap="round" opacity="0.9"/>
       <rect x="15" y="36" width="6" height="22" rx="1.5" fill="url(#lgold)" opacity="0.7"/>
       <rect x="24" y="28" width="6" height="30" rx="1.5" fill="url(#lgold)" opacity="0.8"/>
       <rect x="33" y="20" width="6" height="38" rx="1.5" fill="url(#lgold)"/>
@@ -128,7 +128,7 @@ export default function Layout({ children, currentPageName }) {
               {/* Logo */}
               <Link to={createPageUrl('Home')} className="flex items-center gap-2 flex-shrink-0">
                 <LogoSVG />
-                <span className="font-bold text-sm tracking-wide" style={{ color: '#D4AF37' }}>PrédiCité</span>
+                <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold)' }}>PrédiCité</span>
               </Link>
 
               {/* Nav */}
@@ -143,7 +143,7 @@ export default function Layout({ children, currentPageName }) {
                   );
                 })}
                 {/* Règles — lien direct visible */}
-                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[#D4AF37]/30 bg-[#D4AF37]/8 hover:bg-[#D4AF37]/15`} style={{ color: isActive('ReglesDuJeu') ? '#D4AF37' : '#D4AF37cc' }}>
+                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8 hover:bg-[var(--p-gold)]/15`} style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold)' : 'var(--p-gold)cc' }}>
                   <BookOpen className="w-3.5 h-3.5" />
                   Règles
                 </Link>
@@ -170,7 +170,7 @@ export default function Layout({ children, currentPageName }) {
                               key={item.name}
                               to={createPageUrl(item.name)}
                               className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
-                                isActive(item.name) ? 'text-[#D4AF37] bg-white/8' : 'text-white/60 hover:text-white hover:bg-white/6'
+                                isActive(item.name) ? 'text-[var(--p-gold)] bg-white/8' : 'text-white/60 hover:text-white hover:bg-white/6'
                               }`}
                             >
                               <Icon className="w-4 h-4 text-white/30" />
@@ -187,8 +187,8 @@ export default function Layout({ children, currentPageName }) {
               {/* User bloc */}
               <div className="flex items-center gap-3 flex-shrink-0">
                 {user && userProgress && userProgress.total_points > 0 && (
-                  <div className="px-3 py-1.5 rounded-full border border-[#D4AF37]/30 flex items-center gap-1.5" style={{ background: 'rgba(212,175,55,0.1)' }}>
-                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#D4AF37' }}>
+                  <div className="px-3 py-1.5 rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5" style={{ background: 'rgba(212,175,55,0.1)' }}>
+                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--p-gold)' }}>
                       {(userProgress.total_points || 0).toLocaleString('fr-FR')} pts
                     </span>
                   </div>
@@ -253,7 +253,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center justify-between h-13 px-4 py-2">
             <Link to={createPageUrl('Home')} className="flex items-center gap-2">
               <LogoSVG />
-              <span className="font-bold text-sm tracking-wide" style={{ color: '#D4AF37' }}>PrédiCité</span>
+              <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold)' }}>PrédiCité</span>
             </Link>
             <div className="flex items-center gap-2">
               {user && (
@@ -287,7 +287,7 @@ export default function Layout({ children, currentPageName }) {
                         key={item.name}
                         to={createPageUrl(item.name)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                          isActive(item.name) ? 'bg-white/10 text-[#D4AF37]' : 'text-white/60 hover:bg-white/6 hover:text-white'
+                          isActive(item.name) ? 'bg-white/10 text-[var(--p-gold)]' : 'text-white/60 hover:bg-white/6 hover:text-white'
                         }`}
                       >
                         <Icon className="w-4 h-4" />

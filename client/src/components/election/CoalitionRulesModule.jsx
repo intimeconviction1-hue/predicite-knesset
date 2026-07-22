@@ -18,8 +18,8 @@ const RULES = [
     id: 'nomination',
     icon: Users2,
     title: 'Le mandat de formation',
-    color: '#D4AF37',
-    accent: 'border-[#D4AF37]/30 bg-[#D4AF37]/8',
+    color: 'var(--p-gold)',
+    accent: 'border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8',
     content: [
       { type: 'text', value: "Après le scrutin, le Président de l'État consulte les chefs de listes élues, puis charge le dirigeant qui lui semble avoir les meilleures chances de réunir une majorité (61 sièges sur 120) de former un gouvernement. Ce n'est pas automatiquement le chef de la liste arrivée en tête." },
       { type: 'text', value: "Le mandataire dispose d'un délai légal (28 jours, prolongeable de 14 jours supplémentaires) pour négocier une coalition. S'il échoue, le Président peut confier le mandat à quelqu'un d'autre, ou la Knesset peut désigner elle-même un candidat avec le soutien d'au moins 61 députés." },
@@ -62,7 +62,7 @@ function RuleBlock({ item }) {
   if (item.type === 'highlight') {
     return (
       <div className="rounded-lg p-3" style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)' }}>
-        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: '#D4AF37' }}>{item.label}</p>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-gold)' }}>{item.label}</p>
         <p className="text-xs leading-relaxed" style={{ color: 'rgba(245,240,232,0.7)' }}>{item.value}</p>
       </div>
     );
@@ -76,7 +76,7 @@ export default function CoalitionRulesModule({ compact = false }) {
   return (
     <div className={compact ? '' : 'rounded-2xl border overflow-hidden'} style={compact ? {} : { borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(10,18,38,0.6)' }}>
       {!compact && (
-        <div className="px-6 py-5 flex items-center gap-3" style={{ background: 'linear-gradient(135deg,#7C3AED,#D4AF37)' }}>
+        <div className="px-6 py-5 flex items-center gap-3" style={{ background: 'linear-gradient(135deg,#7C3AED,var(--p-gold))' }}>
           <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center">
             <Crown className="w-5 h-5 text-white" />
           </div>

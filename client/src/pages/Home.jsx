@@ -26,7 +26,7 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
           transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
         />
       </div>
-      <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'rgba(245,240,232,0.25)' : (liste.color || '#D4AF37') }}>
+      <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'rgba(245,240,232,0.25)' : (liste.color || 'var(--p-gold)') }}>
         {belowThreshold ? 'seuil' : `${seats} sièges`}
       </span>
     </motion.div>
@@ -77,7 +77,7 @@ export default function Home() {
   const oppositionSeats = rankedListes.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: '#050A18' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
 
       {/* Hero */}
       <div className="relative flex flex-col items-center justify-center text-center px-4 py-24 md:py-32"
@@ -86,9 +86,9 @@ export default function Home() {
         <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full"
           style={{ background: 'rgba(212,175,55,0.1)', border: '0.5px solid rgba(212,175,55,0.3)' }}>
           <motion.div className="w-1.5 h-1.5 rounded-full"
-            style={{ background: '#D4AF37' }}
+            style={{ background: 'var(--p-gold)' }}
             animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#D4AF37' }}>
+          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold)' }}>
             Scrutin du 27 octobre 2026 · Knesset
           </span>
         </div>
@@ -124,7 +124,7 @@ export default function Home() {
           </Link>
           <Link to={createPageUrl('PremierMinistre')}>
             <button className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm"
-              style={{ background: '#D4AF37', color: '#050A18' }}>
+              style={{ background: 'var(--p-gold)', color: 'var(--p-night)' }}>
               <Crown className="w-4 h-4" /> Pronostic Premier ministre
             </button>
           </Link>
@@ -137,11 +137,11 @@ export default function Home() {
             transition={{ delay: 0.4 }}
             className="mt-8 flex items-center gap-3 px-4 py-2.5 rounded-xl"
             style={{ background: 'rgba(212,175,55,0.08)', border: '0.5px solid rgba(212,175,55,0.2)' }}>
-            <Trophy className="w-3.5 h-3.5" style={{ color: '#D4AF37' }} />
+            <Trophy className="w-3.5 h-3.5" style={{ color: 'var(--p-gold)' }} />
             <span className="text-sm" style={{ color: 'rgba(245,240,232,0.6)' }}>
               Bonjour {user.full_name?.split(' ')[0] || user.email?.split('@')[0]} ·
             </span>
-            <span className="font-bold text-sm" style={{ fontFamily: 'monospace', color: '#D4AF37' }}>
+            <span className="font-bold text-sm" style={{ fontFamily: 'monospace', color: 'var(--p-gold)' }}>
               {(progress.total_points || 0).toLocaleString('fr-FR')} pts
             </span>
           </motion.div>
@@ -154,7 +154,7 @@ export default function Home() {
           <div className="flex items-start justify-between mb-2">
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
-              <p className="text-4xl font-black font-mono text-[#3B82F6] leading-none mt-1">{coalitionSeats}</p>
+              <p className="text-4xl font-black font-mono text-[var(--p-blue)] leading-none mt-1">{coalitionSeats}</p>
             </div>
             <div className="text-center pt-2">
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>120 sièges</p>
@@ -162,7 +162,7 @@ export default function Home() {
             </div>
             <div className="text-right">
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(217,43,43,0.75)' }}>Bloc opposition</p>
-              <p className="text-4xl font-black font-mono text-[#D92B2B] leading-none mt-1">{oppositionSeats}</p>
+              <p className="text-4xl font-black font-mono text-[var(--p-red)] leading-none mt-1">{oppositionSeats}</p>
             </div>
           </div>
 

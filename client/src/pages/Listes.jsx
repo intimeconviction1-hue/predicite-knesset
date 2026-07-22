@@ -43,7 +43,7 @@ export default function Listes() {
   });
 
   return (
-    <div className="min-h-screen" style={{ background: '#050A18' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       {/* Header */}
       <div className="relative border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
         <div className="max-w-7xl mx-auto px-4 py-12">
@@ -60,7 +60,7 @@ export default function Listes() {
             <button
               onClick={() => setShowRules(!showRules)}
               className="mt-4 text-sm font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
-              style={{ color: '#D4AF37' }}
+              style={{ color: 'var(--p-gold)' }}
             >
               {showRules ? 'Masquer' : 'Comment lire ces sièges ?'} <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showRules ? 'rotate-90' : ''}`} />
             </button>

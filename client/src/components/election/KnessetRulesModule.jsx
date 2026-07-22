@@ -18,8 +18,8 @@ const RULES = [
     id: 'seuil',
     icon: Percent,
     title: 'Le seuil électoral (3,25 %)',
-    color: '#D4AF37',
-    accent: 'border-[#D4AF37]/30 bg-[#D4AF37]/8',
+    color: 'var(--p-gold)',
+    accent: 'border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8',
     content: [
       { type: 'text', value: "Une liste doit obtenir au moins 3,25 % des suffrages exprimés au niveau national pour entrer à la Knesset. En dessous, elle n'obtient aucun siège, même si des dizaines de milliers d'électeurs ont voté pour elle — leurs voix sont redistribuées entre les listes qui ont franchi le seuil." },
       { type: 'stat', label: 'Seuil actuel', value: '3,25 % des suffrages exprimés' },
@@ -76,7 +76,7 @@ function RuleBlock({ item }) {
   if (item.type === 'highlight') {
     return (
       <div className="rounded-lg p-3" style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)' }}>
-        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: '#D4AF37' }}>{item.label}</p>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-gold)' }}>{item.label}</p>
         <p className="text-xs leading-relaxed" style={{ color: 'rgba(245,240,232,0.7)' }}>{item.value}</p>
       </div>
     );

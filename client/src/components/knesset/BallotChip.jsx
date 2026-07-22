@@ -22,7 +22,7 @@ export default function BallotChip({ letters, size = 'md' }) {
       style={{
         width: dims.w,
         height: dims.h,
-        background: '#F3EEE3',
+        background: 'var(--p-paper)',
         borderRadius: 3,
         display: 'flex',
         alignItems: 'center',
@@ -46,7 +46,7 @@ export default function BallotChip({ letters, size = 'md' }) {
             fontFamily: "'Arial Hebrew','Noto Sans Hebrew',sans-serif",
             fontWeight: 800,
             fontSize: dims.font,
-            color: '#14203D',
+            color: 'var(--p-ink)',
             letterSpacing: '0.5px',
           }}
         >

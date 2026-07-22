@@ -74,7 +74,7 @@ export default function PremierMinistre() {
   const selectedCandidat = candidats.find(c => c.id === existingPred?.candidat_pm_id);
 
   return (
-    <div className="min-h-screen" style={{ background: '#050A18' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       <div className="max-w-3xl mx-auto px-4 py-8">
         <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-white transition-colors" style={{ color: 'rgba(245,240,232,0.4)' }}>
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
@@ -82,7 +82,7 @@ export default function PremierMinistre() {
 
         {/* Header */}
         <div className="rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(212,175,55,0.08))' }}>
-          <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: '#D4AF37' }} />
+          <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold)' }} />
           <h1 className="text-2xl font-black text-white mb-2" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>Qui sera Premier ministre ?</h1>
           <p className="text-sm max-w-xl mx-auto" style={{ color: 'rgba(245,240,232,0.55)' }}>
             Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard.
@@ -90,7 +90,7 @@ export default function PremierMinistre() {
         </div>
 
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"
-          style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : '#D4AF37' }}>
+          style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : 'var(--p-gold)' }}>
           {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
           {deadlineClosed
             ? 'Pronostics clôturés'
@@ -158,7 +158,7 @@ export default function PremierMinistre() {
                 onClick={handleSubmit}
                 disabled={!selected || isSubmitting || deadlineClosed}
                 className="w-full py-3 rounded-xl font-bold text-sm text-white disabled:opacity-40 transition-opacity"
-                style={{ background: 'linear-gradient(135deg,#7C3AED,#D4AF37)' }}
+                style={{ background: 'linear-gradient(135deg,#7C3AED,var(--p-gold))' }}
               >
                 {isSubmitting ? 'Enregistrement...' : '✓ Valider mon pronostic'}
               </button>

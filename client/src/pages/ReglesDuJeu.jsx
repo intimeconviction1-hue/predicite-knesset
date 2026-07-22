@@ -44,7 +44,7 @@ const STEPS = [
     icon: Target,
     num: '02',
     label: 'ANTICIPER',
-    color: '#D4AF37',
+    color: 'var(--p-gold)',
     title: 'Soumettre vos pronostics',
     description: 'Pour chaque liste, pronostiquez un nombre de sièges. Ajoutez, si vous le souhaitez, un pronostic Premier ministre, qui se résout séparément — plus tard, à l\'investiture. Vous pouvez modifier vos pronostics jusqu\'à la deadline.',
     tips: [
@@ -84,7 +84,7 @@ export default function ReglesDuJeu() {
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-white/60">Règles du jeu</span>
           </div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: '#D4AF37' }}>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: 'var(--p-gold)' }}>
             Comment ça marche
           </p>
           <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk','Outfit',sans-serif" }}>
@@ -148,7 +148,7 @@ export default function ReglesDuJeu() {
                   <p className="text-sm font-semibold text-white/80">{rule.label}</p>
                   <p className="text-xs text-white/35 mt-0.5">{rule.desc}</p>
                 </div>
-                <span className="text-sm font-black ml-8 tabular-nums" style={{ fontFamily: "'JetBrains Mono',monospace", color: '#D4AF37' }}>{rule.pts}</span>
+                <span className="text-sm font-black ml-8 tabular-nums" style={{ fontFamily: "'JetBrains Mono',monospace", color: 'var(--p-gold)' }}>{rule.pts}</span>
               </div>
             ))}
           </div>
@@ -165,7 +165,7 @@ export default function ReglesDuJeu() {
             {[
               { pct: '35%', label: 'Précision sièges', desc: 'Justesse de vos pronostics sièges par liste.', color: '#4A7FD4' },
               { pct: '15%', label: 'Précision PM', desc: 'Pronostic Premier ministre, une fois résolu.', color: '#A78BFA' },
-              { pct: '30%', label: 'Apprentissage', desc: 'Quiz système électoral, coalition, signaux lus.', color: '#D4AF37' },
+              { pct: '30%', label: 'Apprentissage', desc: 'Quiz système électoral, coalition, signaux lus.', color: 'var(--p-gold)' },
               { pct: '20%', label: 'Régularité', desc: 'Streak quotidien et participation continue.', color: '#22C55E' },
             ].map(({ pct, label, desc, color }) => (
               <div key={label} className="rounded-xl border border-white/10 p-5" style={{ background: 'rgba(255,255,255,0.03)' }}>

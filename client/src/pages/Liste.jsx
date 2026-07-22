@@ -11,6 +11,7 @@ import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
+import BallotChip from '@/components/knesset/BallotChip';
 
 const BLOC_LABEL = {
   coalition: 'Coalition sortante',
@@ -142,12 +143,15 @@ export default function ListePage() {
         {/* Header */}
         <div className="rounded-2xl border border-white/10 p-6 mb-6" style={{ background: 'rgba(255,255,255,0.03)' }}>
           <div className="flex items-start justify-between flex-wrap gap-3">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || '#6B7280' }} />
-                <h1 className="text-2xl font-black text-white" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>{liste.name_fr}</h1>
+            <div className="flex items-start gap-4">
+              <BallotChip letters={liste.ballot_letters} size="lg" />
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || '#6B7280' }} />
+                  <h1 className="text-2xl font-black text-white" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>{liste.name_fr}</h1>
+                </div>
+                <p className="text-sm" style={{ color: 'rgba(245,240,232,0.5)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
               </div>
-              <p className="text-sm" style={{ color: 'rgba(245,240,232,0.5)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
             </div>
             <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(245,240,232,0.6)' }}>
               {BLOC_LABEL[liste.bloc] || '—'}
@@ -167,12 +171,15 @@ export default function ListePage() {
             </div>
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.35)' }}>Dernière projection</p>
-              <p className="text-xl font-bold font-mono" style={{ color: liste.color || '#D4AF37' }}>
-                {latest ? `${latest.seats} sièges` : 'À venir'}
-              </p>
+              {latest ? (
+                <p className="text-xl font-bold font-mono" style={{ color: liste.color || '#D4AF37' }}>{latest.seats} sièges</p>
+              ) : (
+                <p className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.3)' }}>Pas encore de sondage</p>
+              )}
             </div>
           </div>
         </div>
+
 
         {/* Historique sondages */}
         {history.length > 0 && (

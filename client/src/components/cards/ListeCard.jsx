@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Users, TrendingUp, TrendingDown, ChevronRight } from 'lucide-react';
 import Tooltip from '@/components/shared/Tooltip';
+import BallotChip from '@/components/knesset/BallotChip';
 
 const BLOC_LABEL = {
   coalition: 'Coalition sortante',
@@ -41,7 +42,7 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: liste.color || blocColor }} />
+              <BallotChip letters={liste.ballot_letters} size="sm" />
               <div>
                 <h3 className="text-white font-bold text-base leading-tight">{liste.name_fr}</h3>
                 <p className="text-[11px] mt-0.5" style={{ color: 'rgba(245,240,232,0.4)' }}>{liste.leader_name}</p>

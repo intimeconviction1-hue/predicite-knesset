@@ -5,6 +5,7 @@ import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Vote, Crown, ChevronRight, Trophy } from 'lucide-react';
+import Hemicycle from '@/components/knesset/Hemicycle';
 
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
@@ -147,25 +148,33 @@ export default function Home() {
         )}
       </div>
 
-      {/* Bloc coalition / opposition */}
-      {(coalitionSeats > 0 || oppositionSeats > 0) && (
-        <div className="max-w-3xl mx-auto px-4 pb-10">
-          <div className="rounded-2xl p-5 flex items-center justify-between"
-            style={{ background: 'rgba(10,18,38,0.8)', border: '0.5px solid rgba(245,240,232,0.07)' }}>
-            <div className="text-center flex-1">
-              <p className="text-[10px] uppercase tracking-wide mb-1" style={{ color: 'rgba(59,130,246,0.7)' }}>Bloc coalition</p>
-              <p className="text-3xl font-black font-mono text-[#3B82F6]">{coalitionSeats}</p>
+      {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app */}
+      <div className="max-w-3xl mx-auto px-4 pb-10">
+        <div className="relative rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.25) 0%, rgba(10,18,38,0.9) 65%)', border: '0.5px solid rgba(245,240,232,0.08)' }}>
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
+              <p className="text-4xl font-black font-mono text-[#3B82F6] leading-none mt-1">{coalitionSeats}</p>
             </div>
-            <div className="text-center px-4">
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>sur 120 · majorité 61</p>
+            <div className="text-center pt-2">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>120 sièges</p>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(212,175,55,0.7)' }}>majorité 61</p>
             </div>
-            <div className="text-center flex-1">
-              <p className="text-[10px] uppercase tracking-wide mb-1" style={{ color: 'rgba(217,43,43,0.7)' }}>Bloc opposition</p>
-              <p className="text-3xl font-black font-mono text-[#D92B2B]">{oppositionSeats}</p>
+            <div className="text-right">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(217,43,43,0.75)' }}>Bloc opposition</p>
+              <p className="text-4xl font-black font-mono text-[#D92B2B] leading-none mt-1">{oppositionSeats}</p>
             </div>
           </div>
+
+          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={220} />
+
+          <p className="text-center text-[11px] -mt-2" style={{ color: 'rgba(245,240,232,0.3)' }}>
+            {latestPoll
+              ? `Projection ${latestPoll.institute} du ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
+              : 'Composition à venir — le premier sondage sièges apparaîtra ici'}
+          </p>
         </div>
-      )}
+      </div>
 
       {/* Classement des listes */}
       <div className="max-w-3xl mx-auto px-4 pb-16">

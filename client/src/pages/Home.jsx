@@ -80,9 +80,22 @@ export default function Home() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
 
-      {/* Hero */}
-      <div className="relative flex flex-col items-center justify-center text-center px-4 py-24 md:py-32"
-        style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)' }}>
+      {/* Hero — photo réelle de la Knesset (CC0, Wikimedia Commons) en fond, assombrie
+          et fondue vers --p-night pour rester lisible et s'intégrer à l'identité du site */}
+      <div className="relative flex flex-col items-center justify-center text-center px-4 py-24 md:py-32 overflow-hidden">
+        <div className="absolute inset-0" style={{
+          backgroundImage: "url('/images/knesset-hero.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 35%',
+        }} />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.6) 0%, rgba(5,10,24,0.8) 50%, var(--p-night) 100%)',
+        }} />
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse at 50% 15%, rgba(212,175,55,0.15) 0%, transparent 60%)',
+        }} />
+
+        <div className="relative z-10 flex flex-col items-center">
 
         <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full"
           style={{ background: 'rgba(212,175,55,0.1)', border: '0.5px solid rgba(212,175,55,0.3)' }}>
@@ -147,6 +160,7 @@ export default function Home() {
             </span>
           </motion.div>
         )}
+        </div>
       </div>
 
       {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app */}

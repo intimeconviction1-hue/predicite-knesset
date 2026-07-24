@@ -64,15 +64,25 @@ les 4 fonctions dans `server/functions/` qui touchent la base, et
 `server/scripts/seed-listes.js`. `DB_PATH` a disparu de `.env`, remplacé par
 `DATABASE_URL` (obligatoire, le serveur refuse de démarrer sans).
 
-**Reste à faire pour la mise en ligne effective** (voir README section
-Déploiement pour le détail) :
-1. Créer le projet Postgres gratuit (Neon ou Supabase) — pas encore fait,
-   nécessite un compte créé par Simon lui-même.
-2. Pousser le repo sur GitHub (pas de remote configuré actuellement).
-3. Créer le Web Service Render, brancher le repo, configurer les variables
-   d'environnement (`DATABASE_URL`, `SESSION_SECRET` réel, `NODE_ENV=production`).
-4. Visibilité choisie : lien discret/privé, pas d'annonce publique — donc pas
-   besoin de durcir l'auth email-seul dans l'immédiat pour cette mise en ligne.
+**✅ Mise en ligne faite et vérifiée le 2026-07-24** :
+- Base Postgres gratuite sur **Neon** (pas Neon Auth — désactivé volontairement,
+  l'auth maison existante suffit, pas besoin d'un deuxième système).
+- Repo poussé sur GitHub via GitHub Desktop (pas la CLI git — plus simple pour
+  Simon) : [github.com/intimeconviction1-hue/predicite-knesset](https://github.com/intimeconviction1-hue/predicite-knesset),
+  **privé**.
+- Web Service **Render** (tier gratuit, région Frankfurt), build command
+  `cd client && npm install --include=dev && npm run build && cd ../server && npm install`
+  (le `--include=dev` est nécessaire : Render met `NODE_ENV=production` par
+  défaut, ce qui fait sauter les devDependencies dont `vite` sans ce flag —
+  premier déploiement raté pour cette raison, corrigé ensuite).
+- Site live : **https://predicite-knesset.onrender.com** — vérifié
+  fonctionnel (`/api/health`, page d'accueil, 12 listes visibles via l'API en
+  prod).
+- Visibilité choisie par Simon : lien discret/privé, pas d'annonce publique —
+  donc pas besoin de durcir l'auth email-seul dans l'immédiat.
+- À savoir : le tier gratuit Render se met en veille après 15 min
+  d'inactivité (30-60s de réveil au premier accès après une pause) —
+  accepté comme compromis pour un hébergement gratuit à usage privé.
 
 ## État d'avancement
 
@@ -153,10 +163,9 @@ quelques semaines, ce projet évolue vite)*
 8. `KNESSET_SEED_LISTES.json` (docs/) : paysage partisan mi-2026, à
    actualiser — plusieurs `current_knesset_seats` volontairement laissés
    `null` (pas de source fiable vérifiée à l'écriture).
-9. **Mise en ligne / hébergement** : migration Postgres faite et testée
-   (2026-07-24, voir section Déploiement ci-dessus). Reste : créer le compte
-   Neon/Supabase, pousser sur GitHub (pas de remote configuré), créer le
-   service Render et lancer le premier déploiement réel.
+9. ~~Mise en ligne / hébergement~~ **fait le 2026-07-24** — site live sur
+   https://predicite-knesset.onrender.com (Render + Neon), voir section
+   Déploiement ci-dessus pour le détail.
 
 ## Méthode de travail établie (à conserver)
 - **Livraison en patchs**, pas de zip complet à chaque changement : quand

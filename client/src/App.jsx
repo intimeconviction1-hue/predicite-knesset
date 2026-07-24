@@ -37,7 +37,7 @@ const AppRoutes = () => (
         }
       />
     ))}
-    <Route path="*" element={<PageNotFound />} />
+    <Route path="*" element={<LayoutWrapper><PageNotFound /></LayoutWrapper>} />
   </Routes>
 );
 

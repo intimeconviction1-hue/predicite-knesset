@@ -140,9 +140,15 @@ quelques semaines, ce projet évolue vite)*
    que les 12 listes sont bien réapparues après le déplacement de la base
    (c'était la dernière action avant une coupure de chat précédente — statut
    réel inconnu tant que ce n'est pas recontrôlé).
-2. **Peupler des CandidatPM réels** avec `liste_id` pour voir le rendu complet
-   de la page Premier ministre (actuellement testé seulement dans le sandbox
-   Claude, avec des données de test).
+2. ~~Peupler des CandidatPM réels~~ **fait le 2026-07-24** — 5 candidats
+   réalistes (Netanyahou, Bennett, Lapid, Gantz, Eisenkot) liés à leur
+   `liste_id`, via `docs/KNESSET_SEED_CANDIDATS_PM.json` +
+   `npm run seed:candidats-pm` (idempotent, comme `seed:listes`). Rendu
+   vérifié en prod sur la vraie page PremierMinistre. Bennett et Lapid
+   apparaissent séparément car la répartition des rôles dans la liste
+   commune "Ensemble" n'est pas tranchée publiquement — à corriger si une
+   annonce officielle change la donne (voir note en tête du JSON). Toute
+   autre personnalité reste couverte par l'option "Autre" déjà existante.
 3. **Badges** : le schéma existe (`badges`, `user_badges`), la logique
    d'attribution réelle n'est qu'un stub (`updateStreakAndBadges` ne fait que
    le streak, `new_badges` toujours vide). Pas de surface d'affichage des

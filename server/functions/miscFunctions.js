@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { filterEntity, createEntity, updateEntity } from '../db/index.js';
 
-export function ensureUserProgress(user_email) {
-  const existing = filterEntity('UserProgress', { user_email })[0];
+export async function ensureUserProgress(user_email) {
+  const existing = (await filterEntity('UserProgress', { user_email }))[0];
   if (existing) return existing;
   return createEntity('UserProgress', { id: randomUUID(), user_email });
 }
@@ -18,8 +18,8 @@ function daysBetween(a, b) {
  * Les badges de régularité (Badge/user_badges) restent à câbler côté UI —
  * cette fonction pose juste la mécanique de streak.
  */
-export function updateStreakAndBadges(user_email) {
-  const up = ensureUserProgress(user_email);
+export async function updateStreakAndBadges(user_email) {
+  const up = await ensureUserProgress(user_email);
   const today = new Date().toISOString().slice(0, 10);
 
   if (up.last_active_date === today) {
@@ -29,7 +29,7 @@ export function updateStreakAndBadges(user_email) {
   const gap = up.last_active_date ? daysBetween(up.last_active_date, today) : null;
   const newStreak = gap === 1 ? (up.current_streak || 0) + 1 : 1;
 
-  updateEntity('UserProgress', up.id, { current_streak: newStreak, last_active_date: today });
+  await updateEntity('UserProgress', up.id, { current_streak: newStreak, last_active_date: today });
 
   return { ok: true, current_streak: newStreak, new_badges: [] };
 }

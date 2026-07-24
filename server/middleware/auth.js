@@ -1,12 +1,16 @@
-import { db } from '../db/index.js';
+import { queryOne } from '../db/index.js';
 
-export function requireAuth(req, res, next) {
-  const email = req.session?.user_email;
-  if (!email) return res.status(401).json({ error: 'Unauthorized' });
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-  if (!user) return res.status(401).json({ error: 'Unauthorized' });
-  req.user = user;
-  next();
+export async function requireAuth(req, res, next) {
+  try {
+    const email = req.session?.user_email;
+    if (!email) return res.status(401).json({ error: 'Unauthorized' });
+    const user = await queryOne('SELECT * FROM users WHERE email = ?', [email]);
+    if (!user) return res.status(401).json({ error: 'Unauthorized' });
+    req.user = user;
+    next();
+  } catch (e) {
+    next(e);
+  }
 }
 
 export function requireAdmin(req, res, next) {

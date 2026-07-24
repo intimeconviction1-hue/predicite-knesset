@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Users, TrendingUp, TrendingDown, ChevronRight } from 'lucide-react';
 import Tooltip from '@/components/shared/Tooltip';
 import BallotChip from '@/components/knesset/BallotChip';
+import CountUp from '@/components/knesset/CountUp';
 
 const BLOC_LABEL = {
   coalition: 'Coalition sortante',
@@ -36,13 +37,17 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
     >
       <Link to={`/Liste?slug=${liste.slug}`}>
         <div
-          className="group overflow-hidden rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 p-4"
-          style={{ background: 'rgba(10,18,42,0.85)', backdropFilter: 'blur(8px)' }}
+          className="group overflow-hidden rounded-2xl border p-4 transition-colors duration-300"
+          style={{ background: 'rgba(10,18,42,0.85)', backdropFilter: 'blur(8px)', borderColor: 'rgba(255,255,255,0.1)' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = `${blocColor}55`; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
         >
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2.5">
-              <BallotChip letters={liste.ballot_letters} size="sm" />
+              <motion.div whileHover={{ rotate: 0, scale: 1.06 }} transition={{ type: 'spring', stiffness: 300, damping: 12 }}>
+                <BallotChip letters={liste.ballot_letters} size="sm" />
+              </motion.div>
               <div>
                 <h3 className="text-white font-bold text-base leading-tight">{liste.name_fr}</h3>
                 <p className="text-[11px] mt-0.5" style={{ color: 'rgba(245,240,232,0.4)' }}>{liste.leader_name}</p>
@@ -66,7 +71,7 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
                 <p className="text-sm font-bold mt-0.5" style={{ color: '#F47090' }}>Sous le seuil (3,25%)</p>
               ) : (
                 <p className="text-2xl font-black mt-0.5" style={{ fontFamily: 'monospace', color: liste.color || blocColor }}>
-                  {projectedSeats != null ? projectedSeats : '—'}
+                  {projectedSeats != null ? <CountUp value={projectedSeats} duration={800} /> : '—'}
                   <span className="text-xs font-normal" style={{ color: 'rgba(245,240,232,0.3)' }}> / 120</span>
                 </p>
               )}

@@ -7,8 +7,8 @@ const JUSTIF_MAX = 500;
 
 function requireField(cond, message) { if (!cond) throw new Error(message); }
 
-function getDeadlineUtc() {
-  const settings = filterEntity('CampaignSettings', { key: 'global' })[0];
+async function getDeadlineUtc() {
+  const settings = (await filterEntity('CampaignSettings', { key: 'global' }))[0];
   const d = settings?.predictions_deadline_utc;
   if (typeof d === 'string' && d.trim()) {
     const parsed = new Date(d.trim());
@@ -30,30 +30,30 @@ function seatPointsForError(err) {
   return 0;
 }
 
-function getUserProgress(user_email) {
-  const up = filterEntity('UserProgress', { user_email })[0];
+async function getUserProgress(user_email) {
+  const up = (await filterEntity('UserProgress', { user_email }))[0];
   if (!up) throw new Error('UserProgress introuvable pour cet utilisateur.');
   return up;
 }
 
-export function submitPronosticSieges(user_email, body) {
+export async function submitPronosticSieges(user_email, body) {
   requireField(typeof body.liste_id === 'string' && body.liste_id.trim(), 'liste_id requis.');
   requireField(Number.isFinite(body.predicted_seats), 'predicted_seats doit être un nombre.');
   const liste_id = body.liste_id.trim();
   const predicted_seats = Math.max(0, Math.min(120, Math.round(body.predicted_seats)));
 
-  const deadlineUtc = getDeadlineUtc();
+  const deadlineUtc = await getDeadlineUtc();
   if (isPastDeadline(deadlineUtc)) {
     const err = new Error('Phase fermée : pronostics clôturés.');
     err.status = 403; err.deadline_utc = deadlineUtc;
     throw err;
   }
 
-  const liste = filterEntity('Liste', { id: liste_id })[0];
+  const liste = (await filterEntity('Liste', { id: liste_id }))[0];
   requireField(!!liste, 'Liste introuvable.');
 
-  const up = getUserProgress(user_email);
-  const existing = filterEntity('PronosticSieges', { user_email, liste_id })[0] || null;
+  const up = await getUserProgress(user_email);
+  const existing = (await filterEntity('PronosticSieges', { user_email, liste_id }))[0] || null;
 
   const justification = typeof body.justification === 'string' ? body.justification.trim().slice(0, JUSTIF_MAX) : '';
   const hasJustification = justification.length >= 20;
@@ -67,21 +67,21 @@ export function submitPronosticSieges(user_email, body) {
   };
 
   if (existing) {
-    updateEntity('PronosticSieges', existing.id, payload);
+    await updateEntity('PronosticSieges', existing.id, payload);
   } else {
-    createEntity('PronosticSieges', payload);
-    updateEntity('UserProgress', up.id, { total_points: (up.total_points ?? 0) + delta });
+    await createEntity('PronosticSieges', payload);
+    await updateEntity('UserProgress', up.id, { total_points: (up.total_points ?? 0) + delta });
   }
 
   return { ok: true, awarded: newPoints, delta, updated: !!existing };
 }
 
-export function scoreSiegesAndSync() {
-  const resultat = filterEntity('ResultatSieges', { is_final: true })[0];
+export async function scoreSiegesAndSync() {
+  const resultat = (await filterEntity('ResultatSieges', { is_final: true }))[0];
   requireField(!!resultat, 'ResultatSieges (is_final=true) introuvable.');
 
   const seatsByListe = new Map((resultat.seats_by_liste || []).map(r => [r.liste_id, r.seats]));
-  const preds = listEntity('PronosticSieges', { sort: '-created_at', limit: 5000 });
+  const preds = await listEntity('PronosticSieges', { sort: '-created_at', limit: 5000 });
 
   const deltaByUser = new Map();
 
@@ -99,23 +99,23 @@ export function scoreSiegesAndSync() {
     const delta = finalPoints - oldPoints;
     deltaByUser.set(p.user_email, (deltaByUser.get(p.user_email) ?? 0) + delta);
 
-    updateEntity('PronosticSieges', p.id, { points_earned: finalPoints, is_correct: err === 0 });
+    await updateEntity('PronosticSieges', p.id, { points_earned: finalPoints, is_correct: err === 0 });
   }
 
   for (const [email, delta] of deltaByUser.entries()) {
-    const up = filterEntity('UserProgress', { user_email: email })[0];
+    const up = (await filterEntity('UserProgress', { user_email: email }))[0];
     if (!up) continue;
-    updateEntity('UserProgress', up.id, { total_points: (up.total_points ?? 0) + delta });
+    await updateEntity('UserProgress', up.id, { total_points: (up.total_points ?? 0) + delta });
   }
 
   return { ok: true, users_updated: deltaByUser.size, predictions_scored: preds.length };
 }
 
-export function scoreBlocMajoritaire() {
-  const resultat = filterEntity('ResultatSieges', { is_final: true })[0];
+export async function scoreBlocMajoritaire() {
+  const resultat = (await filterEntity('ResultatSieges', { is_final: true }))[0];
   requireField(!!resultat, 'ResultatSieges (is_final=true) introuvable.');
 
-  const listes = listEntity('Liste', { sort: '-created_at', limit: 200 });
+  const listes = await listEntity('Liste', { sort: '-created_at', limit: 200 });
   const blocById = new Map(listes.map(l => [l.id, l.bloc]));
   const seatsByListe = new Map((resultat.seats_by_liste || []).map(r => [r.liste_id, r.seats]));
 
@@ -125,7 +125,7 @@ export function scoreBlocMajoritaire() {
   }
   const realCoalitionMajority = coalitionSeats >= MAJORITY_SEATS;
 
-  const preds = listEntity('PronosticSieges', { sort: '-created_at', limit: 5000 });
+  const preds = await listEntity('PronosticSieges', { sort: '-created_at', limit: 5000 });
   const byUser = new Map();
   for (const p of preds) {
     if (!byUser.has(p.user_email)) byUser.set(p.user_email, []);
@@ -140,9 +140,9 @@ export function scoreBlocMajoritaire() {
     }
     const predictedMajority = predictedCoalitionSeats >= MAJORITY_SEATS;
     if (predictedMajority === realCoalitionMajority) {
-      const up = filterEntity('UserProgress', { user_email: email })[0];
+      const up = (await filterEntity('UserProgress', { user_email: email }))[0];
       if (up) {
-        updateEntity('UserProgress', up.id, { total_points: (up.total_points ?? 0) + SCORE.blocBonus });
+        await updateEntity('UserProgress', up.id, { total_points: (up.total_points ?? 0) + SCORE.blocBonus });
         usersUpdated++;
       }
     }

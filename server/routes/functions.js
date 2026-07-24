@@ -16,30 +16,30 @@ router.post('/:name', requireAuth, async (req, res) => {
   try {
     switch (name) {
       case 'ensureUserProgress':
-        return res.json(ensureUserProgress(req.user.email));
+        return res.json(await ensureUserProgress(req.user.email));
 
       case 'updateStreakAndBadges':
-        return res.json(updateStreakAndBadges(req.user.email));
+        return res.json(await updateStreakAndBadges(req.user.email));
 
       case 'prediciteScoringSieges': {
         if (body.action === 'submitPronosticSieges') {
-          return res.json(submitPronosticSieges(req.user.email, body));
+          return res.json(await submitPronosticSieges(req.user.email, body));
         }
         if (body.action === 'scoreSiegesAndSync') {
           if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
-          return res.json(scoreSiegesAndSync());
+          return res.json(await scoreSiegesAndSync());
         }
         if (body.action === 'scoreBlocMajoritaire') {
           if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
-          return res.json(scoreBlocMajoritaire());
+          return res.json(await scoreBlocMajoritaire());
         }
         return res.status(400).json({ error: 'action inconnue' });
       }
 
       case 'resolvePremierMinistre': {
         if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
-        if (body.action === 'resolve') return res.json(resolvePremierMinistre(body.investedCandidatPmId));
-        if (body.action === 'autoResolveIfExpired') return res.json(autoResolveIfExpired());
+        if (body.action === 'resolve') return res.json(await resolvePremierMinistre(body.investedCandidatPmId));
+        if (body.action === 'autoResolveIfExpired') return res.json(await autoResolveIfExpired());
         return res.status(400).json({ error: 'action inconnue' });
       }
 

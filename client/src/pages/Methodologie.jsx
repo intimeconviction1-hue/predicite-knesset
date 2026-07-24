@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { motion } from 'framer-motion';
 import { ChevronRight, ShieldCheck, Globe, FileWarning, ExternalLink } from 'lucide-react';
 
 const SOURCES = [
@@ -30,24 +31,48 @@ export default function Methodologie() {
     <div className="min-h-screen" style={{ background: '#050505' }}>
       <div className="relative border-b border-white/8" style={{ background: 'rgba(7,18,42,0.98)' }}>
         <div className="max-w-4xl mx-auto px-4 py-16">
-          <div className="flex items-center gap-2 text-white/30 text-sm mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center gap-2 text-white/30 text-sm mb-6"
+          >
             <Link to={createPageUrl('Home')} className="hover:text-white/60 transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-white/60">Sources & Méthodologie</span>
-          </div>
-          <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.08 }}
+            className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
             Sources & Méthodologie
-          </h1>
-          <p className="text-white/50 text-base leading-relaxed max-w-2xl">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.16 }}
+            className="text-white/50 text-base leading-relaxed max-w-2xl"
+          >
             PrédiCité ne publie que des données réelles, sourcées et datées.
             Aucun chiffre n'est inventé, estimé ou complété pour « faire joli ».
-          </p>
+          </motion.p>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
-        {SOURCES.map(({ title, icon: Icon, color, items }) => (
-          <div key={title} className="rounded-2xl border border-white/10 p-6 md:p-8" style={{ background: 'rgba(255,255,255,0.03)' }}>
+        {SOURCES.map(({ title, icon: Icon, color, items }, index) => (
+          <motion.div
+            key={title}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.4, delay: index * 0.08 }}
+            className="rounded-2xl border border-white/10 p-6 md:p-8"
+            style={{ background: 'rgba(255,255,255,0.03)' }}
+          >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color + '18', border: `1px solid ${color}30` }}>
                 <Icon className="w-4 h-4" style={{ color }} />
@@ -62,10 +87,17 @@ export default function Methodologie() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         ))}
 
-        <div className="rounded-2xl border p-6 md:p-8" style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.05)' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4, delay: SOURCES.length * 0.08 }}
+          className="rounded-2xl border p-6 md:p-8"
+          style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.05)' }}
+        >
           <div className="flex items-center gap-3 mb-3">
             <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold)' }} />
             <h2 className="text-lg font-bold text-white">Transparence sur une limite actuelle</h2>
@@ -77,7 +109,7 @@ export default function Methodologie() {
             vérifie l'accessibilité du site plutôt que d'inventer un résultat — il
             vaut mieux ne rien afficher que d'afficher un chiffre faux.
           </p>
-        </div>
+        </motion.div>
 
         <div className="text-center pt-4">
           <Link

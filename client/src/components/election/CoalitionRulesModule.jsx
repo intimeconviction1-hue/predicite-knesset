@@ -81,7 +81,7 @@ export default function CoalitionRulesModule({ compact = false }) {
             <Crown className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-white font-bold text-lg" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>Comment se forme un gouvernement</h2>
+            <h2 className="text-white font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>Comment se forme un gouvernement</h2>
             <p className="text-white/60 text-xs">Ce qui se joue après le soir du scrutin, avant de pronostiquer le Premier ministre</p>
           </div>
         </div>

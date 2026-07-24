@@ -148,7 +148,7 @@ export default function ListePage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || '#6B7280' }} />
-                  <h1 className="text-2xl font-black text-white" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>{liste.name_fr}</h1>
+                  <h1 className="text-2xl font-black text-white" style={{ fontFamily: 'var(--font-display)' }}>{liste.name_fr}</h1>
                 </div>
                 <p className="text-sm" style={{ color: 'rgba(245,240,232,0.5)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
               </div>
@@ -259,7 +259,16 @@ export default function ListePage() {
             ) : (
               <div className="space-y-5">
                 <div className="text-center">
-                  <span className="text-5xl font-black font-mono" style={{ color: liste.color || 'var(--p-gold)' }}>{seats[0]}</span>
+                  <motion.span
+                    key={seats[0]}
+                    initial={{ scale: 1.15, opacity: 0.6 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                    className="text-5xl font-black font-mono inline-block"
+                    style={{ color: liste.color || 'var(--p-gold)' }}
+                  >
+                    {seats[0]}
+                  </motion.span>
                   <p className="text-sm mt-2" style={{ color: 'rgba(245,240,232,0.4)' }}>sièges sur 120</p>
                 </div>
                 <Slider value={seats} onValueChange={setSeats} min={0} max={maxSeats} step={1} />

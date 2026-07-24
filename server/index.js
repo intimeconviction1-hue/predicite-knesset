@@ -4,6 +4,7 @@ import session from 'express-session';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { initDb } from './db/index.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
 import functionsRouter from './routes/functions.js';
@@ -44,6 +45,13 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`PrédiCité (Knesset) — serveur sur http://localhost:${PORT}`);
-});
+initDb()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`PrédiCité (Knesset) — serveur sur http://localhost:${PORT}`);
+    });
+  })
+  .catch(e => {
+    console.error('[db] Échec de connexion/initialisation Postgres :', e.message);
+    process.exit(1);
+  });

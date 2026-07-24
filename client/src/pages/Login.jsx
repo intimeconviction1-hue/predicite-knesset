@@ -26,7 +26,7 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--p-night)' }}>
       <div className="w-full max-w-sm rounded-2xl border border-white/10 p-8" style={{ background: 'rgba(255,255,255,0.03)' }}>
-        <h1 className="text-2xl font-black text-white mb-1" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>PrédiCité</h1>
+        <h1 className="text-2xl font-black text-white mb-1" style={{ fontFamily: 'var(--font-display)' }}>PrédiCité</h1>
         <p className="text-sm mb-6" style={{ color: 'rgba(245,240,232,0.45)' }}>
           Connexion par email — pas de mot de passe pour l'instant.
         </p>

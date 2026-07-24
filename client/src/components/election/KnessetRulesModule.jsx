@@ -95,7 +95,7 @@ export default function KnessetRulesModule({ compact = false }) {
             <Scale className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-white font-bold text-lg" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>Comment on vote à la Knesset</h2>
+            <h2 className="text-white font-bold text-lg" style={{ fontFamily: 'var(--font-display)' }}>Comment on vote à la Knesset</h2>
             <p className="text-white/60 text-xs">Le mécanisme du scrutin, pour pronostiquer avec de vraies bases</p>
           </div>
         </div>

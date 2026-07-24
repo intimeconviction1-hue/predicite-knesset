@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info } from 'lucide-react';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
+import Hemicycle from '@/components/knesset/Hemicycle';
+import CountUp from '@/components/knesset/CountUp';
+import BallotChip from '@/components/knesset/BallotChip';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
 
@@ -45,6 +48,17 @@ export default function PremierMinistre() {
     queryFn: () => base44.entities.CandidatPM.filter({ is_active: true }),
   });
 
+  const { data: listes = [] } = useQuery({
+    queryKey: ['listes-for-pm'],
+    queryFn: () => base44.entities.Liste.filter({ is_active: true }),
+  });
+
+  const { data: sondages = [] } = useQuery({
+    queryKey: ['sondages-sieges-latest-pm'],
+    queryFn: () => base44.entities.SondageSieges.list('-poll_date', 1),
+  });
+  const latestPoll = sondages?.[0] || null;
+
   const { data: existingPred, refetch } = useQuery({
     queryKey: ['pronostic-pm', user?.email],
     queryFn: async () => {
@@ -71,7 +85,14 @@ export default function PremierMinistre() {
     }
   };
 
+  const listeById = new Map(listes.map(l => [l.id, l]));
   const selectedCandidat = candidats.find(c => c.id === existingPred?.candidat_pm_id);
+
+  const seatsByListe = new Map((latestPoll?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
+  const coalitionSeats = listes.filter(l => l.bloc === 'coalition').reduce((s, l) => s + (seatsByListe.get(l.id) || 0), 0);
+  const oppositionSeats = listes.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + (seatsByListe.get(l.id) || 0), 0);
+  const leadingBloc = coalitionSeats === oppositionSeats ? null : (coalitionSeats > oppositionSeats ? 'coalition' : 'opposition');
+  const seatsToMajority = leadingBloc ? Math.max(0, 61 - Math.max(coalitionSeats, oppositionSeats)) : null;
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
@@ -89,6 +110,27 @@ export default function PremierMinistre() {
           </p>
         </div>
 
+        {/* Le calcul de coalition — même hémicycle que l'accueil, recontextualisé */}
+        <div className="rounded-2xl p-5 mb-6" style={{ background: 'rgba(10,18,38,0.8)', border: '0.5px solid rgba(245,240,232,0.07)' }}>
+          <p className="text-center text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: 'rgba(245,240,232,0.4)' }}>
+            Le problème que le futur Premier ministre doit résoudre
+          </p>
+          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={160} animate={false} />
+          <p className="text-center text-sm mt-1" style={{ color: 'rgba(245,240,232,0.5)' }}>
+            {leadingBloc == null ? (
+              'Composition à venir — le calcul de coalition apparaîtra avec le premier sondage.'
+            ) : seatsToMajority === 0 ? (
+              <span>Le bloc <strong style={{ color: leadingBloc === 'coalition' ? 'var(--p-blue)' : 'var(--p-red)' }}>{leadingBloc === 'coalition' ? 'coalition' : 'opposition'}</strong> atteint seul la majorité de 61.</span>
+            ) : (
+              <span>
+                Le bloc <strong style={{ color: leadingBloc === 'coalition' ? 'var(--p-blue)' : 'var(--p-red)' }}>{leadingBloc === 'coalition' ? 'coalition' : 'opposition'}</strong> mène avec{' '}
+                <strong className="font-mono"><CountUp value={Math.max(coalitionSeats, oppositionSeats)} duration={800} /></strong> sièges — il lui en manque{' '}
+                <strong className="font-mono" style={{ color: 'var(--p-gold)' }}>{seatsToMajority}</strong> pour la majorité, à trouver auprès de listes non alignées.
+              </span>
+            )}
+          </p>
+        </div>
+
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"
           style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : 'var(--p-gold)' }}>
           {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
@@ -101,14 +143,16 @@ export default function PremierMinistre() {
         <div className="rounded-2xl border border-white/10 p-6 mb-6" style={{ background: 'rgba(255,255,255,0.03)' }}>
           {existingPred ? (
             <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#22C55E' }} />
+              <div className="flex items-center gap-3">
+                {listeById.get(selectedCandidat?.liste_id) && (
+                  <BallotChip letters={listeById.get(selectedCandidat.liste_id)?.ballot_letters} size="sm" />
+                )}
                 <div>
                   <p className="text-sm font-semibold" style={{ color: '#22C55E' }}>
                     Pronostic : {selectedCandidat?.name_fr || 'Autre'}
                   </p>
                   <p className="text-xs mt-0.5" style={{ color: 'rgba(34,197,94,0.7)' }}>
-                    {existingPred.resolved_at ? 'Résolu' : 'En attente de l\'investiture'}
+                    {existingPred.resolved_at ? 'Résolu' : "En attente de l'investiture"}
                   </p>
                 </div>
               </div>
@@ -116,7 +160,7 @@ export default function PremierMinistre() {
                 <button
                   onClick={() => setSelected(existingPred.candidat_pm_id)}
                   className="text-xs font-semibold px-3 py-1.5 rounded-lg"
-                  style={{ color: '#4A7FD4', border: '1px solid rgba(74,127,212,0.4)' }}
+                  style={{ color: 'var(--p-blue)', border: '1px solid rgba(74,127,212,0.4)' }}
                 >
                   Modifier
                 </button>
@@ -124,34 +168,46 @@ export default function PremierMinistre() {
             </div>
           ) : isLoading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {[...Array(6)].map((_, i) => <div key={i} className="h-20 rounded-xl animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />)}
+              {[...Array(6)].map((_, i) => <div key={i} className="h-24 rounded-xl animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />)}
             </div>
           ) : (
             <div className="space-y-4">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {candidats.map(c => (
-                  <button
-                    key={c.id}
-                    onClick={() => setSelected(c.id)}
-                    className="rounded-xl p-4 text-center transition-all border"
-                    style={{
-                      background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.03)',
-                      borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'rgba(255,255,255,0.08)',
-                    }}
-                  >
-                    <p className="text-sm font-semibold text-white">{c.name_fr}</p>
-                  </button>
-                ))}
-                <button
+                {candidats.map(c => {
+                  const liste = listeById.get(c.liste_id);
+                  const isSelected = selected === c.id;
+                  return (
+                    <motion.button
+                      key={c.id}
+                      onClick={() => setSelected(c.id)}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      className="rounded-xl p-3 text-center transition-colors border flex flex-col items-center gap-2"
+                      style={{
+                        background: isSelected ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.03)',
+                        borderColor: isSelected ? 'rgba(212,175,55,0.5)' : (liste?.color ? `${liste.color}30` : 'rgba(255,255,255,0.08)'),
+                      }}
+                    >
+                      {liste ? <BallotChip letters={liste.ballot_letters} size="sm" /> : <div className="w-2 h-2 rounded-full" style={{ background: 'rgba(245,240,232,0.2)' }} />}
+                      <div>
+                        <p className="text-sm font-semibold text-white">{c.name_fr}</p>
+                        {liste && <p className="text-[10px] mt-0.5" style={{ color: liste.color || 'rgba(245,240,232,0.4)' }}>{liste.name_fr}</p>}
+                      </div>
+                    </motion.button>
+                  );
+                })}
+                <motion.button
                   onClick={() => setSelected('autre')}
-                  className="rounded-xl p-4 text-center transition-all border"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="rounded-xl p-3 text-center transition-colors border flex flex-col items-center justify-center gap-2 min-h-[76px]"
                   style={{
                     background: selected === 'autre' ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.03)',
                     borderColor: selected === 'autre' ? 'rgba(212,175,55,0.5)' : 'rgba(255,255,255,0.08)',
                   }}
                 >
                   <p className="text-sm font-semibold" style={{ color: 'rgba(245,240,232,0.6)' }}>Autre</p>
-                </button>
+                </motion.button>
               </div>
 
               <button

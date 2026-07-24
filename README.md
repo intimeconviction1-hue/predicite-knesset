@@ -6,13 +6,13 @@ pronostic Premier ministre, indice citoyen, deux modules pédagogiques
 (système électoral, formation du gouvernement).
 
 Repo git autonome — plus aucune dépendance à Base44. Stack : React/Vite
-(client) + Node/Express/SQLite (server), dans l'esprit de PILOTE.
+(client) + Node/Express/Postgres (server), dans l'esprit de PILOTE.
 
 ## Structure
 
 ```
 client/   React/Vite — l'interface (pages, composants, thème)
-server/   Express + SQLite — API, auth, scoring, collecteurs
+server/   Express + Postgres — API, auth, scoring, collecteurs
 docs/     Notes de conception + historique du pivot depuis Base44
 ```
 
@@ -21,18 +21,23 @@ docs/     Notes de conception + historique du pivot depuis Base44
 Deux terminaux, comme pour PILOTE. **Sous PowerShell 5.1 (Windows), `&&` ne
 fonctionne pas comme séparateur** — une commande à la fois, comme ci-dessous.
 
+Il faut une base Postgres accessible (locale, ou un projet gratuit
+Neon/Supabase — voir section Déploiement plus bas) avant de démarrer le
+serveur.
+
 **Terminal 1 — serveur :**
 ```
 cd server
 npm install
 copy .env.example .env
 ```
-Éditer `.env` : `SESSION_SECRET`, éventuellement `ANTHROPIC_API_KEY` pour le
-collecteur de sondages. Puis :
+Éditer `.env` : `DATABASE_URL` (obligatoire), `SESSION_SECRET`, éventuellement
+`ANTHROPIC_API_KEY` pour le collecteur de sondages. Puis :
 ```
 npm run dev
 ```
-Le serveur écoute sur `http://localhost:8788` (port modifiable via `.env`).
+Le serveur écoute sur `http://localhost:8788` (port modifiable via `.env`) et
+crée le schéma automatiquement au démarrage s'il n'existe pas encore.
 
 **Terminal 2 — client (nouveau terminal séparé, le serveur doit rester lancé) :**
 ```
@@ -74,15 +79,29 @@ npm start
 En production, Express sert directement `client/dist/` — plus besoin du
 serveur Vite séparé.
 
+## Déploiement
+
+Choix fait le 2026-07-24 : Postgres géré (Neon ou Supabase, tiers gratuits
+sans carte bancaire) + Render (tiers gratuit) pour le serveur Express, qui
+sert aussi le build client (`client/dist`) — un seul service à héberger.
+Render gratuit n'offre pas de disque persistant, d'où le passage de SQLite à
+Postgres : la donnée vit hors du serveur web, qui peut donc rester stateless.
+
+Étapes :
+1. Créer un projet gratuit sur [Neon](https://neon.tech) ou
+   [Supabase](https://supabase.com), récupérer la chaîne de connexion
+   (`postgresql://...`).
+2. Pousser ce repo sur GitHub (pas encore fait — pas de remote configuré).
+3. Créer un Web Service sur [Render](https://render.com) branché sur ce repo
+   GitHub : build command `cd client && npm install && npm run build`,
+   start command `cd server && npm install && npm start`, variable
+   d'environnement `NODE_ENV=production` + `DATABASE_URL` (étape 1) +
+   `SESSION_SECRET` (une vraie valeur aléatoire, pas `change-moi`).
+4. Le tier gratuit Render se met en veille après 15 min d'inactivité (30-60s
+   de réveil au premier accès) — acceptable pour un usage privé/lien discret.
+
 ## Points d'attention avant d'aller plus loin
 
-- **Base de données** : `node:sqlite`, le module intégré à Node (pas de compilation
-  native, donc pas besoin de Visual Studio Build Tools sous Windows). Toujours
-  marqué "expérimental" par Node lui-même (avertissement bénin au démarrage),
-  mais testé de bout en bout pour ce projet. Disponible sans flag depuis
-  Node ≈22.22 / 24.15 — si `npm run dev` échoue avec une erreur `node:sqlite`
-  introuvable, c'est que votre version de Node est plus ancienne : mettre à
-  jour Node réglera le problème plus proprement qu'un flag.
 - **Auth minimale** (email seul) — à durcir avant toute ouverture au-delà d'un
   usage personnel/petit cercle.
 - **`resultatsKnessetCollector` ne fait pas de vrai parsing** — le site

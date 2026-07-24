@@ -50,7 +50,7 @@ export default function Listes() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-2 mb-2">
               <Vote className="w-5 h-5 text-white/70" />
-              <h1 className="text-2xl font-bold text-white" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>
+              <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
                 Listes en lice — Knesset 2026
               </h1>
             </div>

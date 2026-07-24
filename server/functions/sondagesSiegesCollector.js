@@ -1,5 +1,4 @@
-import { randomUUID } from 'node:crypto';
-import { db, filterEntity, listEntity, createEntity } from '../db/index.js';
+import { filterEntity, listEntity, createEntity } from '../db/index.js';
 import { invokeLLMWithWebSearch } from './llm.js';
 
 const AUTHORIZED_SOURCES = [
@@ -23,7 +22,7 @@ export async function runSondagesSiegesCollector() {
   const results = { created: 0, skipped: 0, rejected: 0, errors: [], unmatched_listes: [] };
   const todayFR = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Jerusalem' });
 
-  const existingListes = filterEntity('Liste', { is_active: true });
+  const existingListes = await filterEntity('Liste', { is_active: true });
   const listeNames = existingListes.map(l => l.name_fr);
 
   const prompt = `Tu es un assistant de veille électorale. Nous sommes le ${todayFR}.
@@ -49,7 +48,7 @@ Pour chaque sondage réel : institute, publisher_media, poll_date (YYYY-MM-DD), 
     return { success: true, message: 'Aucun sondage réel identifié pour le moment.', results };
   }
 
-  const existingPolls = listEntity('SondageSieges', { sort: '-poll_date', limit: 200 });
+  const existingPolls = await listEntity('SondageSieges', { sort: '-poll_date', limit: 200 });
 
   for (const poll of polls) {
     try {
@@ -79,7 +78,7 @@ Pour chaque sondage réel : institute, publisher_media, poll_date (YYYY-MM-DD), 
       const checksum = buildChecksum(poll.institute, poll.poll_date, poll.seats_by_liste);
       if (existingPolls.some(p => p.checksum === checksum)) { results.skipped++; continue; }
 
-      createEntity('SondageSieges', {
+      await createEntity('SondageSieges', {
         institute: poll.institute,
         publisher_media: poll.publisher_media || poll.institute,
         poll_date: poll.poll_date,

@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Vote, Crown, ChevronRight, Trophy } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
+import CountUp from '@/components/knesset/CountUp';
 
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
@@ -154,7 +155,7 @@ export default function Home() {
           <div className="flex items-start justify-between mb-2">
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
-              <p className="text-4xl font-black font-mono text-[var(--p-blue)] leading-none mt-1">{coalitionSeats}</p>
+              <p className="text-4xl font-black font-mono text-[var(--p-blue)] leading-none mt-1"><CountUp value={coalitionSeats} /></p>
             </div>
             <div className="text-center pt-2">
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>120 sièges</p>
@@ -162,7 +163,7 @@ export default function Home() {
             </div>
             <div className="text-right">
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(217,43,43,0.75)' }}>Bloc opposition</p>
-              <p className="text-4xl font-black font-mono text-[var(--p-red)] leading-none mt-1">{oppositionSeats}</p>
+              <p className="text-4xl font-black font-mono text-[var(--p-red)] leading-none mt-1"><CountUp value={oppositionSeats} delay={200} /></p>
             </div>
           </div>
 

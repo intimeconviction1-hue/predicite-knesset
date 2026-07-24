@@ -1,6 +1,6 @@
 import express from 'express';
 import { randomUUID } from 'node:crypto';
-import { db } from '../db/index.js';
+import { queryOne, run } from '../db/index.js';
 
 /**
  * Auth volontairement minimale : email seul, pas de mot de passe, session cookie.
@@ -22,45 +22,58 @@ function getAdminEmails() {
     .filter(Boolean);
 }
 
-router.post('/login', (req, res) => {
-  const email = (req.body?.email || '').trim().toLowerCase();
-  const full_name = (req.body?.full_name || '').trim();
-  if (!email || !email.includes('@')) {
-    return res.status(400).json({ error: 'Email invalide.' });
+router.post('/login', async (req, res, next) => {
+  try {
+    const email = (req.body?.email || '').trim().toLowerCase();
+    const full_name = (req.body?.full_name || '').trim();
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({ error: 'Email invalide.' });
+    }
+
+    let user = await queryOne('SELECT * FROM users WHERE email = ?', [email]);
+
+    if (!user) {
+      // COUNT(*) revient en BIGINT côté Postgres, donc en string via pg — Number() nécessaire.
+      const { n } = await queryOne('SELECT COUNT(*) as n FROM users');
+      const isFirstUser = Number(n) === 0;
+      const isListedAdmin = getAdminEmails().includes(email);
+      const role = (isFirstUser || isListedAdmin) ? 'admin' : 'user';
+
+      const id = randomUUID();
+      await run(
+        'INSERT INTO users (id, email, full_name, role) VALUES (?, ?, ?, ?)',
+        [id, email, full_name || email.split('@')[0], role]
+      );
+      user = await queryOne('SELECT * FROM users WHERE id = ?', [id]);
+
+      // Initialise la progression utilisateur (équivalent ensureUserProgress)
+      await run(
+        'INSERT INTO user_progress (id, user_email) VALUES (?, ?) ON CONFLICT (user_email) DO NOTHING',
+        [randomUUID(), email]
+      );
+    }
+
+    req.session.user_email = user.email;
+    res.json({ id: user.id, email: user.email, full_name: user.full_name, role: user.role });
+  } catch (e) {
+    next(e);
   }
-
-  let user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-
-  if (!user) {
-    const totalUsers = db.prepare('SELECT COUNT(*) as n FROM users').get().n;
-    const isFirstUser = totalUsers === 0;
-    const isListedAdmin = getAdminEmails().includes(email);
-    const role = (isFirstUser || isListedAdmin) ? 'admin' : 'user';
-
-    const id = randomUUID();
-    db.prepare('INSERT INTO users (id, email, full_name, role) VALUES (?, ?, ?, ?)')
-      .run(id, email, full_name || email.split('@')[0], role);
-    user = db.prepare('SELECT * FROM users WHERE id = ?').get(id);
-
-    // Initialise la progression utilisateur (équivalent ensureUserProgress)
-    db.prepare('INSERT OR IGNORE INTO user_progress (id, user_email) VALUES (?, ?)')
-      .run(randomUUID(), email);
-  }
-
-  req.session.user_email = user.email;
-  res.json({ id: user.id, email: user.email, full_name: user.full_name, role: user.role });
 });
 
 router.post('/logout', (req, res) => {
   req.session.destroy(() => res.json({ ok: true }));
 });
 
-router.get('/me', (req, res) => {
-  const email = req.session?.user_email;
-  if (!email) return res.status(401).json({ error: 'Non connecté' });
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email);
-  if (!user) return res.status(401).json({ error: 'Non connecté' });
-  res.json({ id: user.id, email: user.email, full_name: user.full_name, role: user.role });
+router.get('/me', async (req, res, next) => {
+  try {
+    const email = req.session?.user_email;
+    if (!email) return res.status(401).json({ error: 'Non connecté' });
+    const user = await queryOne('SELECT * FROM users WHERE email = ?', [email]);
+    if (!user) return res.status(401).json({ error: 'Non connecté' });
+    res.json({ id: user.id, email: user.email, full_name: user.full_name, role: user.role });
+  } catch (e) {
+    next(e);
+  }
 });
 
 export default router;

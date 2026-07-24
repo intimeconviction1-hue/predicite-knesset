@@ -87,7 +87,7 @@ export default function ReglesDuJeu() {
           <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: 'var(--p-gold)' }}>
             Comment ça marche
           </p>
-          <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight" style={{ fontFamily: "'Space Grotesk','Outfit',sans-serif" }}>
+          <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
             Règles du jeu — Knesset 2026
           </h1>
           <p className="text-white/50 text-base leading-relaxed max-w-2xl">
@@ -99,7 +99,7 @@ export default function ReglesDuJeu() {
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-16">
 
         <section id="boucle">
-          <h2 className="text-xl font-bold text-white mb-8" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>
+          <h2 className="text-xl font-bold text-white mb-8" style={{ fontFamily: 'var(--font-display)' }}>
             La boucle de jeu en 3 étapes
           </h2>
           <div className="space-y-4">
@@ -136,7 +136,7 @@ export default function ReglesDuJeu() {
         </section>
 
         <section id="points">
-          <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>Calcul des points</h2>
+          <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>Calcul des points</h2>
           <p className="text-white/40 text-sm mb-6">Les points sièges sont attribués après les résultats officiels ; le point Premier ministre après l'investiture.</p>
           <div className="rounded-2xl border border-white/10 overflow-hidden">
             <div className="grid grid-cols-[1fr_auto] text-xs font-bold uppercase tracking-wider text-white/30 px-5 py-3 border-b border-white/8" style={{ background: 'rgba(255,255,255,0.02)' }}>
@@ -159,7 +159,7 @@ export default function ReglesDuJeu() {
         </section>
 
         <section id="indice-citoyen">
-          <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>L'indice citoyen</h2>
+          <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>L'indice citoyen</h2>
           <p className="text-white/40 text-sm mb-6">Score sur 100 pts qui mesure votre engagement civique global.</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {[
@@ -178,7 +178,7 @@ export default function ReglesDuJeu() {
         </section>
 
         <section id="badges">
-          <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>Badges & récompenses</h2>
+          <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-display)' }}>Badges & récompenses</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {BADGES.map(({ icon, label, desc }) => (
               <div key={label} className="flex items-start gap-3 rounded-xl border border-white/8 p-4" style={{ background: 'rgba(255,255,255,0.025)' }}>
@@ -194,7 +194,7 @@ export default function ReglesDuJeu() {
 
         <section className="rounded-2xl border border-white/10 p-8 text-center" style={{ background: 'rgba(30,58,138,0.15)' }}>
           <p className="text-white/50 text-sm mb-2">Prêt à commencer ?</p>
-          <h3 className="text-2xl font-black text-white mb-6" style={{ fontFamily: "'Space Grotesk',sans-serif" }}>
+          <h3 className="text-2xl font-black text-white mb-6" style={{ fontFamily: 'var(--font-display)' }}>
             Anticipez. Apprenez. Gagnez.
           </h3>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

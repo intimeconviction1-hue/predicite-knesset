@@ -1,13 +1,19 @@
--- Schéma PrédiCité — édition Knesset 2026
+-- Schéma PrédiCité — édition Knesset 2026 (dialecte Postgres depuis le
+-- passage de node:sqlite, 2026-07-24)
 -- Une table par entité. Les champs "tableau" (ex. seats_by_liste) sont stockés
 -- en JSON texte et (dé)sérialisés côté serveur (voir db/index.js).
+-- now_iso() reproduit le format ISO 8601 que produisait datetime('now') côté
+-- SQLite, pour rester cohérent avec new Date().toISOString() utilisé côté JS.
+CREATE OR REPLACE FUNCTION now_iso() RETURNS text AS $$
+  SELECT to_char(now() AT TIME ZONE 'utc', 'YYYY-MM-DD"T"HH24:MI:SS"Z"');
+$$ LANGUAGE sql;
 
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   email TEXT UNIQUE NOT NULL,
   full_name TEXT,
   role TEXT NOT NULL DEFAULT 'user', -- 'user' | 'admin'
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  created_at TEXT NOT NULL DEFAULT (now_iso())
 );
 
 CREATE TABLE IF NOT EXISTS listes (
@@ -24,8 +30,8 @@ CREATE TABLE IF NOT EXISTS listes (
   predecessor_ids TEXT, -- JSON array de liste_id
   current_knesset_seats INTEGER,
   logo_url TEXT,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+  created_at TEXT NOT NULL DEFAULT (now_iso()),
+  updated_at TEXT NOT NULL DEFAULT (now_iso())
 );
 
 CREATE TABLE IF NOT EXISTS sondages_sieges (
@@ -39,7 +45,7 @@ CREATE TABLE IF NOT EXISTS sondages_sieges (
   source_language TEXT CHECK (source_language IN ('fr','he')) DEFAULT 'fr',
   seats_by_liste TEXT NOT NULL, -- JSON array [{liste_id, seats}]
   checksum TEXT UNIQUE,
-  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  created_at TEXT NOT NULL DEFAULT (now_iso())
 );
 
 CREATE TABLE IF NOT EXISTS resultats_sieges (
@@ -50,7 +56,7 @@ CREATE TABLE IF NOT EXISTS resultats_sieges (
   threshold_pct REAL NOT NULL DEFAULT 3.25,
   source_url TEXT,
   is_final INTEGER NOT NULL DEFAULT 0,
-  collected_at TEXT NOT NULL DEFAULT (datetime('now'))
+  collected_at TEXT NOT NULL DEFAULT (now_iso())
 );
 
 CREATE TABLE IF NOT EXISTS pronostics_sieges (
@@ -62,8 +68,8 @@ CREATE TABLE IF NOT EXISTS pronostics_sieges (
   justification TEXT,
   points_earned INTEGER NOT NULL DEFAULT 0,
   is_correct INTEGER NOT NULL DEFAULT 0,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+  created_at TEXT NOT NULL DEFAULT (now_iso()),
+  updated_at TEXT NOT NULL DEFAULT (now_iso()),
   UNIQUE(user_email, liste_id)
 );
 
@@ -80,7 +86,7 @@ CREATE TABLE IF NOT EXISTS pronostics_pm (
   id TEXT PRIMARY KEY,
   user_email TEXT NOT NULL UNIQUE,
   candidat_pm_id TEXT NOT NULL, -- id de candidats_pm, ou littéralement "autre"
-  submitted_at TEXT NOT NULL DEFAULT (datetime('now')),
+  submitted_at TEXT NOT NULL DEFAULT (now_iso()),
   locked_at TEXT,
   resolved_at TEXT,
   resolved_value TEXT,
@@ -119,6 +125,6 @@ CREATE TABLE IF NOT EXISTS user_badges (
   id TEXT PRIMARY KEY,
   user_email TEXT NOT NULL,
   badge_code TEXT NOT NULL REFERENCES badges(code),
-  earned_at TEXT NOT NULL DEFAULT (datetime('now')),
+  earned_at TEXT NOT NULL DEFAULT (now_iso()),
   UNIQUE(user_email, badge_code)
 );

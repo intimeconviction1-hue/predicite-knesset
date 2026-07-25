@@ -269,7 +269,7 @@ export default function Leaderboard() {
 
                   {/* Avatar */}
                   <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
-                    style={{ background: isCurrentUser ? 'var(--p-gold)' : 'var(--p-card)', color: isCurrentUser ? 'var(--p-night)' : 'var(--p-text-60)', fontFamily: 'var(--font-display)' }}>
+                    style={{ background: isCurrentUser ? 'var(--p-gold)' : 'var(--p-card)', color: isCurrentUser ? 'var(--p-ink)' : 'var(--p-text-60)', fontFamily: 'var(--font-display)' }}>
                     {player.user_email?.charAt(0).toUpperCase()}
                   </div>
 

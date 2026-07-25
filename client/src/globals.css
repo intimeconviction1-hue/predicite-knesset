@@ -40,9 +40,15 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --p-night:        #050A18;
-    --p-night-2:      #0B1628;
-    --p-card:         #0F1E36;
+    /* Thème clair depuis 2026-07-25 (Simon : le sombre "faisait lourd", pas
+       assez d'institution/lumiere/espoir). Mêmes noms de tokens qu'avant
+       (--p-night etc.) pour que tout le reste du code continue de marcher
+       sans y toucher — seules les VALEURS changent, vers --p-learn-bg/
+       --p-learn-card/--p-ink qui existaient déjà, jamais branchés ailleurs
+       que BallotChip. */
+    --p-night:        #F8F6F0;
+    --p-night-2:      #F1ECE0;
+    --p-card:         #FFFFFF;
     --p-learn-bg:     #F8F6F0;
     --p-learn-card:   #FFFFFF;
     --p-learn-border: rgba(5, 10, 24, 0.08);
@@ -51,6 +57,12 @@
     --p-gold:         #D4AF37;
     --p-gold-dim:     rgba(212, 175, 55, 0.15);
     --p-gold-border:  rgba(212, 175, 55, 0.3);
+    /* --p-gold en TEXTE direct sur le fond clair --p-night ne fait que
+       1.95:1 de contraste (calculé) — trop bas pour du texte lisible.
+       --p-gold-text est une version foncée (5.6:1) à utiliser partout où
+       l'or sert de couleur de texte (chiffres, labels) ; --p-gold reste
+       pour le décoratif (icônes, bordures, glows, fonds teintés). */
+    --p-gold-text:    #7A5F1A;
     --p-blue:         #2B5CE6;
     --p-blue-dim:     rgba(43, 92, 230, 0.15);
     --p-blue-border:  rgba(43, 92, 230, 0.3);
@@ -60,13 +72,19 @@
     --p-green-dim:    rgba(26, 140, 85, 0.15);
     --p-paper:        #F3EEE3;
     --p-ink:          #14203D;
-    --p-text:         #F5F0E8;
-    --p-text-60:      rgba(245, 240, 232, 0.6);
-    --p-text-40:      rgba(245, 240, 232, 0.4);
-    --p-text-25:      rgba(245, 240, 232, 0.25);
-    --p-text-10:      rgba(245, 240, 232, 0.1);
-    --p-border:       rgba(245, 240, 232, 0.08);
-    --p-border-hover: rgba(245, 240, 232, 0.15);
+    --p-text:         #14203D;
+    /* Alphas recalculés par mesure réelle (pas de simple report des valeurs
+       sombres) : de l'encre à 0.45 sur crème ne fait que 2.75:1 de contraste
+       (échoue AA 4.5:1) — la transparence ne se transpose pas symétriquement
+       du blanc-sur-noir au noir-sur-blanc. Valeurs ci-dessous vérifiées via
+       calcul de luminance relative WCAG : -60 ≈ 6.9:1, -40 ≈ 5:1 (AA),
+       -25 ≈ 3.2:1 (AA grand texte / décoratif uniquement). */
+    --p-text-60:      rgba(20, 32, 61, 0.75);
+    --p-text-40:      rgba(20, 32, 61, 0.65);
+    --p-text-25:      rgba(20, 32, 61, 0.5);
+    --p-text-10:      rgba(20, 32, 61, 0.15);
+    --p-border:       rgba(20, 32, 61, 0.1);
+    --p-border-hover: rgba(20, 32, 61, 0.18);
     --font-display:   'Syne', system-ui, sans-serif;
     --font-body:      'Inter', system-ui, sans-serif;
     --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
@@ -125,12 +143,12 @@ span[role="button"] { min-height: auto; }
 :focus-visible { outline: 2px solid var(--p-blue); outline-offset: 2px; border-radius: 4px; }
 
 .skip-to-content { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; z-index:-999; }
-.skip-to-content:focus { left:6px; top:6px; width:auto; height:auto; overflow:auto; z-index:999; background:var(--p-night); color:var(--p-gold); padding:10px 20px; border-radius:4px; font-weight:600; font-size:1rem; border:2px solid var(--p-gold); outline:3px solid var(--p-gold); outline-offset:2px; }
+.skip-to-content:focus { left:6px; top:6px; width:auto; height:auto; overflow:auto; z-index:999; background:var(--p-ink); color:var(--p-gold); padding:10px 20px; border-radius:4px; font-weight:600; font-size:1rem; border:2px solid var(--p-gold); outline:3px solid var(--p-gold); outline-offset:2px; }
 
 .p-display { font-family:var(--font-display); font-weight:800; line-height:1.05; letter-spacing:-0.02em; color:var(--p-text); }
 .p-title   { font-family:var(--font-display); font-weight:700; line-height:1.15; letter-spacing:-0.01em; color:var(--p-text); }
 .p-body    { font-family:var(--font-body); font-weight:400; line-height:1.65; color:var(--p-text-60); }
-.p-mono    { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; color:var(--p-gold); }
+.p-mono    { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; color:var(--p-gold-text); }
 
 .p-card { background:var(--p-card); border:0.5px solid var(--p-border); border-radius:12px; transition:border-color 0.15s, transform 0.15s; }
 .p-card:hover { border-color:var(--p-border-hover); }
@@ -138,15 +156,15 @@ span[role="button"] { min-height: auto; }
 .p-learn-card { background:var(--p-learn-card); border:0.5px solid var(--p-learn-border); border-radius:12px; color:var(--p-learn-text); }
 
 .p-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; border:0.5px solid; min-height:auto; }
-.p-badge-gold    { background:var(--p-gold-dim);  color:var(--p-gold);  border-color:var(--p-gold-border); }
-.p-badge-blue    { background:var(--p-blue-dim);  color:#7BA3F0;        border-color:var(--p-blue-border); }
-.p-badge-red     { background:var(--p-red-dim);   color:#F07080;        border-color:rgba(200,16,46,0.3); }
-.p-badge-green   { background:var(--p-green-dim); color:#5DC98A;        border-color:rgba(26,140,85,0.3); }
+.p-badge-gold    { background:var(--p-gold-dim);  color:var(--p-gold-text); border-color:var(--p-gold-border); }
+.p-badge-blue    { background:var(--p-blue-dim);  color:var(--p-blue);      border-color:var(--p-blue-border); }
+.p-badge-red     { background:var(--p-red-dim);   color:var(--p-red);       border-color:rgba(200,16,46,0.3); }
+.p-badge-green   { background:var(--p-green-dim); color:#16794A;            border-color:rgba(26,140,85,0.3); }
 .p-badge-neutral { background:var(--p-text-10);   color:var(--p-text-40); border-color:var(--p-border); }
 
 .p-btn-primary { background:var(--p-blue); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:opacity 0.15s; }
 .p-btn-primary:hover { opacity:0.88; }
-.p-btn-gold { background:transparent; color:var(--p-gold); border:0.5px solid var(--p-gold-border); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:background 0.15s; }
+.p-btn-gold { background:transparent; color:var(--p-gold-text); border:0.5px solid var(--p-gold-border); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:background 0.15s; }
 .p-btn-gold:hover { background:var(--p-gold-dim); }
 .p-btn-ghost { background:transparent; color:var(--p-text-60); border:0.5px solid var(--p-border-hover); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; cursor:pointer; transition:color 0.15s, border-color 0.15s; }
 .p-btn-ghost:hover { color:var(--p-text); border-color:var(--p-text-40); }

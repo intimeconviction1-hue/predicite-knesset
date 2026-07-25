@@ -72,8 +72,8 @@ export default function Layout({ children, currentPageName }) {
   const navLinkDark = (active) =>
     `flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
       active
-        ? 'text-[var(--p-gold)] bg-white/8'
-        : 'text-white/60 hover:text-white hover:bg-white/8'
+        ? 'text-[var(--p-gold-text)] bg-[rgba(20,32,61,0.06)]'
+        : 'text-[var(--p-text-60)] hover:text-[var(--p-text)] hover:bg-[rgba(20,32,61,0.05)]'
     }`;
 
   const LogoSVG = () => (
@@ -108,15 +108,15 @@ export default function Layout({ children, currentPageName }) {
       {/* Bandeau bleu/blanc/bleu — motif drapeau israélien */}
       <div className="h-0.5 w-full flex fixed top-0 z-[60]">
         <div className="w-1/3 h-full bg-[#0038B8]" />
-        <div className="w-1/3 h-full bg-white/70" />
+        <div className="w-1/3 h-full bg-white" />
         <div className="w-1/3 h-full bg-[#0038B8]" />
       </div>
 
       {/* ── Desktop Header ── */}
       <header className="hidden md:block sticky top-0.5 z-50">
         <div
-          className="border-b border-white/10"
-          style={{ background: 'rgba(7,18,42,0.95)', backdropFilter: 'blur(12px)' }}
+          className="border-b border-[rgba(20,32,61,0.08)]"
+          style={{ background: 'rgba(248,246,240,0.92)', backdropFilter: 'blur(12px)' }}
         >
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
@@ -124,7 +124,7 @@ export default function Layout({ children, currentPageName }) {
               {/* Logo */}
               <Link to={createPageUrl('Home')} className="flex items-center gap-2 flex-shrink-0">
                 <LogoSVG />
-                <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold)' }}>PrédiCité</span>
+                <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold-text)' }}>PrédiCité</span>
               </Link>
 
               {/* Nav */}
@@ -139,7 +139,7 @@ export default function Layout({ children, currentPageName }) {
                   );
                 })}
                 {/* Règles — lien direct visible */}
-                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8 hover:bg-[var(--p-gold)]/15`} style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold)' : 'rgba(212,175,55,0.8)' }}>
+                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8 hover:bg-[var(--p-gold)]/15`} style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold-text)' : 'rgba(122,95,26,0.8)' }}>
                   <BookOpen className="w-3.5 h-3.5" />
                   Règles
                 </Link>
@@ -161,8 +161,8 @@ export default function Layout({ children, currentPageName }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full right-0 mt-1 w-48 rounded-xl border border-white/10 py-1 z-50"
-                        style={{ background: 'rgba(7,18,42,0.97)', backdropFilter: 'blur(12px)' }}
+                        className="absolute top-full right-0 mt-1 w-48 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
+                        style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
                       >
                         {moreNavItems.map((item) => {
                           const Icon = item.icon;
@@ -171,10 +171,10 @@ export default function Layout({ children, currentPageName }) {
                               key={item.name}
                               to={createPageUrl(item.name)}
                               className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
-                                isActive(item.name) ? 'text-[var(--p-gold)] bg-white/8' : 'text-white/60 hover:text-white hover:bg-white/6'
+                                isActive(item.name) ? 'text-[var(--p-gold-text)] bg-[rgba(20,32,61,0.06)]' : 'text-[var(--p-text-60)] hover:text-[var(--p-text)] hover:bg-[rgba(20,32,61,0.05)]'
                               }`}
                             >
-                              <Icon className="w-4 h-4 text-white/30" />
+                              <Icon className="w-4 h-4 text-[var(--p-text-25)]" />
                               {item.label}
                             </Link>
                           );
@@ -189,7 +189,7 @@ export default function Layout({ children, currentPageName }) {
               <div className="flex items-center gap-3 flex-shrink-0">
                 {user && userProgress && userProgress.total_points > 0 && (
                   <div className="px-3 py-1.5 rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5" style={{ background: 'rgba(212,175,55,0.1)' }}>
-                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--p-gold)' }}>
+                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--p-gold-text)' }}>
                       {(userProgress.total_points || 0).toLocaleString('fr-FR')} pts
                     </span>
                   </div>
@@ -198,17 +198,17 @@ export default function Layout({ children, currentPageName }) {
                   <div className="relative" ref={userMenuRef}>
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/8 transition-colors"
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[rgba(20,32,61,0.05)] transition-colors"
                       aria-haspopup="menu"
                       aria-expanded={isUserMenuOpen}
                     >
                       <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#1E3A8A' }}>
                         {user.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-sm font-medium text-white/80">
+                      <span className="text-sm font-medium" style={{ color: 'var(--p-text-60)' }}>
                         {user.full_name?.split(' ')[0] || user.email?.split('@')[0]}
                       </span>
-                      <ChevronDown className={`w-3.5 h-3.5 text-white/40 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} style={{ color: 'var(--p-text-40)' }} />
                     </button>
                     <AnimatePresence>
                       {isUserMenuOpen && (
@@ -217,8 +217,8 @@ export default function Layout({ children, currentPageName }) {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute top-full right-0 mt-1 w-44 rounded-xl border border-white/10 py-1 z-50"
-                          style={{ background: 'rgba(7,18,42,0.97)', backdropFilter: 'blur(12px)' }}
+                          className="absolute top-full right-0 mt-1 w-44 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
+                          style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
                         >
                           <button
                             onClick={() => base44.auth.logout()}
@@ -250,13 +250,13 @@ export default function Layout({ children, currentPageName }) {
       {/* ── Mobile Header ── */}
       <nav aria-label="Navigation mobile" className="md:hidden sticky top-0.5 z-50">
         <div
-          className="border-b border-white/10"
-          style={{ background: 'rgba(7,18,42,0.95)', backdropFilter: 'blur(12px)' }}
+          className="border-b border-[rgba(20,32,61,0.08)]"
+          style={{ background: 'rgba(248,246,240,0.92)', backdropFilter: 'blur(12px)' }}
         >
           <div className="flex items-center justify-between h-13 px-4 py-2">
             <Link to={createPageUrl('Home')} className="flex items-center gap-2">
               <LogoSVG />
-              <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold)' }}>PrédiCité</span>
+              <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold-text)' }}>PrédiCité</span>
             </Link>
             <div className="flex items-center gap-2">
               {user && (
@@ -266,10 +266,10 @@ export default function Layout({ children, currentPageName }) {
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2.5 rounded-lg hover:bg-white/8 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2.5 rounded-lg hover:bg-[rgba(20,32,61,0.05)] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
               >
-                {isMobileMenuOpen ? <X className="w-5 h-5 text-white/70" /> : <Menu className="w-5 h-5 text-white/70" />}
+                {isMobileMenuOpen ? <X className="w-5 h-5" style={{ color: 'var(--p-text-60)' }} /> : <Menu className="w-5 h-5" style={{ color: 'var(--p-text-60)' }} />}
               </button>
             </div>
           </div>
@@ -280,7 +280,7 @@ export default function Layout({ children, currentPageName }) {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="border-t border-white/8 overflow-hidden"
+                className="border-t border-[rgba(20,32,61,0.06)] overflow-hidden"
               >
                 <div className="p-3 space-y-0.5">
                   {[...mainNavItems, { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen }, ...moreNavItems].map((item) => {
@@ -290,7 +290,7 @@ export default function Layout({ children, currentPageName }) {
                         key={item.name}
                         to={createPageUrl(item.name)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                          isActive(item.name) ? 'bg-white/10 text-[var(--p-gold)]' : 'text-white/60 hover:bg-white/6 hover:text-white'
+                          isActive(item.name) ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-gold-text)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -321,7 +321,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Footer */}
-      <footer role="contentinfo" className="border-t border-white/10 text-white mt-auto" style={{ background: 'var(--p-night-2)' }}>
+      <footer role="contentinfo" className="border-t border-[rgba(20,32,61,0.08)] mt-auto" style={{ background: 'var(--p-night-2)', color: 'var(--p-text)' }}>
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -329,7 +329,7 @@ export default function Layout({ children, currentPageName }) {
                 <div className="bg-[#0038B8] rounded-md p-1.5">
                   <Vote className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-bold text-white">Knesset 2026</span>
+                <span className="font-bold" style={{ color: 'var(--p-text)' }}>Knesset 2026</span>
               </div>
               <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>
                 Plateforme civique, gratuite et pédagogique sur les élections législatives israéliennes, à destination d'un public francophone.
@@ -337,33 +337,33 @@ export default function Layout({ children, currentPageName }) {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Découvrir</h4>
+              <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Découvrir</h4>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
-                <li><Link to={createPageUrl('Listes')} className="hover:text-white transition-colors">Listes</Link></li>
-                <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-white transition-colors">Premier ministre</Link></li>
-                <li><Link to={createPageUrl('Leaderboard')} className="hover:text-white transition-colors">Classement</Link></li>
+                <li><Link to={createPageUrl('Listes')} className="hover:text-[var(--p-text)] transition-colors">Listes</Link></li>
+                <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Premier ministre</Link></li>
+                <li><Link to={createPageUrl('Leaderboard')} className="hover:text-[var(--p-text)] transition-colors">Classement</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Apprendre</h4>
+              <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Apprendre</h4>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
-                <li><Link to={createPageUrl('Learn')} className="hover:text-white transition-colors">Les législatives israéliennes</Link></li>
-                <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-white transition-colors">Comment on vote à la Knesset</Link></li>
-                <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-white transition-colors">Formation du gouvernement</Link></li>
+                <li><Link to={createPageUrl('Learn')} className="hover:text-[var(--p-text)] transition-colors">Les législatives israéliennes</Link></li>
+                <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-[var(--p-text)] transition-colors">Comment on vote à la Knesset</Link></li>
+                <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Formation du gouvernement</Link></li>
               </ul>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Transparence</h4>
+              <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Transparence</h4>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
-                <li><Link to={createPageUrl('Methodologie')} className="hover:text-white transition-colors">Sources & Méthodologie</Link></li>
-                <li><Link to={createPageUrl('Leaderboard')} className="hover:text-white transition-colors">Classement</Link></li>
+                <li><Link to={createPageUrl('Methodologie')} className="hover:text-[var(--p-text)] transition-colors">Sources & Méthodologie</Link></li>
+                <li><Link to={createPageUrl('Leaderboard')} className="hover:text-[var(--p-text)] transition-colors">Classement</Link></li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
+          <div className="border-t border-[rgba(20,32,61,0.08)] mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
             <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>
               © 2026 · Knesset 2026 · Plateforme neutre et pédagogique · Aucun parti politique associé
             </p>

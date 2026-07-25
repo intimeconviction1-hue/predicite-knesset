@@ -7,6 +7,8 @@ import { motion } from 'framer-motion';
 import { Vote, Crown, ChevronRight, Trophy } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
+import CountdownTimer from '@/components/knesset/CountdownTimer';
+import ElectionTimeline from '@/components/knesset/ElectionTimeline';
 
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
@@ -163,6 +165,36 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Compte à rebours + calendrier — le scrutin approche, sentiment de progression */}
+      <div className="max-w-3xl mx-auto px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+          className="rounded-3xl p-6 md:p-10 text-center"
+          style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}
+        >
+          <p className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: 'var(--p-gold-text)' }}>
+            Le scrutin approche
+          </p>
+          <div className="flex justify-center">
+            <CountdownTimer />
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4, delay: 0.08 }}
+          className="rounded-3xl p-6 md:p-10 mt-4"
+          style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}
+        >
+          <ElectionTimeline />
+        </motion.div>
+      </div>
+
       {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app */}
       <div className="max-w-3xl mx-auto px-4 pb-10">
         <div className="relative rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.25) 0%, rgba(10,18,38,0.9) 65%)', border: '0.5px solid rgba(245,240,232,0.08)' }}>
@@ -194,12 +226,12 @@ export default function Home() {
       {/* Classement des listes */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-base text-white" style={{ fontFamily: "'Syne', sans-serif" }}>
+          <h2 className="font-bold text-base" style={{ fontFamily: "'Syne', sans-serif", color: 'var(--p-text)' }}>
             Dernière projection sièges
           </h2>
           <Link to={createPageUrl('Listes')}
-            className="text-xs flex items-center gap-1 hover:text-white transition-colors"
-            style={{ color: 'rgba(245,240,232,0.35)' }}>
+            className="text-xs flex items-center gap-1 hover:text-[var(--p-text)] transition-colors"
+            style={{ color: 'var(--p-text-40)' }}>
             Toutes les listes <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
@@ -223,7 +255,7 @@ export default function Home() {
 
         {/* Liens secondaires */}
         <div className="flex items-center justify-center gap-6 mt-12 pt-10"
-          style={{ borderTop: '0.5px solid rgba(245,240,232,0.06)' }}>
+          style={{ borderTop: '0.5px solid var(--p-border)' }}>
           {[
             { label: 'Classement', to: 'Leaderboard' },
             { label: 'Comprendre', to: 'Learn' },
@@ -231,8 +263,8 @@ export default function Home() {
             { label: 'Règles du jeu', to: 'ReglesDuJeu' },
           ].map(({ label, to }) => (
             <Link key={to} to={createPageUrl(to)}
-              className="text-sm hover:text-white transition-colors"
-              style={{ color: 'rgba(245,240,232,0.3)' }}>
+              className="text-sm hover:text-[var(--p-text)] transition-colors"
+              style={{ color: 'var(--p-text-40)' }}>
               {label}
             </Link>
           ))}

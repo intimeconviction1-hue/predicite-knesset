@@ -89,7 +89,7 @@ export default function Home() {
           backgroundPosition: 'center 35%',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.6) 0%, rgba(5,10,24,0.8) 50%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.25) 0%, rgba(5,10,24,0.45) 55%, var(--p-night) 100%)',
         }} />
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at 50% 15%, rgba(212,175,55,0.15) 0%, transparent 60%)',

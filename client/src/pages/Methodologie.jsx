@@ -18,7 +18,7 @@ const SOURCES = [
   {
     title: 'Résultats officiels',
     icon: ShieldCheck,
-    color: '#22C55E',
+    color: '#16794A',
     items: [
       "Commission électorale centrale d'Israël — le résultat définitif national, sièges par liste, provient de son site officiel (votes26.bechirot.gov.il) ou du jeu de données ouvert data.gov.il.",
       'Tant que la structure de données de la 26ᵉ Knesset n\'est pas confirmée, aucun résultat n\'est publié sur PrédiCité par extrapolation ou approximation — voir la note de transparence ci-dessous.',
@@ -29,20 +29,21 @@ const SOURCES = [
 export default function Methodologie() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
-      <div className="relative overflow-hidden border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+      <div className="relative overflow-hidden border-b" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)', borderColor: 'var(--p-border)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 85% 0%, rgba(34,197,94,0.1) 0%, transparent 55%)',
+          background: 'radial-gradient(ellipse at 85% 0%, rgba(34,197,94,0.08) 0%, transparent 55%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-white/30 text-sm mb-6"
+            className="flex items-center gap-2 text-sm mb-6"
+            style={{ color: 'var(--p-text-25)' }}
           >
-            <Link to={createPageUrl('Home')} className="hover:text-white/60 transition-colors">Accueil</Link>
+            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white/60">Sources & Méthodologie</span>
+            <span style={{ color: 'var(--p-text-60)' }}>Sources & Méthodologie</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -53,7 +54,7 @@ export default function Methodologie() {
           >
             <motion.div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22C55E' }}
               animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#22C55E' }}>
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#16794A' }}>
               Vérifié en continu · zéro donnée inventée
             </span>
           </motion.div>
@@ -61,8 +62,8 @@ export default function Methodologie() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.08 }}
-            className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="text-3xl md:text-4xl font-black mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}
           >
             Sources & Méthodologie
           </motion.h1>
@@ -70,7 +71,8 @@ export default function Methodologie() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.16 }}
-            className="text-white/50 text-base leading-relaxed max-w-2xl"
+            className="text-base leading-relaxed max-w-2xl"
+            style={{ color: 'var(--p-text-60)' }}
           >
             PrédiCité ne publie que des données réelles, sourcées et datées.
             Aucun chiffre n'est inventé, estimé ou complété pour « faire joli ».
@@ -87,8 +89,8 @@ export default function Methodologie() {
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4, delay: index * 0.08 }}
             whileHover={{ y: -2 }}
-            className="rounded-2xl border border-white/10 p-6 md:p-8 transition-colors duration-300 hover:border-white/20"
-            style={{ background: 'rgba(255,255,255,0.03)' }}
+            className="rounded-2xl border p-6 md:p-8 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+            style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
           >
             <div className="flex items-center gap-3 mb-4">
               <motion.div
@@ -99,11 +101,11 @@ export default function Methodologie() {
               >
                 <Icon className="w-4 h-4" style={{ color }} />
               </motion.div>
-              <h2 className="text-lg font-bold text-white">{title}</h2>
+              <h2 className="text-lg font-bold" style={{ color: 'var(--p-text)' }}>{title}</h2>
             </div>
             <ul className="space-y-3">
               {items.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm text-white/55 leading-relaxed">
+                <li key={i} className="flex items-start gap-2 text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>
                   <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
                   {item}
                 </li>
@@ -121,12 +123,12 @@ export default function Methodologie() {
           style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.05)' }}
         >
           <div className="flex items-center gap-3 mb-3">
-            <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold)' }} />
-            <h2 className="text-lg font-bold text-white">Transparence sur une limite actuelle</h2>
+            <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
+            <h2 className="text-lg font-bold" style={{ color: 'var(--p-text)' }}>Transparence sur une limite actuelle</h2>
             <motion.div className="w-1.5 h-1.5 rounded-full ml-auto flex-shrink-0" style={{ background: 'var(--p-gold)' }}
               animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
           </div>
-          <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,240,232,0.6)' }}>
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>
             Au moment où ces lignes sont écrites, le site officiel de la 26ᵉ Knesset
             n'était pas encore structuré (la Knesset a été dissoute le 17 juillet
             2026, le scrutin est fixé au 27 octobre). Le collecteur de résultats
@@ -139,7 +141,7 @@ export default function Methodologie() {
           <Link
             to={createPageUrl('Listes')}
             className="group inline-flex items-center gap-2 text-sm font-semibold hover:opacity-80 transition-opacity"
-            style={{ color: '#4A7FD4' }}
+            style={{ color: 'var(--p-blue)' }}
           >
             Voir les listes suivies <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>

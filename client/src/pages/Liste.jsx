@@ -122,7 +122,7 @@ export default function ListePage() {
   if (isLoading || !liste) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--p-night)' }}>
-        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-white/70 animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-[var(--p-border-hover)] border-t-[var(--p-text-40)] animate-spin" />
       </div>
     );
   }
@@ -130,7 +130,7 @@ export default function ListePage() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-white transition-colors" style={{ color: 'rgba(245,240,232,0.4)' }}>
+        <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
         </Link>
 
@@ -140,8 +140,8 @@ export default function ListePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           whileHover={{ y: -2 }}
-          className="rounded-2xl border border-white/10 p-6 mb-6 transition-colors duration-300 hover:border-white/20"
-          style={{ background: 'rgba(255,255,255,0.03)' }}
+          className="rounded-2xl border p-6 mb-6 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+          style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div className="flex items-start gap-4">
@@ -149,9 +149,9 @@ export default function ListePage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || '#6B7280' }} />
-                  <h1 className="text-2xl font-black text-white" style={{ fontFamily: 'var(--font-display)' }}>{liste.name_fr}</h1>
+                  <h1 className="text-2xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{liste.name_fr}</h1>
                 </div>
-                <p className="text-sm" style={{ color: 'rgba(245,240,232,0.5)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
+                <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
               </div>
             </div>
             {(() => {
@@ -168,22 +168,22 @@ export default function ListePage() {
           </div>
 
           {liste.founded_or_merged_note && (
-            <p className="text-xs mt-3 pt-3 border-t" style={{ color: 'rgba(212,175,55,0.8)', borderColor: 'rgba(255,255,255,0.06)' }}>
+            <p className="text-xs mt-3 pt-3 border-t" style={{ color: 'var(--p-gold-text)', borderColor: 'var(--p-border)' }}>
               ⓘ {liste.founded_or_merged_note}
             </p>
           )}
 
-          <div className="flex items-center gap-6 mt-4 pt-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-6 mt-4 pt-4 border-t" style={{ borderColor: 'var(--p-border)' }}>
             <div>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.35)' }}>Sièges sortants (25e Knesset)</p>
-              <p className="text-xl font-bold text-white font-mono">{liste.current_knesset_seats ?? '—'}</p>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Sièges sortants (25e Knesset)</p>
+              <p className="text-xl font-bold font-mono" style={{ color: 'var(--p-text)' }}>{liste.current_knesset_seats ?? '—'}</p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.35)' }}>Dernière projection</p>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Dernière projection</p>
               {latest ? (
-                <p className="text-xl font-bold font-mono" style={{ color: liste.color || 'var(--p-gold)' }}>{latest.seats} sièges</p>
+                <p className="text-xl font-bold font-mono" style={{ color: liste.color || 'var(--p-gold-text)' }}>{latest.seats} sièges</p>
               ) : (
-                <p className="text-sm font-medium" style={{ color: 'rgba(245,240,232,0.3)' }}>Pas encore de sondage</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--p-text-25)' }}>Pas encore de sondage</p>
               )}
             </div>
           </div>
@@ -198,17 +198,17 @@ export default function ListePage() {
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4 }}
             whileHover={{ y: -2 }}
-            className="rounded-2xl border border-white/10 p-6 mb-6 transition-colors duration-300 hover:border-white/20"
-            style={{ background: 'rgba(255,255,255,0.03)' }}
+            className="rounded-2xl border p-6 mb-6 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+            style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-4 h-4" style={{ color: '#4A7FD4' }} />
-              <h2 className="font-bold text-white text-sm">Évolution des sondages sièges</h2>
+              <TrendingUp className="w-4 h-4" style={{ color: 'var(--p-blue)' }} />
+              <h2 className="font-bold text-sm" style={{ color: 'var(--p-text)' }}>Évolution des sondages sièges</h2>
             </div>
             <div className="flex items-end gap-2 h-32 mb-3">
               {history.map((h, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group relative">
-                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold)' }}>{h.seats}</span>
+                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold-text)' }}>{h.seats}</span>
                   <motion.div
                     className="w-full rounded-t-sm"
                     style={{ backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.7 }}
@@ -220,16 +220,16 @@ export default function ListePage() {
                 </div>
               ))}
             </div>
-            <div className="space-y-1.5 mt-4 pt-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+            <div className="space-y-1.5 mt-4 pt-4 border-t" style={{ borderColor: 'var(--p-border)' }}>
               {history.slice().reverse().slice(0, 5).map((h, i) => (
                 <div key={i} className="flex items-center justify-between text-xs">
-                  <span style={{ color: 'rgba(245,240,232,0.5)' }}>
+                  <span style={{ color: 'var(--p-text-60)' }}>
                     {h.institute} · {new Date(h.date).toLocaleDateString('fr-FR')}
                   </span>
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-white/80">{h.seats} sièges</span>
+                    <span className="font-mono font-bold" style={{ color: 'var(--p-text)' }}>{h.seats} sièges</span>
                     {h.source_url && (
-                      <a href={h.source_url} target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(245,240,232,0.3)' }}>
+                      <a href={h.source_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--p-text-25)' }}>
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
@@ -246,8 +246,8 @@ export default function ListePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="rounded-2xl border border-white/10 overflow-hidden mb-6"
-          style={{ background: 'rgba(255,255,255,0.03)' }}
+          className="rounded-2xl border overflow-hidden mb-6"
+          style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
           <div className="px-6 py-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
             <div className="flex items-center gap-2">
@@ -257,7 +257,7 @@ export default function ListePage() {
           </div>
 
           <div className={`flex items-center gap-2 px-6 py-2.5 text-xs ${deadlineClosed ? '' : ''}`}
-            style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : 'var(--p-gold)' }}>
+            style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>
             {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
             {deadlineClosed ? 'Pronostics clôturés' : <span>Clôture : <strong>{formatLocalDeadline(deadlineUtc)}</strong></span>}
           </div>
@@ -267,17 +267,17 @@ export default function ListePage() {
               confirmed || true ? (
                 <div className="flex items-center justify-between rounded-xl p-4" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#22C55E' }} />
+                    <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
                     <div>
-                      <p className="text-sm font-semibold" style={{ color: '#22C55E' }}>Pronostic : {existingPred.predicted_seats} sièges</p>
-                      <p className="text-xs mt-0.5" style={{ color: 'rgba(34,197,94,0.7)' }}>Enregistré</p>
+                      <p className="text-sm font-semibold" style={{ color: '#16794A' }}>Pronostic : {existingPred.predicted_seats} sièges</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#16794A' }}>Enregistré</p>
                     </div>
                   </div>
                   {!deadlineClosed && (
                     <button
                       onClick={() => { setSeats([existingPred.predicted_seats]); setEditMode(true); }}
                       className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-                      style={{ color: '#4A7FD4', border: '1px solid rgba(74,127,212,0.4)' }}
+                      style={{ color: 'var(--p-blue)', border: '1px solid rgba(74,127,212,0.4)' }}
                     >
                       <PenLine className="w-3.5 h-3.5" /> Modifier
                     </button>
@@ -293,11 +293,11 @@ export default function ListePage() {
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                     className="text-5xl font-black font-mono inline-block"
-                    style={{ color: liste.color || 'var(--p-gold)' }}
+                    style={{ color: liste.color || 'var(--p-gold-text)' }}
                   >
                     {seats[0]}
                   </motion.span>
-                  <p className="text-sm mt-2" style={{ color: 'rgba(245,240,232,0.4)' }}>sièges sur 120</p>
+                  <p className="text-sm mt-2" style={{ color: 'var(--p-text-40)' }}>sièges sur 120</p>
                 </div>
                 <Slider
                   value={seats}
@@ -307,7 +307,7 @@ export default function ListePage() {
                   step={1}
                   aria-label="Nombre de sièges pronostiqués"
                 />
-                <div className="flex justify-between text-[11px]" style={{ color: 'rgba(245,240,232,0.3)' }}>
+                <div className="flex justify-between text-[11px]" style={{ color: 'var(--p-text-25)' }}>
                   <span>0 (sous le seuil)</span>
                   <span>Seuil ≈ 4 sièges</span>
                   <span>{maxSeats}</span>
@@ -316,8 +316,8 @@ export default function ListePage() {
                 <button
                   type="button"
                   onClick={() => setShowJustification(!showJustification)}
-                  className="flex items-center gap-1.5 text-xs hover:text-white transition-colors"
-                  style={{ color: 'rgba(245,240,232,0.4)' }}
+                  className="flex items-center gap-1.5 text-xs hover:text-[var(--p-text)] transition-colors"
+                  style={{ color: 'var(--p-text-40)' }}
                 >
                   <PenLine className="w-3.5 h-3.5" />
                   {showJustification ? "Masquer l'analyse" : 'Ajouter une analyse (facultatif)'}
@@ -327,14 +327,14 @@ export default function ListePage() {
                     value={justification}
                     onChange={(e) => setJustification(e.target.value)}
                     placeholder="Pourquoi ce nombre de sièges ? Accords d'excédents, dynamique de campagne…"
-                    className="resize-none text-sm bg-transparent border-white/15 text-white placeholder:text-white/25"
+                    className="resize-none text-sm bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-25)]"
                     rows={3}
                   />
                 )}
 
                 <div className="flex gap-3">
                   {editMode && (
-                    <Button variant="outline" onClick={() => setEditMode(false)} className="flex-1 border-white/15 text-white/70">Annuler</Button>
+                    <Button variant="outline" onClick={() => setEditMode(false)} className="flex-1 border-[var(--p-border-hover)] text-[var(--p-text-60)]">Annuler</Button>
                   )}
                   <Button
                     onClick={handleSubmit}
@@ -353,7 +353,7 @@ export default function ListePage() {
         <KnessetRulesModule compact />
 
         <div className="flex items-center justify-center gap-6 mt-8">
-          <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-white transition-colors flex items-center gap-1.5" style={{ color: 'rgba(245,240,232,0.4)' }}>
+          <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-[var(--p-text)] transition-colors flex items-center gap-1.5" style={{ color: 'var(--p-text-40)' }}>
             <Users className="w-3.5 h-3.5" /> Pronostic Premier ministre
           </Link>
         </div>

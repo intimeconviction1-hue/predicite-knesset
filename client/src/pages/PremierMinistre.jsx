@@ -76,21 +76,21 @@ export default function PremierMinistre() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       <div className="max-w-3xl mx-auto px-4 py-8">
-        <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-white transition-colors" style={{ color: 'rgba(245,240,232,0.4)' }}>
+        <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
         </Link>
 
         {/* Header */}
-        <div className="rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(212,175,55,0.08))' }}>
+        <div className="rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(212,175,55,0.08))' }}>
           <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold)' }} />
-          <h1 className="text-2xl font-black text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>Qui sera Premier ministre ?</h1>
-          <p className="text-sm max-w-xl mx-auto" style={{ color: 'rgba(245,240,232,0.55)' }}>
+          <h1 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Qui sera Premier ministre ?</h1>
+          <p className="text-sm max-w-xl mx-auto" style={{ color: 'var(--p-text-60)' }}>
             Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard.
           </p>
         </div>
 
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"
-          style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? '#F47090' : 'var(--p-gold)' }}>
+          style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>
           {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
           {deadlineClosed
             ? 'Pronostics clôturés'
@@ -98,16 +98,16 @@ export default function PremierMinistre() {
         </div>
 
         {/* Formulaire */}
-        <div className="rounded-2xl border border-white/10 p-6 mb-6" style={{ background: 'rgba(255,255,255,0.03)' }}>
+        <div className="rounded-2xl border p-6 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
           {existingPred ? (
             <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#22C55E' }} />
+                <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: '#22C55E' }}>
+                  <p className="text-sm font-semibold" style={{ color: '#16794A' }}>
                     Pronostic : {selectedCandidat?.name_fr || 'Autre'}
                   </p>
-                  <p className="text-xs mt-0.5" style={{ color: 'rgba(34,197,94,0.7)' }}>
+                  <p className="text-xs mt-0.5" style={{ color: '#16794A' }}>
                     {existingPred.resolved_at ? 'Résolu' : 'En attente de l\'investiture'}
                   </p>
                 </div>
@@ -116,7 +116,7 @@ export default function PremierMinistre() {
                 <button
                   onClick={() => setSelected(existingPred.candidat_pm_id)}
                   className="text-xs font-semibold px-3 py-1.5 rounded-lg"
-                  style={{ color: '#4A7FD4', border: '1px solid rgba(74,127,212,0.4)' }}
+                  style={{ color: 'var(--p-blue)', border: '1px solid rgba(74,127,212,0.4)' }}
                 >
                   Modifier
                 </button>
@@ -124,7 +124,7 @@ export default function PremierMinistre() {
             </div>
           ) : isLoading ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {[...Array(6)].map((_, i) => <div key={i} className="h-20 rounded-xl animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />)}
+              {[...Array(6)].map((_, i) => <div key={i} className="h-20 rounded-xl animate-pulse" style={{ background: 'var(--p-border)' }} />)}
             </div>
           ) : (
             <div className="space-y-4">
@@ -135,22 +135,22 @@ export default function PremierMinistre() {
                     onClick={() => setSelected(c.id)}
                     className="rounded-xl p-4 text-center transition-all border"
                     style={{
-                      background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.03)',
-                      borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'rgba(255,255,255,0.08)',
+                      background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
+                      borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
                     }}
                   >
-                    <p className="text-sm font-semibold text-white">{c.name_fr}</p>
+                    <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{c.name_fr}</p>
                   </button>
                 ))}
                 <button
                   onClick={() => setSelected('autre')}
                   className="rounded-xl p-4 text-center transition-all border"
                   style={{
-                    background: selected === 'autre' ? 'rgba(212,175,55,0.12)' : 'rgba(255,255,255,0.03)',
-                    borderColor: selected === 'autre' ? 'rgba(212,175,55,0.5)' : 'rgba(255,255,255,0.08)',
+                    background: selected === 'autre' ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
+                    borderColor: selected === 'autre' ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
                   }}
                 >
-                  <p className="text-sm font-semibold" style={{ color: 'rgba(245,240,232,0.6)' }}>Autre</p>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--p-text-60)' }}>Autre</p>
                 </button>
               </div>
 
@@ -165,7 +165,7 @@ export default function PremierMinistre() {
             </div>
           )}
 
-          <div className="flex items-start gap-2 mt-4 pt-4 border-t text-xs" style={{ borderColor: 'rgba(255,255,255,0.06)', color: 'rgba(245,240,232,0.35)' }}>
+          <div className="flex items-start gap-2 mt-4 pt-4 border-t text-xs" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
             <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
             <p>+100 points si votre pronostic correspond à la personne effectivement investie Premier ministre. Un chef de gouvernement de transition ne compte pas. Si personne n'est investi avant la deadline de résolution, le pronostic bascule automatiquement sur « Autre ».</p>
           </div>

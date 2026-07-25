@@ -30,10 +30,10 @@ export default function Login() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-sm rounded-2xl border border-white/10 p-8"
-        style={{ background: 'rgba(255,255,255,0.03)' }}
+        className="w-full max-w-sm rounded-2xl border p-8"
+        style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
       >
-        <h1 className="text-2xl font-black text-white mb-1" style={{ fontFamily: 'var(--font-display)' }}>PrédiCité</h1>
+        <h1 className="text-2xl font-black mb-1" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>PrédiCité</h1>
         <p className="text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>
           Connexion par email — pas de mot de passe pour l'instant.
         </p>
@@ -47,7 +47,7 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full mt-1 px-3 py-2.5 rounded-lg bg-transparent border text-white text-sm outline-none transition-colors focus:border-[var(--p-gold)]"
+              className="w-full mt-1 px-3 py-2.5 rounded-lg bg-transparent border text-[var(--p-text)] text-sm outline-none transition-colors focus:border-[var(--p-gold)]"
               style={{ borderColor: 'var(--p-border-hover)' }}
               placeholder="vous@exemple.com"
             />
@@ -59,14 +59,14 @@ export default function Login() {
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full mt-1 px-3 py-2.5 rounded-lg bg-transparent border text-white text-sm outline-none transition-colors focus:border-[var(--p-gold)]"
+              className="w-full mt-1 px-3 py-2.5 rounded-lg bg-transparent border text-[var(--p-text)] text-sm outline-none transition-colors focus:border-[var(--p-gold)]"
               style={{ borderColor: 'var(--p-border-hover)' }}
               placeholder="Prénom Nom"
             />
           </div>
 
           {error && (
-            <p role="alert" className="text-xs" style={{ color: '#F47090' }}>{error}</p>
+            <p role="alert" className="text-xs" style={{ color: 'var(--p-red)' }}>{error}</p>
           )}
 
           <button

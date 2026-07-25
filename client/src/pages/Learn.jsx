@@ -17,20 +17,21 @@ const KEY_NUMBERS = [
 export default function Learn() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
-      <div className="relative overflow-hidden border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+      <div className="relative overflow-hidden border-b" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)', borderColor: 'var(--p-border)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 15% 0%, rgba(212,175,55,0.12) 0%, transparent 55%)',
+          background: 'radial-gradient(ellipse at 15% 0%, rgba(212,175,55,0.1) 0%, transparent 55%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-white/30 text-sm mb-6"
+            className="flex items-center gap-2 text-sm mb-6"
+            style={{ color: 'var(--p-text-25)' }}
           >
-            <Link to={createPageUrl('Home')} className="hover:text-white/60 transition-colors">Accueil</Link>
+            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white/60">Comprendre</span>
+            <span style={{ color: 'var(--p-text-60)' }}>Comprendre</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -38,15 +39,15 @@ export default function Learn() {
             transition={{ duration: 0.4, delay: 0.06 }}
             className="flex items-center gap-2 mb-3"
           >
-            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold)' }}>Comprendre avant de pronostiquer</p>
+            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
+            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>Comprendre avant de pronostiquer</p>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.12 }}
-            className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="text-3xl md:text-4xl font-black mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}
           >
             Les législatives israéliennes, expliquées
           </motion.h1>
@@ -54,7 +55,8 @@ export default function Learn() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-white/50 text-base leading-relaxed max-w-2xl"
+            className="text-base leading-relaxed max-w-2xl"
+            style={{ color: 'var(--p-text-60)' }}
           >
             Le 27 octobre 2026, Israël élit les 120 membres de la 26ᵉ Knesset. Deux
             choses à comprendre avant de pronostiquer : comment les voix se
@@ -113,10 +115,10 @@ export default function Learn() {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
           whileHover={{ y: -2 }}
-          className="rounded-2xl border border-white/10 p-8 text-center transition-colors duration-300 hover:border-white/20"
-          style={{ background: 'rgba(30,58,138,0.15)' }}
+          className="rounded-2xl border p-8 text-center transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+          style={{ background: 'rgba(30,58,138,0.08)', borderColor: 'var(--p-border)' }}
         >
-          <p className="text-white/50 text-sm mb-4">Prêt à mettre ça en pratique ?</p>
+          <p className="text-sm mb-4" style={{ color: 'var(--p-text-40)' }}>Prêt à mettre ça en pratique ?</p>
           <Link
             to={createPageUrl('Listes')}
             className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-opacity hover:opacity-85"

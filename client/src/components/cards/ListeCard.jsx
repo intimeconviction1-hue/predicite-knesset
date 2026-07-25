@@ -25,9 +25,9 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
       <Link to={`/Liste?slug=${liste.slug}`}>
         <div
           className="group overflow-hidden rounded-2xl border p-4 transition-colors duration-300"
-          style={{ background: 'rgba(10,18,42,0.85)', backdropFilter: 'blur(8px)', borderColor: 'rgba(255,255,255,0.1)' }}
+          style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = `${blocColor}55`; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--p-border)'; }}
         >
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
@@ -36,8 +36,8 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
                 <BallotChip letters={liste.ballot_letters} size="sm" />
               </motion.div>
               <div>
-                <h3 className="text-white font-bold text-base leading-tight">{liste.name_fr}</h3>
-                <p className="text-[11px] mt-0.5" style={{ color: 'rgba(245,240,232,0.4)' }}>{liste.leader_name}</p>
+                <h3 className="font-bold text-base leading-tight" style={{ color: 'var(--p-text)' }}>{liste.name_fr}</h3>
+                <p className="text-[11px] mt-0.5" style={{ color: 'var(--p-text-40)' }}>{liste.leader_name}</p>
               </div>
             </div>
             <Tooltip text="Classement descriptif, pas un jugement politique." position="bottom">
@@ -51,20 +51,20 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
           </div>
 
           {/* Projection sièges */}
-          <div className="flex items-end justify-between py-3 border-t border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+          <div className="flex items-end justify-between py-3 border-t border-b" style={{ borderColor: 'var(--p-border)' }}>
             <div>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.35)' }}>Projection sièges</p>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Projection sièges</p>
               {belowThreshold ? (
-                <p className="text-sm font-bold mt-0.5" style={{ color: '#F47090' }}>Sous le seuil (3,25%)</p>
+                <p className="text-sm font-bold mt-0.5" style={{ color: 'var(--p-red)' }}>Sous le seuil (3,25%)</p>
               ) : (
                 <p className="text-2xl font-black mt-0.5" style={{ fontFamily: 'monospace', color: liste.color || blocColor }}>
                   {projectedSeats != null ? <CountUp value={projectedSeats} duration={800} /> : '—'}
-                  <span className="text-xs font-normal" style={{ color: 'rgba(245,240,232,0.3)' }}> / 120</span>
+                  <span className="text-xs font-normal" style={{ color: 'var(--p-text-25)' }}> / 120</span>
                 </p>
               )}
             </div>
             {delta != null && delta !== 0 && (
-              <div className="flex items-center gap-1 text-xs font-bold" style={{ color: delta > 0 ? '#22C55E' : 'var(--p-red)' }}>
+              <div className="flex items-center gap-1 text-xs font-bold" style={{ color: delta > 0 ? '#16794A' : 'var(--p-red)' }}>
                 {delta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
                 {delta > 0 ? '+' : ''}{delta}
               </div>
@@ -73,11 +73,11 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
 
           {/* Footer */}
           <div className="flex items-center justify-between pt-3">
-            <div className="flex items-center gap-1.5 text-white/30 text-[11px]">
+            <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--p-text-25)' }}>
               <Users className="w-3 h-3" />
               {liste.current_knesset_seats != null ? `${liste.current_knesset_seats} sièges sortants` : 'Nouvelle liste'}
             </div>
-            <div className="flex items-center gap-1 text-[#4A7FD4] text-xs font-semibold group-hover:gap-1.5 transition-all">
+            <div className="flex items-center gap-1 text-xs font-semibold group-hover:gap-1.5 transition-all" style={{ color: 'var(--p-blue)' }}>
               Pronostiquer <ChevronRight className="w-3 h-3" />
             </div>
           </div>

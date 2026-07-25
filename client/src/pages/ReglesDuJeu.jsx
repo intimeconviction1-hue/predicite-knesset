@@ -16,11 +16,11 @@ const SCORING_RULES = [
 ];
 
 const BADGES = [
-  { icon: Target, color: '#4A7FD4', label: 'Analyste Précis', desc: 'Première liste pronostiquée à ±1 siège près.' },
-  { icon: Landmark, color: '#D4AF37', label: 'Politologue', desc: 'Quiz système électoral et formation de coalition réussis.' },
-  { icon: Crown, color: '#A78BFA', label: 'Faiseur de rois', desc: 'Pronostic Premier ministre correct.' },
-  { icon: PieChart, color: '#22C55E', label: 'Data Citoyen', desc: '5 quiz complétés avec succès.' },
-  { icon: Flame, color: '#F97316', label: 'Série enflammée', desc: '7 jours d\'activité consécutifs.' },
+  { icon: Target, color: '#2B5CE6', label: 'Analyste Précis', desc: 'Première liste pronostiquée à ±1 siège près.' },
+  { icon: Landmark, color: '#7A5F1A', label: 'Politologue', desc: 'Quiz système électoral et formation de coalition réussis.' },
+  { icon: Crown, color: '#6D28D9', label: 'Faiseur de rois', desc: 'Pronostic Premier ministre correct.' },
+  { icon: PieChart, color: '#16794A', label: 'Data Citoyen', desc: '5 quiz complétés avec succès.' },
+  { icon: Flame, color: '#C2410C', label: 'Série enflammée', desc: '7 jours d\'activité consécutifs.' },
 ];
 
 const STEPS = [
@@ -29,7 +29,7 @@ const STEPS = [
     icon: BarChart3,
     num: '01',
     label: 'COMPRENDRE',
-    color: '#4A7FD4',
+    color: '#2B5CE6',
     title: 'Comprendre le scrutin avant de pronostiquer',
     description: 'La Knesset se vote à la proportionnelle nationale, liste contre liste, avec un seuil de 3,25 %. Deux modules expliquent le mécanisme (répartition des sièges, accords d\'excédents) et la formation du gouvernement qui suit — c\'est la base pour un pronostic sensé, pas une case à cocher avant de jouer.',
     tips: [
@@ -45,7 +45,7 @@ const STEPS = [
     icon: Target,
     num: '02',
     label: 'ANTICIPER',
-    color: '#D4AF37',
+    color: '#7A5F1A',
     title: 'Soumettre vos pronostics',
     description: 'Pour chaque liste, pronostiquez un nombre de sièges. Ajoutez, si vous le souhaitez, un pronostic Premier ministre, qui se résout séparément — plus tard, à l\'investiture. Vous pouvez modifier vos pronostics jusqu\'à la deadline.',
     tips: [
@@ -61,7 +61,7 @@ const STEPS = [
     icon: Trophy,
     num: '03',
     label: 'COMPARER',
-    color: '#22C55E',
+    color: '#16794A',
     title: 'Monter au classement',
     description: 'Après les résultats officiels, vos pronostics sont automatiquement scorés. Votre indice citoyen combine précision sièges (35 %), précision Premier ministre (15 %), apprentissage (30 %) et régularité (20 %).',
     tips: [
@@ -78,27 +78,28 @@ export default function ReglesDuJeu() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
 
-      <div className="relative overflow-hidden border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+      <div className="relative overflow-hidden border-b" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)', borderColor: 'var(--p-border)' }}>
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 85% 0%, rgba(212,175,55,0.12) 0%, transparent 55%)',
+          background: 'radial-gradient(ellipse at 85% 0%, rgba(212,175,55,0.1) 0%, transparent 55%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-white/30 text-sm mb-6"
+            className="flex items-center gap-2 text-sm mb-6"
+            style={{ color: 'var(--p-text-25)' }}
           >
-            <Link to={createPageUrl('Home')} className="hover:text-white/60 transition-colors">Accueil</Link>
+            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white/60" aria-current="page">Règles du jeu</span>
+            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Règles du jeu</span>
           </motion.div>
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.06 }}
             className="text-xs font-bold uppercase tracking-[0.2em] mb-3"
-            style={{ color: 'var(--p-gold)' }}
+            style={{ color: 'var(--p-gold-text)' }}
           >
             Comment ça marche
           </motion.p>
@@ -106,8 +107,8 @@ export default function ReglesDuJeu() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.12 }}
-            className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)' }}
+            className="text-3xl md:text-4xl font-black mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}
           >
             Règles du jeu — Knesset 2026
           </motion.h1>
@@ -115,7 +116,8 @@ export default function ReglesDuJeu() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-white/50 text-base leading-relaxed max-w-2xl"
+            className="text-base leading-relaxed max-w-2xl"
+            style={{ color: 'var(--p-text-60)' }}
           >
             PrédiCité est un jeu prédictif civique. Comprenez le scrutin proportionnel israélien, pronostiquez sièges et Premier ministre, comparez votre précision avec celle de la communauté francophone.
           </motion.p>
@@ -125,7 +127,7 @@ export default function ReglesDuJeu() {
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-16">
 
         <section id="boucle">
-          <h2 className="text-xl font-bold text-white mb-8" style={{ fontFamily: 'var(--font-display)' }}>
+          <h2 className="text-xl font-bold mb-8" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
             La boucle de jeu en 3 étapes
           </h2>
           <div className="space-y-4">
@@ -138,8 +140,8 @@ export default function ReglesDuJeu() {
                 viewport={{ once: true, margin: '-10%' }}
                 transition={{ duration: 0.4, delay: index * 0.08 }}
                 whileHover={{ y: -2 }}
-                className="rounded-2xl border border-white/10 p-6 md:p-8 transition-colors duration-300 hover:border-white/20"
-                style={{ background: 'rgba(255,255,255,0.03)' }}
+                className="rounded-2xl border p-6 md:p-8 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+                style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
               >
                 <div className="flex items-start gap-5">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
@@ -151,11 +153,11 @@ export default function ReglesDuJeu() {
                       <span className="text-[10px] font-black tracking-[0.2em] uppercase" style={{ fontFamily: "'JetBrains Mono',monospace", color }}>{num}</span>
                       <span className="text-[9px] font-bold tracking-[0.18em] uppercase px-2 py-0.5 rounded-full border" style={{ color, borderColor: color + '40', background: color + '12' }}>{label}</span>
                     </div>
-                    <h3 className="text-lg font-bold text-white mb-2">{title}</h3>
-                    <p className="text-white/55 text-sm leading-relaxed mb-4">{description}</p>
+                    <h3 className="text-lg font-bold mb-2" style={{ color: 'var(--p-text)' }}>{title}</h3>
+                    <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--p-text-60)' }}>{description}</p>
                     <ul className="space-y-1.5 mb-4">
                       {tips.map((tip, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-white/45">
+                        <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--p-text-40)' }}>
                           <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
                           {tip}
                         </li>
@@ -172,43 +174,44 @@ export default function ReglesDuJeu() {
         </section>
 
         <section id="points">
-          <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>Calcul des points</h2>
-          <p className="text-white/40 text-sm mb-6">Les points sièges sont attribués après les résultats officiels ; le point Premier ministre après l'investiture.</p>
+          <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Calcul des points</h2>
+          <p className="text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>Les points sièges sont attribués après les résultats officiels ; le point Premier ministre après l'investiture.</p>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4 }}
-            className="rounded-2xl border border-white/10 overflow-hidden"
+            className="rounded-2xl border overflow-hidden"
+            style={{ borderColor: 'var(--p-border)' }}
           >
-            <div className="grid grid-cols-[1fr_auto] text-xs font-bold uppercase tracking-wider text-white/30 px-5 py-3 border-b border-white/8" style={{ background: 'rgba(255,255,255,0.02)' }}>
+            <div className="grid grid-cols-[1fr_auto] text-xs font-bold uppercase tracking-wider px-5 py-3 border-b" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)', color: 'var(--p-text-25)' }}>
               <span>Action</span><span>Points</span>
             </div>
             {SCORING_RULES.map((rule, i) => (
-              <div key={i} className="grid grid-cols-[1fr_auto] items-center px-5 py-4 border-b border-white/6 last:border-0" style={{ background: i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.015)' }}>
+              <div key={i} className="grid grid-cols-[1fr_auto] items-center px-5 py-4 border-b last:border-0" style={{ background: i % 2 === 0 ? 'var(--p-card)' : 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
                 <div>
-                  <p className="text-sm font-semibold text-white/80">{rule.label}</p>
-                  <p className="text-xs text-white/35 mt-0.5">{rule.desc}</p>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{rule.label}</p>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--p-text-40)' }}>{rule.desc}</p>
                 </div>
-                <span className="text-sm font-black ml-8 tabular-nums" style={{ fontFamily: "'JetBrains Mono',monospace", color: 'var(--p-gold)' }}>{rule.pts}</span>
+                <span className="text-sm font-black ml-8 tabular-nums" style={{ fontFamily: "'JetBrains Mono',monospace", color: 'var(--p-gold-text)' }}>{rule.pts}</span>
               </div>
             ))}
           </motion.div>
-          <div className="flex items-start gap-2 mt-4 text-xs text-white/35">
+          <div className="flex items-start gap-2 mt-4 text-xs" style={{ color: 'var(--p-text-40)' }}>
             <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
             <p>Le pronostic Premier ministre est binaire (bon ou pas) et se résout séparément, potentiellement des semaines après le scrutin — voir la page dédiée pour le détail du mécanisme.</p>
           </div>
         </section>
 
         <section id="indice-citoyen">
-          <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>L'indice citoyen</h2>
-          <p className="text-white/40 text-sm mb-6">Score sur 100 pts qui mesure votre engagement civique global.</p>
+          <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>L'indice citoyen</h2>
+          <p className="text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>Score sur 100 pts qui mesure votre engagement civique global.</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { pct: '35%', label: 'Précision sièges', desc: 'Justesse de vos pronostics sièges par liste.', color: '#4A7FD4' },
-              { pct: '15%', label: 'Précision PM', desc: 'Pronostic Premier ministre, une fois résolu.', color: '#A78BFA' },
-              { pct: '30%', label: 'Apprentissage', desc: 'Quiz système électoral, coalition, signaux lus.', color: 'var(--p-gold)' },
-              { pct: '20%', label: 'Régularité', desc: 'Streak quotidien et participation continue.', color: '#22C55E' },
+              { pct: '35%', label: 'Précision sièges', desc: 'Justesse de vos pronostics sièges par liste.', color: '#2B5CE6' },
+              { pct: '15%', label: 'Précision PM', desc: 'Pronostic Premier ministre, une fois résolu.', color: '#6D28D9' },
+              { pct: '30%', label: 'Apprentissage', desc: 'Quiz système électoral, coalition, signaux lus.', color: 'var(--p-gold-text)' },
+              { pct: '20%', label: 'Régularité', desc: 'Streak quotidien et participation continue.', color: '#16794A' },
             ].map(({ pct, label, desc, color }, index) => (
               <motion.div
                 key={label}
@@ -217,19 +220,19 @@ export default function ReglesDuJeu() {
                 viewport={{ once: true, margin: '-10%' }}
                 transition={{ duration: 0.4, delay: index * 0.06 }}
                 whileHover={{ y: -2 }}
-                className="rounded-xl border border-white/10 p-5 transition-colors duration-300 hover:border-white/20"
-                style={{ background: 'rgba(255,255,255,0.03)' }}
+                className="rounded-xl border p-5 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+                style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
               >
                 <div className="text-3xl font-black mb-1" style={{ fontFamily: "'JetBrains Mono',monospace", color }}>{pct}</div>
-                <div className="font-bold text-white text-sm mb-1">{label}</div>
-                <div className="text-white/40 text-xs leading-relaxed">{desc}</div>
+                <div className="font-bold text-sm mb-1" style={{ color: 'var(--p-text)' }}>{label}</div>
+                <div className="text-xs leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{desc}</div>
               </motion.div>
             ))}
           </div>
         </section>
 
         <section id="badges">
-          <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-display)' }}>Badges & récompenses</h2>
+          <h2 className="text-xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Badges & récompenses</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
             {BADGES.map(({ icon: Icon, color, label, desc }, index) => (
               <motion.div
@@ -239,8 +242,8 @@ export default function ReglesDuJeu() {
                 viewport={{ once: true, margin: '-10%' }}
                 transition={{ duration: 0.4, delay: index * 0.06 }}
                 whileHover={{ y: -2 }}
-                className="flex items-start gap-3 rounded-xl border border-white/8 p-4 transition-colors duration-300 hover:border-white/20"
-                style={{ background: 'rgba(255,255,255,0.025)' }}
+                className="flex items-start gap-3 rounded-xl border p-4 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+                style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
               >
                 <div
                   className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
@@ -249,8 +252,8 @@ export default function ReglesDuJeu() {
                   <Icon className="w-4 h-4" style={{ color }} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-white/85">{label}</p>
-                  <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{desc}</p>
+                  <p className="text-sm font-bold" style={{ color: 'var(--p-text)' }}>{label}</p>
+                  <p className="text-xs mt-0.5 leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -262,18 +265,18 @@ export default function ReglesDuJeu() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="rounded-2xl border border-white/10 p-8 text-center"
-          style={{ background: 'rgba(30,58,138,0.15)' }}
+          className="rounded-2xl border p-8 text-center"
+          style={{ background: 'rgba(30,58,138,0.08)', borderColor: 'var(--p-border)' }}
         >
-          <p className="text-white/50 text-sm mb-2">Prêt à commencer ?</p>
-          <h3 className="text-2xl font-black text-white mb-6" style={{ fontFamily: 'var(--font-display)' }}>
+          <p className="text-sm mb-2" style={{ color: 'var(--p-text-40)' }}>Prêt à commencer ?</p>
+          <h3 className="text-2xl font-black mb-6" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
             Anticipez. Apprenez. Gagnez.
           </h3>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to={createPageUrl('Listes')} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-opacity hover:opacity-85" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
               <Vote className="w-4 h-4" /> Explorer les listes
             </Link>
-            <Link to={createPageUrl('PremierMinistre')} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border border-white/15 text-white/70 hover:text-white hover:border-white/30 transition-colors">
+            <Link to={createPageUrl('PremierMinistre')} className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border transition-colors hover:text-[var(--p-text)] hover:border-[var(--p-border-hover)]" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-60)' }}>
               <Crown className="w-4 h-4" /> Pronostic Premier ministre
             </Link>
           </div>

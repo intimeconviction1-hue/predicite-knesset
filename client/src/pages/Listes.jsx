@@ -45,22 +45,22 @@ export default function Listes() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       {/* Header */}
-      <div className="relative border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+      <div className="relative border-b" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)', borderColor: 'var(--p-border)' }}>
         <div className="max-w-7xl mx-auto px-4 py-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-2 mb-2">
-              <Vote className="w-5 h-5 text-white/70" />
-              <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-display)' }}>
+              <Vote className="w-5 h-5" style={{ color: 'var(--p-text-60)' }} />
+              <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
                 Listes en lice — Knesset 2026
               </h1>
             </div>
-            <p className="text-white/50 text-sm">
+            <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>
               {listes.length} listes suivies · Scrutin du 27 octobre 2026 · Sondages sièges mis à jour régulièrement
             </p>
             <button
               onClick={() => setShowRules(!showRules)}
               className="mt-4 text-sm font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
-              style={{ color: 'var(--p-gold)' }}
+              style={{ color: 'var(--p-gold-text)' }}
             >
               {showRules ? 'Masquer' : 'Comment lire ces sièges ?'} <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showRules ? 'rotate-90' : ''}`} />
             </button>
@@ -76,19 +76,19 @@ export default function Listes() {
 
       {/* Filters */}
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="rounded-2xl border border-white/10 p-4" style={{ background: 'rgba(255,255,255,0.03)' }}>
+        <div className="rounded-2xl border p-4" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'var(--p-text-25)' }} />
               <Input
                 placeholder="Rechercher une liste ou une tête de liste..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-transparent border-white/15 text-white placeholder:text-white/30"
+                className="pl-10 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-25)]"
               />
             </div>
             <Select value={blocFilter} onValueChange={setBlocFilter}>
-              <SelectTrigger className="w-full md:w-56 bg-transparent border-white/15 text-white">
+              <SelectTrigger className="w-full md:w-56 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)]">
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder="Bloc" />
               </SelectTrigger>
@@ -107,14 +107,14 @@ export default function Listes() {
         {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[...Array(9)].map((_, i) => (
-              <div key={i} className="rounded-2xl h-48 animate-pulse" style={{ background: 'rgba(255,255,255,0.04)' }} />
+              <div key={i} className="rounded-2xl h-48 animate-pulse" style={{ background: 'var(--p-border)' }} />
             ))}
           </div>
         ) : filteredListes.length === 0 ? (
           <div className="text-center py-16">
-            <Vote className="w-12 h-12 mx-auto text-white/15 mb-4" />
-            <h3 className="text-lg font-semibold text-white/60">Aucune liste trouvée</h3>
-            <p className="text-white/30 text-sm">Essayez de modifier vos filtres</p>
+            <Vote className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--p-text-25)' }} />
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--p-text-60)' }}>Aucune liste trouvée</h3>
+            <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Essayez de modifier vos filtres</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -124,11 +124,11 @@ export default function Listes() {
           </div>
         )}
 
-        <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-          <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-white transition-colors" style={{ color: 'rgba(245,240,232,0.4)' }}>
+        <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t" style={{ borderColor: 'var(--p-border)' }}>
+          <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
             Pronostic Premier ministre
           </Link>
-          <Link to={createPageUrl('Leaderboard')} className="text-sm hover:text-white transition-colors" style={{ color: 'rgba(245,240,232,0.4)' }}>
+          <Link to={createPageUrl('Leaderboard')} className="text-sm hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
             Classement
           </Link>
         </div>

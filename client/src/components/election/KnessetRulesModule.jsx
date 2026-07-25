@@ -7,7 +7,7 @@ const RULES = [
     id: 'scrutin',
     icon: Vote,
     title: 'Un bulletin, une liste',
-    color: '#4A7FD4',
+    color: '#2B5CE6',
     accent: 'border-[#4A7FD4]/30 bg-[#4A7FD4]/8',
     content: [
       { type: 'text', value: "En Israël, on ne vote pas pour une personne mais pour une liste entière : un parti, ou une alliance de partis présentant une liste commune. Il n'y a ni circonscriptions ni vote uninominal — tout le pays forme une seule circonscription nationale." },
@@ -18,7 +18,7 @@ const RULES = [
     id: 'seuil',
     icon: Percent,
     title: 'Le seuil électoral (3,25 %)',
-    color: 'var(--p-gold)',
+    color: 'var(--p-gold-text)',
     accent: 'border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8',
     content: [
       { type: 'text', value: "Une liste doit obtenir au moins 3,25 % des suffrages exprimés au niveau national pour entrer à la Knesset. En dessous, elle n'obtient aucun siège, même si des dizaines de milliers d'électeurs ont voté pour elle — leurs voix sont redistribuées entre les listes qui ont franchi le seuil." },
@@ -30,7 +30,7 @@ const RULES = [
     id: 'repartition',
     icon: BarChart3,
     title: 'La répartition des 120 sièges',
-    color: '#22C55E',
+    color: '#16794A',
     accent: 'border-emerald-400/30 bg-emerald-400/8',
     content: [
       { type: 'text', value: "Les 120 sièges sont répartis à la proportionnelle entre toutes les listes ayant franchi le seuil, selon la méthode Bader-Ofer (une variante de la méthode d'Hondt). Plus une liste a de voix, plus le rendement en sièges par voix est favorable — un effet qui avantage légèrement les grandes listes par rapport aux petites." },
@@ -42,7 +42,7 @@ const RULES = [
     id: 'excedents',
     icon: Shuffle,
     title: 'Les accords d\'excédents de voix',
-    color: '#A78BFA',
+    color: '#6D28D9',
     accent: 'border-[#A78BFA]/30 bg-[#A78BFA]/8',
     content: [
       { type: 'text', value: "Avant l'élection, deux listes peuvent signer un accord d'excédents (« hescem odafim ») : leurs restes de voix inutilisés dans le calcul sont mis en commun, ce qui peut faire basculer un siège de justesse vers l'une des deux plutôt que de le perdre." },
@@ -53,7 +53,7 @@ const RULES = [
     id: 'depot',
     icon: AlertCircle,
     title: 'Le dépôt des listes',
-    color: '#F47090',
+    color: 'var(--p-red)',
     accent: 'border-[#F47090]/30 bg-[#F47090]/8',
     content: [
       { type: 'text', value: "La composition définitive des listes (candidats, ordre, éventuelles fusions de dernière minute) n'est arrêtée que quelques semaines avant le scrutin, une fois le délai légal de dépôt passé auprès de la commission électorale centrale. Jusque-là, des alliances annoncées peuvent encore se défaire." },
@@ -65,10 +65,10 @@ const RULES = [
 function RuleBlock({ item }) {
   if (item.type === 'stat') {
     return (
-      <div className="flex items-start gap-3 rounded-lg p-3" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
+      <div className="flex items-start gap-3 rounded-lg p-3" style={{ background: 'rgba(20,32,61,0.04)', border: '1px solid var(--p-border)' }}>
         <div className="flex-1">
-          <p className="text-[11px] uppercase tracking-wide font-semibold mb-0.5" style={{ color: 'rgba(245,240,232,0.4)' }}>{item.label}</p>
-          <p className="text-sm font-bold text-white/90">{item.value}</p>
+          <p className="text-[11px] uppercase tracking-wide font-semibold mb-0.5" style={{ color: 'var(--p-text-40)' }}>{item.label}</p>
+          <p className="text-sm font-bold" style={{ color: 'var(--p-text)' }}>{item.value}</p>
         </div>
       </div>
     );
@@ -76,19 +76,19 @@ function RuleBlock({ item }) {
   if (item.type === 'highlight') {
     return (
       <div className="rounded-lg p-3" style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)' }}>
-        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-gold)' }}>{item.label}</p>
-        <p className="text-xs leading-relaxed" style={{ color: 'rgba(245,240,232,0.7)' }}>{item.value}</p>
+        <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-gold-text)' }}>{item.label}</p>
+        <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-60)' }}>{item.value}</p>
       </div>
     );
   }
-  return <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,240,232,0.55)' }}>{item.value}</p>;
+  return <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>{item.value}</p>;
 }
 
 export default function KnessetRulesModule({ compact = false }) {
   const [openId, setOpenId] = useState(compact ? null : 'scrutin');
 
   return (
-    <div className={compact ? '' : 'rounded-2xl border overflow-hidden'} style={compact ? {} : { borderColor: 'rgba(255,255,255,0.1)', background: 'rgba(10,18,38,0.6)' }}>
+    <div className={compact ? '' : 'rounded-2xl border overflow-hidden'} style={compact ? {} : { borderColor: 'var(--p-border)', background: 'var(--p-card)' }}>
       {!compact && (
         <div className="px-6 py-5 flex items-center gap-3" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
           <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center">
@@ -101,7 +101,7 @@ export default function KnessetRulesModule({ compact = false }) {
         </div>
       )}
 
-      <div className={compact ? 'space-y-2' : 'divide-y'} style={compact ? {} : { borderColor: 'rgba(255,255,255,0.06)' }}>
+      <div className={compact ? 'space-y-2' : 'divide-y'} style={compact ? {} : { borderColor: 'var(--p-border)' }}>
         {RULES.map((rule) => {
           const Icon = rule.icon;
           const isOpen = openId === rule.id;
@@ -110,13 +110,13 @@ export default function KnessetRulesModule({ compact = false }) {
             <div key={rule.id} className={compact ? `rounded-xl border ${rule.accent} overflow-hidden` : ''}>
               <button
                 onClick={() => setOpenId(isOpen ? null : rule.id)}
-                className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-white/5"
+                className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition-colors hover:bg-[rgba(20,32,61,0.04)]"
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${rule.accent}`}>
                   <Icon className="w-4 h-4" style={{ color: rule.color }} />
                 </div>
                 <span className="flex-1 text-sm font-semibold" style={{ color: rule.color }}>{rule.title}</span>
-                <ChevronDown className={`w-4 h-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} style={{ color: 'rgba(245,240,232,0.3)' }} />
+                <ChevronDown className={`w-4 h-4 transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} style={{ color: 'var(--p-text-25)' }} />
               </button>
 
               <AnimatePresence>
@@ -128,7 +128,7 @@ export default function KnessetRulesModule({ compact = false }) {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-4 pb-4 pt-1 space-y-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+                    <div className="px-4 pb-4 pt-1 space-y-3 border-t" style={{ borderColor: 'var(--p-border)' }}>
                       {rule.content.map((item, i) => (
                         <RuleBlock key={i} item={item} />
                       ))}

@@ -2,15 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { ChevronRight, BookOpen } from 'lucide-react';
+import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
+import Hemicycle from '@/components/knesset/Hemicycle';
+import CountUp from '@/components/knesset/CountUp';
+
+const KEY_NUMBERS = [
+  { value: 120, suffix: '', label: 'sièges à la Knesset', color: 'var(--p-blue)' },
+  { value: 61, suffix: '', label: 'sièges pour la majorité', color: 'var(--p-gold)' },
+  { value: 3.25, suffix: ' %', label: 'seuil électoral', color: '#22C55E', decimals: 2 },
+];
 
 export default function Learn() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
-      <div className="relative border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
-        <div className="max-w-4xl mx-auto px-4 py-16">
+      <div className="relative overflow-hidden border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at 15% 0%, rgba(212,175,55,0.12) 0%, transparent 55%)',
+        }} />
+        <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -54,24 +65,65 @@ export default function Learn() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-10">
-        <KnessetRulesModule />
-        <CoalitionRulesModule />
+
+        {/* Hémicycle vierge — même composant signature que Home, ici pour visualiser
+            d'un coup d'œil les deux chiffres qui structurent tout le reste : 120 sièges, majorité à 61 */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+          className="rounded-3xl px-6 pt-8 pb-4 md:px-10"
+          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.9) 65%)', border: '0.5px solid rgba(245,240,232,0.08)' }}
+        >
+          <Hemicycle seatsByListe={[]} listes={[]} height={170} />
+          <div className="grid grid-cols-3 gap-2 -mt-2 pt-4 border-t" style={{ borderColor: 'rgba(245,240,232,0.06)' }}>
+            {KEY_NUMBERS.map((n, i) => (
+              <div key={n.label} className="text-center">
+                <p className="text-2xl md:text-3xl font-black font-mono leading-none" style={{ color: n.color }}>
+                  <CountUp value={n.value} decimals={n.decimals} suffix={n.suffix} delay={i * 150} />
+                </p>
+                <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'rgba(245,240,232,0.35)' }}>{n.label}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="rounded-2xl border border-white/10 p-8 text-center"
+        >
+          <KnessetRulesModule />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4, delay: 0.08 }}
+        >
+          <CoalitionRulesModule />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+          whileHover={{ y: -2 }}
+          className="rounded-2xl border border-white/10 p-8 text-center transition-colors duration-300 hover:border-white/20"
           style={{ background: 'rgba(30,58,138,0.15)' }}
         >
           <p className="text-white/50 text-sm mb-4">Prêt à mettre ça en pratique ?</p>
           <Link
             to={createPageUrl('Listes')}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-opacity hover:opacity-85"
+            className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-opacity hover:opacity-85"
             style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}
           >
             Voir les listes et pronostiquer
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>
       </div>

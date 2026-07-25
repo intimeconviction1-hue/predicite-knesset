@@ -28,9 +28,12 @@ const SOURCES = [
 
 export default function Methodologie() {
   return (
-    <div className="min-h-screen" style={{ background: '#050505' }}>
-      <div className="relative border-b border-white/8" style={{ background: 'rgba(7,18,42,0.98)' }}>
-        <div className="max-w-4xl mx-auto px-4 py-16">
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+      <div className="relative overflow-hidden border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at 85% 0%, rgba(34,197,94,0.1) 0%, transparent 55%)',
+        }} />
+        <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
@@ -40,6 +43,19 @@ export default function Methodologie() {
             <Link to={createPageUrl('Home')} className="hover:text-white/60 transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
             <span className="text-white/60">Sources & Méthodologie</span>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.06 }}
+            className="flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full w-fit"
+            style={{ background: 'rgba(34,197,94,0.1)', border: '0.5px solid rgba(34,197,94,0.3)' }}
+          >
+            <motion.div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22C55E' }}
+              animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#22C55E' }}>
+              Vérifié en continu · zéro donnée inventée
+            </span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
@@ -70,13 +86,19 @@ export default function Methodologie() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4, delay: index * 0.08 }}
-            className="rounded-2xl border border-white/10 p-6 md:p-8"
+            whileHover={{ y: -2 }}
+            className="rounded-2xl border border-white/10 p-6 md:p-8 transition-colors duration-300 hover:border-white/20"
             style={{ background: 'rgba(255,255,255,0.03)' }}
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: color + '18', border: `1px solid ${color}30` }}>
+              <motion.div
+                whileHover={{ scale: 1.08 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 12 }}
+                className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: color + '18', border: `1px solid ${color}30` }}
+              >
                 <Icon className="w-4 h-4" style={{ color }} />
-              </div>
+              </motion.div>
               <h2 className="text-lg font-bold text-white">{title}</h2>
             </div>
             <ul className="space-y-3">
@@ -101,6 +123,8 @@ export default function Methodologie() {
           <div className="flex items-center gap-3 mb-3">
             <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold)' }} />
             <h2 className="text-lg font-bold text-white">Transparence sur une limite actuelle</h2>
+            <motion.div className="w-1.5 h-1.5 rounded-full ml-auto flex-shrink-0" style={{ background: 'var(--p-gold)' }}
+              animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
           </div>
           <p className="text-sm leading-relaxed" style={{ color: 'rgba(245,240,232,0.6)' }}>
             Au moment où ces lignes sont écrites, le site officiel de la 26ᵉ Knesset
@@ -114,10 +138,10 @@ export default function Methodologie() {
         <div className="text-center pt-4">
           <Link
             to={createPageUrl('Listes')}
-            className="inline-flex items-center gap-2 text-sm font-semibold hover:opacity-80 transition-opacity"
+            className="group inline-flex items-center gap-2 text-sm font-semibold hover:opacity-80 transition-opacity"
             style={{ color: '#4A7FD4' }}
           >
-            Voir les listes suivies <ExternalLink className="w-3.5 h-3.5" />
+            Voir les listes suivies <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
       </div>

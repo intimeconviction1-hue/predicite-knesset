@@ -12,13 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import BallotChip from '@/components/knesset/BallotChip';
-
-const BLOC_LABEL = {
-  coalition: 'Coalition sortante',
-  opposition: 'Opposition',
-  liste_arabe: 'Liste arabe',
-  non_alignee: 'Non alignée',
-};
+import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z'; // veille du scrutin, 07:00 Israël
 
@@ -141,7 +135,14 @@ export default function ListePage() {
         </Link>
 
         {/* Header */}
-        <div className="rounded-2xl border border-white/10 p-6 mb-6" style={{ background: 'rgba(255,255,255,0.03)' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          whileHover={{ y: -2 }}
+          className="rounded-2xl border border-white/10 p-6 mb-6 transition-colors duration-300 hover:border-white/20"
+          style={{ background: 'rgba(255,255,255,0.03)' }}
+        >
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div className="flex items-start gap-4">
               <BallotChip letters={liste.ballot_letters} size="lg" />
@@ -153,9 +154,17 @@ export default function ListePage() {
                 <p className="text-sm" style={{ color: 'rgba(245,240,232,0.5)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
               </div>
             </div>
-            <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(245,240,232,0.6)' }}>
-              {BLOC_LABEL[liste.bloc] || '—'}
-            </span>
+            {(() => {
+              const blocColor = BLOC_COLOR[liste.bloc] || '#6B7280';
+              return (
+                <span
+                  className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"
+                  style={{ background: `${blocColor}18`, color: blocColor, border: `1px solid ${blocColor}40` }}
+                >
+                  {BLOC_LABEL[liste.bloc] || '—'}
+                </span>
+              );
+            })()}
           </div>
 
           {liste.founded_or_merged_note && (
@@ -178,12 +187,20 @@ export default function ListePage() {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
 
 
         {/* Historique sondages */}
         {history.length > 0 && (
-          <div className="rounded-2xl border border-white/10 p-6 mb-6" style={{ background: 'rgba(255,255,255,0.03)' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.4 }}
+            whileHover={{ y: -2 }}
+            className="rounded-2xl border border-white/10 p-6 mb-6 transition-colors duration-300 hover:border-white/20"
+            style={{ background: 'rgba(255,255,255,0.03)' }}
+          >
             <div className="flex items-center gap-2 mb-4">
               <TrendingUp className="w-4 h-4" style={{ color: '#4A7FD4' }} />
               <h2 className="font-bold text-white text-sm">Évolution des sondages sièges</h2>
@@ -192,9 +209,13 @@ export default function ListePage() {
               {history.map((h, i) => (
                 <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group relative">
                   <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold)' }}>{h.seats}</span>
-                  <div
-                    className="w-full rounded-t-sm transition-all"
-                    style={{ height: `${(h.seats / maxSeats) * 100}%`, backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.7 }}
+                  <motion.div
+                    className="w-full rounded-t-sm"
+                    style={{ backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.7 }}
+                    initial={{ height: 0 }}
+                    whileInView={{ height: `${(h.seats / maxSeats) * 100}%` }}
+                    viewport={{ once: true, margin: '-10%' }}
+                    transition={{ duration: 0.5, delay: i * 0.05 }}
                   />
                 </div>
               ))}
@@ -216,11 +237,18 @@ export default function ListePage() {
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Formulaire pronostic */}
-        <div className="rounded-2xl border border-white/10 overflow-hidden mb-6" style={{ background: 'rgba(255,255,255,0.03)' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+          className="rounded-2xl border border-white/10 overflow-hidden mb-6"
+          style={{ background: 'rgba(255,255,255,0.03)' }}
+        >
           <div className="px-6 py-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
             <div className="flex items-center gap-2">
               <Trophy className="w-4 h-4 text-white" />
@@ -271,7 +299,14 @@ export default function ListePage() {
                   </motion.span>
                   <p className="text-sm mt-2" style={{ color: 'rgba(245,240,232,0.4)' }}>sièges sur 120</p>
                 </div>
-                <Slider value={seats} onValueChange={setSeats} min={0} max={maxSeats} step={1} />
+                <Slider
+                  value={seats}
+                  onValueChange={setSeats}
+                  min={0}
+                  max={maxSeats}
+                  step={1}
+                  aria-label="Nombre de sièges pronostiqués"
+                />
                 <div className="flex justify-between text-[11px]" style={{ color: 'rgba(245,240,232,0.3)' }}>
                   <span>0 (sous le seuil)</span>
                   <span>Seuil ≈ 4 sièges</span>
@@ -313,7 +348,7 @@ export default function ListePage() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
 
         <KnessetRulesModule compact />
 

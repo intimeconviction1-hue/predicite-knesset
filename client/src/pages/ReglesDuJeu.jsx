@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { BarChart3, Target, Trophy, Vote, Crown, ChevronRight, Info } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { BarChart3, Target, Trophy, Vote, Crown, ChevronRight, Info, Landmark, PieChart, Flame } from 'lucide-react';
 
 const SCORING_RULES = [
   { label: 'Siège exact pour une liste', pts: '+150', desc: 'Le nombre de sièges pronostiqué correspond exactement au résultat.' },
@@ -15,11 +16,11 @@ const SCORING_RULES = [
 ];
 
 const BADGES = [
-  { icon: '🎯', label: 'Analyste Précis', desc: 'Première liste pronostiquée à ±1 siège près.' },
-  { icon: '🏛️', label: 'Politologue', desc: 'Quiz système électoral et formation de coalition réussis.' },
-  { icon: '👑', label: 'Faiseur de rois', desc: 'Pronostic Premier ministre correct.' },
-  { icon: '📊', label: 'Data Citoyen', desc: '5 quiz complétés avec succès.' },
-  { icon: '🔥', label: 'Série enflammée', desc: '7 jours d\'activité consécutifs.' },
+  { icon: Target, color: '#4A7FD4', label: 'Analyste Précis', desc: 'Première liste pronostiquée à ±1 siège près.' },
+  { icon: Landmark, color: '#D4AF37', label: 'Politologue', desc: 'Quiz système électoral et formation de coalition réussis.' },
+  { icon: Crown, color: '#A78BFA', label: 'Faiseur de rois', desc: 'Pronostic Premier ministre correct.' },
+  { icon: PieChart, color: '#22C55E', label: 'Data Citoyen', desc: '5 quiz complétés avec succès.' },
+  { icon: Flame, color: '#F97316', label: 'Série enflammée', desc: '7 jours d\'activité consécutifs.' },
 ];
 
 const STEPS = [
@@ -44,7 +45,7 @@ const STEPS = [
     icon: Target,
     num: '02',
     label: 'ANTICIPER',
-    color: 'var(--p-gold)',
+    color: '#D4AF37',
     title: 'Soumettre vos pronostics',
     description: 'Pour chaque liste, pronostiquez un nombre de sièges. Ajoutez, si vous le souhaitez, un pronostic Premier ministre, qui se résout séparément — plus tard, à l\'investiture. Vous pouvez modifier vos pronostics jusqu\'à la deadline.',
     tips: [
@@ -75,24 +76,49 @@ const STEPS = [
 
 export default function ReglesDuJeu() {
   return (
-    <div className="min-h-screen" style={{ background: '#050505' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
 
-      <div className="relative border-b border-white/8" style={{ background: 'rgba(7,18,42,0.98)' }}>
-        <div className="max-w-4xl mx-auto px-4 py-16">
-          <div className="flex items-center gap-2 text-white/30 text-sm mb-6">
+      <div className="relative overflow-hidden border-b border-white/8" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.15) 0%, transparent 100%)' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'radial-gradient(ellipse at 85% 0%, rgba(212,175,55,0.12) 0%, transparent 55%)',
+        }} />
+        <div className="relative max-w-4xl mx-auto px-4 py-16">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex items-center gap-2 text-white/30 text-sm mb-6"
+          >
             <Link to={createPageUrl('Home')} className="hover:text-white/60 transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span className="text-white/60">Règles du jeu</span>
-          </div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: 'var(--p-gold)' }}>
+            <span className="text-white/60" aria-current="page">Règles du jeu</span>
+          </motion.div>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.06 }}
+            className="text-xs font-bold uppercase tracking-[0.2em] mb-3"
+            style={{ color: 'var(--p-gold)' }}
+          >
             Comment ça marche
-          </p>
-          <h1 className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight" style={{ fontFamily: 'var(--font-display)' }}>
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.12 }}
+            className="text-3xl md:text-4xl font-black text-white mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)' }}
+          >
             Règles du jeu — Knesset 2026
-          </h1>
-          <p className="text-white/50 text-base leading-relaxed max-w-2xl">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.18 }}
+            className="text-white/50 text-base leading-relaxed max-w-2xl"
+          >
             PrédiCité est un jeu prédictif civique. Comprenez le scrutin proportionnel israélien, pronostiquez sièges et Premier ministre, comparez votre précision avec celle de la communauté francophone.
-          </p>
+          </motion.p>
         </div>
       </div>
 
@@ -103,8 +129,18 @@ export default function ReglesDuJeu() {
             La boucle de jeu en 3 étapes
           </h2>
           <div className="space-y-4">
-            {STEPS.map(({ id, icon: Icon, num, label, color, title, description, tips, link, linkLabel }) => (
-              <div key={id} id={id} className="rounded-2xl border border-white/10 p-6 md:p-8" style={{ background: 'rgba(255,255,255,0.03)' }}>
+            {STEPS.map(({ id, icon: Icon, num, label, color, title, description, tips, link, linkLabel }, index) => (
+              <motion.div
+                key={id}
+                id={id}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-10%' }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                whileHover={{ y: -2 }}
+                className="rounded-2xl border border-white/10 p-6 md:p-8 transition-colors duration-300 hover:border-white/20"
+                style={{ background: 'rgba(255,255,255,0.03)' }}
+              >
                 <div className="flex items-start gap-5">
                   <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
                     style={{ background: color + '18', border: `1px solid ${color}30` }}>
@@ -130,7 +166,7 @@ export default function ReglesDuJeu() {
                     </Link>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -138,7 +174,13 @@ export default function ReglesDuJeu() {
         <section id="points">
           <h2 className="text-xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>Calcul des points</h2>
           <p className="text-white/40 text-sm mb-6">Les points sièges sont attribués après les résultats officiels ; le point Premier ministre après l'investiture.</p>
-          <div className="rounded-2xl border border-white/10 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.4 }}
+            className="rounded-2xl border border-white/10 overflow-hidden"
+          >
             <div className="grid grid-cols-[1fr_auto] text-xs font-bold uppercase tracking-wider text-white/30 px-5 py-3 border-b border-white/8" style={{ background: 'rgba(255,255,255,0.02)' }}>
               <span>Action</span><span>Points</span>
             </div>
@@ -151,7 +193,7 @@ export default function ReglesDuJeu() {
                 <span className="text-sm font-black ml-8 tabular-nums" style={{ fontFamily: "'JetBrains Mono',monospace", color: 'var(--p-gold)' }}>{rule.pts}</span>
               </div>
             ))}
-          </div>
+          </motion.div>
           <div className="flex items-start gap-2 mt-4 text-xs text-white/35">
             <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
             <p>Le pronostic Premier ministre est binaire (bon ou pas) et se résout séparément, potentiellement des semaines après le scrutin — voir la page dédiée pour le détail du mécanisme.</p>
@@ -167,12 +209,21 @@ export default function ReglesDuJeu() {
               { pct: '15%', label: 'Précision PM', desc: 'Pronostic Premier ministre, une fois résolu.', color: '#A78BFA' },
               { pct: '30%', label: 'Apprentissage', desc: 'Quiz système électoral, coalition, signaux lus.', color: 'var(--p-gold)' },
               { pct: '20%', label: 'Régularité', desc: 'Streak quotidien et participation continue.', color: '#22C55E' },
-            ].map(({ pct, label, desc, color }) => (
-              <div key={label} className="rounded-xl border border-white/10 p-5" style={{ background: 'rgba(255,255,255,0.03)' }}>
+            ].map(({ pct, label, desc, color }, index) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-10%' }}
+                transition={{ duration: 0.4, delay: index * 0.06 }}
+                whileHover={{ y: -2 }}
+                className="rounded-xl border border-white/10 p-5 transition-colors duration-300 hover:border-white/20"
+                style={{ background: 'rgba(255,255,255,0.03)' }}
+              >
                 <div className="text-3xl font-black mb-1" style={{ fontFamily: "'JetBrains Mono',monospace", color }}>{pct}</div>
                 <div className="font-bold text-white text-sm mb-1">{label}</div>
                 <div className="text-white/40 text-xs leading-relaxed">{desc}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -180,19 +231,40 @@ export default function ReglesDuJeu() {
         <section id="badges">
           <h2 className="text-xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-display)' }}>Badges & récompenses</h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {BADGES.map(({ icon, label, desc }) => (
-              <div key={label} className="flex items-start gap-3 rounded-xl border border-white/8 p-4" style={{ background: 'rgba(255,255,255,0.025)' }}>
-                <span className="text-2xl flex-shrink-0">{icon}</span>
+            {BADGES.map(({ icon: Icon, color, label, desc }, index) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-10%' }}
+                transition={{ duration: 0.4, delay: index * 0.06 }}
+                whileHover={{ y: -2 }}
+                className="flex items-start gap-3 rounded-xl border border-white/8 p-4 transition-colors duration-300 hover:border-white/20"
+                style={{ background: 'rgba(255,255,255,0.025)' }}
+              >
+                <div
+                  className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                  style={{ background: color + '18', border: `1px solid ${color}30` }}
+                >
+                  <Icon className="w-4 h-4" style={{ color }} />
+                </div>
                 <div>
                   <p className="text-sm font-bold text-white/85">{label}</p>
                   <p className="text-xs text-white/40 mt-0.5 leading-relaxed">{desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
-        <section className="rounded-2xl border border-white/10 p-8 text-center" style={{ background: 'rgba(30,58,138,0.15)' }}>
+        <motion.section
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+          className="rounded-2xl border border-white/10 p-8 text-center"
+          style={{ background: 'rgba(30,58,138,0.15)' }}
+        >
           <p className="text-white/50 text-sm mb-2">Prêt à commencer ?</p>
           <h3 className="text-2xl font-black text-white mb-6" style={{ fontFamily: 'var(--font-display)' }}>
             Anticipez. Apprenez. Gagnez.
@@ -205,7 +277,7 @@ export default function ReglesDuJeu() {
               <Crown className="w-4 h-4" /> Pronostic Premier ministre
             </Link>
           </div>
-        </section>
+        </motion.section>
 
       </div>
     </div>

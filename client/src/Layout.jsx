@@ -99,15 +99,11 @@ export default function Layout({ children, currentPageName }) {
   );
 
   return (
-    <div className="min-h-screen" style={{ background: '#050505' }}>
+    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
       {/* Skip to main content – navigation clavier (accessibilité) */}
       <a href="#main-content" className="skip-to-content">
         Aller au contenu principal
       </a>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
-        body { font-family: 'Outfit', ui-sans-serif, system-ui, sans-serif; }
-      `}</style>
 
       {/* Bandeau bleu/blanc/bleu — motif drapeau israélien */}
       <div className="h-0.5 w-full flex fixed top-0 z-[60]">
@@ -143,13 +139,18 @@ export default function Layout({ children, currentPageName }) {
                   );
                 })}
                 {/* Règles — lien direct visible */}
-                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8 hover:bg-[var(--p-gold)]/15`} style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold)' : 'var(--p-gold)cc' }}>
+                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8 hover:bg-[var(--p-gold)]/15`} style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold)' : 'rgba(212,175,55,0.8)' }}>
                   <BookOpen className="w-3.5 h-3.5" />
                   Règles
                 </Link>
 
                 <div className="relative" ref={moreRef}>
-                  <button onClick={() => setIsMoreOpen(!isMoreOpen)} className={navLinkDark(isMoreActive)}>
+                  <button
+                    onClick={() => setIsMoreOpen(!isMoreOpen)}
+                    className={navLinkDark(isMoreActive)}
+                    aria-haspopup="menu"
+                    aria-expanded={isMoreOpen}
+                  >
                     Plus
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMoreOpen ? 'rotate-180' : ''}`} />
                   </button>
@@ -198,6 +199,8 @@ export default function Layout({ children, currentPageName }) {
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                       className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/8 transition-colors"
+                      aria-haspopup="menu"
+                      aria-expanded={isUserMenuOpen}
                     >
                       <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#1E3A8A' }}>
                         {user.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
@@ -318,7 +321,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Footer */}
-      <footer role="contentinfo" className="bg-[#07122A] border-t border-white/10 text-white mt-auto">
+      <footer role="contentinfo" className="border-t border-white/10 text-white mt-auto" style={{ background: 'var(--p-night-2)' }}>
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -328,14 +331,14 @@ export default function Layout({ children, currentPageName }) {
                 </div>
                 <span className="font-bold text-white">Knesset 2026</span>
               </div>
-              <p className="text-white/50 text-sm">
+              <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>
                 Plateforme civique, gratuite et pédagogique sur les élections législatives israéliennes, à destination d'un public francophone.
               </p>
             </div>
 
             <div>
               <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Découvrir</h4>
-              <ul className="space-y-2 text-sm text-white/50">
+              <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Listes')} className="hover:text-white transition-colors">Listes</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-white transition-colors">Premier ministre</Link></li>
                 <li><Link to={createPageUrl('Leaderboard')} className="hover:text-white transition-colors">Classement</Link></li>
@@ -344,7 +347,7 @@ export default function Layout({ children, currentPageName }) {
 
             <div>
               <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Apprendre</h4>
-              <ul className="space-y-2 text-sm text-white/50">
+              <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Learn')} className="hover:text-white transition-colors">Les législatives israéliennes</Link></li>
                 <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-white transition-colors">Comment on vote à la Knesset</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-white transition-colors">Formation du gouvernement</Link></li>
@@ -353,7 +356,7 @@ export default function Layout({ children, currentPageName }) {
 
             <div>
               <h4 className="font-semibold mb-3 text-white/80 text-sm uppercase tracking-wide">Transparence</h4>
-              <ul className="space-y-2 text-sm text-white/50">
+              <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Methodologie')} className="hover:text-white transition-colors">Sources & Méthodologie</Link></li>
                 <li><Link to={createPageUrl('Leaderboard')} className="hover:text-white transition-colors">Classement</Link></li>
               </ul>
@@ -361,10 +364,10 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           <div className="border-t border-white/10 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-2">
-            <p className="text-xs text-white/30">
+            <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>
               © 2026 · Knesset 2026 · Plateforme neutre et pédagogique · Aucun parti politique associé
             </p>
-            <p className="text-xs text-white/25">
+            <p className="text-xs" style={{ color: 'var(--p-text-25)' }}>
               Élections : 27 octobre 2026
             </p>
           </div>

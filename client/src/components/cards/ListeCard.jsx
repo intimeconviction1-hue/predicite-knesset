@@ -5,20 +5,7 @@ import { Users, TrendingUp, TrendingDown, ChevronRight } from 'lucide-react';
 import Tooltip from '@/components/shared/Tooltip';
 import BallotChip from '@/components/knesset/BallotChip';
 import CountUp from '@/components/knesset/CountUp';
-
-const BLOC_LABEL = {
-  coalition: 'Coalition sortante',
-  opposition: 'Opposition',
-  liste_arabe: 'Liste arabe',
-  non_alignee: 'Non alignée',
-};
-
-const BLOC_COLOR = {
-  coalition: 'var(--p-blue)',
-  opposition: 'var(--p-red)',
-  liste_arabe: '#22C55E',
-  non_alignee: '#9CA3AF',
-};
+import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 
 export default function ListeCard({ liste, latestPoll, index = 0 }) {
   const projectedSeats = latestPoll?.seats_by_liste?.find(s => s.liste_id === liste.id)?.seats ?? null;

@@ -3,6 +3,9 @@ import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Trophy, Medal, Crown, Users, Target, Flame, Search, BookOpen } from 'lucide-react';
+import CountUp from '@/components/knesset/CountUp';
+
+const formatFr = (v) => Math.round(v).toLocaleString('fr-FR');
 
 export default function Leaderboard() {
   const [user, setUser] = useState(null);
@@ -97,14 +100,16 @@ export default function Leaderboard() {
               </div>
               <div className="flex items-center gap-6 text-center">
                 {[
-                  { label: 'Points', value: currentUserProgress.total_points?.toLocaleString('fr-FR') || 0 },
-                  { label: 'Prédictions', value: currentUserProgress.predictions_count || 0 },
+                  { label: 'Points', count: currentUserProgress.total_points || 0 },
+                  { label: 'Prédictions', count: currentUserProgress.predictions_count || 0 },
                   { label: 'Précision', value: getPrecision(currentUserProgress), color: 'var(--p-green)' },
                   { label: 'Série', value: `${currentUserProgress.daily_streak || 0}j`, color: '#F97316' },
-                ].map(({ label, value, color }) => (
+                ].map(({ label, value, count, color }) => (
                   <div key={label}>
                     <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>{label}</p>
-                    <p className="font-bold p-mono text-sm" style={{ color: color || 'var(--p-text)' }}>{value}</p>
+                    <p className="font-bold p-mono text-sm" style={{ color: color || 'var(--p-text)' }}>
+                      {count != null ? <CountUp value={count} duration={800} formatter={formatFr} /> : value}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -132,7 +137,7 @@ export default function Leaderboard() {
                 {topThree[1]?.user_email?.split('@')[0]}
               </p>
               <p className="p-mono text-sm" style={{ color: '#B0B8C8' }}>
-                {getScore(topThree[1])} <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[1])}</span>
+                <CountUp value={getScore(topThree[1])} duration={900} delay={200} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[1])}</span>
               </p>
               <div className="w-20 h-16 rounded-t-lg mt-2 flex items-center justify-center"
                 style={{ background: 'rgba(176,184,200,0.08)', border: '0.5px solid rgba(176,184,200,0.15)' }}>
@@ -156,7 +161,7 @@ export default function Leaderboard() {
                 {topThree[0]?.user_email?.split('@')[0]}
               </p>
               <p className="p-mono text-base" style={{ color: 'var(--p-gold)' }}>
-                {getScore(topThree[0])} <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[0])}</span>
+                <CountUp value={getScore(topThree[0])} duration={900} delay={100} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[0])}</span>
               </p>
               <div className="w-24 h-24 rounded-t-lg mt-2 flex items-center justify-center"
                 style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
@@ -179,7 +184,7 @@ export default function Leaderboard() {
                 {topThree[2]?.user_email?.split('@')[0]}
               </p>
               <p className="p-mono text-sm" style={{ color: '#CD7F32' }}>
-                {getScore(topThree[2])} <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[2])}</span>
+                <CountUp value={getScore(topThree[2])} duration={900} delay={300} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[2])}</span>
               </p>
               <div className="w-20 h-12 rounded-t-lg mt-2 flex items-center justify-center"
                 style={{ background: 'rgba(205,127,50,0.08)', border: '0.5px solid rgba(205,127,50,0.15)' }}>
@@ -244,15 +249,13 @@ export default function Leaderboard() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.04 }}
-                  className="px-4 py-3 flex items-center gap-4 transition-colors"
+                  className={`px-4 py-3 flex items-center gap-4 transition-colors duration-300 ${!isCurrentUser ? 'hover:bg-white/[0.03]' : ''}`}
                   style={{
                     borderBottom: '0.5px solid var(--p-border)',
                     borderLeft: isCurrentUser ? '2px solid var(--p-gold)' : 'none',
                     background: isCurrentUser ? 'var(--p-gold-dim)' : 'transparent',
                     cursor: 'default',
                   }}
-                  onMouseEnter={e => { if (!isCurrentUser) e.currentTarget.style.background = 'rgba(245,240,232,0.03)'; }}
-                  onMouseLeave={e => { if (!isCurrentUser) e.currentTarget.style.background = 'transparent'; }}
                 >
                   {/* Rang */}
                   <div className="w-7 flex justify-center shrink-0">
@@ -302,7 +305,7 @@ export default function Leaderboard() {
                   {/* Score */}
                   <div className="text-right shrink-0">
                     <p className="font-bold p-mono" style={{ color: isCurrentUser ? 'var(--p-gold)' : 'var(--p-text)' }}>
-                      {typeof getScore(player) === 'number' ? getScore(player).toLocaleString('fr-FR') : getScore(player)}
+                      <CountUp value={getScore(player)} duration={700} delay={index * 20} formatter={formatFr} />
                     </p>
                     <p className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(player)}</p>
                   </div>

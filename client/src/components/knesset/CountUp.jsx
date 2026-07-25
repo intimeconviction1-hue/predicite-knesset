@@ -6,7 +6,7 @@ import { useInView } from 'framer-motion';
  * viewport. Easing "ease-out" — vite au début, se pose en douceur, comme un
  * compteur de résultats électoraux plutôt qu'un tick linéaire mécanique.
  */
-export default function CountUp({ value, duration = 1200, delay = 0, decimals = 0, suffix = '', className, style }) {
+export default function CountUp({ value, duration = 1200, delay = 0, decimals = 0, suffix = '', formatter, className, style }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-10%' });
   const [display, setDisplay] = useState(0);
@@ -28,5 +28,6 @@ export default function CountUp({ value, duration = 1200, delay = 0, decimals = 
     return () => cancelAnimationFrame(raf);
   }, [isInView, value, duration, delay]);
 
-  return <span ref={ref} className={className} style={style}>{display.toFixed(decimals)}{suffix}</span>;
+  const text = formatter ? formatter(display) : `${display.toFixed(decimals)}${suffix}`;
+  return <span ref={ref} className={className} style={style}>{text}</span>;
 }

@@ -7,7 +7,8 @@
     "dev": "node --watch index.js",
     "start": "node index.js",
     "seed:listes": "node scripts/seed-listes.js",
-    "seed:candidats-pm": "node scripts/seed-candidats-pm.js"
+    "seed:candidats-pm": "node scripts/seed-candidats-pm.js",
+    "seed:sondages": "node scripts/seed-sondages.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

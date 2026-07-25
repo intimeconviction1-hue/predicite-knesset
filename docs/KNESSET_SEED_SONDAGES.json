@@ -1,0 +1,68 @@
+{
+  "_note": "Amorce pour peupler l'entité SondageSieges. Sondages réels de juillet 2026, sourcés depuis la page Wikipédia 'Opinion polling for the 2026 Israeli legislative election' (tableau lu directement dans le DOM pour éviter toute erreur de colonne), avec vérification de l'URL de la source primaire (article de presse israélien) via les notes de bas de page de cet article. seats_by_liste utilise le slug de la liste (résolu vers son id réel par le script de seed) et n'inclut que les listes qui franchissent le seuil de 3,25% dans CE sondage précis — une liste sous le seuil dans un sondage donné est absente du tableau plutôt que d'inventer un 0. margin_error_pct volontairement omis quand la source ne le publie pas.",
+  "sondages": [
+    {
+      "institute": "Kantar",
+      "publisher_media": "Israel Hayom",
+      "poll_date": "2026-07-23",
+      "sample_size": null,
+      "source_url": "https://www.israelhayom.co.il/news/politics/article/21046119",
+      "source_language": "he",
+      "seats_by_liste": [
+        { "slug": "likoud", "seats": 23 },
+        { "slug": "yashar-gadi-eisenkot", "seats": 23 },
+        { "slug": "ensemble-bennett-lapid", "seats": 14 },
+        { "slug": "les-democrates", "seats": 10 },
+        { "slug": "otzma-yehudit", "seats": 9 },
+        { "slug": "yisrael-beytenou", "seats": 9 },
+        { "slug": "shas", "seats": 8 },
+        { "slug": "judaisme-unifie-de-la-torah", "seats": 8 },
+        { "slug": "sionisme-religieux", "seats": 5 },
+        { "slug": "ra-am", "seats": 5 },
+        { "slug": "hadash-ta-al-liste-commune", "seats": 5 }
+      ]
+    },
+    {
+      "institute": "Lazar",
+      "publisher_media": "Maariv",
+      "poll_date": "2026-07-22",
+      "sample_size": 500,
+      "source_url": "https://www.maariv.co.il/news/politics/article-1348125",
+      "source_language": "he",
+      "seats_by_liste": [
+        { "slug": "yashar-gadi-eisenkot", "seats": 23 },
+        { "slug": "likoud", "seats": 20 },
+        { "slug": "ensemble-bennett-lapid", "seats": 17 },
+        { "slug": "les-democrates", "seats": 11 },
+        { "slug": "yisrael-beytenou", "seats": 10 },
+        { "slug": "otzma-yehudit", "seats": 8 },
+        { "slug": "shas", "seats": 8 },
+        { "slug": "judaisme-unifie-de-la-torah", "seats": 8 },
+        { "slug": "sionisme-religieux", "seats": 5 },
+        { "slug": "ra-am", "seats": 5 },
+        { "slug": "hadash-ta-al-liste-commune", "seats": 5 }
+      ]
+    },
+    {
+      "institute": "Midgam",
+      "publisher_media": "Channel 13",
+      "poll_date": "2026-07-21",
+      "sample_size": 988,
+      "source_url": "https://13tv.co.il/item/news/politics/politics/dnxub-905274776/",
+      "source_language": "he",
+      "seats_by_liste": [
+        { "slug": "likoud", "seats": 21 },
+        { "slug": "yashar-gadi-eisenkot", "seats": 21 },
+        { "slug": "ensemble-bennett-lapid", "seats": 14 },
+        { "slug": "les-democrates", "seats": 11 },
+        { "slug": "yisrael-beytenou", "seats": 10 },
+        { "slug": "hadash-ta-al-liste-commune", "seats": 6 },
+        { "slug": "otzma-yehudit", "seats": 7 },
+        { "slug": "shas", "seats": 8 },
+        { "slug": "judaisme-unifie-de-la-torah", "seats": 8 },
+        { "slug": "sionisme-religieux", "seats": 5 },
+        { "slug": "ra-am", "seats": 5 }
+      ]
+    }
+  ]
+}

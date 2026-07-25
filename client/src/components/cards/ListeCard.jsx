@@ -32,6 +32,11 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
           {/* Header */}
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2.5">
+              {liste.logo_url && (
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 p-1" style={{ background: '#FFFFFF', border: '1px solid var(--p-border)' }}>
+                  <img src={liste.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                </div>
+              )}
               <motion.div whileHover={{ rotate: 0, scale: 1.06 }} transition={{ type: 'spring', stiffness: 300, damping: 12 }}>
                 <BallotChip letters={liste.ballot_letters} size="sm" />
               </motion.div>

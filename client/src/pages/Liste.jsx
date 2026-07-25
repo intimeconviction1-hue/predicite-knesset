@@ -134,6 +134,11 @@ export default function ListePage() {
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
         </Link>
 
+        {/* Bandeau photo — bâtiment de la Knesset (libre, Wikimedia Commons) */}
+        <div className="relative overflow-hidden rounded-2xl mb-4 h-28" style={{ backgroundImage: "url('/images/liste-hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,10,24,0.35) 0%, rgba(5,10,24,0.65) 100%)' }} />
+        </div>
+
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -145,6 +150,11 @@ export default function ListePage() {
         >
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div className="flex items-start gap-4">
+              {liste.logo_url && (
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 p-1.5" style={{ background: '#FFFFFF', border: '1px solid var(--p-border)' }}>
+                  <img src={liste.logo_url} alt="" className="max-w-full max-h-full object-contain" />
+                </div>
+              )}
               <BallotChip letters={liste.ballot_letters} size="lg" />
               <div>
                 <div className="flex items-center gap-2 mb-1">

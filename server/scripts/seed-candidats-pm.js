@@ -4,7 +4,7 @@ import 'dotenv/config';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { initDb, filterEntity, createEntity, pool } from '../db/index.js';
+import { initDb, filterEntity, createEntity, updateEntity, pool } from '../db/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const seedPath = path.join(__dirname, '..', '..', 'docs', 'KNESSET_SEED_CANDIDATS_PM.json');
@@ -19,10 +19,21 @@ async function main() {
   const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
   const candidats = seed.candidats || [];
 
-  let created = 0, skipped = 0, unmatched = 0;
+  let created = 0, skipped = 0, updated = 0, unmatched = 0;
   for (const c of candidats) {
     const existing = await filterEntity('CandidatPM', { name_fr: c.name_fr });
-    if (existing.length > 0) { skipped++; continue; }
+    if (existing.length > 0) {
+      // Déjà présent : on complète juste photo_url si le seed en fournit une
+      // et que la ligne actuelle ne l'a pas encore (idempotent, ne touche
+      // rien d'autre — pas de risque pour les PronosticPM existants).
+      if (c.photo_url && !existing[0].photo_url) {
+        await updateEntity('CandidatPM', existing[0].id, { photo_url: c.photo_url });
+        updated++;
+      } else {
+        skipped++;
+      }
+      continue;
+    }
 
     const liste = (await filterEntity('Liste', { name_fr: c.liste_name_fr }))[0];
     if (!liste) {
@@ -41,7 +52,7 @@ async function main() {
     created++;
   }
 
-  console.log(`Import terminé : ${created} créés, ${skipped} déjà présents (ignorés), ${unmatched} liste(s) introuvable(s).`);
+  console.log(`Import terminé : ${created} créés, ${updated} photo_url complétée(s), ${skipped} déjà présents (ignorés), ${unmatched} liste(s) introuvable(s).`);
   await pool.end();
 }
 

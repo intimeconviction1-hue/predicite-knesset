@@ -44,23 +44,31 @@ export default function Listes() {
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
-      {/* Header */}
-      <div className="relative border-b" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)', borderColor: 'var(--p-border)' }}>
-        <div className="max-w-7xl mx-auto px-4 py-12">
+      {/* Header — photo réelle de l'hémicycle de la Knesset (libre, Wikimedia Commons) */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0" style={{
+          backgroundImage: "url('/images/listes-hero.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }} />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.55) 0%, rgba(5,10,24,0.75) 60%, var(--p-night) 100%)',
+        }} />
+        <div className="relative max-w-7xl mx-auto px-4 py-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-2 mb-2">
-              <Vote className="w-5 h-5" style={{ color: 'var(--p-text-60)' }} />
-              <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
+              <Vote className="w-5 h-5" style={{ color: 'rgba(245,240,232,0.7)' }} />
+              <h1 className="text-2xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'white' }}>
                 Listes en lice — Knesset 2026
               </h1>
             </div>
-            <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>
+            <p className="text-sm" style={{ color: 'rgba(245,240,232,0.55)' }}>
               {listes.length} listes suivies · Scrutin du 27 octobre 2026 · Sondages sièges mis à jour régulièrement
             </p>
             <button
               onClick={() => setShowRules(!showRules)}
               className="mt-4 text-sm font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
-              style={{ color: 'var(--p-gold-text)' }}
+              style={{ color: 'var(--p-gold)' }}
             >
               {showRules ? 'Masquer' : 'Comment lire ces sièges ?'} <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showRules ? 'rotate-90' : ''}`} />
             </button>

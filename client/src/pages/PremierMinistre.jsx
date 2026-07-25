@@ -80,13 +80,17 @@ export default function PremierMinistre() {
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
         </Link>
 
-        {/* Header */}
-        <div className="rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'linear-gradient(135deg, rgba(124,58,237,0.1), rgba(212,175,55,0.08))' }}>
-          <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold)' }} />
-          <h1 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Qui sera Premier ministre ?</h1>
-          <p className="text-sm max-w-xl mx-auto" style={{ color: 'var(--p-text-60)' }}>
-            Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard.
-          </p>
+        {/* Header — statue de la Menorah devant la Knesset, de nuit (libre, Wikimedia Commons) */}
+        <div className="relative overflow-hidden rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.3)' }}>
+          <div className="absolute inset-0" style={{ backgroundImage: "url('/images/pm-hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 30%' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(20,10,40,0.75) 0%, rgba(5,10,24,0.88) 100%)' }} />
+          <div className="relative">
+            <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold)' }} />
+            <h1 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'white' }}>Qui sera Premier ministre ?</h1>
+            <p className="text-sm max-w-xl mx-auto" style={{ color: 'rgba(245,240,232,0.7)' }}>
+              Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"
@@ -101,8 +105,12 @@ export default function PremierMinistre() {
         <div className="rounded-2xl border p-6 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
           {existingPred ? (
             <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
+              <div className="flex items-center gap-3">
+                {selectedCandidat?.photo_url ? (
+                  <img src={selectedCandidat.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" style={{ border: '1px solid rgba(34,197,94,0.4)' }} />
+                ) : (
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
+                )}
                 <div>
                   <p className="text-sm font-semibold" style={{ color: '#16794A' }}>
                     Pronostic : {selectedCandidat?.name_fr || 'Autre'}
@@ -130,28 +138,47 @@ export default function PremierMinistre() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {candidats.map(c => (
-                  <button
+                  <motion.button
                     key={c.id}
                     onClick={() => setSelected(c.id)}
-                    className="rounded-xl p-4 text-center transition-all border"
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
                     style={{
                       background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
                       borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
                     }}
                   >
+                    {c.photo_url ? (
+                      <img
+                        src={c.photo_url}
+                        alt=""
+                        className="w-16 h-16 rounded-full object-cover"
+                        style={{ border: selected === c.id ? '2px solid var(--p-gold)' : '1px solid var(--p-border-hover)' }}
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>
+                        <Crown className="w-6 h-6" style={{ color: 'var(--p-text-25)' }} />
+                      </div>
+                    )}
                     <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{c.name_fr}</p>
-                  </button>
+                  </motion.button>
                 ))}
-                <button
+                <motion.button
                   onClick={() => setSelected('autre')}
-                  className="rounded-xl p-4 text-center transition-all border"
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
                   style={{
                     background: selected === 'autre' ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
                     borderColor: selected === 'autre' ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
                   }}
                 >
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>
+                    <Crown className="w-6 h-6" style={{ color: 'var(--p-text-25)' }} />
+                  </div>
                   <p className="text-sm font-semibold" style={{ color: 'var(--p-text-60)' }}>Autre</p>
-                </button>
+                </motion.button>
               </div>
 
               <button

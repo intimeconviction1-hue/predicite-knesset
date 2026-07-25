@@ -78,9 +78,17 @@ export default function ReglesDuJeu() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
 
-      <div className="relative overflow-hidden border-b" style={{ background: 'linear-gradient(180deg, rgba(30,58,138,0.1) 0%, transparent 100%)', borderColor: 'var(--p-border)' }}>
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0" style={{
+          backgroundImage: "url('/images/regles-hero.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }} />
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.6) 0%, rgba(5,10,24,0.8) 60%, var(--p-night) 100%)',
+        }} />
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 85% 0%, rgba(212,175,55,0.1) 0%, transparent 55%)',
+          background: 'radial-gradient(ellipse at 85% 0%, rgba(212,175,55,0.15) 0%, transparent 55%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
@@ -88,18 +96,18 @@ export default function ReglesDuJeu() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'var(--p-text-25)' }}
+            style={{ color: 'rgba(245,240,232,0.4)' }}
           >
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
+            <Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Règles du jeu</span>
+            <span style={{ color: 'rgba(245,240,232,0.7)' }} aria-current="page">Règles du jeu</span>
           </motion.div>
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.06 }}
             className="text-xs font-bold uppercase tracking-[0.2em] mb-3"
-            style={{ color: 'var(--p-gold-text)' }}
+            style={{ color: 'var(--p-gold)' }}
           >
             Comment ça marche
           </motion.p>
@@ -108,7 +116,7 @@ export default function ReglesDuJeu() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.12 }}
             className="text-3xl md:text-4xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}
+            style={{ fontFamily: 'var(--font-display)', color: 'white' }}
           >
             Règles du jeu — Knesset 2026
           </motion.h1>
@@ -117,7 +125,7 @@ export default function ReglesDuJeu() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.18 }}
             className="text-base leading-relaxed max-w-2xl"
-            style={{ color: 'var(--p-text-60)' }}
+            style={{ color: 'rgba(245,240,232,0.6)' }}
           >
             PrédiCité est un jeu prédictif civique. Comprenez le scrutin proportionnel israélien, pronostiquez sièges et Premier ministre, comparez votre précision avec celle de la communauté francophone.
           </motion.p>

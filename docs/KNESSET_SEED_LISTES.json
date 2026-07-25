@@ -1,17 +1,17 @@
 {
   "_note": "Amorce pour peupler l'entité Liste dans Base44. Reflète les principales listes suivies dans les sondages francophones/israéliens de juillet 2026. Le paysage change chaque semaine (fusions, scissions) : à vérifier avant tout import, notamment 'current_knesset_seats' laissé à null volontairement — à compléter depuis une source vérifiée (ex. Wikipédia « Liste des membres de la 25e Knesset ») plutôt que déduit d'un sondage. bloc = classification descriptive (position vis-à-vis de la coalition sortante), jamais un jugement de valeur.",
   "listes": [
-    { "name_fr": "Likoud", "leader_name": "Benjamin Netanyahou", "bloc": "coalition", "color": "#0038B8", "current_knesset_seats": null },
-    { "name_fr": "Otzma Yehudit", "leader_name": "Itamar Ben Gvir", "bloc": "coalition", "color": "#1E3A8A", "current_knesset_seats": null },
-    { "name_fr": "Sionisme religieux", "leader_name": "Bezalel Smotrich", "bloc": "coalition", "color": "#0D9488", "current_knesset_seats": null, "founded_or_merged_note": "Oscille autour du seuil de 3,25% dans les sondages de juillet 2026." },
-    { "name_fr": "Shas", "leader_name": "Aryeh Deri", "bloc": "coalition", "color": "#F59E0B", "current_knesset_seats": null },
-    { "name_fr": "Judaïsme unifié de la Torah", "leader_name": "Yitzhak Goldknopf", "bloc": "coalition", "color": "#78716C", "current_knesset_seats": null },
-    { "name_fr": "Yashar (Gadi Eisenkot)", "leader_name": "Gadi Eisenkot", "bloc": "opposition", "color": "#22C55E", "current_knesset_seats": null, "founded_or_merged_note": "Nouveau parti, ancien chef d'état-major — deuxième force dans plusieurs sondages de 2026." },
+    { "name_fr": "Likoud", "leader_name": "Benjamin Netanyahou", "bloc": "coalition", "color": "#0038B8", "current_knesset_seats": null, "logo_url": "/images/logos/likoud.svg" },
+    { "name_fr": "Otzma Yehudit", "leader_name": "Itamar Ben Gvir", "bloc": "coalition", "color": "#1E3A8A", "current_knesset_seats": null, "logo_url": "/images/logos/otzma-yehudit.svg" },
+    { "name_fr": "Sionisme religieux", "leader_name": "Bezalel Smotrich", "bloc": "coalition", "color": "#0D9488", "current_knesset_seats": null, "founded_or_merged_note": "Oscille autour du seuil de 3,25% dans les sondages de juillet 2026.", "logo_url": "/images/logos/sionisme-religieux.png" },
+    { "name_fr": "Shas", "leader_name": "Aryeh Deri", "bloc": "coalition", "color": "#F59E0B", "current_knesset_seats": null, "logo_url": "/images/logos/shas.png" },
+    { "name_fr": "Judaïsme unifié de la Torah", "leader_name": "Yitzhak Goldknopf", "bloc": "coalition", "color": "#78716C", "current_knesset_seats": null, "logo_url": "/images/logos/judaisme-unifie-torah.png" },
+    { "name_fr": "Yashar (Gadi Eisenkot)", "leader_name": "Gadi Eisenkot", "bloc": "opposition", "color": "#22C55E", "current_knesset_seats": null, "founded_or_merged_note": "Nouveau parti, ancien chef d'état-major — deuxième force dans plusieurs sondages de 2026.", "logo_url": "/images/logos/yashar.png" },
     { "name_fr": "Ensemble (Bennett-Lapid)", "leader_name": "Naftali Bennett & Yaïr Lapid", "bloc": "opposition", "color": "#3B82F6", "current_knesset_seats": null, "founded_or_merged_note": "Alliance annoncée en 2026, regroupant les listes de Bennett et Lapid — composition à confirmer au dépôt officiel des listes." },
-    { "name_fr": "Yisrael Beytenou", "leader_name": "Avigdor Lieberman", "bloc": "opposition", "color": "#0EA5E9", "current_knesset_seats": null },
+    { "name_fr": "Yisrael Beytenou", "leader_name": "Avigdor Lieberman", "bloc": "opposition", "color": "#0EA5E9", "current_knesset_seats": null, "logo_url": "/images/logos/yisrael-beytenou.svg" },
     { "name_fr": "Unité nationale", "leader_name": "Benny Gantz", "bloc": "opposition", "color": "#64748B", "current_knesset_seats": null, "founded_or_merged_note": "Recomposition en cours en 2026 ; certains sondages testent des configurations avec Yoaz Hendel, Dedi Simhi." },
-    { "name_fr": "Les Démocrates", "leader_name": "Yair Golan", "bloc": "opposition", "color": "#84CC16", "current_knesset_seats": null, "founded_or_merged_note": "Fusion Meretz + Parti travailliste." },
-    { "name_fr": "Ra'am", "leader_name": "Mansour Abbas", "bloc": "liste_arabe", "color": "#059669", "current_knesset_seats": null },
+    { "name_fr": "Les Démocrates", "leader_name": "Yair Golan", "bloc": "opposition", "color": "#84CC16", "current_knesset_seats": null, "founded_or_merged_note": "Fusion Meretz + Parti travailliste.", "logo_url": "/images/logos/les-democrates.svg" },
+    { "name_fr": "Ra'am", "leader_name": "Mansour Abbas", "bloc": "liste_arabe", "color": "#059669", "current_knesset_seats": null, "logo_url": "/images/logos/raam.svg" },
     { "name_fr": "Hadash-Ta'al / Liste commune", "leader_name": "Ayman Odeh", "bloc": "liste_arabe", "color": "#DC2626", "current_knesset_seats": null, "founded_or_merged_note": "Configuration de liste commune arabe testée dans plusieurs sondages 2026 — à confirmer au dépôt." }
   ]
 }

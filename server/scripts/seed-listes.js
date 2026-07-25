@@ -4,7 +4,7 @@ import 'dotenv/config';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { initDb, filterEntity, createEntity, pool } from '../db/index.js';
+import { initDb, filterEntity, createEntity, updateEntity, pool } from '../db/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const seedPath = path.join(__dirname, '..', '..', 'docs', 'KNESSET_SEED_LISTES.json');
@@ -29,11 +29,21 @@ async function main() {
   const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
   const listes = seed.listes || [];
 
-  let created = 0, skipped = 0;
+  let created = 0, skipped = 0, updated = 0;
   for (const l of listes) {
     const slug = l.slug || slugify(l.name_fr);
     const existing = await filterEntity('Liste', { slug });
-    if (existing.length > 0) { skipped++; continue; }
+    if (existing.length > 0) {
+      // Déjà présente : on complète juste logo_url si le seed en fournit un
+      // et que la ligne actuelle ne l'a pas encore (idempotent).
+      if (l.logo_url && !existing[0].logo_url) {
+        await updateEntity('Liste', existing[0].id, { logo_url: l.logo_url });
+        updated++;
+      } else {
+        skipped++;
+      }
+      continue;
+    }
 
     await createEntity('Liste', {
       name_fr: l.name_fr,
@@ -45,11 +55,12 @@ async function main() {
       founded_or_merged_note: l.founded_or_merged_note || null,
       is_active: true,
       current_knesset_seats: l.current_knesset_seats ?? null,
+      logo_url: l.logo_url || null,
     });
     created++;
   }
 
-  console.log(`Import terminé : ${created} créées, ${skipped} déjà présentes (ignorées).`);
+  console.log(`Import terminé : ${created} créées, ${updated} logo_url complété(s), ${skipped} déjà présentes (ignorées).`);
   console.log('Rappel : vérifiez current_knesset_seats avant de vous y fier — voir la note en tête du fichier seed.');
   await pool.end();
 }

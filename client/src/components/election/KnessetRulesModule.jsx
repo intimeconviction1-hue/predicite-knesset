@@ -22,6 +22,11 @@ const RULES = [
     accent: 'border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8',
     content: [
       { type: 'text', value: "Une liste doit obtenir au moins 3,25 % des suffrages exprimés au niveau national pour entrer à la Knesset. En dessous, elle n'obtient aucun siège, même si des dizaines de milliers d'électeurs ont voté pour elle — leurs voix sont redistribuées entre les listes qui ont franchi le seuil." },
+      { type: 'threshold-bar', threshold: 3.25, examples: [
+        { label: 'Liste sous le seuil', pct: 1.8, pass: false },
+        { label: 'Liste tout juste au-dessus', pct: 3.6, pass: true },
+        { label: 'Grande liste', pct: 19, pass: true },
+      ] },
       { type: 'stat', label: 'Seuil actuel', value: '3,25 % des suffrages exprimés' },
       { type: 'text', value: "C'est souvent le vrai point de bascule d'une élection : une petite liste qui frôle le seuil peut faire perdre — ou gagner — plusieurs sièges à tout un bloc. C'est le cas du Sionisme religieux de Bezalel Smotrich, qui oscille autour de ce seuil dans les sondages de cette campagne." },
     ]
@@ -34,6 +39,7 @@ const RULES = [
     accent: 'border-emerald-400/30 bg-emerald-400/8',
     content: [
       { type: 'text', value: "Les 120 sièges sont répartis à la proportionnelle entre toutes les listes ayant franchi le seuil, selon la méthode Bader-Ofer (une variante de la méthode d'Hondt). Plus une liste a de voix, plus le rendement en sièges par voix est favorable — un effet qui avantage légèrement les grandes listes par rapport aux petites." },
+      { type: 'seats-bar', total: 120, majority: 61 },
       { type: 'stat', label: 'Majorité', value: '61 sièges sur 120' },
       { type: 'text', value: "Aucune liste n'a jamais obtenu seule la majorité absolue depuis la création de l'État. Le résultat du soir du scrutin n'est donc qu'une étape : il fixe le rapport de force, pas le gouvernement." },
     ]
@@ -63,6 +69,67 @@ const RULES = [
 ];
 
 function RuleBlock({ item }) {
+  if (item.type === 'threshold-bar') {
+    return (
+      <div className="rounded-lg p-3.5" style={{ background: 'rgba(20,32,61,0.03)', border: '1px solid var(--p-border)' }}>
+        <div className="relative h-2 rounded-full mb-3 mt-2" style={{ background: 'var(--p-border-hover)' }}>
+          <div
+            className="absolute top-0 h-full rounded-l-full"
+            style={{ width: `${item.threshold * 4}%`, background: 'var(--p-red)', opacity: 0.35 }}
+          />
+          <div
+            className="absolute -top-1 w-0.5 h-4"
+            style={{ left: `${item.threshold * 4}%`, background: 'var(--p-text)' }}
+          />
+          {item.examples.map((ex, i) => (
+            <div
+              key={i}
+              className="absolute -top-1.5 w-3 h-3 rounded-full border-2"
+              style={{
+                left: `calc(${Math.min(ex.pct * 4, 96)}% - 6px)`,
+                background: ex.pass ? 'var(--p-green)' : 'var(--p-red)',
+                borderColor: 'var(--p-card)',
+              }}
+              title={`${ex.label} — ${ex.pct}%`}
+            />
+          ))}
+        </div>
+        <div className="flex items-center justify-between text-[10px] mb-2.5" style={{ color: 'var(--p-text-25)' }}>
+          <span>0%</span>
+          <span className="font-bold" style={{ color: 'var(--p-text)' }}>seuil {item.threshold}%</span>
+          <span>25%</span>
+        </div>
+        <div className="space-y-1">
+          {item.examples.map((ex, i) => (
+            <div key={i} className="flex items-center gap-2 text-xs">
+              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: ex.pass ? 'var(--p-green)' : 'var(--p-red)' }} />
+              <span style={{ color: 'var(--p-text-60)' }}>{ex.label} ({ex.pct}%)</span>
+              <span className="ml-auto font-semibold" style={{ color: ex.pass ? 'var(--p-green)' : 'var(--p-red)' }}>
+                {ex.pass ? 'entre à la Knesset' : 'aucun siège'}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if (item.type === 'seats-bar') {
+    const majorityPct = (item.majority / item.total) * 100;
+    return (
+      <div className="rounded-lg p-3.5" style={{ background: 'rgba(20,32,61,0.03)', border: '1px solid var(--p-border)' }}>
+        <div className="relative h-3 rounded-full overflow-hidden flex" style={{ background: 'var(--p-border-hover)' }}>
+          <div className="h-full" style={{ width: `${majorityPct}%`, background: 'linear-gradient(90deg,#2B5CE6,#4A7FD4)' }} />
+          <div className="h-full flex-1" style={{ background: 'linear-gradient(90deg,#C8102E,#E24A63)', opacity: 0.5 }} />
+          <div className="absolute -top-1 w-0.5 h-5" style={{ left: `${majorityPct}%`, background: 'var(--p-text)' }} />
+        </div>
+        <div className="flex items-center justify-between text-[10px] mt-2" style={{ color: 'var(--p-text-25)' }}>
+          <span>0</span>
+          <span className="font-bold" style={{ color: 'var(--p-text)' }}>{item.majority} = majorité</span>
+          <span>{item.total} sièges</span>
+        </div>
+      </div>
+    );
+  }
   if (item.type === 'stat') {
     return (
       <div className="flex items-start gap-3 rounded-lg p-3" style={{ background: 'rgba(20,32,61,0.04)', border: '1px solid var(--p-border)' }}>

@@ -43,7 +43,7 @@ export default function Listes() {
   });
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
       {/* Header — photo réelle de l'hémicycle de la Knesset (libre, Wikimedia Commons) */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0" style={{

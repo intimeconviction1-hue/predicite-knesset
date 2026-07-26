@@ -74,7 +74,7 @@ export default function PremierMinistre() {
   const selectedCandidat = candidats.find(c => c.id === existingPred?.candidat_pm_id);
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="max-w-3xl mx-auto px-4 py-8">
         <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
           <ChevronLeft className="w-4 h-4" /> Toutes les listes

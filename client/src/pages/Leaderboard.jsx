@@ -45,7 +45,7 @@ export default function Leaderboard() {
   const getScoreLabel = (player) => player.citizen_index != null ? 'indice' : 'pts';
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
 
       {/* Header */}
       <div style={{ background: 'var(--p-night-2)', borderBottom: '0.5px solid var(--p-border)' }}>

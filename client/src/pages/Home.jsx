@@ -80,7 +80,7 @@ export default function Home() {
   const oppositionSeats = rankedListes.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
 
       {/* Hero — photo réelle de la Knesset (CC0, Wikimedia Commons) en fond, assombrie
           et fondue vers --p-night pour rester lisible et s'intégrer à l'identité du site */}

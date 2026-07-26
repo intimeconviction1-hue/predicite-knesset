@@ -99,7 +99,24 @@ export default function Layout({ children, currentPageName }) {
   );
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen relative" style={{ background: 'var(--p-night)' }}>
+      {/* Fond décoratif fixe — halos de couleur + grain léger, pour casser le
+          plat du papier uni sans nuire à la lisibilité du contenu au-dessus. */}
+      <div
+        className="fixed inset-0 pointer-events-none"
+        style={{
+          zIndex: 0,
+          backgroundImage: `
+            radial-gradient(ellipse 900px 600px at 8% -5%, rgba(212,175,55,0.14), transparent 60%),
+            radial-gradient(ellipse 800px 700px at 100% 15%, rgba(43,92,230,0.10), transparent 55%),
+            radial-gradient(ellipse 700px 600px at 15% 100%, rgba(43,92,230,0.08), transparent 55%),
+            radial-gradient(circle, rgba(20,32,61,0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: 'auto, auto, auto, 22px 22px',
+          backgroundRepeat: 'no-repeat, no-repeat, no-repeat, repeat',
+        }}
+      />
+
       {/* Skip to main content – navigation clavier (accessibilité) */}
       <a href="#main-content" className="skip-to-content">
         Aller au contenu principal

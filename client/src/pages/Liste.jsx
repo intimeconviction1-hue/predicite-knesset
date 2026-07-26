@@ -121,14 +121,14 @@ export default function ListePage() {
 
   if (isLoading || !liste) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--p-night)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'transparent' }}>
         <div className="w-8 h-8 rounded-full border-2 border-[var(--p-border-hover)] border-t-[var(--p-text-40)] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-1 text-sm mb-6 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
           <ChevronLeft className="w-4 h-4" /> Toutes les listes

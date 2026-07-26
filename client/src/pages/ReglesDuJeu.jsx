@@ -76,7 +76,7 @@ const STEPS = [
 
 export default function ReglesDuJeu() {
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
 
       <div className="relative overflow-hidden">
         <div className="absolute inset-0" style={{

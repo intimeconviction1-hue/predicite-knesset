@@ -28,7 +28,7 @@ const SOURCES = [
 
 export default function Methodologie() {
   return (
-    <div className="min-h-screen" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="relative overflow-hidden">
         <div className="absolute inset-0" style={{
           backgroundImage: "url('/images/methodologie-hero.jpg')",

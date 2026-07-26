@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { BarChart3, Target, Trophy, Vote, Crown, ChevronRight, Info, Landmark, PieChart, Flame, Zap } from 'lucide-react';
+import { BarChart3, Target, Trophy, Vote, Crown, ChevronRight, Info, Landmark, PieChart, Flame, Zap, TrendingUp, Coins, ArrowRight } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
 
 // Barème EXACT, aligné sur le code serveur (server/functions/*) :
@@ -244,6 +244,39 @@ export default function ReglesDuJeu() {
                 <div className="text-xs leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{desc}</div>
               </motion.div>
             ))}
+          </div>
+        </section>
+
+        {/* Paris sur sondages — la mécanique de rétention entre deux sondages */}
+        <section id="paris">
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingUp className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
+            <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Parie sur les sondages</h2>
+          </div>
+          <p className="text-sm mb-6 max-w-2xl" style={{ color: 'var(--p-text-40)' }}>
+            Entre deux sondages, mise tes <b style={{ color: 'var(--p-gold-text)' }}>jetons</b> (gratuits, renouvelés chaque semaine) sur ce que diront les prochains. <b style={{ color: 'var(--p-text-60)' }}>Que des points, jamais d'argent.</b>
+          </p>
+          <div className="grid sm:grid-cols-3 gap-3 mb-5">
+            {[
+              { icon: Coins, color: 'var(--p-gold-text)', t: 'Des jetons gratuits', d: 'Une dotation chaque semaine, plus ce que tu gagnes. Impossible de « faire faillite ».' },
+              { icon: TrendingUp, color: 'var(--p-blue)', t: 'Des cotes vivantes', d: 'La cote s\'ouvre sur la probabilité des sondages, puis bouge selon les mises de tous. L\'improbable paie plus.' },
+              { icon: Trophy, color: '#16794A', t: 'Résolu à chaque sondage', d: 'Quand un nouveau sondage tombe, les paris se dénouent et une nouvelle manche s\'ouvre.' },
+            ].map(({ icon: Icon, color, t, d }) => (
+              <div key={t} className="rounded-xl border p-4" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+                <Icon className="w-5 h-5 mb-2" style={{ color }} />
+                <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-text)' }}>{t}</p>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-2xl border p-5" style={{ background: 'var(--p-blue-dim)', borderColor: 'var(--p-blue-border)' }}>
+            <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--p-blue)' }}>Exemple</p>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--p-text-60)' }}>
+              Tu mises <b style={{ color: 'var(--p-text)' }}>50 jetons</b> sur « Likoud en tête » à une cote de <b style={{ color: 'var(--p-gold-text)' }}>2,35</b>. Si le prochain sondage lui donne la tête, tu remportes <b style={{ color: 'var(--p-green)' }}>118 jetons</b>. Plus tu paries tôt et à contre-courant, plus la cote — donc le gain — est élevée.
+            </p>
+            <Link to={createPageUrl('Paris')} className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-blue)', boxShadow: '0 10px 24px -8px rgba(43,92,230,0.6)' }}>
+              Voir les paris ouverts <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </section>
 

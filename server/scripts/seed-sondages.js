@@ -5,7 +5,8 @@ import path from 'node:path';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { initDb, filterEntity, createEntity, pool } from '../db/index.js';
+import { initDb, filterEntity, listEntity, createEntity, pool } from '../db/index.js';
+import { rolloverParis } from '../functions/parisSondages.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const seedPath = path.join(__dirname, '..', '..', 'docs', 'KNESSET_SEED_SONDAGES.json');
@@ -61,6 +62,23 @@ async function main() {
   }
 
   console.log(`Import terminé : ${created} sondage(s) créé(s), ${skipped} déjà présent(s) (ignorés).`);
+
+  // Boucle des paris : si un nouveau sondage est arrivé, on dénoue les marchés
+  // ouverts (paiement des gagnants) et on ouvre la manche suivante. Tolérant :
+  // un souci ici n'invalide pas l'import du sondage.
+  if (created > 0) {
+    try {
+      const latest = (await listEntity('SondageSieges', { sort: '-poll_date', limit: 1 }))[0];
+      if (latest) {
+        const r = await rolloverParis(latest.id);
+        const openInfo = r.opened?.skipped ? `manche non ouverte (${r.opened.skipped})` : `manche ${r.opened?.manche} ouverte`;
+        console.log(`Paris : ${r.resolved.marches_resolus} marché(s) résolu(s), ${r.resolved.mises_gagnantes_payees} mise(s) payée(s), ${openInfo}.`);
+      }
+    } catch (e) {
+      console.warn('Paris : rollover ignoré —', e.message);
+    }
+  }
+
   await pool.end();
 }
 

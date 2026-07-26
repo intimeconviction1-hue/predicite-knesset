@@ -190,6 +190,19 @@ export async function placerMise(user_email, body) {
   return { ok: true, cote, gain_pot, mise };
 }
 
+// Enchaînement complet à l'arrivée d'un nouveau sondage : on résout les marchés
+// ouverts (ils avaient été ouverts sur des données plus anciennes), puis on
+// ouvre une nouvelle manche fondée sur ce sondage. Idempotent côté résolution
+// (les marchés déjà résolus sont ignorés) ; l'ouverture peut échouer sans
+// casser le reste (ex. pas assez de listes en lice).
+export async function rolloverParis(sondage_id) {
+  const resolved = await resolveByPoll(sondage_id);
+  let opened;
+  try { opened = await openMancheRang(); }
+  catch (e) { opened = { skipped: e.message }; }
+  return { resolved, opened };
+}
+
 // Résout tous les marchés 'rang' ouverts à partir d'un sondage : l'issue
 // gagnante est la liste qui a le plus de sièges. Paie les gagnants, marque le
 // marché résolu. Idempotent (ne retouche pas un marché déjà résolu).

@@ -4,9 +4,9 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Home, MapPin, Trophy, Users, BookOpen, 
+  Home, MapPin, Trophy, Users, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  User, LogOut, BarChart2
+  User, LogOut, BarChart2, Landmark
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -61,6 +61,7 @@ export default function Layout({ children, currentPageName }) {
 
   // Menu "Plus" — réduit aux pages réellement routées pour l'instant
   const moreNavItems = [
+    { name: 'Historique', label: 'Historique', icon: Landmark },
     { name: 'Methodologie', label: 'Sources', icon: BarChart2 },
   ];
 
@@ -368,6 +369,7 @@ export default function Layout({ children, currentPageName }) {
                 <li><Link to={createPageUrl('Learn')} className="hover:text-[var(--p-text)] transition-colors">Les législatives israéliennes</Link></li>
                 <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-[var(--p-text)] transition-colors">Comment on vote à la Knesset</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Formation du gouvernement</Link></li>
+                <li><Link to={createPageUrl('Historique')} className="hover:text-[var(--p-text)] transition-colors">Historique des Knesset</Link></li>
               </ul>
             </div>
 

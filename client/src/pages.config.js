@@ -55,6 +55,7 @@ import Leaderboard from './pages/Leaderboard';
 import Learn from './pages/Learn';
 import Methodologie from './pages/Methodologie';
 import ReglesDuJeu from './pages/ReglesDuJeu';
+import Historique from './pages/Historique';
 import __Layout from './Layout.jsx';
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
@@ -74,6 +75,7 @@ export const PAGES = {
     "Learn": Learn,
     "Methodologie": Methodologie,
     "ReglesDuJeu": ReglesDuJeu,
+    "Historique": Historique,
 }
 
 export const pagesConfig = {

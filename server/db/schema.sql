@@ -93,6 +93,20 @@ CREATE TABLE IF NOT EXISTS pronostics_pm (
   points_earned INTEGER NOT NULL DEFAULT 0
 );
 
+CREATE TABLE IF NOT EXISTS knesset_historique (
+  id TEXT PRIMARY KEY,
+  knesset_number INTEGER NOT NULL UNIQUE, -- 1 à 25
+  election_date TEXT NOT NULL,
+  name TEXT NOT NULL, -- ex. "25e Knesset"
+  turnout_pct REAL,
+  threshold_pct REAL, -- seuil en vigueur à cette élection (a varié dans le temps : 1%, 1.5%, 2%, 3.25%)
+  results TEXT NOT NULL, -- JSON array [{party_name, leader, vote_pct, seats}]
+  pm_after TEXT, -- Premier ministre du gouvernement formé après cette élection
+  notes TEXT,
+  source_url TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+
 CREATE TABLE IF NOT EXISTS campaign_settings (
   key TEXT PRIMARY KEY,
   predictions_deadline_utc TEXT,

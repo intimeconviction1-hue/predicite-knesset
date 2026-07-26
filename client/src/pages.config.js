@@ -50,6 +50,7 @@
 import Listes from './pages/Listes';
 import Liste from './pages/Liste';
 import PremierMinistre from './pages/PremierMinistre';
+import Paris from './pages/Paris';
 import Home from './pages/Home';
 import Leaderboard from './pages/Leaderboard';
 import Learn from './pages/Learn';
@@ -72,6 +73,7 @@ export const PAGES = {
     "Listes": Listes,
     "Liste": Liste,
     "PremierMinistre": PremierMinistre,
+    "Paris": Paris,
     "Home": Home,
     "Leaderboard": Leaderboard,
     "Learn": Learn,

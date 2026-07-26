@@ -138,6 +138,29 @@
   }
 }
 
+/* Halos de fond du Layout (voir .p-bg-blob-*) — dérive lente et douce,
+   coupée automatiquement par la règle prefers-reduced-motion ci-dessus. */
+@keyframes p-blob-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(5vw, 4vh) scale(1.12); }
+}
+@keyframes p-blob-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-4vw, 5vh) scale(1.08); }
+}
+@keyframes p-blob-c {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(4vw, -4vh) scale(1.1); }
+}
+@keyframes p-blob-d {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(-3vw, -5vh) scale(1.15); }
+}
+.p-bg-blob-a { animation: p-blob-a 26s ease-in-out infinite; }
+.p-bg-blob-b { animation: p-blob-b 33s ease-in-out infinite; }
+.p-bg-blob-c { animation: p-blob-c 29s ease-in-out infinite; }
+.p-bg-blob-d { animation: p-blob-d 37s ease-in-out infinite; }
+
 button, [role="button"], a { min-height: 44px; display: inline-flex; align-items: center; }
 span[role="button"] { min-height: auto; }
 :focus-visible { outline: 2px solid var(--p-blue); outline-offset: 2px; border-radius: 4px; }

@@ -101,22 +101,32 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen relative" style={{ background: 'var(--p-night)' }}>
-      {/* Fond décoratif fixe — halos de couleur + grain léger, pour casser le
-          plat du papier uni sans nuire à la lisibilité du contenu au-dessus. */}
-      <div
-        className="fixed inset-0 pointer-events-none"
-        style={{
-          zIndex: 0,
-          backgroundImage: `
-            radial-gradient(ellipse 900px 600px at 8% -5%, rgba(212,175,55,0.14), transparent 60%),
-            radial-gradient(ellipse 800px 700px at 100% 15%, rgba(43,92,230,0.10), transparent 55%),
-            radial-gradient(ellipse 700px 600px at 15% 100%, rgba(43,92,230,0.08), transparent 55%),
-            radial-gradient(circle, rgba(20,32,61,0.05) 1px, transparent 1px)
-          `,
-          backgroundSize: 'auto, auto, auto, 22px 22px',
-          backgroundRepeat: 'no-repeat, no-repeat, no-repeat, repeat',
-        }}
-      />
+      {/* Fond décoratif fixe — halos de couleur animés (dérive lente) + grain
+          léger. Fixe au viewport (pas au document) pour rester présent
+          partout, même entre les cartes, quel que soit le défilement. */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        <div className="p-bg-blob-a" style={{
+          position: 'absolute', top: '-12%', left: '-8%', width: '48vw', height: '48vw', maxWidth: 620, maxHeight: 620,
+          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.16, filter: 'blur(90px)',
+        }} />
+        <div className="p-bg-blob-b" style={{
+          position: 'absolute', top: '2%', right: '-12%', width: '42vw', height: '42vw', maxWidth: 560, maxHeight: 560,
+          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.13, filter: 'blur(90px)',
+        }} />
+        <div className="p-bg-blob-c" style={{
+          position: 'absolute', top: '42%', left: '8%', width: '38vw', height: '38vw', maxWidth: 500, maxHeight: 500,
+          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.11, filter: 'blur(90px)',
+        }} />
+        <div className="p-bg-blob-d" style={{
+          position: 'absolute', bottom: '-14%', right: '-6%', width: '46vw', height: '46vw', maxWidth: 600, maxHeight: 600,
+          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.14, filter: 'blur(90px)',
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(20,32,61,0.06) 1px, transparent 1px)',
+          backgroundSize: '22px 22px',
+        }} />
+      </div>
 
       {/* Skip to main content – navigation clavier (accessibilité) */}
       <a href="#main-content" className="skip-to-content">

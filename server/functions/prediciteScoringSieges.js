@@ -1,6 +1,6 @@
 import { filterEntity, listEntity, createEntity, updateEntity } from '../db/index.js';
 
-const SCORE = { engagement: 10, exactSeat: 150, within1Seat: 100, within3Seats: 50, thresholdBonus: 30, blocBonus: 50 };
+const SCORE = { engagement: 10, justifBonus: 50, exactSeat: 150, within1Seat: 100, within3Seats: 50, thresholdBonus: 30, blocBonus: 50 };
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
 const MAJORITY_SEATS = 61;
 const JUSTIF_MAX = 500;
@@ -57,7 +57,7 @@ export async function submitPronosticSieges(user_email, body) {
 
   const justification = typeof body.justification === 'string' ? body.justification.trim().slice(0, JUSTIF_MAX) : '';
   const hasJustification = justification.length >= 20;
-  const newPoints = existing ? (existing.points_earned ?? 0) : (SCORE.engagement + (hasJustification ? 50 : 0));
+  const newPoints = existing ? (existing.points_earned ?? 0) : (SCORE.engagement + (hasJustification ? SCORE.justifBonus : 0));
   const delta = existing ? 0 : newPoints;
 
   const payload = {
@@ -95,6 +95,12 @@ export async function scoreSiegesAndSync() {
 
     const realAboveThreshold = realSeats > 0;
     if (!!p.predicted_above_threshold === realAboveThreshold) finalPoints += SCORE.thresholdBonus;
+
+    // Conserve le bonus de justification acquis à la saisie : le score final
+    // ne doit pas effacer l'effort d'analyse (sinon justifier ne sert qu'avant
+    // les résultats). On le ré-ajoute donc si la justification est valide.
+    const justified = typeof p.justification === 'string' && p.justification.trim().length >= 20;
+    if (justified) finalPoints += SCORE.justifBonus;
 
     const delta = finalPoints - oldPoints;
     deltaByUser.set(p.user_email, (deltaByUser.get(p.user_email) ?? 0) + delta);

@@ -195,9 +195,20 @@ export default function Home() {
         </motion.div>
       </div>
 
-      {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app */}
+      {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app.
+          Photo réelle de l'hémicycle (même image que le hero Listes) en fond : le visuel
+          en points fait littéralement écho à la salle qu'on voit derrière. */}
       <div className="max-w-3xl mx-auto px-4 pb-10">
-        <div className="relative rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.25) 0%, rgba(10,18,38,0.9) 65%)', border: '0.5px solid rgba(245,240,232,0.08)' }}>
+        <div className="relative overflow-hidden rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}>
+          <div className="absolute inset-0" style={{
+            backgroundImage: "url('/images/listes-hero.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }} />
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.35) 0%, rgba(10,18,38,0.93) 65%)',
+          }} />
+          <div className="relative">
           <div className="flex items-start justify-between mb-2">
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
@@ -220,6 +231,7 @@ export default function Home() {
               ? `Projection ${latestPoll.institute} du ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
               : 'Composition à venir — le premier sondage sièges apparaîtra ici'}
           </p>
+          </div>
         </div>
       </div>
 
@@ -241,15 +253,23 @@ export default function Home() {
             <p className="text-sm" style={{ color: 'rgba(245,240,232,0.3)' }}>Sondages à venir…</p>
           </div>
         ) : (
-          <div className="rounded-2xl p-5" style={{ background: 'rgba(10,18,38,0.8)', border: '0.5px solid rgba(245,240,232,0.07)' }}>
-            {rankedListes.map((l, i) => (
-              <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
-            ))}
-            {latestPoll && (
-              <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'rgba(245,240,232,0.25)', borderColor: 'rgba(245,240,232,0.05)' }}>
-                {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
-              </p>
-            )}
+          <div className="relative overflow-hidden rounded-2xl p-5" style={{ border: '0.5px solid rgba(245,240,232,0.07)' }}>
+            <div className="absolute inset-0" style={{
+              backgroundImage: "url('/images/liste-hero.jpg')",
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }} />
+            <div className="absolute inset-0" style={{ background: 'rgba(10,18,38,0.88)' }} />
+            <div className="relative">
+              {rankedListes.map((l, i) => (
+                <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
+              ))}
+              {latestPoll && (
+                <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'rgba(245,240,232,0.25)', borderColor: 'rgba(245,240,232,0.05)' }}>
+                  {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
+                </p>
+              )}
+            </div>
           </div>
         )}
 

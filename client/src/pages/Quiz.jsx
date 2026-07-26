@@ -69,6 +69,10 @@ export default function Quiz() {
         {CATEGORIES.map(c => (
           <QuizWidget key={c.key} category={c.key} title={c.title} />
         ))}
+
+        <div className="flex items-center justify-center gap-2 pt-4 text-sm text-center" style={{ color: 'var(--p-text-40)' }}>
+          <span>Envie d'aller plus loin ? <Link to={createPageUrl('Learn')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Comprendre les législatives</Link>, <Link to={createPageUrl('Historique')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>l'Historique</Link> ou <Link to={createPageUrl('ReglesDuJeu')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>les règles du jeu</Link>.</span>
+        </div>
       </div>
     </div>
   );

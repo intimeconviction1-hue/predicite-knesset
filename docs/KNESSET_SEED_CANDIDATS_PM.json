@@ -1,10 +1,10 @@
 {
   "_note": "Amorce pour peupler l'entité CandidatPM. Ne liste que les personnalités ayant une chance réaliste d'être investies Premier ministre à l'issue du scrutin du 27 octobre 2026, d'après le paysage de juillet 2026 (voir KNESSET_SEED_LISTES.json). Toute personnalité absente de cette liste reste couverte par l'option 'Autre' du pronostic PM (voir server/functions/resolvePremierMinistre.js). Bennett et Lapid apparaissent séparément malgré la liste commune 'Ensemble' : la répartition des rôles (qui serait Premier ministre en cas de victoire) n'est pas tranchée publiquement à l'écriture — à corriger si une annonce officielle change la donne. À vérifier/actualiser au fil de la campagne.",
   "candidats": [
-    { "name_fr": "Benjamin Netanyahou", "liste_name_fr": "Likoud", "photo_url": "/images/candidats/netanyahou.jpg" },
-    { "name_fr": "Naftali Bennett", "liste_name_fr": "Ensemble (Bennett-Lapid)", "photo_url": "/images/candidats/bennett.jpg" },
-    { "name_fr": "Yaïr Lapid", "liste_name_fr": "Ensemble (Bennett-Lapid)", "photo_url": "/images/candidats/lapid.jpg" },
-    { "name_fr": "Benny Gantz", "liste_name_fr": "Unité nationale", "photo_url": "/images/candidats/gantz.jpg" },
-    { "name_fr": "Gadi Eisenkot", "liste_name_fr": "Yashar (Gadi Eisenkot)", "photo_url": "/images/candidats/eisenkot.jpg" }
+    { "name_fr": "Benjamin Netanyahou", "liste_name_fr": "Likoud", "photo_url": "/images/candidats/netanyahou.jpg", "bio": "Né en 1949 à Tel-Aviv, Benjamin Netanyahou dirige le Likoud et est le Premier ministre le plus longtemps en fonction de l'histoire d'Israël, avec des mandats en 1996-1999, 2009-2021 et depuis 2022." },
+    { "name_fr": "Naftali Bennett", "liste_name_fr": "Ensemble (Bennett-Lapid)", "photo_url": "/images/candidats/bennett.jpg", "bio": "Né en 1972 à Haïfa, Naftali Bennett a servi dans des unités d'élite de Tsahal avant de fonder une entreprise technologique, puis d'occuper les ministères de l'Économie, de l'Éducation et de la Défense. Premier ministre de juin 2021 à juin 2022, à la tête d'une coalition inédite avec Yaïr Lapid." },
+    { "name_fr": "Yaïr Lapid", "liste_name_fr": "Ensemble (Bennett-Lapid)", "photo_url": "/images/candidats/lapid.jpg", "bio": "Né en 1963 à Tel-Aviv, Yaïr Lapid a été journaliste et présentateur vedette de la télévision israélienne avant d'entrer en politique en 2012. Fondateur de Yesh Atid, ministre des Finances puis des Affaires étrangères, il a été Premier ministre de juillet à décembre 2022." },
+    { "name_fr": "Benny Gantz", "liste_name_fr": "Unité nationale", "photo_url": "/images/candidats/gantz.jpg", "bio": "Né en 1959, Benny Gantz a été chef d'état-major de Tsahal de 2011 à 2015 avant d'entrer en politique en 2018. Ministre de la Défense de 2020 à 2022, il dirige aujourd'hui le parti Unité nationale." },
+    { "name_fr": "Gadi Eisenkot", "liste_name_fr": "Yashar (Gadi Eisenkot)", "photo_url": "/images/candidats/eisenkot.jpg", "bio": "Né en 1960 à Tibériade, Gadi Eisenkot a été chef d'état-major de Tsahal de 2015 à 2019. Élu à la Knesset en 2022 sur la liste de Benny Gantz, il a fondé son propre parti, Yashar, en 2025." }
   ]
 }

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { Trophy, Medal, Crown, Users, Target, Flame, Search, BookOpen } from 'lucide-react';
 import CountUp from '@/components/knesset/CountUp';
 
@@ -319,6 +321,11 @@ export default function Leaderboard() {
                 <p style={{ color: 'var(--p-text-40)' }}>Aucun joueur trouvé</p>
               </div>
             )}
+          </div>
+
+          <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t text-sm" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
+            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
+            <span>Envie de monter au classement ? <Link to={createPageUrl('ReglesDuJeu')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Voir comment ça marche</Link> ou <Link to={createPageUrl('Quiz')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>tester le quiz</Link>.</span>
           </div>
         </div>
       </div>

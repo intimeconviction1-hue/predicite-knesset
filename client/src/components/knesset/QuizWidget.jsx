@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HelpCircle, CheckCircle2, XCircle } from 'lucide-react';
+import { HelpCircle, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 
 const CATEGORY_LABEL = { regles: 'Règles du jeu', historique: 'Historique', actualite: 'Actualité' };
 
@@ -99,7 +99,26 @@ export default function QuizWidget({ category, title }) {
         {result && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
             <div className="mt-4 pt-4 border-t text-xs space-y-2" style={{ borderColor: 'var(--p-border)' }}>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                className="flex items-center gap-2 rounded-lg px-3 py-2 font-bold"
+                style={{
+                  background: result.is_correct ? 'rgba(34,197,94,0.1)' : 'rgba(217,43,43,0.08)',
+                  color: result.is_correct ? 'var(--p-green)' : 'var(--p-red)',
+                }}
+              >
+                {result.is_correct ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
+                <span>{result.is_correct ? 'Bonne réponse !' : 'Pas tout à fait'}</span>
+                {result.is_correct && user && !result.already_answered && (
+                  <span className="ml-auto flex items-center gap-1 text-xs" style={{ color: 'var(--p-gold-text)' }}>
+                    <Sparkles className="w-3.5 h-3.5" /> +10 pts
+                  </span>
+                )}
+              </motion.div>
               {result.already_answered && <p style={{ color: 'var(--p-text-40)' }}>Déjà répondu précédemment — pas de points supplémentaires.</p>}
+              {!user && <p style={{ color: 'var(--p-text-40)' }}>Connectez-vous pour gagner des points d'apprentissage à chaque bonne réponse.</p>}
               {result.explanation && <p style={{ color: 'var(--p-text-60)' }}>{result.explanation}</p>}
               <button onClick={handleNext} className="text-xs font-semibold hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
                 Question suivante →

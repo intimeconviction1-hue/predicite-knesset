@@ -34,10 +34,13 @@ async function main() {
     const slug = l.slug || slugify(l.name_fr);
     const existing = await filterEntity('Liste', { slug });
     if (existing.length > 0) {
-      // Déjà présente : on complète juste logo_url si le seed en fournit un
-      // et que la ligne actuelle ne l'a pas encore (idempotent).
-      if (l.logo_url && !existing[0].logo_url) {
-        await updateEntity('Liste', existing[0].id, { logo_url: l.logo_url });
+      // Déjà présente : on complète juste les champs que le seed fournit et
+      // que la ligne actuelle n'a pas encore (idempotent), sans toucher au reste.
+      const patch = {};
+      if (l.logo_url && !existing[0].logo_url) patch.logo_url = l.logo_url;
+      if (l.current_knesset_seats != null && existing[0].current_knesset_seats == null) patch.current_knesset_seats = l.current_knesset_seats;
+      if (Object.keys(patch).length > 0) {
+        await updateEntity('Liste', existing[0].id, patch);
         updated++;
       } else {
         skipped++;
@@ -60,7 +63,7 @@ async function main() {
     created++;
   }
 
-  console.log(`Import terminé : ${created} créées, ${updated} logo_url complété(s), ${skipped} déjà présentes (ignorées).`);
+  console.log(`Import terminé : ${created} créées, ${updated} mise(s) à jour (logo/sièges), ${skipped} déjà présentes (ignorées).`);
   console.log('Rappel : vérifiez current_knesset_seats avant de vous y fier — voir la note en tête du fichier seed.');
   await pool.end();
 }

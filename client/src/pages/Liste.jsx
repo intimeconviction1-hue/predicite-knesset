@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import {
-  ChevronLeft, Users, TrendingUp, CheckCircle, PenLine, Lock, Clock, Trophy, ExternalLink
+  ChevronLeft, Users, TrendingUp, CheckCircle, PenLine, Lock, Clock, Trophy, ExternalLink, Landmark
 } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
@@ -87,6 +87,24 @@ export default function ListePage() {
   const latest = history[history.length - 1] || null;
   const maxSeats = Math.max(40, ...history.map(h => h.seats));
 
+  const { data: historiqueElections = [] } = useQuery({
+    queryKey: ['knesset-historique-for-liste'],
+    queryFn: () => base44.entities.KnessetHistorique.list('knesset_number', 30),
+  });
+
+  // Ne montre l'évolution que pour les élections où le nom correspond
+  // exactement (pas de rapprochement approximatif qui inventerait un lien) —
+  // les partis récents (2026) n'auront donc naturellement aucun historique.
+  const partyHistory = liste
+    ? historiqueElections
+        .map(e => {
+          const match = (e.results || []).find(r => r.party_name?.toLowerCase() === liste.name_fr.toLowerCase());
+          return match ? { knesset_number: e.knesset_number, election_date: e.election_date, seats: match.seats } : null;
+        })
+        .filter(Boolean)
+    : [];
+  const maxPartyHistorySeats = Math.max(40, ...partyHistory.map(h => h.seats));
+
   const { data: existingPred } = useQuery({
     queryKey: ['pronostic-sieges', liste?.id, user?.email],
     queryFn: async () => {
@@ -151,11 +169,11 @@ export default function ListePage() {
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div className="flex items-start gap-4">
               {liste.logo_url && (
-                <div className="w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 p-1.5" style={{ background: '#FFFFFF', border: '1px solid var(--p-border)' }}>
+                <div className="w-16 h-16 rounded-xl flex items-center justify-center flex-shrink-0 p-2" style={{ background: '#FFFFFF', border: '1px solid var(--p-border)' }}>
                   <img src={liste.logo_url} alt="" className="max-w-full max-h-full object-contain" />
                 </div>
               )}
-              <BallotChip letters={liste.ballot_letters} size="lg" />
+              {liste.ballot_letters && <BallotChip letters={liste.ballot_letters} size="lg" />}
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || '#6B7280' }} />
@@ -247,6 +265,43 @@ export default function ListePage() {
                 </div>
               ))}
             </div>
+          </motion.div>
+        )}
+
+        {/* Évolution historique — vraies élections passées où cette liste (même nom exact) a participé */}
+        {partyHistory.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.4 }}
+            className="rounded-2xl border p-6 mb-6"
+            style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <Landmark className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
+              <h2 className="font-bold text-sm" style={{ color: 'var(--p-text)' }}>Évolution depuis sa création</h2>
+            </div>
+            <div className="flex items-end gap-2 h-28 mb-3">
+              {partyHistory.map((h, i) => (
+                <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1">
+                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold-text)' }}>{h.seats}</span>
+                  <motion.div
+                    className="w-full rounded-t-sm"
+                    style={{ backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.65 }}
+                    initial={{ height: 0 }}
+                    whileInView={{ height: `${(h.seats / maxPartyHistorySeats) * 100}%` }}
+                    viewport={{ once: true, margin: '-10%' }}
+                    transition={{ duration: 0.5, delay: i * 0.03 }}
+                  />
+                  <span className="text-[9px]" style={{ color: 'var(--p-text-25)' }}>{new Date(h.election_date).getFullYear()}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>
+              {partyHistory.length} élection{partyHistory.length > 1 ? 's' : ''} sous ce nom exact, de {new Date(partyHistory[0].election_date).getFullYear()} à {new Date(partyHistory[partyHistory.length - 1].election_date).getFullYear()} —
+              voir <Link to={createPageUrl('Historique')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>le détail dans l'Historique</Link>.
+            </p>
           </motion.div>
         )}
 

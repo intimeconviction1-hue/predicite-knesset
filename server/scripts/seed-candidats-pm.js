@@ -23,11 +23,13 @@ async function main() {
   for (const c of candidats) {
     const existing = await filterEntity('CandidatPM', { name_fr: c.name_fr });
     if (existing.length > 0) {
-      // Déjà présent : on complète juste photo_url si le seed en fournit une
-      // et que la ligne actuelle ne l'a pas encore (idempotent, ne touche
-      // rien d'autre — pas de risque pour les PronosticPM existants).
-      if (c.photo_url && !existing[0].photo_url) {
-        await updateEntity('CandidatPM', existing[0].id, { photo_url: c.photo_url });
+      // Déjà présent : on complète juste les champs manquants (idempotent,
+      // ne touche rien d'autre — pas de risque pour les PronosticPM existants).
+      const patch = {};
+      if (c.photo_url && !existing[0].photo_url) patch.photo_url = c.photo_url;
+      if (c.bio && !existing[0].bio) patch.bio = c.bio;
+      if (Object.keys(patch).length > 0) {
+        await updateEntity('CandidatPM', existing[0].id, patch);
         updated++;
       } else {
         skipped++;
@@ -52,7 +54,7 @@ async function main() {
     created++;
   }
 
-  console.log(`Import terminé : ${created} créés, ${updated} photo_url complétée(s), ${skipped} déjà présents (ignorés), ${unmatched} liste(s) introuvable(s).`);
+  console.log(`Import terminé : ${created} créés, ${updated} mise(s) à jour (photo/bio), ${skipped} déjà présents (ignorés), ${unmatched} liste(s) introuvable(s).`);
   await pool.end();
 }
 

@@ -10,7 +10,8 @@ const RULES = [
     color: '#2B5CE6',
     accent: 'border-[#4A7FD4]/30 bg-[#4A7FD4]/8',
     content: [
-      { type: 'text', value: "En Israël, on ne vote pas pour une personne mais pour une liste entière : un parti, ou une alliance de partis présentant une liste commune. Il n'y a ni circonscriptions ni vote uninominal — tout le pays forme une seule circonscription nationale." },
+      { type: 'text', value: "En Israël, on ne vote pas pour une personne mais pour une liste entière : un parti, ou une alliance de partis présentant une liste commune. Il n'y a ni circonscriptions ni vote uninominal — tout le pays forme une seule circonscription nationale. C'est ce qu'on appelle une représentation proportionnelle intégrale (« pure ») : la répartition des 120 sièges suit directement le pourcentage national de voix de chaque liste, sans découpage géographique intermédiaire." },
+      { type: 'highlight', label: 'Pourquoi une seule circonscription nationale ?', value: "Ce choix remonte aux institutions pré-étatiques du Yishouv : dans une société d'immigration très diverse (courants religieux, laïcs, socialistes, révisionnistes, communautés arabes...), le but était de garantir une voix à chaque sensibilité politique, plutôt que de risquer d'en écraser certaines par un découpage en circonscriptions locales. Contrepartie assumée : un Parlement très fragmenté, où aucune liste n'a jamais eu seule la majorité — d'où la nécessité systématique d'une coalition." },
       { type: 'highlight', label: 'Différence clé', value: "Contrairement au scrutin français, il n'y a pas de duel entre deux personnes au second tour : un seul tour, et le résultat se traduit directement en sièges à la Knesset." },
     ]
   },

@@ -129,6 +129,10 @@ export default function Actu() {
             ))}
           </div>
         )}
+
+        <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
+          <span>Cette actu vous inspire un pronostic ? <Link to={createPageUrl('Listes')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Voir les listes</Link> ou <Link to={createPageUrl('PremierMinistre')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>pronostiquer le Premier ministre</Link>.</span>
+        </div>
       </div>
     </div>
   );

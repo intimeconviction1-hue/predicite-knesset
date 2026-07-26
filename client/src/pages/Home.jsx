@@ -70,14 +70,17 @@ export default function Home() {
 
   const latestPoll = sondages?.[0] || null;
   const seatsByListe = new Map((latestPoll?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
-  const rankedListes = [...listes]
-    .map(l => ({ ...l, _seats: seatsByListe.get(l.id) ?? 0 }))
-    .sort((a, b) => b._seats - a._seats)
-    .slice(0, 10);
+  // Sur TOUTES les listes (pas seulement le top 10 affiché plus bas), sinon
+  // les blocs coalition/opposition perdent les listes hors classement — et
+  // la liste_arabe, qui n'est ni l'un ni l'autre, doit apparaître à part
+  // plutôt que d'être silencieusement absente du total.
+  const listesAvecSieges = listes.map(l => ({ ...l, _seats: seatsByListe.get(l.id) ?? 0 }));
+  const rankedListes = [...listesAvecSieges].sort((a, b) => b._seats - a._seats).slice(0, 10);
   const maxSeats = Math.max(20, ...rankedListes.map(l => l._seats));
 
-  const coalitionSeats = rankedListes.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
-  const oppositionSeats = rankedListes.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
+  const coalitionSeats = listesAvecSieges.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
+  const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
+  const arabSeats = listesAvecSieges.filter(l => l.bloc === 'liste_arabe').reduce((s, l) => s + l._seats, 0);
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -165,8 +168,53 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app.
+          Placé juste après le hero (avant le compte à rebours) pour être visible sans scroller :
+          c'est l'information la plus stratégique de la page. Photo réelle de l'hémicycle
+          (même image que le hero Listes) en fond : le visuel en points fait littéralement
+          écho à la salle qu'on voit derrière. */}
+      <div className="max-w-3xl mx-auto px-4 pt-10 pb-2">
+        <div className="relative overflow-hidden rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}>
+          <div className="absolute inset-0" style={{
+            backgroundImage: "url('/images/listes-hero.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }} />
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.62) 65%)',
+          }} />
+          <div className="relative">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
+              <p className="text-4xl font-black font-mono text-[var(--p-blue)] leading-none mt-1"><CountUp value={coalitionSeats} /></p>
+            </div>
+            <div className="text-center pt-2">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>120 sièges</p>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(212,175,55,0.7)' }}>majorité 61</p>
+              {arabSeats > 0 && (
+                <p className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'rgba(16,185,129,0.7)' }}>+ {arabSeats} listes arabes</p>
+              )}
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(217,43,43,0.75)' }}>Bloc opposition</p>
+              <p className="text-4xl font-black font-mono text-[var(--p-red)] leading-none mt-1"><CountUp value={oppositionSeats} delay={200} /></p>
+            </div>
+          </div>
+
+          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={220} />
+
+          <p className="text-center text-[11px] -mt-2" style={{ color: 'rgba(245,240,232,0.3)' }}>
+            {latestPoll
+              ? `Projection ${latestPoll.institute} du ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
+              : 'Composition à venir — le premier sondage sièges apparaîtra ici'}
+          </p>
+          </div>
+        </div>
+      </div>
+
       {/* Compte à rebours + calendrier — le scrutin approche, sentiment de progression */}
-      <div className="max-w-3xl mx-auto px-4 py-12">
+      <div className="max-w-3xl mx-auto px-4 py-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -193,46 +241,6 @@ export default function Home() {
         >
           <ElectionTimeline />
         </motion.div>
-      </div>
-
-      {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app.
-          Photo réelle de l'hémicycle (même image que le hero Listes) en fond : le visuel
-          en points fait littéralement écho à la salle qu'on voit derrière. */}
-      <div className="max-w-3xl mx-auto px-4 pb-10">
-        <div className="relative overflow-hidden rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}>
-          <div className="absolute inset-0" style={{
-            backgroundImage: "url('/images/listes-hero.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }} />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.62) 65%)',
-          }} />
-          <div className="relative">
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
-              <p className="text-4xl font-black font-mono text-[var(--p-blue)] leading-none mt-1"><CountUp value={coalitionSeats} /></p>
-            </div>
-            <div className="text-center pt-2">
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>120 sièges</p>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(212,175,55,0.7)' }}>majorité 61</p>
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(217,43,43,0.75)' }}>Bloc opposition</p>
-              <p className="text-4xl font-black font-mono text-[var(--p-red)] leading-none mt-1"><CountUp value={oppositionSeats} delay={200} /></p>
-            </div>
-          </div>
-
-          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={220} />
-
-          <p className="text-center text-[11px] -mt-2" style={{ color: 'rgba(245,240,232,0.3)' }}>
-            {latestPoll
-              ? `Projection ${latestPoll.institute} du ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
-              : 'Composition à venir — le premier sondage sièges apparaîtra ici'}
-          </p>
-          </div>
-        </div>
       </div>
 
       {/* Classement des listes */}

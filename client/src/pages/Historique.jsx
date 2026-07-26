@@ -221,6 +221,10 @@ export default function Historique() {
         <div className="mt-8">
           <QuizWidget category="historique" title="Testez vos connaissances" />
         </div>
+
+        <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
+          <span>Envie de pronostiquer plutôt que de regarder en arrière ? <Link to={createPageUrl('Listes')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Voir les listes 2026</Link></span>
+        </div>
       </div>
     </div>
   );

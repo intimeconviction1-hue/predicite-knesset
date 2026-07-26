@@ -81,6 +81,9 @@ CREATE TABLE IF NOT EXISTS candidats_pm (
   photo_url TEXT,
   is_active INTEGER NOT NULL DEFAULT 1
 );
+-- Ajouté après la création initiale de la table : ADD COLUMN IF NOT EXISTS
+-- (plutôt qu'un DROP/CREATE) pour ne pas perdre les lignes déjà en base.
+ALTER TABLE candidats_pm ADD COLUMN IF NOT EXISTS bio TEXT;
 
 CREATE TABLE IF NOT EXISTS pronostics_pm (
   id TEXT PRIMARY KEY,

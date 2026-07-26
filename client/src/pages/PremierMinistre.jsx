@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info } from 'lucide-react';
+import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info, X } from 'lucide-react';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
@@ -23,6 +23,7 @@ export default function PremierMinistre() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deadlineUtc, setDeadlineUtc] = useState(FALLBACK_DEADLINE_UTC);
   const [deadlineClosed, setDeadlineClosed] = useState(false);
+  const [bioCandidat, setBioCandidat] = useState(null);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -143,12 +144,25 @@ export default function PremierMinistre() {
                     onClick={() => setSelected(c.id)}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.97 }}
-                    className="rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
+                    className="relative rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
                     style={{
                       background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
                       borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
                     }}
                   >
+                    {c.bio && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => { e.stopPropagation(); setBioCandidat(c); }}
+                        onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); setBioCandidat(c); } }}
+                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center hover:bg-[rgba(20,32,61,0.08)] transition-colors"
+                        style={{ color: 'var(--p-text-25)' }}
+                        aria-label={`Biographie de ${c.name_fr}`}
+                      >
+                        <Info className="w-3.5 h-3.5" />
+                      </span>
+                    )}
                     {c.photo_url ? (
                       <img
                         src={c.photo_url}
@@ -200,6 +214,48 @@ export default function PremierMinistre() {
 
         <CoalitionRulesModule />
       </div>
+
+      <AnimatePresence>
+        {bioCandidat && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+            style={{ background: 'rgba(5,10,24,0.6)' }}
+            onClick={() => setBioCandidat(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 12, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.97 }}
+              transition={{ duration: 0.18 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm rounded-2xl p-6 relative"
+              style={{ background: 'var(--p-card)', border: '1px solid var(--p-border)' }}
+            >
+              <button
+                onClick={() => setBioCandidat(null)}
+                className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center hover:bg-[rgba(20,32,61,0.06)]"
+                aria-label="Fermer"
+              >
+                <X className="w-4 h-4" style={{ color: 'var(--p-text-40)' }} />
+              </button>
+              <div className="flex flex-col items-center text-center">
+                {bioCandidat.photo_url ? (
+                  <img src={bioCandidat.photo_url} alt="" className="w-20 h-20 rounded-full object-cover mb-3" style={{ border: '2px solid var(--p-gold)' }} />
+                ) : (
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center mb-3" style={{ background: 'var(--p-night-2)' }}>
+                    <Crown className="w-7 h-7" style={{ color: 'var(--p-text-25)' }} />
+                  </div>
+                )}
+                <h3 className="font-bold text-lg mb-3" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{bioCandidat.name_fr}</h3>
+                <p className="text-sm leading-relaxed text-left" style={{ color: 'var(--p-text-60)' }}>{bioCandidat.bio}</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

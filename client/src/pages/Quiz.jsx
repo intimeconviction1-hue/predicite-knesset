@@ -21,7 +21,7 @@ export default function Quiz() {
           backgroundPosition: 'center',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.6) 0%, rgba(5,10,24,0.82) 60%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.35) 0%, rgba(5,10,24,0.55) 60%, var(--p-night) 100%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div

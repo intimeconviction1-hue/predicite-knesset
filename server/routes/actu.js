@@ -7,9 +7,10 @@ import express from 'express';
 
 const router = express.Router();
 
+// Uniquement des requêtes francophones — pas de résultats en anglais/hébreu.
 const QUERIES = [
   { q: 'Knesset 2026 élections', hl: 'fr', gl: 'IL', ceid: 'IL:fr' },
-  { q: 'Israel Knesset election 2026', hl: 'en', gl: 'US', ceid: 'US:en' },
+  { q: 'Israël Knesset campagne électorale', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
 ];
 
 const CACHE_TTL_MS = 20 * 60 * 1000;

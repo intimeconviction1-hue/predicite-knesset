@@ -107,6 +107,16 @@ export default function Layout({ children, currentPageName }) {
           léger. Fixe au viewport (pas au document) pour rester présent
           partout, même entre les cartes, quel que soit le défilement. */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
+        {/* Photo institutionnelle en toile de fond, très discrète — visible surtout
+            sur les côtés gauche/droit au-delà de la colonne de contenu centrée. */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: "url('/images/knesset-hero.jpg')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 30%',
+          opacity: 0.1,
+          filter: 'grayscale(35%)',
+        }} />
         <div className="p-bg-blob-a" style={{
           position: 'absolute', top: '-12%', left: '-8%', width: '48vw', height: '48vw', maxWidth: 620, maxHeight: 620,
           borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.16, filter: 'blur(90px)',

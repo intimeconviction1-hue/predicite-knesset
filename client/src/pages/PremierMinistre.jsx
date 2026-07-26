@@ -83,7 +83,7 @@ export default function PremierMinistre() {
         {/* Header — statue de la Menorah devant la Knesset, de nuit (libre, Wikimedia Commons) */}
         <div className="relative overflow-hidden rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.3)' }}>
           <div className="absolute inset-0" style={{ backgroundImage: "url('/images/pm-hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 30%' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(20,10,40,0.75) 0%, rgba(5,10,24,0.88) 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(20,10,40,0.45) 0%, rgba(5,10,24,0.6) 100%)' }} />
           <div className="relative">
             <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold)' }} />
             <h1 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'white' }}>Qui sera Premier ministre ?</h1>

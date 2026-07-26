@@ -52,7 +52,7 @@ export default function Listes() {
           backgroundPosition: 'center',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.55) 0%, rgba(5,10,24,0.75) 60%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.32) 0%, rgba(5,10,24,0.5) 60%, var(--p-night) 100%)',
         }} />
         <div className="relative max-w-7xl mx-auto px-4 py-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>

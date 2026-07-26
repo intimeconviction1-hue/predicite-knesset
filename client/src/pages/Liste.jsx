@@ -136,7 +136,7 @@ export default function ListePage() {
 
         {/* Bandeau photo — bâtiment de la Knesset (libre, Wikimedia Commons) */}
         <div className="relative overflow-hidden rounded-2xl mb-4 h-28" style={{ backgroundImage: "url('/images/liste-hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,10,24,0.35) 0%, rgba(5,10,24,0.65) 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,10,24,0.2) 0%, rgba(5,10,24,0.4) 100%)' }} />
         </div>
 
         {/* Header */}

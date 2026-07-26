@@ -91,7 +91,7 @@ export default function Home() {
           backgroundPosition: 'center 35%',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.25) 0%, rgba(5,10,24,0.45) 55%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.15) 0%, rgba(5,10,24,0.3) 55%, var(--p-night) 100%)',
         }} />
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse at 50% 15%, rgba(212,175,55,0.15) 0%, transparent 60%)',
@@ -206,7 +206,7 @@ export default function Home() {
             backgroundPosition: 'center',
           }} />
           <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.35) 0%, rgba(10,18,38,0.93) 65%)',
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.62) 65%)',
           }} />
           <div className="relative">
           <div className="flex items-start justify-between mb-2">
@@ -259,7 +259,7 @@ export default function Home() {
               backgroundSize: 'cover',
               backgroundPosition: 'center',
             }} />
-            <div className="absolute inset-0" style={{ background: 'rgba(10,18,38,0.88)' }} />
+            <div className="absolute inset-0" style={{ background: 'rgba(10,18,38,0.6)' }} />
             <div className="relative">
               {rankedListes.map((l, i) => (
                 <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />

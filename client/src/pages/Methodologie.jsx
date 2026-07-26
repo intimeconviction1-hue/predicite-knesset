@@ -36,7 +36,7 @@ export default function Methodologie() {
           backgroundPosition: 'center',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.6) 0%, rgba(5,10,24,0.8) 60%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.35) 0%, rgba(5,10,24,0.55) 60%, var(--p-night) 100%)',
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
           background: 'radial-gradient(ellipse at 85% 0%, rgba(34,197,94,0.1) 0%, transparent 55%)',

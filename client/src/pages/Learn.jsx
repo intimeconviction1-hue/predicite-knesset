@@ -25,7 +25,7 @@ export default function Learn() {
           backgroundPosition: 'center',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.55) 0%, rgba(5,10,24,0.78) 60%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.32) 0%, rgba(5,10,24,0.52) 60%, var(--p-night) 100%)',
         }} />
         <div className="absolute inset-0 pointer-events-none" style={{
           background: 'radial-gradient(ellipse at 15% 0%, rgba(212,175,55,0.15) 0%, transparent 55%)',
@@ -84,9 +84,18 @@ export default function Learn() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="rounded-3xl px-6 pt-8 pb-4 md:px-10"
-          style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.9) 65%)', border: '0.5px solid rgba(245,240,232,0.08)' }}
+          className="relative overflow-hidden rounded-3xl px-6 pt-8 pb-4 md:px-10"
+          style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}
         >
+          <div className="absolute inset-0" style={{
+            backgroundImage: "url('/images/listes-hero.jpg')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }} />
+          <div className="absolute inset-0" style={{
+            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.6) 65%)',
+          }} />
+          <div className="relative">
           <Hemicycle seatsByListe={[]} listes={[]} height={170} />
           <div className="grid grid-cols-3 gap-2 -mt-2 pt-4 border-t" style={{ borderColor: 'rgba(245,240,232,0.06)' }}>
             {KEY_NUMBERS.map((n, i) => (
@@ -97,6 +106,7 @@ export default function Learn() {
                 <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'rgba(245,240,232,0.35)' }}>{n.label}</p>
               </div>
             ))}
+          </div>
           </div>
         </motion.div>
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import { BarChart3, Target, Trophy, Vote, Crown, ChevronRight, Info, Landmark, PieChart, Flame } from 'lucide-react';
+import QuizWidget from '@/components/knesset/QuizWidget';
 
 const SCORING_RULES = [
   { label: 'Siège exact pour une liste', pts: '+150', desc: 'Le nombre de sièges pronostiqué correspond exactement au résultat.' },
@@ -237,6 +238,12 @@ export default function ReglesDuJeu() {
               </motion.div>
             ))}
           </div>
+        </section>
+
+        <section id="quiz">
+          <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Testez-vous</h2>
+          <p className="text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>Une question au hasard sur les règles, l'histoire ou l'actu — d'autres sur <Link to={createPageUrl('Quiz')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>la page Quiz</Link>.</p>
+          <QuizWidget />
         </section>
 
         <section id="badges">

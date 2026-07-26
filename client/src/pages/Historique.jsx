@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, Landmark, ExternalLink, Info } from 'lucide-react';
+import QuizWidget from '@/components/knesset/QuizWidget';
 
 function ElectionCard({ election, index }) {
   const [open, setOpen] = useState(false);
@@ -164,6 +165,10 @@ export default function Historique() {
             {elections.map((e, i) => <ElectionCard key={e.id} election={e} index={i} />)}
           </div>
         )}
+
+        <div className="mt-8">
+          <QuizWidget category="historique" title="Testez vos connaissances" />
+        </div>
       </div>
     </div>
   );

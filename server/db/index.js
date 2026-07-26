@@ -63,6 +63,8 @@ export const ENTITY_CONFIG = {
   SondageSieges: { table: 'sondages_sieges', jsonFields: ['seats_by_liste'] },
   ResultatSieges: { table: 'resultats_sieges', jsonFields: ['seats_by_liste'], boolFields: ['is_final'] },
   KnessetHistorique: { table: 'knesset_historique', jsonFields: ['results'] },
+  QuizQuestion: { table: 'quiz_questions', jsonFields: ['choices'] },
+  QuizReponse: { table: 'quiz_reponses', boolFields: ['is_correct'] },
   PronosticSieges: { table: 'pronostics_sieges', boolFields: ['predicted_above_threshold', 'is_correct'], hasUpdatedAt: true },
   CandidatPM: { table: 'candidats_pm', boolFields: ['is_active'] },
   PronosticPM: { table: 'pronostics_pm' },

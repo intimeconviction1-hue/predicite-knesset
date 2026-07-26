@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
+import QuizWidget from '@/components/knesset/QuizWidget';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
 
@@ -115,6 +116,15 @@ export default function Learn() {
           transition={{ duration: 0.4, delay: 0.08 }}
         >
           <CoalitionRulesModule />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+        >
+          <QuizWidget />
         </motion.div>
 
         <motion.div

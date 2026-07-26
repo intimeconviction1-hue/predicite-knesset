@@ -63,6 +63,7 @@ export default function Layout({ children, currentPageName }) {
   const moreNavItems = [
     { name: 'Actu', label: 'Actu', icon: Newspaper },
     { name: 'Historique', label: 'Historique', icon: Landmark },
+    { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
     { name: 'Methodologie', label: 'Sources', icon: BarChart2 },
   ];
 
@@ -382,6 +383,7 @@ export default function Layout({ children, currentPageName }) {
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Formation du gouvernement</Link></li>
                 <li><Link to={createPageUrl('Historique')} className="hover:text-[var(--p-text)] transition-colors">Historique des Knesset</Link></li>
                 <li><Link to={createPageUrl('Actu')} className="hover:text-[var(--p-text)] transition-colors">Actu de la campagne</Link></li>
+                <li><Link to={createPageUrl('Quiz')} className="hover:text-[var(--p-text)] transition-colors">Quiz</Link></li>
               </ul>
             </div>
 

@@ -1,0 +1,145 @@
+{
+  "_note": "Amorce pour peupler l'entité QuizQuestion. Toutes les questions reprennent des faits déjà vérifiés ailleurs dans le site (KnessetRulesModule, CoalitionRulesModule, KNESSET_SEED_HISTORIQUE.json, KNESSET_SEED_SONDAGES.json) — aucune recherche nouvelle, juste une remise en forme pédagogique. correct_index est l'index (0-based) dans choices.",
+  "questions": [
+    {
+      "category": "regles",
+      "question": "Quel pourcentage des suffrages une liste doit-elle obtenir pour entrer à la Knesset ?",
+      "choices": ["1 %", "2 %", "3,25 %", "5 %"],
+      "correct_index": 2,
+      "explanation": "Le seuil électoral est de 3,25 % depuis 2015. Il était de 1 % de 1949 à 1992, 1,5 % de 1992 à 2003, puis 2 % de 2003 à 2014.",
+      "source_url": "https://en.wikipedia.org/wiki/List_of_political_parties_in_Israel"
+    },
+    {
+      "category": "regles",
+      "question": "Combien de sièges faut-il pour la majorité à la Knesset ?",
+      "choices": ["50", "55", "61", "70"],
+      "correct_index": 2,
+      "explanation": "La Knesset compte 120 sièges ; la majorité absolue est donc de 61.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Comment vote-t-on en Israël pour les élections législatives ?",
+      "choices": [
+        "Pour un candidat dans sa circonscription",
+        "Pour une liste, sur une circonscription nationale unique",
+        "Pour deux candidats, comme en France",
+        "Par un vote direct pour le Premier ministre uniquement"
+      ],
+      "correct_index": 1,
+      "explanation": "Il n'y a ni circonscriptions ni vote uninominal : tout le pays forme une seule circonscription, et on vote pour une liste entière.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Comment s'appelle la méthode utilisée pour répartir les 120 sièges entre les listes ?",
+      "choices": ["Méthode Sainte-Laguë", "Méthode Bader-Ofer", "Scrutin à deux tours", "Vote unique transférable"],
+      "correct_index": 1,
+      "explanation": "La méthode Bader-Ofer, une variante de la méthode d'Hondt, avantage légèrement les grandes listes par rapport aux petites.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "À quoi sert un accord d'excédents de voix (« hescem odafim ») entre deux listes ?",
+      "choices": [
+        "À fusionner définitivement les deux listes",
+        "À mettre en commun leurs restes de voix inutilisés, pour ne pas perdre de siège de justesse",
+        "À se partager le poste de Premier ministre",
+        "À obtenir une exemption du seuil électoral"
+      ],
+      "correct_index": 1,
+      "explanation": "Deux listes proches idéologiquement ont souvent intérêt à signer un tel accord, qui peut faire basculer un siège de justesse vers l'une des deux plutôt que de le perdre.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Le Premier ministre israélien est-il élu directement par les citoyens ?",
+      "choices": [
+        "Oui, toujours",
+        "Non, jamais, sauf de 1996 à 2001",
+        "Oui, mais seulement depuis 2015",
+        "Non, il est nommé par la Cour suprême"
+      ],
+      "correct_index": 1,
+      "explanation": "C'est la composition de la Knesset qui détermine qui gouverne. Un système d'élection directe du Premier ministre a existé de 1996 à 2001 avant d'être abandonné.",
+      "source_url": null
+    },
+    {
+      "category": "historique",
+      "question": "Comment appelle-t-on le bouleversement politique de 1977, quand le Likoud a battu le Parti travailliste pour la première fois ?",
+      "choices": ["La Mahapakh", "L'Intifada", "Le Kach", "La Nakba"],
+      "correct_index": 0,
+      "explanation": "Le \"Mahapakh\" a mis fin à 29 ans de domination ininterrompue du Mapaï/Alignement travailliste, avec Menahem Begin devenant Premier ministre.",
+      "source_url": "https://en.wikipedia.org/wiki/1977_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Qui était Premier ministre après la toute première élection israélienne, en 1949 ?",
+      "choices": ["Menahem Begin", "Golda Meir", "David Ben Gourion", "Yitzhak Rabin"],
+      "correct_index": 2,
+      "explanation": "David Ben Gourion (Mapaï) a formé le premier gouvernement d'Israël après l'élection du 25 janvier 1949.",
+      "source_url": "https://en.wikipedia.org/wiki/1949_Israeli_Constituent_Assembly_election"
+    },
+    {
+      "category": "historique",
+      "question": "Combien d'élections législatives ont eu lieu en Israël entre avril 2019 et mars 2020 ?",
+      "choices": ["Une seule", "Deux", "Trois", "Quatre"],
+      "correct_index": 2,
+      "explanation": "Avril 2019, septembre 2019 puis mars 2020 : un cas unique dans l'histoire d'Israël, faute de coalition majoritaire formée après les deux premiers scrutins.",
+      "source_url": "https://en.wikipedia.org/wiki/2020_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Qu'est-ce qui a marqué la coalition formée après les élections de 2021 ?",
+      "choices": [
+        "La plus large majorité de l'histoire d'Israël",
+        "Une coalition très hétérogène (droite, centre, gauche, et Ra'am, premier parti arabe à y participer), mettant fin à 12 ans de Netanyahou au pouvoir",
+        "Le retour au pouvoir du Parti travailliste seul",
+        "La première femme Premier ministre depuis Golda Meir"
+      ],
+      "correct_index": 1,
+      "explanation": "Le \"gouvernement du changement\" de Naftali Bennett puis Yaïr Lapid a rassemblé des partis très différents, dont Ra'am — une première pour un parti arabe dans une coalition gouvernementale israélienne.",
+      "source_url": "https://en.wikipedia.org/wiki/2021_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Depuis quelle année le seuil électoral de 3,25 % est-il en vigueur ?",
+      "choices": ["1992", "2003", "2015", "2022"],
+      "correct_index": 2,
+      "explanation": "Le seuil est passé de 2 % à 3,25 % pour l'élection de 2015, la première Knesset couverte par PrédiCité sous ce seuil.",
+      "source_url": "https://en.wikipedia.org/wiki/2015_Israeli_legislative_election"
+    },
+    {
+      "category": "actualite",
+      "question": "Quelle est la date du scrutin législatif israélien couvert par PrédiCité ?",
+      "choices": ["17 juillet 2026", "26 octobre 2026", "27 octobre 2026", "1er novembre 2026"],
+      "correct_index": 2,
+      "explanation": "Le scrutin de la 26e Knesset est prévu le 27 octobre 2026. Le 17 juillet est la date de dissolution de la Knesset sortante, le 26 octobre la clôture des pronostics sur PrédiCité.",
+      "source_url": null
+    },
+    {
+      "category": "actualite",
+      "question": "Qui dirige Yashar, l'un des partis qui a percé dans les sondages de la campagne 2026 ?",
+      "choices": ["Naftali Bennett", "Gadi Eisenkot", "Yaïr Lapid", "Benny Gantz"],
+      "correct_index": 1,
+      "explanation": "Gadi Eisenkot, ancien chef d'état-major, dirige Yashar — donné en tête ou ex-aequo avec le Likoud dans plusieurs sondages de juillet 2026.",
+      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
+    },
+    {
+      "category": "actualite",
+      "question": "Autour de quel seuil le Sionisme religieux de Bezalel Smotrich oscille-t-il dans les sondages de la campagne 2026 ?",
+      "choices": ["Le seuil de majorité (61 sièges)", "Le seuil électoral (3,25 %)", "Le seuil de blocage (25 sièges)", "Aucun, il est loin devant"],
+      "correct_index": 1,
+      "explanation": "Plusieurs sondages de juillet 2026 placent le Sionisme religieux tout près du seuil des 3,25 %, ce qui peut faire basculer plusieurs sièges pour tout un bloc.",
+      "source_url": null
+    },
+    {
+      "category": "actualite",
+      "question": "Quand la Knesset sortante (la 25e) a-t-elle été dissoute, ouvrant la campagne 2026 ?",
+      "choices": ["13 mai 2026", "17 juillet 2026", "1er novembre 2022", "26 octobre 2026"],
+      "correct_index": 1,
+      "explanation": "La Knesset a approuvé sa dissolution le 17 juillet 2026, lançant officiellement la campagne électorale.",
+      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
+    }
+  ]
+}

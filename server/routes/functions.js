@@ -5,6 +5,7 @@ import { runResultatsKnessetCollector } from '../functions/resultatsKnessetColle
 import { submitPronosticSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from '../functions/prediciteScoringSieges.js';
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
 import { ensureUserProgress, updateStreakAndBadges } from '../functions/miscFunctions.js';
+import { submitQuizAnswer } from '../functions/quizScoring.js';
 
 const router = express.Router();
 
@@ -20,6 +21,9 @@ router.post('/:name', requireAuth, async (req, res) => {
 
       case 'updateStreakAndBadges':
         return res.json(await updateStreakAndBadges(req.user.email));
+
+      case 'submitQuizAnswer':
+        return res.json(await submitQuizAnswer(req.user.email, body));
 
       case 'prediciteScoringSieges': {
         if (body.action === 'submitPronosticSieges') {

@@ -107,6 +107,26 @@ CREATE TABLE IF NOT EXISTS knesset_historique (
   created_at TEXT NOT NULL DEFAULT (now_iso())
 );
 
+CREATE TABLE IF NOT EXISTS quiz_questions (
+  id TEXT PRIMARY KEY,
+  category TEXT NOT NULL CHECK (category IN ('regles','historique','actualite')),
+  question TEXT NOT NULL,
+  choices TEXT NOT NULL, -- JSON array de 4 chaînes
+  correct_index INTEGER NOT NULL,
+  explanation TEXT,
+  source_url TEXT,
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+
+CREATE TABLE IF NOT EXISTS quiz_reponses (
+  id TEXT PRIMARY KEY,
+  user_email TEXT NOT NULL,
+  question_id TEXT NOT NULL REFERENCES quiz_questions(id),
+  is_correct INTEGER NOT NULL DEFAULT 0,
+  answered_at TEXT NOT NULL DEFAULT (now_iso()),
+  UNIQUE(user_email, question_id)
+);
+
 CREATE TABLE IF NOT EXISTS campaign_settings (
   key TEXT PRIMARY KEY,
   predictions_deadline_utc TEXT,

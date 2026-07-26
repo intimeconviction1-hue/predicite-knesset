@@ -49,7 +49,7 @@ function makeEntity(name) {
 const ENTITY_NAMES = [
   'Liste', 'SondageSieges', 'ResultatSieges', 'PronosticSieges',
   'CandidatPM', 'PronosticPM', 'CampaignSettings', 'UserProgress', 'Badge',
-  'KnessetHistorique',
+  'KnessetHistorique', 'QuizQuestion', 'QuizReponse',
 ];
 
 const entities = Object.fromEntries(ENTITY_NAMES.map(n => [n, makeEntity(n)]));

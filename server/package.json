@@ -9,7 +9,8 @@
     "seed:listes": "node scripts/seed-listes.js",
     "seed:candidats-pm": "node scripts/seed-candidats-pm.js",
     "seed:sondages": "node scripts/seed-sondages.js",
-    "seed:historique": "node scripts/seed-historique.js"
+    "seed:historique": "node scripts/seed-historique.js",
+    "seed:quiz": "node scripts/seed-quiz.js"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

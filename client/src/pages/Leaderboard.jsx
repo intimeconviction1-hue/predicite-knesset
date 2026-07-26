@@ -9,6 +9,23 @@ import CountUp from '@/components/knesset/CountUp';
 
 const formatFr = (v) => Math.round(v).toLocaleString('fr-FR');
 
+// Indice citoyen /100 — calculé côté client depuis les compteurs déjà exposés
+// par user_progress (aucune migration nécessaire, toujours à jour) :
+//   précision  = points de pronostics = total − apprentissage − régularité
+//   apprentissage = learning_points (quiz) · régularité = regularity_points (streak)
+// Chaque composante est ramenée à 0..1 via un plafond de référence (« excellent
+// engagement » sur la campagne), puis pondérée 40 / 30 / 30.
+const CITIZEN_CAP = { precision: 2000, learning: 300, regularity: 900 };
+function computeCitizenIndex(p) {
+  const learning = p.learning_points || 0;
+  const regularity = p.regularity_points || 0;
+  const precision = Math.max(0, (p.total_points || 0) - learning - regularity);
+  const idx = 40 * Math.min(1, precision / CITIZEN_CAP.precision)
+            + 30 * Math.min(1, learning / CITIZEN_CAP.learning)
+            + 30 * Math.min(1, regularity / CITIZEN_CAP.regularity);
+  return Math.round(idx);
+}
+
 export default function Leaderboard() {
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -22,12 +39,15 @@ export default function Leaderboard() {
     queryFn: () => base44.entities.UserProgress.list('-total_points', 100)
   });
 
-  const filteredUsers = allUsers.filter(u =>
+  // Le classement se fait sur l'indice citoyen (l'API renvoie les lignes triées
+  // par total_points ; on re-trie par indice, qui est la vraie métrique de rang).
+  const ranked = [...allUsers].sort((a, b) => computeCitizenIndex(b) - computeCitizenIndex(a));
+  const filteredUsers = ranked.filter(u =>
     u.user_email?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const currentUserRank = allUsers.findIndex(u => u.user_email === user?.email) + 1;
-  const currentUserProgress = allUsers.find(u => u.user_email === user?.email);
+  const currentUserRank = ranked.findIndex(u => u.user_email === user?.email) + 1;
+  const currentUserProgress = ranked.find(u => u.user_email === user?.email);
   const topThree = filteredUsers.slice(0, 3);
   const rest = filteredUsers.slice(3);
 
@@ -43,8 +63,8 @@ export default function Leaderboard() {
     return `${Math.round((player.correct_predictions || 0) / player.predictions_count * 100)}%`;
   };
 
-  const getScore = (player) => player.citizen_index ?? player.total_points ?? 0;
-  const getScoreLabel = (player) => player.citizen_index != null ? 'indice' : 'pts';
+  const getScore = (player) => computeCitizenIndex(player);
+  const getScoreLabel = () => 'indice';
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -58,13 +78,13 @@ export default function Leaderboard() {
               <h1 className="p-display text-3xl">Classement citoyen</h1>
             </div>
             <p className="p-body text-sm max-w-xl mb-5">
-              Classement au total de points cumulés — précision de tes pronostics, Premier ministre, quiz et régularité.
+              Indice citoyen /100 = précision ×40 % + apprentissage ×30 % + régularité ×30 %. Tes points bruts continuent de s'accumuler ; l'indice, lui, mesure ton équilibre.
             </p>
             <div className="flex items-center gap-6 flex-wrap">
               {[
-                { icon: Target,   label: 'Précision sièges',   color: 'var(--p-red)' },
-                { icon: BookOpen, label: 'Quiz & apprentissage', color: 'var(--p-gold)' },
-                { icon: Flame,    label: 'Régularité',          color: '#F97316' },
+                { icon: Target,   label: 'Précision × 40 %',    color: 'var(--p-red)' },
+                { icon: BookOpen, label: 'Apprentissage × 30 %', color: 'var(--p-gold)' },
+                { icon: Flame,    label: 'Régularité × 30 %',   color: '#F97316' },
               ].map(({ icon: Icon, label, color }) => (
                 <div key={label} className="flex items-center gap-1.5 text-sm" style={{ color: 'var(--p-text-60)' }}>
                   <Icon className="w-4 h-4" style={{ color }} />

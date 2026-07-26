@@ -225,7 +225,7 @@ export default function ReglesDuJeu() {
         <section id="classement">
           <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Comment on te classe</h2>
           <p className="text-sm mb-6 max-w-2xl" style={{ color: 'var(--p-text-40)' }}>
-            Ton rang est ton <b style={{ color: 'var(--p-text-60)' }}>total de points</b>, tout simplement. Il se nourrit de quatre sources — aucune pondération cachée, chaque point compte pareil.
+            Tes points s'accumulent selon le barème ci-dessus. Ton <b style={{ color: 'var(--p-text-60)' }}>rang</b>, lui, se lit sur l'<b style={{ color: 'var(--p-gold-text)' }}>indice citoyen /100</b> — un équilibre entre <b style={{ color: 'var(--p-text-60)' }}>précision (40 %)</b>, <b style={{ color: 'var(--p-text-60)' }}>apprentissage (30 %)</b> et <b style={{ color: 'var(--p-text-60)' }}>régularité (30 %)</b>, pour ne pas récompenser que le volume. Voici tes sources de points :
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {SOURCES.map(({ max, unit, label, desc, color, icon: Icon }, index) => (

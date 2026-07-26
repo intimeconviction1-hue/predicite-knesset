@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Vote, Crown, ChevronRight, Trophy } from 'lucide-react';
+import { ChevronRight, Trophy } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
@@ -129,25 +129,6 @@ export default function Home() {
           style={{ color: 'rgba(245,240,232,0.5)', fontWeight: 400 }}>
           Pronostiquez les législatives israéliennes, en français
         </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.18 }}
-          className="flex flex-col sm:flex-row items-center gap-3">
-          <Link to={createPageUrl('Listes')}>
-            <button className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white"
-              style={{ background: '#1E3A8A' }}>
-              <Vote className="w-4 h-4" /> Voir les listes
-            </button>
-          </Link>
-          <Link to={createPageUrl('PremierMinistre')}>
-            <button className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm"
-              style={{ background: 'var(--p-gold)', color: 'var(--p-night)' }}>
-              <Crown className="w-4 h-4" /> Pronostic Premier ministre
-            </button>
-          </Link>
-        </motion.div>
 
         {user && progress && (
           <motion.div

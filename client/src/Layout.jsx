@@ -67,17 +67,18 @@ export default function Layout({ children, currentPageName }) {
   }, []);
 
   // Nav organisée autour de l'axe « jouer en apprenant, apprendre en s'amusant » :
-  // pronostiquer/comparer d'un côté, comprendre le contexte de l'autre.
+  // Jouer = la mécanique du jeu (règles, classement, quiz) ; Apprendre = le
+  // contenu de l'élection elle-même (listes, PM, historique, actu).
   const jouerItems = [
-    { name: 'Listes', label: 'Listes', icon: MapPin },
-    { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
+    { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen },
     { name: 'Leaderboard', label: 'Classement', icon: Trophy },
     { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
   ];
 
   const apprendreItems = [
     { name: 'Learn', label: 'Comprendre', icon: BookOpen },
-    { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen },
+    { name: 'Listes', label: 'Listes', icon: MapPin },
+    { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
     { name: 'Historique', label: 'Historique', icon: Landmark },
     { name: 'Actu', label: 'Actu', icon: Newspaper },
     { name: 'Methodologie', label: 'Sources', icon: BarChart2 },

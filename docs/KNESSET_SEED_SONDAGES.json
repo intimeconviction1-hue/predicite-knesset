@@ -3,6 +3,29 @@
   "sondages": [
     {
       "institute": "Kantar",
+      "publisher_media": "Kan 11",
+      "poll_date": "2026-07-26",
+      "sample_size": 550,
+      "margin_error_pct": 4.2,
+      "source_url": "https://www.kan.org.il/content/kan-news/politic/1081690/",
+      "source_language": "he",
+      "seats_by_liste": [
+        { "slug": "likoud", "seats": 22 },
+        { "slug": "yashar-gadi-eisenkot", "seats": 21 },
+        { "slug": "ensemble-bennett-lapid", "seats": 14 },
+        { "slug": "les-democrates", "seats": 10 },
+        { "slug": "otzma-yehudit", "seats": 9 },
+        { "slug": "yisrael-beytenou", "seats": 9 },
+        { "slug": "shas", "seats": 8 },
+        { "slug": "judaisme-unifie-de-la-torah", "seats": 8 },
+        { "slug": "sionisme-religieux", "seats": 5 },
+        { "slug": "ra-am", "seats": 5 },
+        { "slug": "hadash-ta-al-liste-commune", "seats": 5 },
+        { "slug": "les-reservistes-hendel-tropper", "seats": 4 }
+      ]
+    },
+    {
+      "institute": "Kantar",
       "publisher_media": "Israel Hayom",
       "poll_date": "2026-07-23",
       "sample_size": null,

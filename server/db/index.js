@@ -71,6 +71,9 @@ export const ENTITY_CONFIG = {
   CampaignSettings: { table: 'campaign_settings', idColumn: 'key' },
   UserProgress: { table: 'user_progress' },
   Badge: { table: 'badges', idColumn: 'id' },
+  ParisMarche: { table: 'paris_marches', jsonFields: ['resolver_args'] },
+  ParisIssue: { table: 'paris_issues' },
+  ParisMise: { table: 'paris_mises' },
 };
 
 function getConfig(entityName) {

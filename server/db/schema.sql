@@ -165,3 +165,53 @@ CREATE TABLE IF NOT EXISTS user_badges (
   earned_at TEXT NOT NULL DEFAULT (now_iso()),
   UNIQUE(user_email, badge_code)
 );
+
+-- ───────────────────────────────────────────────────────────────────────────
+-- Paris sur sondages — jeu de POINTS gratuit, aucun argent réel. Modèle et
+-- cotes détaillés : docs/predicite-paris-modele-scoring.md. Deux monnaies :
+-- le score (total_points, permanent) et les JETONS (renouvelables, à miser).
+
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons INTEGER NOT NULL DEFAULT 1000;
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons_semaine TEXT;   -- semaine ISO de la dernière dotation
+
+-- Un marché = une question pariable, rattachée à une manche (cadence des sondages).
+CREATE TABLE IF NOT EXISTS paris_marches (
+  id TEXT PRIMARY KEY,
+  manche INTEGER NOT NULL,
+  type TEXT NOT NULL,                       -- 'binaire' | 'seuil' | 'rang'
+  question TEXT NOT NULL,
+  resolver_kind TEXT NOT NULL,              -- 'liste_rang' | 'liste_seuil' | 'bloc_majorite'
+  resolver_args TEXT,                       -- JSON : { liste_id, seuil, ... }
+  liquidity_k INTEGER NOT NULL DEFAULT 800, -- force du prior sondage dans la cote
+  opens_at TEXT NOT NULL DEFAULT (now_iso()),
+  closes_at TEXT,                           -- verrou (avant publication du sondage)
+  resolved_by TEXT,                         -- id du sondage qui a tranché
+  status TEXT NOT NULL DEFAULT 'open',      -- 'open' | 'locked' | 'resolved' | 'void'
+  winning_issue TEXT,
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+
+-- Les issues d'un marché (OUI/NON, ou une par liste pour un marché 'rang').
+CREATE TABLE IF NOT EXISTS paris_issues (
+  id TEXT PRIMARY KEY,
+  marche_id TEXT NOT NULL REFERENCES paris_marches(id),
+  label TEXT NOT NULL,
+  match_value TEXT,                         -- valeur qui rend cette issue gagnante
+  prob_open REAL NOT NULL DEFAULT 0.5,      -- P implicite du sondage à l'ouverture
+  pool_reel INTEGER NOT NULL DEFAULT 0      -- somme des mises réelles sur cette issue
+);
+
+-- Chaque mise d'un joueur — la cote est VERROUILLÉE à la prise du pari.
+CREATE TABLE IF NOT EXISTS paris_mises (
+  id TEXT PRIMARY KEY,
+  user_email TEXT NOT NULL,
+  marche_id TEXT NOT NULL REFERENCES paris_marches(id),
+  issue_id TEXT NOT NULL REFERENCES paris_issues(id),
+  mise INTEGER NOT NULL,
+  cote REAL NOT NULL,
+  gain_pot INTEGER NOT NULL,                -- round(mise * cote), pré-calculé
+  statut TEXT NOT NULL DEFAULT 'en_jeu',    -- 'en_jeu' | 'gagne' | 'perdu' | 'rembourse'
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+CREATE INDEX IF NOT EXISTS idx_mises_user ON paris_mises(user_email);
+CREATE INDEX IF NOT EXISTS idx_mises_marche ON paris_mises(marche_id);

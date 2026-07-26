@@ -58,13 +58,13 @@ export default function Leaderboard() {
               <h1 className="p-display text-3xl">Classement citoyen</h1>
             </div>
             <p className="p-body text-sm max-w-xl mb-5">
-              Indice citoyen = précision ×40% + apprentissage ×30% + régularité ×30%
+              Classement au total de points cumulés — précision de tes pronostics, Premier ministre, quiz et régularité.
             </p>
             <div className="flex items-center gap-6 flex-wrap">
               {[
-                { icon: Target,   label: 'Précision × 40%',    color: 'var(--p-red)' },
-                { icon: BookOpen, label: 'Apprentissage × 30%', color: 'var(--p-gold)' },
-                { icon: Flame,    label: 'Régularité × 30%',   color: '#F97316' },
+                { icon: Target,   label: 'Précision sièges',   color: 'var(--p-red)' },
+                { icon: BookOpen, label: 'Quiz & apprentissage', color: 'var(--p-gold)' },
+                { icon: Flame,    label: 'Régularité',          color: '#F97316' },
               ].map(({ icon: Icon, label, color }) => (
                 <div key={label} className="flex items-center gap-1.5 text-sm" style={{ color: 'var(--p-text-60)' }}>
                   <Icon className="w-4 h-4" style={{ color }} />

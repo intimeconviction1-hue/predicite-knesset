@@ -4,8 +4,41 @@
 // médias d'origine. Résultat mis en cache en mémoire quelques minutes pour
 // ne pas re-solliciter Google à chaque chargement de page.
 import express from 'express';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const router = express.Router();
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Résumés PrédiCité (français) de sources israéliennes — traduits/résumés à la
+// main quand l'info manque en français. Chargés depuis docs/ACTU_CURATED.json
+// et fusionnés au flux automatique, mais TAGGÉS `curated: true` pour être
+// affichés distinctement (jamais confondus avec la presse d'origine).
+function loadCurated() {
+  try {
+    const p = path.join(__dirname, '..', '..', 'docs', 'ACTU_CURATED.json');
+    const raw = JSON.parse(fs.readFileSync(p, 'utf8'));
+    return (raw.items || []).map(it => ({
+      title: it.title,
+      summary: it.summary || null,
+      link: it.source_url,
+      source: it.source || null,
+      pubDate: it.pub_date || null,
+      curated: true,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+// Fusionne les brèves curatives (en tête, puis triées avec le flux par date).
+function withCurated(rssItems) {
+  const curated = loadCurated();
+  return [...curated, ...rssItems]
+    .sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+}
 
 // Uniquement des requêtes francophones — pas de résultats en anglais/hébreu.
 const QUERIES = [
@@ -53,7 +86,7 @@ async function fetchQuery({ q, hl, gl, ceid }) {
 router.get('/', async (req, res) => {
   const now = Date.now();
   if (now - cache.at < CACHE_TTL_MS && cache.items.length > 0) {
-    return res.json({ items: cache.items, cached: true });
+    return res.json({ items: withCurated(cache.items), cached: true });
   }
   try {
     const results = await Promise.all(QUERIES.map(fetchQuery));
@@ -66,9 +99,12 @@ router.get('/', async (req, res) => {
     }).sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0)).slice(0, 24);
 
     cache = { at: now, items: merged };
-    res.json({ items: merged, cached: false });
+    res.json({ items: withCurated(merged), cached: false });
   } catch (e) {
-    if (cache.items.length > 0) return res.json({ items: cache.items, cached: true, stale: true });
+    if (cache.items.length > 0) return res.json({ items: withCurated(cache.items), cached: true, stale: true });
+    // Même si le flux automatique échoue, on sert au moins les brèves curatives.
+    const curated = withCurated([]);
+    if (curated.length > 0) return res.json({ items: curated, cached: false, rssDown: true });
     res.status(502).json({ error: "Impossible de récupérer l'actualité pour le moment.", detail: e.message });
   }
 });

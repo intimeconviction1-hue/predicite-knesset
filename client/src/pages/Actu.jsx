@@ -36,60 +36,37 @@ export default function Actu() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0" style={{
-          backgroundImage: "url('/images/learn-hero.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+        <div className="p-tricolor"><div /><div /><div /></div>
+        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
         }} />
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.35) 0%, rgba(5,10,24,0.55) 60%, var(--p-night) 100%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'rgba(245,240,232,0.4)' }}
-          >
-            <Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link>
+        <div className="relative max-w-4xl mx-auto px-4 py-14">
+          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>
+            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'rgba(245,240,232,0.7)' }} aria-current="page">Actu</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.06 }}
-            className="flex items-center gap-2 mb-3"
-          >
-            <Newspaper className="w-4 h-4" style={{ color: 'var(--p-gold)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold)' }}>La campagne en direct</p>
-          </motion.div>
+            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Actu</span>
+          </div>
+          <div className="flex items-center gap-2 mb-3">
+            <Newspaper className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
+            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>La campagne en direct</p>
+          </div>
           <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.12 }}
-            className="text-3xl md:text-4xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'white' }}
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
           >
             Actu Knesset 2026
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-base leading-relaxed max-w-2xl"
-            style={{ color: 'rgba(245,240,232,0.6)' }}
-          >
-            Ce qui bouge dans la campagne — fusions, sondages, accords de coalition — agrégé automatiquement depuis de vrais médias, sans curation manuelle.
-          </motion.p>
+          <p className="text-base md:text-lg leading-relaxed max-w-2xl" style={{ color: 'var(--p-text-60)' }}>
+            Un flux automatique de vrais médias francophones, complété par quelques résumés PrédiCité traduits de sources israéliennes quand l'info manque en français — toujours signalés et sourcés.
+          </p>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'rgba(43,92,230,0.06)', border: '1px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
-          <p>Flux automatique (Google News), rafraîchi régulièrement — aucun tri éditorial de notre part. Chaque titre renvoie vers l'article original de son média.</p>
+          <p>Flux automatique (Google News) rafraîchi régulièrement, plus quelques <b style={{ color: 'var(--p-gold-text)', fontWeight: 600 }}>résumés PrédiCité</b> traduits de sources israéliennes — toujours signalés comme tels et sourcés. Chaque élément renvoie vers l'article d'origine.</p>
         </div>
 
         {isLoading ? (
@@ -102,14 +79,35 @@ export default function Actu() {
           </div>
         ) : (
           <div className="space-y-2.5">
-            {items.map((item, i) => (
+            {items.map((item, i) => item.curated ? (
+              // Résumé PrédiCité — carte distincte (liseré doré + badge) pour ne
+              // jamais être confondu avec un article de presse original.
               <motion.a
                 key={item.link + i}
-                href={item.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                href={item.link} target="_blank" rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-5%' }}
+                transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.3) }}
+                whileHover={{ y: -1 }}
+                className="block rounded-xl p-4 transition-colors duration-200"
+                style={{ background: 'var(--p-card)', border: '1px solid var(--p-gold-border)', borderLeft: '3px solid var(--p-gold)' }}
+              >
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                  <span className="p-badge p-badge-gold">Résumé PrédiCité</span>
+                  {item.source && <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>d'après {item.source}</span>}
+                </div>
+                <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--p-text)' }}>{item.title}</p>
+                {item.summary && <p className="text-[13px] leading-relaxed mt-1.5" style={{ color: 'var(--p-text-60)' }}>{item.summary}</p>}
+                <div className="flex items-center gap-2 mt-2.5 text-xs" style={{ color: 'var(--p-text-40)' }}>
+                  <span>{timeAgo(item.pubDate)}</span><span>·</span>
+                  <span className="inline-flex items-center gap-1 font-semibold" style={{ color: 'var(--p-blue)' }}>Lire l'original <ExternalLink className="w-3 h-3" /></span>
+                </div>
+              </motion.a>
+            ) : (
+              <motion.a
+                key={item.link + i}
+                href={item.link} target="_blank" rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-5%' }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.3) }}
                 whileHover={{ y: -1 }}

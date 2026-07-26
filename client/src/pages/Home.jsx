@@ -4,11 +4,15 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ChevronRight, Trophy } from 'lucide-react';
+import { ChevronRight, Trophy, ArrowRight } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
+import HeroBackdrop from '@/components/knesset/HeroBackdrop';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
 import ElectionTimeline from '@/components/knesset/ElectionTimeline';
+
+// Jour du scrutin (même convention que CountdownTimer : 07:00 heure d'Israël).
+const ELECTION_DAY = new Date('2026-10-27T04:00:00Z');
 
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
@@ -19,20 +23,29 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
       transition={{ delay: index * 0.04, duration: 0.3 }}
       className="flex items-center gap-3 py-2"
     >
-      <span className="text-xs w-32 shrink-0 truncate" style={{ color: 'rgba(245,240,232,0.6)' }}>{liste.name_fr}</span>
-      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'rgba(245,240,232,0.06)' }}>
+      <span className="text-xs w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
+      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
         <motion.div
           className="h-full rounded-full"
-          style={{ backgroundColor: liste.color || '#6B7280', opacity: belowThreshold ? 0.25 : 0.9 }}
+          style={{ backgroundColor: liste.color || '#6B7280', opacity: belowThreshold ? 0.3 : 1 }}
           initial={{ width: 0 }}
           animate={{ width: `${Math.max(2, ((seats || 0) / maxSeats) * 100)}%` }}
           transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
         />
       </div>
-      <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'rgba(245,240,232,0.25)' : (liste.color || 'var(--p-gold)') }}>
+      <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'var(--p-text-25)' : (liste.color || 'var(--p-gold-text)') }}>
         {belowThreshold ? 'seuil' : `${seats} sièges`}
       </span>
     </motion.div>
+  );
+}
+
+function Tile({ value, label }) {
+  return (
+    <div className="rounded-xl px-3 py-3 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+      <p className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-text)' }}>{value}</p>
+      <p className="text-[10.5px] mt-1.5" style={{ color: 'var(--p-text-40)' }}>{label}</p>
+    </div>
   );
 }
 
@@ -82,115 +95,157 @@ export default function Home() {
   const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
   const arabSeats = listesAvecSieges.filter(l => l.bloc === 'liste_arabe').reduce((s, l) => s + l._seats, 0);
 
+  // Accroche dynamique — toujours vraie, quel que soit le sondage du jour.
+  const nobodyHasMajority = coalitionSeats < 61 && oppositionSeats < 61;
+  const leaderIsCoalition = coalitionSeats >= oppositionSeats;
+  const heroLine1 = nobodyHasMajority ? "Personne n'a la majorité." : 'La bataille est lancée.';
+  const verdict = !latestPoll
+    ? null
+    : nobodyHasMajority
+      ? (arabSeats > 0
+          ? <>Aucun bloc n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — les {arabSeats} sièges arabes tiennent la balance.</>
+          : <>Aucun bloc n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — la majorité reste à construire.</>)
+      : <>Le bloc {leaderIsCoalition ? 'de coalition' : "d'opposition"} franchit la barre des <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b>.</>;
+
+  const daysLeft = Math.max(0, Math.ceil((ELECTION_DAY.getTime() - Date.now()) / 86400000));
+  const firstName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
+
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
 
-      {/* Hero — photo réelle de la Knesset (CC0, Wikimedia Commons) en fond, assombrie
-          et fondue vers --p-night pour rester lisible et s'intégrer à l'identité du site */}
-      <div className="relative flex flex-col items-center justify-center text-center px-4 py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0" style={{
-          backgroundImage: "url('/images/knesset-hero.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 35%',
+      {/* Hero — l'hémicycle vivant en pièce maîtresse. Thème clair unifié (le fond
+          crème + halos sont fournis par le Layout) ; un simple halo doré au sommet
+          concentre le regard. L'accroche pose l'enjeu (qui gouverne ?), un seul CTA
+          mène au pronostic. */}
+      <div className="relative overflow-hidden">
+        {/* liseré tricolore */}
+        <div className="p-tricolor"><div /><div /><div /></div>
+        {/* fond animé : plusieurs photos institutionnelles en fondu croisé (Ken Burns) */}
+        <HeroBackdrop
+          images={[
+            '/images/knesset-hero.jpg',
+            '/images/listes-hero.jpg',
+            '/images/pm-hero.jpg',
+          ]}
+          position="center 26%"
+        />
+        {/* voile crème allégé (photos bien visibles) puis fondu vers le crème avant
+            l'hémicycle, pour garder le texte lisible et les sièges nets. */}
+        <div className="absolute inset-0 pointer-events-none" style={{
+          background: 'linear-gradient(180deg, rgba(248,246,240,0.22) 0%, rgba(248,246,240,0.40) 32%, rgba(248,246,240,0.82) 58%, var(--p-night) 80%)',
         }} />
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.28) 0%, rgba(5,10,24,0.42) 55%, var(--p-night) 100%)',
-        }} />
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 60%)',
+        {/* halo doré au sommet pour concentrer le regard */}
+        <div className="absolute inset-x-0 top-0 h-[420px] pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.22), transparent 62%)',
         }} />
 
-        <div className="relative z-10 flex flex-col items-center">
+        <div className="relative max-w-3xl mx-auto px-4 pt-12 md:pt-16 pb-6 text-center">
+          {/* badge scrutin */}
+          <div className="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full"
+            style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
+            <motion.span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--p-gold)' }}
+              animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>
+              J-{daysLeft} · scrutin du 27 octobre 2026 · Knesset
+            </span>
+          </div>
 
-        <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full"
-          style={{ background: 'rgba(10,14,26,0.55)', border: '0.5px solid rgba(212,175,55,0.5)', backdropFilter: 'blur(4px)' }}>
-          <motion.div className="w-1.5 h-1.5 rounded-full"
-            style={{ background: 'var(--p-gold)' }}
-            animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold)' }}>
-            Scrutin du 27 octobre 2026 · Knesset
-          </span>
+          <p className="mb-2 text-sm font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-blue)' }}>
+            Législatives israéliennes 2026 · en français
+          </p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+            className="text-4xl md:text-6xl font-black mb-4"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.025em', lineHeight: 1.04 }}>
+            {heroLine1}<br />
+            Et <span style={{ color: 'var(--p-gold-text)' }}>toi</span>, tu formes quelle coalition ?
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
+            className="text-base md:text-lg mb-7 max-w-md mx-auto"
+            style={{ color: 'var(--p-text-60)', lineHeight: 1.55 }}>
+            Place les 120 sièges, affronte les sondages en temps réel et grimpe au classement. C'est gratuit.
+          </motion.p>
+
+          {/* CTA — un seul bouton principal, mène au pronostic (page Listes) */}
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <Link to={createPageUrl('Listes')}
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-semibold text-[15px] text-white transition-transform"
+              style={{ background: 'var(--p-blue)', boxShadow: '0 10px 24px -8px rgba(43,92,230,0.6)' }}>
+              Je fais mon pronostic <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link to={createPageUrl('ReglesDuJeu')}
+              className="inline-flex items-center px-6 py-3.5 rounded-[10px] font-semibold text-[15px] transition-colors"
+              style={{ color: 'var(--p-text-60)', border: '0.5px solid var(--p-border)' }}>
+              Comment ça marche
+            </Link>
+          </div>
+
+          {/* état joueur (réel) ou ligne d'accroche honnête pour les visiteurs */}
+          {user && progress ? (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+              className="mt-6 inline-flex items-center gap-3 px-4 py-2.5 rounded-xl"
+              style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
+              <Trophy className="w-3.5 h-3.5" style={{ color: 'var(--p-gold-text)' }} />
+              <span className="text-sm" style={{ color: 'var(--p-text-60)' }}>
+                Bonjour {firstName} ·
+              </span>
+              <span className="font-bold text-sm font-mono" style={{ color: 'var(--p-gold-text)' }}>
+                {(progress.total_points || 0).toLocaleString('fr-FR')} pts
+              </span>
+            </motion.div>
+          ) : (
+            <p className="mt-5 text-[13px]" style={{ color: 'var(--p-text-40)' }}>
+              Gratuit · ton score au dépouillement, le soir du 27 octobre.
+            </p>
+          )}
         </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-5xl md:text-7xl font-black mb-4"
-          style={{ fontFamily: "'Syne', sans-serif", color: 'white', letterSpacing: '-0.02em', lineHeight: 1 }}>
-          PrédiCité
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="text-lg md:text-xl mb-10 max-w-md"
-          style={{ color: 'rgba(245,240,232,0.5)', fontWeight: 400 }}>
-          Pronostiquez les législatives israéliennes, en français
-        </motion.p>
-
-        {user && progress && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="mt-8 flex items-center gap-3 px-4 py-2.5 rounded-xl"
-            style={{ background: 'rgba(212,175,55,0.08)', border: '0.5px solid rgba(212,175,55,0.2)' }}>
-            <Trophy className="w-3.5 h-3.5" style={{ color: 'var(--p-gold)' }} />
-            <span className="text-sm" style={{ color: 'rgba(245,240,232,0.6)' }}>
-              Bonjour {user.full_name?.split(' ')[0] || user.email?.split('@')[0]} ·
-            </span>
-            <span className="font-bold text-sm" style={{ fontFamily: 'monospace', color: 'var(--p-gold)' }}>
-              {(progress.total_points || 0).toLocaleString('fr-FR')} pts
-            </span>
-          </motion.div>
-        )}
-        </div>
-      </div>
-
-      {/* Hémicycle — la composition de la Knesset en un coup d'œil, visuel signature de l'app.
-          Placé juste après le hero (avant le compte à rebours) pour être visible sans scroller :
-          c'est l'information la plus stratégique de la page. Photo réelle de l'hémicycle
-          (même image que le hero Listes) en fond : le visuel en points fait littéralement
-          écho à la salle qu'on voit derrière. */}
-      <div className="max-w-3xl mx-auto px-4 pt-10 pb-2">
-        <div className="relative overflow-hidden rounded-3xl px-6 pt-10 pb-6 md:px-10 md:pt-12" style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}>
-          <div className="absolute inset-0" style={{
-            backgroundImage: "url('/images/listes-hero.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }} />
-          <div className="absolute inset-0" style={{
-            background: 'radial-gradient(ellipse at 50% 0%, rgba(30,58,138,0.2) 0%, rgba(10,18,38,0.62) 65%)',
-          }} />
-          <div className="relative">
-          <div className="flex items-start justify-between mb-2">
-            <div>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(59,130,246,0.75)' }}>Bloc coalition</p>
-              <p className="text-4xl font-black font-mono text-[var(--p-blue)] leading-none mt-1"><CountUp value={coalitionSeats} /></p>
+        {/* Hémicycle — pièce maîtresse, avec les totaux de blocs et la ligne 61 */}
+        <div className="relative max-w-2xl mx-auto px-4 pb-4">
+          <div className="flex items-end justify-between mb-1 px-1">
+            <div className="text-left">
+              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-blue)' }}>Bloc coalition</p>
+              <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-blue)' }}><CountUp value={coalitionSeats} /></p>
             </div>
-            <div className="text-center pt-2">
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(245,240,232,0.3)' }}>120 sièges</p>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(212,175,55,0.7)' }}>majorité 61</p>
+            <div className="text-center pb-1.5">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-25)' }}>120 sièges</p>
+              <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--p-gold-text)' }}>majorité 61</p>
               {arabSeats > 0 && (
-                <p className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'rgba(16,185,129,0.7)' }}>+ {arabSeats} listes arabes</p>
+                <p className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'var(--p-green)' }}>+ {arabSeats} listes arabes</p>
               )}
             </div>
             <div className="text-right">
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'rgba(217,43,43,0.75)' }}>Bloc opposition</p>
-              <p className="text-4xl font-black font-mono text-[var(--p-red)] leading-none mt-1"><CountUp value={oppositionSeats} delay={200} /></p>
+              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-red)' }}>Bloc opposition</p>
+              <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-red)' }}><CountUp value={oppositionSeats} delay={200} /></p>
             </div>
           </div>
 
-          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={220} />
+          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={250} />
 
-          <p className="text-center text-[11px] -mt-2" style={{ color: 'rgba(245,240,232,0.3)' }}>
+          {verdict ? (
+            <p className="text-center text-sm mt-1" style={{ color: 'var(--p-text-60)' }}>{verdict}</p>
+          ) : (
+            <p className="text-center text-[13px] mt-1" style={{ color: 'var(--p-text-40)' }}>
+              Composition à venir — le premier sondage sièges apparaîtra ici.
+            </p>
+          )}
+          <p className="text-center text-[11px] font-mono mt-1" style={{ color: 'var(--p-text-25)' }}>
             {latestPoll
-              ? `Projection ${latestPoll.institute} du ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
-              : 'Composition à venir — le premier sondage sièges apparaîtra ici'}
+              ? `Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
+              : 'En attente du premier sondage sièges'}
           </p>
-          </div>
+        </div>
+
+        {/* tuiles factuelles */}
+        <div className="max-w-2xl mx-auto px-4 pt-4 pb-2 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Tile value={`J-${daysLeft}`} label="avant le scrutin" />
+          <Tile value="120" label="sièges en jeu" />
+          <Tile value="61" label="pour gouverner" />
+          <Tile value={listes.length || '—'} label="listes en lice" />
         </div>
       </div>
 
@@ -227,7 +282,7 @@ export default function Home() {
       {/* Classement des listes */}
       <div className="max-w-3xl mx-auto px-4 pb-16">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="font-bold text-base" style={{ fontFamily: "'Syne', sans-serif", color: 'var(--p-text)' }}>
+          <h2 className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
             Dernière projection sièges
           </h2>
           <Link to={createPageUrl('Listes')}
@@ -238,32 +293,24 @@ export default function Home() {
         </div>
 
         {rankedListes.length === 0 ? (
-          <div className="rounded-2xl p-8 text-center" style={{ background: 'rgba(10,18,38,0.6)' }}>
-            <p className="text-sm" style={{ color: 'rgba(245,240,232,0.3)' }}>Sondages à venir…</p>
+          <div className="rounded-2xl p-8 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+            <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Sondages à venir…</p>
           </div>
         ) : (
-          <div className="relative overflow-hidden rounded-2xl p-5" style={{ border: '0.5px solid rgba(245,240,232,0.07)' }}>
-            <div className="absolute inset-0" style={{
-              backgroundImage: "url('/images/liste-hero.jpg')",
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }} />
-            <div className="absolute inset-0" style={{ background: 'rgba(10,18,38,0.6)' }} />
-            <div className="relative">
-              {rankedListes.map((l, i) => (
-                <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
-              ))}
-              {latestPoll && (
-                <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'rgba(245,240,232,0.25)', borderColor: 'rgba(245,240,232,0.05)' }}>
-                  {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
-                </p>
-              )}
-            </div>
+          <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+            {rankedListes.map((l, i) => (
+              <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
+            ))}
+            {latestPoll && (
+              <p className="text-[10px] mt-3 pt-3 border-t font-mono" style={{ color: 'var(--p-text-25)', borderColor: 'var(--p-border)' }}>
+                {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
+              </p>
+            )}
           </div>
         )}
 
         {/* Liens secondaires */}
-        <div className="flex items-center justify-center gap-6 mt-12 pt-10"
+        <div className="flex items-center justify-center gap-6 mt-12 pt-10 flex-wrap"
           style={{ borderTop: '0.5px solid var(--p-border)' }}>
           {[
             { label: 'Classement', to: 'Leaderboard' },

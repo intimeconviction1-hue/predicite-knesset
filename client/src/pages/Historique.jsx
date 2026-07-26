@@ -7,6 +7,55 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, Landmark, ExternalLink, Info } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
 
+function EvolutionChart({ elections }) {
+  if (!elections || elections.length < 2) return null;
+  const sorted = [...elections].sort((a, b) => a.knesset_number - b.knesset_number);
+  const W = 720, H = 220, padL = 30, padR = 12, padT = 12, padB = 28;
+  const maxSeats = 60;
+  const x = (i) => padL + (i / (sorted.length - 1)) * (W - padL - padR);
+  const y = (seats) => padT + (1 - seats / maxSeats) * (H - padT - padB);
+
+  const perElection = sorted.map(e => {
+    const results = [...(e.results || [])].sort((a, b) => b.seats - a.seats);
+    return { knesset_number: e.knesset_number, first: results[0]?.seats || 0, second: results[1]?.seats || 0 };
+  });
+
+  const linePath = (key) => perElection.map((d, i) => `${i === 0 ? 'M' : 'L'} ${x(i)} ${y(d[key])}`).join(' ');
+  const majorityY = y(61);
+
+  return (
+    <div className="rounded-2xl border p-5 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+      <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-text)' }}>Évolution : 1er et 2e parti, élection par élection</p>
+      <p className="text-xs mb-4" style={{ color: 'var(--p-text-40)' }}>De la domination Mapaï/Alignement à la fragmentation actuelle — chaque point est un vrai résultat, pas une estimation.</p>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }}>
+        <line x1={padL} y1={majorityY} x2={W - padR} y2={majorityY} stroke="var(--p-gold)" strokeDasharray="3 4" strokeWidth="1" opacity="0.5" />
+        <text x={W - padR} y={majorityY - 5} textAnchor="end" fontSize="9" fill="var(--p-gold-text)">majorité (61)</text>
+
+        {[0, 20, 40, 60].map(v => (
+          <text key={v} x={padL - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="var(--p-text-25)">{v}</text>
+        ))}
+
+        <path d={linePath('first')} fill="none" stroke="var(--p-gold)" strokeWidth="2" />
+        <path d={linePath('second')} fill="none" stroke="var(--p-blue)" strokeWidth="2" opacity="0.7" />
+
+        {perElection.map((d, i) => (
+          <g key={i}>
+            <circle cx={x(i)} cy={y(d.first)} r="2.5" fill="var(--p-gold)" />
+            <circle cx={x(i)} cy={y(d.second)} r="2.5" fill="var(--p-blue)" opacity="0.7" />
+            {(i === 0 || i === perElection.length - 1 || i % 4 === 0) && (
+              <text x={x(i)} y={H - padB + 14} textAnchor="middle" fontSize="8" fill="var(--p-text-25)">{d.knesset_number}e</text>
+            )}
+          </g>
+        ))}
+      </svg>
+      <div className="flex items-center gap-4 mt-2 text-xs">
+        <span className="flex items-center gap-1.5" style={{ color: 'var(--p-text-40)' }}><span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: 'var(--p-gold)' }} /> 1er parti</span>
+        <span className="flex items-center gap-1.5" style={{ color: 'var(--p-text-40)' }}><span className="w-2.5 h-2.5 rounded-full inline-block" style={{ background: 'var(--p-blue)' }} /> 2e parti</span>
+      </div>
+    </div>
+  );
+}
+
 function ElectionCard({ election, index }) {
   const [open, setOpen] = useState(false);
   const results = [...(election.results || [])].sort((a, b) => b.seats - a.seats);
@@ -153,7 +202,7 @@ export default function Historique() {
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'rgba(43,92,230,0.06)', border: '1px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
-          <p>Cet historique se complète progressivement : {elections.length} élections sur les 25 que compte l'histoire d'Israël sont documentées ici pour l'instant, chacune vérifiée individuellement.</p>
+          <p>Les 25 élections de l'histoire d'Israël, de 1949 à 2022, chacune sourcée et vérifiée individuellement (la somme des sièges de chaque scrutin fait exactement 120).</p>
         </div>
 
         {isLoading ? (
@@ -161,9 +210,12 @@ export default function Historique() {
             {[...Array(6)].map((_, i) => <div key={i} className="h-16 rounded-2xl animate-pulse" style={{ background: 'var(--p-border)' }} />)}
           </div>
         ) : (
-          <div className="space-y-3">
-            {elections.map((e, i) => <ElectionCard key={e.id} election={e} index={i} />)}
-          </div>
+          <>
+            <EvolutionChart elections={elections} />
+            <div className="space-y-3">
+              {elections.map((e, i) => <ElectionCard key={e.id} election={e} index={i} />)}
+            </div>
+          </>
         )}
 
         <div className="mt-8">

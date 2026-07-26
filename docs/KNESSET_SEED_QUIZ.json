@@ -140,6 +140,165 @@
       "correct_index": 1,
       "explanation": "La Knesset a approuvé sa dissolution le 17 juillet 2026, lançant officiellement la campagne électorale.",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
+    },
+    {
+      "category": "regles",
+      "question": "Combien de sièges compte la Knesset au total ?",
+      "choices": ["100", "120", "150", "80"],
+      "correct_index": 1,
+      "explanation": "La Knesset compte 120 membres depuis sa création.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Qui charge officiellement un chef de liste de former le gouvernement après les élections ?",
+      "choices": ["Le président de la Cour suprême", "Le Président de l'État", "Le chef de la liste arrivée en tête, automatiquement", "La Knesset, par un vote"],
+      "correct_index": 1,
+      "explanation": "Le Président de l'État consulte les chefs de listes élues puis charge celui qui lui semble avoir les meilleures chances de réunir 61 sièges — ce n'est pas automatiquement le chef de la liste arrivée en tête.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Combien de temps le mandataire dispose-t-il légalement pour former une coalition, avant prolongation possible ?",
+      "choices": ["14 jours", "28 jours", "60 jours", "90 jours"],
+      "correct_index": 1,
+      "explanation": "Le délai légal est de 28 jours, prolongeable de 14 jours supplémentaires si nécessaire.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Si le mandataire échoue à former un gouvernement et que le Président ne trouve personne d'autre, que peut faire la Knesset ?",
+      "choices": [
+        "Rien, de nouvelles élections sont automatiques",
+        "Désigner elle-même un candidat soutenu par au moins 61 députés",
+        "Prolonger indéfiniment le mandat du même candidat",
+        "Demander à la Cour suprême de trancher"
+      ],
+      "correct_index": 1,
+      "explanation": "La Knesset peut désigner elle-même un candidat au poste de Premier ministre, à condition qu'il soit soutenu par au moins 61 députés.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Un gouvernement « de transition » (démissionnaire, entre deux Knesset) compte-t-il pour le pronostic Premier ministre de PrédiCité ?",
+      "choices": ["Oui, toujours", "Non, seule l'investiture formelle avec vote de confiance compte", "Seulement s'il dure plus de 3 mois", "Seulement si son chef change"],
+      "correct_index": 1,
+      "explanation": "Entre la dissolution de la Knesset et l'investiture d'un nouveau gouvernement, l'exécutif sortant expédie les affaires courantes ; ça ne valide pas le pronostic.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Que deviennent les voix d'une liste qui n'atteint pas le seuil électoral de 3,25 % ?",
+      "choices": ["Elles sont annulées", "Elles sont redistribuées entre les listes qui ont franchi le seuil", "Elles sont reportées à l'élection suivante", "Elles comptent pour l'abstention"],
+      "correct_index": 1,
+      "explanation": "Sous le seuil, une liste n'obtient aucun siège et ses voix sont redistribuées entre les listes qui l'ont franchi.",
+      "source_url": null
+    },
+    {
+      "category": "regles",
+      "question": "Comment appelle-t-on, en hébreu, l'accord d'excédents de voix entre deux listes ?",
+      "choices": ["Mahapakh", "Hescem odafim", "Knesset odafim", "Bader-Ofer"],
+      "correct_index": 1,
+      "explanation": "« Hescem odafim » (accord d'excédents) permet à deux listes de mettre en commun leurs restes de voix inutilisés.",
+      "source_url": null
+    },
+    {
+      "category": "historique",
+      "question": "Quel est, depuis 1949, le record du plus grand nombre de sièges obtenu par une seule liste à la Knesset ?",
+      "choices": ["44 (Parti travailliste, 1992)", "48 (Likoud, 1981)", "56 (Alignement, 1969)", "51 (Alignement, 1973)"],
+      "correct_index": 2,
+      "explanation": "L'Alignement de Golda Meir a obtenu 56 sièges en 1969, un record jamais égalé depuis — loin des 61 nécessaires pour une majorité absolue à lui seul.",
+      "source_url": "https://en.wikipedia.org/wiki/1969_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Quel événement a retardé le scrutin de la 8e Knesset, initialement prévu en octobre 1973 ?",
+      "choices": ["La guerre du Kippour", "Une crise budgétaire", "Une épidémie", "Un attentat contre le Premier ministre"],
+      "correct_index": 0,
+      "explanation": "La guerre du Kippour (octobre 1973) a retardé le scrutin de deux mois, jusqu'au 31 décembre 1973.",
+      "source_url": "https://en.wikipedia.org/wiki/1973_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Qui est devenue Première ministre en mars 1969, après le décès de Levi Eshkol, avant même le scrutin de cette année-là ?",
+      "choices": ["Golda Meir", "Shulamit Aloni", "Yitzhak Rabin", "Ada Maimon"],
+      "correct_index": 0,
+      "explanation": "Golda Meir a succédé à Levi Eshkol en mars 1969, puis mené l'Alignement à son record de 56 sièges la même année.",
+      "source_url": "https://en.wikipedia.org/wiki/1969_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Après l'élection de 1984, très serrée entre Alignement et Likoud, comment le gouvernement a-t-il été formé ?",
+      "choices": [
+        "Le Likoud a gouverné seul en minorité",
+        "Une union nationale Alignement-Likoud avec rotation du poste de Premier ministre",
+        "De nouvelles élections ont été organisées immédiatement",
+        "L'armée a nommé un gouvernement provisoire"
+      ],
+      "correct_index": 1,
+      "explanation": "Alignement (44 sièges) et Likoud (41 sièges) ont formé un gouvernement d'union nationale avec rotation : Shimon Peres puis Yitzhak Shamir comme Premier ministre.",
+      "source_url": "https://en.wikipedia.org/wiki/1984_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Combien de fois un Premier ministre israélien a-t-il été élu directement par les citoyens, avant l'abandon de ce système en 2001 ?",
+      "choices": ["Une seule fois", "Deux fois (1996 et 1999)", "Trois fois", "Jamais, ce système n'a jamais été appliqué"],
+      "correct_index": 1,
+      "explanation": "Benjamin Netanyahou (1996) puis Ehud Barak (1999) ont été les deux seuls Premiers ministres élus par ce système, abandonné ensuite.",
+      "source_url": "https://en.wikipedia.org/wiki/1999_Israeli_general_election"
+    },
+    {
+      "category": "historique",
+      "question": "Quel parti centriste, fondé par Ariel Sharon peu avant le scrutin de 2006, l'a remporté dès sa toute première participation ?",
+      "choices": ["Yesh Atid", "Kadima", "Koulanou", "HaTnua"],
+      "correct_index": 1,
+      "explanation": "Kadima, fondé par Ariel Sharon en 2005, a remporté l'élection de 2006 avec 29 sièges sous la direction d'Ehud Olmert.",
+      "source_url": "https://en.wikipedia.org/wiki/2006_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "En 2013, Benjamin Netanyahou s'est présenté en liste commune avec quel autre parti ?",
+      "choices": ["Shas", "Yisrael Beytenou", "HaBayit HaYehoudi", "Yesh Atid"],
+      "correct_index": 1,
+      "explanation": "« Likoud Yisrael Beytenou » a réuni les deux partis en une seule liste pour ce scrutin, avant qu'ils ne se séparent à nouveau ensuite.",
+      "source_url": "https://en.wikipedia.org/wiki/2013_Israeli_legislative_election"
+    },
+    {
+      "category": "historique",
+      "question": "Parmi les élections documentées sur PrédiCité, laquelle a connu le taux de participation le plus faible ?",
+      "choices": ["1949 (86,9 %)", "1999 (78,7 %)", "2006 (63,6 %)", "2020 (71,5 %)"],
+      "correct_index": 2,
+      "explanation": "L'élection de 2006 a connu une participation de seulement 63,55 %, la plus basse de l'historique documenté ici.",
+      "source_url": "https://en.wikipedia.org/wiki/2006_Israeli_legislative_election"
+    },
+    {
+      "category": "actualite",
+      "question": "Quel institut a publié, le 23 juillet 2026, le sondage montrant pour la première fois une égalité entre le Likoud et Yashar ?",
+      "choices": ["Midgam", "Kantar (pour Israel Hayom)", "Direct Polls", "Panels Politics"],
+      "correct_index": 1,
+      "explanation": "Ce sondage Kantar pour Israel Hayom du 23 juillet 2026 plaçait Likoud et Yashar à égalité, à 23 sièges chacun.",
+      "source_url": "https://www.israelhayom.co.il/news/politics/article/21046119"
+    },
+    {
+      "category": "actualite",
+      "question": "Comment s'appelle l'alliance formée en avril 2026 par Naftali Bennett et Yaïr Lapid ?",
+      "choices": ["Ensemble (« Together »)", "HaMachane HaMamlachti", "Kadima 2026", "Yesh Atid Hadash"],
+      "correct_index": 0,
+      "explanation": "L'alliance « Together » (Ensemble), regroupant Bennett 2026 et Yesh Atid, a été annoncée le 26 avril 2026.",
+      "source_url": "https://en.wikipedia.org/wiki/Together_(Israel)"
+    },
+    {
+      "category": "actualite",
+      "question": "Que s'est-il passé le 10 juin 2026 concernant la liste commune arabe ?",
+      "choices": [
+        "Elle a annoncé sa dissolution définitive",
+        "Hadash-Ta'al et Balad se sont accordés pour la reformer, mettant fin aux discussions avec Ra'am",
+        "Elle a fusionné avec le Likoud",
+        "Elle a passé le seuil électoral pour la première fois"
+      ],
+      "correct_index": 1,
+      "explanation": "Hadash-Ta'al et Balad ont convenu de reformer la Liste commune (Joint List) le 10 juin 2026, mettant fin aux négociations qu'ils menaient de leur côté avec Ra'am.",
+      "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
     }
   ]
 }

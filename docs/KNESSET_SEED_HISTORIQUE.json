@@ -1,5 +1,5 @@
 {
-  "_note": "Amorce pour peupler l'entité KnessetHistorique. 12 élections sur les 25 de l'histoire d'Israël (1949-2022), chacune extraite directement de la table de résultats de sa page Wikipédia dédiée (lecture DOM, pas de résumé approximatif) et vérifiée : la somme des sièges de chaque élection fait exactement 120. Les noms de partis reprennent la transcription usuelle (Wikipédia anglophone) sauf quand ce site a déjà établi une convention française (Likoud, Judaïsme unifié de la Torah, Yisrael Beytenou, Sionisme religieux) — pas de traduction inventée pour les partis historiques moins connus. threshold_pct suit l'historique du seuil électoral israélien (1% de 1949 à 1992, 1,5% de 1992 à 2003, 2% de 2003 à 2014, 3,25% depuis 2015). Reste à compléter : les 13 élections manquantes (1951, 1955, 1959, 1961, 1965, 1969, 1973, 1981, 1984, 1988, 1999, 2006, 2013) — travail en cours, à poursuivre progressivement.",
+  "_note": "Amorce pour peupler l'entité KnessetHistorique. Les 25 élections de l'histoire d'Israël (1949-2022), chacune extraite directement de la table de résultats de sa page Wikipédia dédiée (lecture DOM, pas de résumé approximatif) et vérifiée : la somme des sièges de chaque élection fait exactement 120. Les noms de partis reprennent la transcription usuelle (Wikipédia anglophone) sauf quand ce site a déjà établi une convention française. threshold_pct suit l'historique du seuil électoral israélien (1% de 1949 à 1992, 1,5% de 1992 à 2003, 2% de 2003 à 2014, 3,25% depuis 2015).",
   "elections": [
     {
       "knesset_number": 1,
@@ -11,18 +11,678 @@
       "notes": "Première élection de l'État d'Israël, alors \"Assemblée constituante\", devenue la 1re Knesset.",
       "source_url": "https://en.wikipedia.org/wiki/1949_Israeli_Constituent_Assembly_election",
       "results": [
-        { "party_name": "Mapaï", "leader": "David Ben Gourion", "vote_pct": 35.72, "seats": 46 },
-        { "party_name": "Mapam", "leader": "Yitzhak Tabenkin", "vote_pct": 14.73, "seats": 19 },
-        { "party_name": "Front religieux uni", "leader": "Yehuda Leib Maimon", "vote_pct": 12.19, "seats": 16 },
-        { "party_name": "Herout", "leader": "Menahem Begin", "vote_pct": 11.45, "seats": 14 },
-        { "party_name": "Sionistes généraux", "leader": "Israel Rokach", "vote_pct": 5.21, "seats": 7 },
-        { "party_name": "Parti progressiste", "leader": "Pinchas Rosen", "vote_pct": 4.09, "seats": 5 },
-        { "party_name": "Communautés séfarades et orientales", "leader": "Bechor-Shalom Sheetrit", "vote_pct": 3.52, "seats": 4 },
-        { "party_name": "Maki", "leader": "Shmuel Mikunis", "vote_pct": 3.48, "seats": 4 },
-        { "party_name": "Liste démocratique de Nazareth", "leader": "Seif el-Din el-Zoubi", "vote_pct": 1.70, "seats": 2 },
-        { "party_name": "Liste des combattants", "leader": "Nathan Yellin-Mor", "vote_pct": 1.23, "seats": 1 },
-        { "party_name": "WIZO", "leader": "Rachel Cohen-Kagan", "vote_pct": 1.19, "seats": 1 },
-        { "party_name": "Association yéménite", "leader": "Zecharia Glosca", "vote_pct": 1.01, "seats": 1 }
+        {
+          "party_name": "Mapaï",
+          "leader": "David Ben Gourion",
+          "vote_pct": 35.72,
+          "seats": 46
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Yitzhak Tabenkin",
+          "vote_pct": 14.73,
+          "seats": 19
+        },
+        {
+          "party_name": "Front religieux uni",
+          "leader": "Yehuda Leib Maimon",
+          "vote_pct": 12.19,
+          "seats": 16
+        },
+        {
+          "party_name": "Herout",
+          "leader": "Menahem Begin",
+          "vote_pct": 11.45,
+          "seats": 14
+        },
+        {
+          "party_name": "Sionistes généraux",
+          "leader": "Israel Rokach",
+          "vote_pct": 5.21,
+          "seats": 7
+        },
+        {
+          "party_name": "Parti progressiste",
+          "leader": "Pinchas Rosen",
+          "vote_pct": 4.09,
+          "seats": 5
+        },
+        {
+          "party_name": "Communautés séfarades et orientales",
+          "leader": "Bechor-Shalom Sheetrit",
+          "vote_pct": 3.52,
+          "seats": 4
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Shmuel Mikunis",
+          "vote_pct": 3.48,
+          "seats": 4
+        },
+        {
+          "party_name": "Liste démocratique de Nazareth",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 1.7,
+          "seats": 2
+        },
+        {
+          "party_name": "Liste des combattants",
+          "leader": "Nathan Yellin-Mor",
+          "vote_pct": 1.23,
+          "seats": 1
+        },
+        {
+          "party_name": "WIZO",
+          "leader": "Rachel Cohen-Kagan",
+          "vote_pct": 1.19,
+          "seats": 1
+        },
+        {
+          "party_name": "Association yéménite",
+          "leader": "Zecharia Glosca",
+          "vote_pct": 1.01,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 2,
+      "election_date": "1951-07-30",
+      "name": "2e Knesset",
+      "turnout_pct": 75.15,
+      "threshold_pct": 1,
+      "pm_after": "David Ben Gourion (Mapaï)",
+      "notes": null,
+      "source_url": "https://en.wikipedia.org/wiki/1951_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Mapaï",
+          "leader": "David Ben Gourion",
+          "vote_pct": 37.3,
+          "seats": 45
+        },
+        {
+          "party_name": "Sionistes généraux",
+          "leader": "Israel Rokach",
+          "vote_pct": 16.2,
+          "seats": 20
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Meir Ya'ari",
+          "vote_pct": 12.52,
+          "seats": 15
+        },
+        {
+          "party_name": "Hapoel HaMizrachi",
+          "leader": "Haim-Moshe Shapira",
+          "vote_pct": 6.74,
+          "seats": 8
+        },
+        {
+          "party_name": "Herout",
+          "leader": "Menahem Begin",
+          "vote_pct": 6.64,
+          "seats": 8
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Shmuel Mikunis",
+          "vote_pct": 3.98,
+          "seats": 5
+        },
+        {
+          "party_name": "Parti progressiste",
+          "leader": "Pinchas Rosen",
+          "vote_pct": 3.22,
+          "seats": 4
+        },
+        {
+          "party_name": "Liste démocratique pour les Arabes d'Israël",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 2.38,
+          "seats": 3
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Yitzhak-Meir Levin",
+          "vote_pct": 2.01,
+          "seats": 3
+        },
+        {
+          "party_name": "Communautés séfarades et orientales",
+          "leader": "Eliyahu Eliashar",
+          "vote_pct": 1.75,
+          "seats": 2
+        },
+        {
+          "party_name": "PAI",
+          "leader": "Binyamin Mintz",
+          "vote_pct": 1.63,
+          "seats": 2
+        },
+        {
+          "party_name": "Mizrachi",
+          "leader": "David-Zvi Pinkas",
+          "vote_pct": 1.51,
+          "seats": 2
+        },
+        {
+          "party_name": "Progress and Work",
+          "leader": "Salah-Hassan Hanifes",
+          "vote_pct": 1.17,
+          "seats": 1
+        },
+        {
+          "party_name": "Association yéménite",
+          "leader": "Shimon Garidi",
+          "vote_pct": 1.16,
+          "seats": 1
+        },
+        {
+          "party_name": "Agriculture and Development",
+          "leader": "Faras Hamdan",
+          "vote_pct": 1.14,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 3,
+      "election_date": "1955-07-26",
+      "name": "3e Knesset",
+      "turnout_pct": 82.83,
+      "threshold_pct": 1,
+      "pm_after": "David Ben Gourion (Mapaï)",
+      "notes": null,
+      "source_url": "https://en.wikipedia.org/wiki/1955_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Mapaï",
+          "leader": "David Ben Gourion",
+          "vote_pct": 32.2,
+          "seats": 40
+        },
+        {
+          "party_name": "Herout",
+          "leader": "Menahem Begin",
+          "vote_pct": 12.56,
+          "seats": 15
+        },
+        {
+          "party_name": "Sionistes généraux",
+          "leader": "Israel Rokach",
+          "vote_pct": 10.21,
+          "seats": 13
+        },
+        {
+          "party_name": "Front religieux national",
+          "leader": "Haim-Moshe Shapira",
+          "vote_pct": 9.13,
+          "seats": 11
+        },
+        {
+          "party_name": "Ahdout HaAvoda",
+          "leader": "Yitzhak Tabenkin",
+          "vote_pct": 8.14,
+          "seats": 10
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Meir Ya'ari",
+          "vote_pct": 7.31,
+          "seats": 9
+        },
+        {
+          "party_name": "Front religieux de la Torah",
+          "leader": "Yitzhak-Meir Levin",
+          "vote_pct": 4.67,
+          "seats": 6
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Shmuel Mikunis",
+          "vote_pct": 4.51,
+          "seats": 6
+        },
+        {
+          "party_name": "Parti progressiste",
+          "leader": "Pinchas Rosen",
+          "vote_pct": 4.41,
+          "seats": 5
+        },
+        {
+          "party_name": "Liste démocratique pour les Arabes d'Israël",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 1.81,
+          "seats": 2
+        },
+        {
+          "party_name": "Progress and Work",
+          "leader": "Salah-Hassan Hanifes",
+          "vote_pct": 1.47,
+          "seats": 2
+        },
+        {
+          "party_name": "Agriculture and Development",
+          "leader": "Faras Hamdan",
+          "vote_pct": 1.15,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 4,
+      "election_date": "1959-11-03",
+      "name": "4e Knesset",
+      "turnout_pct": 81.6,
+      "threshold_pct": 1,
+      "pm_after": "David Ben Gourion (Mapaï)",
+      "notes": null,
+      "source_url": "https://en.wikipedia.org/wiki/1959_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Mapaï",
+          "leader": "David Ben Gourion",
+          "vote_pct": 38.2,
+          "seats": 47
+        },
+        {
+          "party_name": "Herout",
+          "leader": "Menahem Begin",
+          "vote_pct": 13.5,
+          "seats": 17
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Haim-Moshe Shapira",
+          "vote_pct": 9.9,
+          "seats": 12
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Meir Ya'ari",
+          "vote_pct": 7.2,
+          "seats": 9
+        },
+        {
+          "party_name": "Sionistes généraux",
+          "leader": "Yosef Sapir",
+          "vote_pct": 6.2,
+          "seats": 8
+        },
+        {
+          "party_name": "Ahdout HaAvoda",
+          "leader": "Yisrael Galili",
+          "vote_pct": 6.0,
+          "seats": 7
+        },
+        {
+          "party_name": "Front religieux de la Torah",
+          "leader": "Yitzhak-Meir Levin",
+          "vote_pct": 4.7,
+          "seats": 6
+        },
+        {
+          "party_name": "Parti progressiste",
+          "leader": "Pinchas Rosen",
+          "vote_pct": 4.6,
+          "seats": 6
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Shmuel Mikunis",
+          "vote_pct": 2.8,
+          "seats": 3
+        },
+        {
+          "party_name": "Progress and Development",
+          "leader": "Ahmed A-Dahar",
+          "vote_pct": 1.3,
+          "seats": 2
+        },
+        {
+          "party_name": "Cooperation and Brotherhood",
+          "leader": "Labib Abu Rokan",
+          "vote_pct": 1.1,
+          "seats": 2
+        },
+        {
+          "party_name": "Agriculture and Development",
+          "leader": "Mahmud Al-Nashaf",
+          "vote_pct": 1.1,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 5,
+      "election_date": "1961-08-15",
+      "name": "5e Knesset",
+      "turnout_pct": 81.57,
+      "threshold_pct": 1,
+      "pm_after": "David Ben Gourion (Mapaï)",
+      "notes": null,
+      "source_url": "https://en.wikipedia.org/wiki/1961_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Mapaï",
+          "leader": "David Ben Gourion",
+          "vote_pct": 34.69,
+          "seats": 42
+        },
+        {
+          "party_name": "Herout",
+          "leader": "Menahem Begin",
+          "vote_pct": 13.76,
+          "seats": 17
+        },
+        {
+          "party_name": "Liberal",
+          "leader": "Pinchas Rosen",
+          "vote_pct": 13.63,
+          "seats": 17
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Haim-Moshe Shapira",
+          "vote_pct": 9.81,
+          "seats": 12
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Meir Ya'ari",
+          "vote_pct": 7.51,
+          "seats": 9
+        },
+        {
+          "party_name": "Ahdout HaAvoda",
+          "leader": "Yisrael Galili",
+          "vote_pct": 6.57,
+          "seats": 8
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Shmuel Mikunis",
+          "vote_pct": 4.18,
+          "seats": 5
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Yitzhak-Meir Levin",
+          "vote_pct": 3.69,
+          "seats": 4
+        },
+        {
+          "party_name": "PAI",
+          "leader": "Kalman Kahana",
+          "vote_pct": 1.93,
+          "seats": 2
+        },
+        {
+          "party_name": "Cooperation and Brotherhood",
+          "leader": "Diyab Obeid",
+          "vote_pct": 1.92,
+          "seats": 2
+        },
+        {
+          "party_name": "Progress and Development",
+          "leader": "Ahmed A-Dahar",
+          "vote_pct": 1.59,
+          "seats": 2
+        }
+      ]
+    },
+    {
+      "knesset_number": 6,
+      "election_date": "1965-11-02",
+      "name": "6e Knesset",
+      "turnout_pct": 85.86,
+      "threshold_pct": 1,
+      "pm_after": "Levi Eshkol (Alignement)",
+      "notes": "David Ben Gourion avait démissionné en 1963 ; Levi Eshkol lui a succédé avant même ce scrutin.",
+      "source_url": "https://en.wikipedia.org/wiki/1965_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Alignement travailliste",
+          "leader": "Levi Eshkol",
+          "vote_pct": 36.74,
+          "seats": 45
+        },
+        {
+          "party_name": "Gahal",
+          "leader": "Menahem Begin",
+          "vote_pct": 21.29,
+          "seats": 26
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Haim-Moshe Shapira",
+          "vote_pct": 8.95,
+          "seats": 11
+        },
+        {
+          "party_name": "Rafi",
+          "leader": "David Ben Gourion",
+          "vote_pct": 7.9,
+          "seats": 10
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Meir Ya'ari",
+          "vote_pct": 6.63,
+          "seats": 8
+        },
+        {
+          "party_name": "Libéraux indépendants",
+          "leader": "Pinchas Rosen",
+          "vote_pct": 3.75,
+          "seats": 5
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Yitzhak-Meir Levin",
+          "vote_pct": 3.3,
+          "seats": 4
+        },
+        {
+          "party_name": "Rakah",
+          "leader": "Meir Vilner",
+          "vote_pct": 2.27,
+          "seats": 3
+        },
+        {
+          "party_name": "PAI",
+          "leader": "Kalman Kahana",
+          "vote_pct": 1.83,
+          "seats": 2
+        },
+        {
+          "party_name": "Progress and Development",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 1.36,
+          "seats": 2
+        },
+        {
+          "party_name": "Cooperation and Brotherhood",
+          "leader": "Diyab Obeid",
+          "vote_pct": 1.36,
+          "seats": 2
+        },
+        {
+          "party_name": "HaOlam HaZeh",
+          "leader": "Uri Avnery",
+          "vote_pct": 1.17,
+          "seats": 1
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Shmuel Mikunis",
+          "vote_pct": 1.13,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 7,
+      "election_date": "1969-10-28",
+      "name": "7e Knesset",
+      "turnout_pct": 81.66,
+      "threshold_pct": 1,
+      "pm_after": "Golda Meir (Alignement)",
+      "notes": "Golda Meir était devenue Première ministre en mars 1969 après le décès de Levi Eshkol. L'Alignement obtient ici 56 sièges, le record historique pour une seule liste depuis la création d'Israël.",
+      "source_url": "https://en.wikipedia.org/wiki/1969_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Alignement",
+          "leader": "Golda Meir",
+          "vote_pct": 46.21,
+          "seats": 56
+        },
+        {
+          "party_name": "Gahal",
+          "leader": "Menahem Begin",
+          "vote_pct": 21.66,
+          "seats": 26
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Haim-Moshe Shapira",
+          "vote_pct": 9.74,
+          "seats": 12
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Yitzhak-Meir Levin",
+          "vote_pct": 3.22,
+          "seats": 4
+        },
+        {
+          "party_name": "Libéraux indépendants",
+          "leader": "Moshe Kol",
+          "vote_pct": 3.21,
+          "seats": 4
+        },
+        {
+          "party_name": "Liste nationale",
+          "leader": "David Ben Gourion",
+          "vote_pct": 3.12,
+          "seats": 4
+        },
+        {
+          "party_name": "Rakah",
+          "leader": "Meir Vilner",
+          "vote_pct": 2.84,
+          "seats": 3
+        },
+        {
+          "party_name": "Progress and Development",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 2.05,
+          "seats": 2
+        },
+        {
+          "party_name": "PAI",
+          "leader": "Kalman Kahana",
+          "vote_pct": 1.83,
+          "seats": 2
+        },
+        {
+          "party_name": "Cooperation and Brotherhood",
+          "leader": "Diyab Obeid",
+          "vote_pct": 1.46,
+          "seats": 2
+        },
+        {
+          "party_name": "HaOlam HaZeh",
+          "leader": "Uri Avnery",
+          "vote_pct": 1.23,
+          "seats": 2
+        },
+        {
+          "party_name": "Centre libre",
+          "leader": "Shmuel Tamir",
+          "vote_pct": 1.2,
+          "seats": 2
+        },
+        {
+          "party_name": "Maki",
+          "leader": "Moshe Sneh",
+          "vote_pct": 1.15,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 8,
+      "election_date": "1973-12-31",
+      "name": "8e Knesset",
+      "turnout_pct": 78.58,
+      "threshold_pct": 1,
+      "pm_after": "Golda Meir (Alignement), puis Yitzhak Rabin en 1974",
+      "notes": "Scrutin retardé de deux mois par la guerre du Kippour (octobre 1973). Première apparition du Likoud, tout juste formé, qui remportera la victoire historique de 1977.",
+      "source_url": "https://en.wikipedia.org/wiki/1973_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Alignement",
+          "leader": "Golda Meir",
+          "vote_pct": 39.65,
+          "seats": 51
+        },
+        {
+          "party_name": "Likoud",
+          "leader": "Menahem Begin",
+          "vote_pct": 30.21,
+          "seats": 39
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Yosef Burg",
+          "vote_pct": 8.32,
+          "seats": 10
+        },
+        {
+          "party_name": "Front religieux de la Torah",
+          "leader": "Shlomo Lorincz",
+          "vote_pct": 3.83,
+          "seats": 5
+        },
+        {
+          "party_name": "Libéraux indépendants",
+          "leader": "Moshe Kol",
+          "vote_pct": 3.61,
+          "seats": 4
+        },
+        {
+          "party_name": "Rakah",
+          "leader": "Meir Vilner",
+          "vote_pct": 3.41,
+          "seats": 4
+        },
+        {
+          "party_name": "Ratz",
+          "leader": "Shulamit Aloni",
+          "vote_pct": 2.24,
+          "seats": 3
+        },
+        {
+          "party_name": "Progress and Development",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 1.44,
+          "seats": 2
+        },
+        {
+          "party_name": "Moked",
+          "leader": "Meir Pa'il",
+          "vote_pct": 1.41,
+          "seats": 1
+        },
+        {
+          "party_name": "Liste arabe pour bédouins et villageois",
+          "leader": "Hamad Abu Rabia",
+          "vote_pct": 1.05,
+          "seats": 1
+        }
       ]
     },
     {
@@ -35,19 +695,360 @@
       "notes": "Le \"Mahapakh\" (bouleversement) : première victoire du Likoud, mettant fin à 29 ans de domination ininterrompue du Mapaï/Alignement travailliste.",
       "source_url": "https://en.wikipedia.org/wiki/1977_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Menahem Begin", "vote_pct": 33.41, "seats": 43 },
-        { "party_name": "Alignement", "leader": "Shimon Peres", "vote_pct": 24.60, "seats": 32 },
-        { "party_name": "Dash", "leader": "Yigael Yadin", "vote_pct": 11.57, "seats": 15 },
-        { "party_name": "Mafdal", "leader": "Yosef Burg", "vote_pct": 9.20, "seats": 12 },
-        { "party_name": "Hadash", "leader": "Meir Vilner", "vote_pct": 4.58, "seats": 5 },
-        { "party_name": "Agoudat Israel", "leader": "Yehuda Meir Abramowicz", "vote_pct": 3.36, "seats": 4 },
-        { "party_name": "Flatto-Sharon", "leader": "Shmuel Flatto-Sharon", "vote_pct": 2.01, "seats": 1 },
-        { "party_name": "Shlomtzion", "leader": "Ariel Sharon", "vote_pct": 1.94, "seats": 2 },
-        { "party_name": "Sheli", "leader": "Aryeh Eliav", "vote_pct": 1.56, "seats": 2 },
-        { "party_name": "Liste arabe unie", "leader": "Seif el-Din el-Zoubi", "vote_pct": 1.38, "seats": 1 },
-        { "party_name": "PAI", "leader": "Kalman Kahana", "vote_pct": 1.35, "seats": 1 },
-        { "party_name": "Ratz", "leader": "Shulamit Aloni", "vote_pct": 1.18, "seats": 1 },
-        { "party_name": "Libéraux indépendants", "leader": "Gideon Hausner", "vote_pct": 1.17, "seats": 1 }
+        {
+          "party_name": "Likoud",
+          "leader": "Menahem Begin",
+          "vote_pct": 33.41,
+          "seats": 43
+        },
+        {
+          "party_name": "Alignement",
+          "leader": "Shimon Peres",
+          "vote_pct": 24.6,
+          "seats": 32
+        },
+        {
+          "party_name": "Dash",
+          "leader": "Yigael Yadin",
+          "vote_pct": 11.57,
+          "seats": 15
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Yosef Burg",
+          "vote_pct": 9.2,
+          "seats": 12
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Meir Vilner",
+          "vote_pct": 4.58,
+          "seats": 5
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Yehuda Meir Abramowicz",
+          "vote_pct": 3.36,
+          "seats": 4
+        },
+        {
+          "party_name": "Flatto-Sharon",
+          "leader": "Shmuel Flatto-Sharon",
+          "vote_pct": 2.01,
+          "seats": 1
+        },
+        {
+          "party_name": "Shlomtzion",
+          "leader": "Ariel Sharon",
+          "vote_pct": 1.94,
+          "seats": 2
+        },
+        {
+          "party_name": "Sheli",
+          "leader": "Aryeh Eliav",
+          "vote_pct": 1.56,
+          "seats": 2
+        },
+        {
+          "party_name": "Liste arabe unie",
+          "leader": "Seif el-Din el-Zoubi",
+          "vote_pct": 1.38,
+          "seats": 1
+        },
+        {
+          "party_name": "PAI",
+          "leader": "Kalman Kahana",
+          "vote_pct": 1.35,
+          "seats": 1
+        },
+        {
+          "party_name": "Ratz",
+          "leader": "Shulamit Aloni",
+          "vote_pct": 1.18,
+          "seats": 1
+        },
+        {
+          "party_name": "Libéraux indépendants",
+          "leader": "Gideon Hausner",
+          "vote_pct": 1.17,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 10,
+      "election_date": "1981-06-30",
+      "name": "10e Knesset",
+      "turnout_pct": 78.5,
+      "threshold_pct": 1,
+      "pm_after": "Menahem Begin (Likoud)",
+      "notes": null,
+      "source_url": "https://en.wikipedia.org/wiki/1981_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Likoud",
+          "leader": "Menahem Begin",
+          "vote_pct": 37.11,
+          "seats": 48
+        },
+        {
+          "party_name": "Alignement",
+          "leader": "Shimon Peres",
+          "vote_pct": 36.57,
+          "seats": 47
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Yosef Burg",
+          "vote_pct": 4.92,
+          "seats": 6
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Avraham Yosef Shapira",
+          "vote_pct": 3.73,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Meir Vilner",
+          "vote_pct": 3.35,
+          "seats": 4
+        },
+        {
+          "party_name": "Tehiya",
+          "leader": "Yuval Ne'eman",
+          "vote_pct": 2.31,
+          "seats": 3
+        },
+        {
+          "party_name": "Tami",
+          "leader": "Aharon Abuhatzira",
+          "vote_pct": 2.3,
+          "seats": 3
+        },
+        {
+          "party_name": "Telem",
+          "leader": "Moshe Dayan",
+          "vote_pct": 1.58,
+          "seats": 2
+        },
+        {
+          "party_name": "Shinui",
+          "leader": "Amnon Rubinstein",
+          "vote_pct": 1.54,
+          "seats": 2
+        },
+        {
+          "party_name": "Ratz",
+          "leader": "Shulamit Aloni",
+          "vote_pct": 1.44,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 11,
+      "election_date": "1984-07-23",
+      "name": "11e Knesset",
+      "turnout_pct": 78.8,
+      "threshold_pct": 1,
+      "pm_after": "Shimon Peres puis Yitzhak Shamir (rotation)",
+      "notes": "Aucun bloc n'ayant de majorité nette, Alignement et Likoud forment un gouvernement d'union nationale avec rotation du poste de Premier ministre.",
+      "source_url": "https://en.wikipedia.org/wiki/1984_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Alignement",
+          "leader": "Shimon Peres",
+          "vote_pct": 34.9,
+          "seats": 44
+        },
+        {
+          "party_name": "Likoud",
+          "leader": "Yitzhak Shamir",
+          "vote_pct": 31.9,
+          "seats": 41
+        },
+        {
+          "party_name": "Tehiya-Tzomet",
+          "leader": "Yuval Ne'eman",
+          "vote_pct": 4.0,
+          "seats": 5
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Yosef Burg",
+          "vote_pct": 3.5,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Meir Vilner",
+          "vote_pct": 3.4,
+          "seats": 4
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Yitzhak Peretz",
+          "vote_pct": 3.1,
+          "seats": 4
+        },
+        {
+          "party_name": "Shinui",
+          "leader": "Amnon Rubinstein",
+          "vote_pct": 2.7,
+          "seats": 3
+        },
+        {
+          "party_name": "Ratz",
+          "leader": "Shulamit Aloni",
+          "vote_pct": 2.4,
+          "seats": 3
+        },
+        {
+          "party_name": "Yahad",
+          "leader": "Ezer Weizman",
+          "vote_pct": 2.2,
+          "seats": 3
+        },
+        {
+          "party_name": "PLFP",
+          "leader": "Mohammed Miari",
+          "vote_pct": 1.8,
+          "seats": 2
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Avraham Yosef Shapira",
+          "vote_pct": 1.7,
+          "seats": 2
+        },
+        {
+          "party_name": "Morasha",
+          "leader": "Haim Drukman",
+          "vote_pct": 1.6,
+          "seats": 2
+        },
+        {
+          "party_name": "Tami",
+          "leader": "Aharon Abuhatzira",
+          "vote_pct": 1.5,
+          "seats": 1
+        },
+        {
+          "party_name": "Kach",
+          "leader": "Meir Kahane",
+          "vote_pct": 1.2,
+          "seats": 1
+        },
+        {
+          "party_name": "Ometz",
+          "leader": "Yigal Hurvitz",
+          "vote_pct": 1.2,
+          "seats": 1
+        }
+      ]
+    },
+    {
+      "knesset_number": 12,
+      "election_date": "1988-11-01",
+      "name": "12e Knesset",
+      "turnout_pct": 79.66,
+      "threshold_pct": 1,
+      "pm_after": "Yitzhak Shamir (Likoud)",
+      "notes": null,
+      "source_url": "https://en.wikipedia.org/wiki/1988_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Likoud",
+          "leader": "Yitzhak Shamir",
+          "vote_pct": 31.07,
+          "seats": 40
+        },
+        {
+          "party_name": "Alignement",
+          "leader": "Shimon Peres",
+          "vote_pct": 30.02,
+          "seats": 39
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Yitzhak Haim Peretz",
+          "vote_pct": 4.72,
+          "seats": 6
+        },
+        {
+          "party_name": "Agoudat Israel",
+          "leader": "Moshe Ze'ev Feldman",
+          "vote_pct": 4.5,
+          "seats": 5
+        },
+        {
+          "party_name": "Ratz",
+          "leader": "Shulamit Aloni",
+          "vote_pct": 4.27,
+          "seats": 5
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Avner Hai Shaki",
+          "vote_pct": 3.93,
+          "seats": 5
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Meir Vilner",
+          "vote_pct": 3.68,
+          "seats": 4
+        },
+        {
+          "party_name": "Tehiya",
+          "leader": "Yuval Ne'eman",
+          "vote_pct": 3.1,
+          "seats": 3
+        },
+        {
+          "party_name": "Mapam",
+          "leader": "Yair Tzaban",
+          "vote_pct": 2.47,
+          "seats": 3
+        },
+        {
+          "party_name": "Tzomet",
+          "leader": "Rafael Eitan",
+          "vote_pct": 1.99,
+          "seats": 2
+        },
+        {
+          "party_name": "Moledet",
+          "leader": "Rehavam Ze'evi",
+          "vote_pct": 1.93,
+          "seats": 2
+        },
+        {
+          "party_name": "Centre-Shinui",
+          "leader": "Amnon Rubinstein",
+          "vote_pct": 1.73,
+          "seats": 2
+        },
+        {
+          "party_name": "Degel HaTorah",
+          "leader": "Avraham Ravitz",
+          "vote_pct": 1.5,
+          "seats": 2
+        },
+        {
+          "party_name": "PLFP",
+          "leader": "Mohammed Miari",
+          "vote_pct": 1.48,
+          "seats": 1
+        },
+        {
+          "party_name": "Mada",
+          "leader": "Abdulwahab Darawshe",
+          "vote_pct": 1.18,
+          "seats": 1
+        }
       ]
     },
     {
@@ -60,16 +1061,66 @@
       "notes": "Retour travailliste, ouvrant la voie aux accords d'Oslo.",
       "source_url": "https://en.wikipedia.org/wiki/1992_Israeli_legislative_election",
       "results": [
-        { "party_name": "Parti travailliste", "leader": "Yitzhak Rabin", "vote_pct": 34.65, "seats": 44 },
-        { "party_name": "Likoud", "leader": "Yitzhak Shamir", "vote_pct": 24.89, "seats": 32 },
-        { "party_name": "Meretz", "leader": "Shulamit Aloni", "vote_pct": 9.58, "seats": 12 },
-        { "party_name": "Tzomet", "leader": "Rafael Eitan", "vote_pct": 6.36, "seats": 8 },
-        { "party_name": "Mafdal", "leader": "Zevulun Hammer", "vote_pct": 4.95, "seats": 6 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 4.94, "seats": 6 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Avraham Yosef Shapira", "vote_pct": 3.29, "seats": 4 },
-        { "party_name": "Hadash", "leader": "Tawfiq Ziad", "vote_pct": 2.39, "seats": 3 },
-        { "party_name": "Moledet", "leader": "Rehavam Ze'evi", "vote_pct": 2.38, "seats": 3 },
-        { "party_name": "Mada", "leader": "Abdulwahab Darawshe", "vote_pct": 1.56, "seats": 2 }
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Yitzhak Rabin",
+          "vote_pct": 34.65,
+          "seats": 44
+        },
+        {
+          "party_name": "Likoud",
+          "leader": "Yitzhak Shamir",
+          "vote_pct": 24.89,
+          "seats": 32
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Shulamit Aloni",
+          "vote_pct": 9.58,
+          "seats": 12
+        },
+        {
+          "party_name": "Tzomet",
+          "leader": "Rafael Eitan",
+          "vote_pct": 6.36,
+          "seats": 8
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Zevulun Hammer",
+          "vote_pct": 4.95,
+          "seats": 6
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 4.94,
+          "seats": 6
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Avraham Yosef Shapira",
+          "vote_pct": 3.29,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Tawfiq Ziad",
+          "vote_pct": 2.39,
+          "seats": 3
+        },
+        {
+          "party_name": "Moledet",
+          "leader": "Rehavam Ze'evi",
+          "vote_pct": 2.38,
+          "seats": 3
+        },
+        {
+          "party_name": "Mada",
+          "leader": "Abdulwahab Darawshe",
+          "vote_pct": 1.56,
+          "seats": 2
+        }
       ]
     },
     {
@@ -82,17 +1133,174 @@
       "notes": "Première élection avec vote direct pour le Premier ministre (système utilisé de 1996 à 2001 seulement) : Netanyahou remporte ce vote alors que le Parti travailliste arrive en tête à la Knesset.",
       "source_url": "https://en.wikipedia.org/wiki/1996_Israeli_general_election",
       "results": [
-        { "party_name": "Parti travailliste", "leader": "Shimon Peres", "vote_pct": 26.83, "seats": 34 },
-        { "party_name": "Likoud–Gesher–Tzomet", "leader": "Benjamin Netanyahou", "vote_pct": 25.14, "seats": 32 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 8.51, "seats": 10 },
-        { "party_name": "Mafdal", "leader": "Zevulun Hammer", "vote_pct": 7.87, "seats": 9 },
-        { "party_name": "Meretz", "leader": "Yossi Sarid", "vote_pct": 7.41, "seats": 9 },
-        { "party_name": "Yisrael BaAliyah", "leader": "Natan Sharansky", "vote_pct": 5.73, "seats": 7 },
-        { "party_name": "Hadash–Balad", "leader": "Hashem Mahameed", "vote_pct": 4.24, "seats": 5 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Meir Porush", "vote_pct": 3.23, "seats": 4 },
-        { "party_name": "Third Way", "leader": "Avigdor Kahalani", "vote_pct": 3.16, "seats": 4 },
-        { "party_name": "Ra'am–Mada", "leader": "Abdulmalik Dehamshe", "vote_pct": 2.93, "seats": 4 },
-        { "party_name": "Moledet", "leader": "Rehavam Ze'evi", "vote_pct": 2.36, "seats": 2 }
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Shimon Peres",
+          "vote_pct": 26.83,
+          "seats": 34
+        },
+        {
+          "party_name": "Likoud–Gesher–Tzomet",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 25.14,
+          "seats": 32
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 8.51,
+          "seats": 10
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Zevulun Hammer",
+          "vote_pct": 7.87,
+          "seats": 9
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Yossi Sarid",
+          "vote_pct": 7.41,
+          "seats": 9
+        },
+        {
+          "party_name": "Yisrael BaAliyah",
+          "leader": "Natan Sharansky",
+          "vote_pct": 5.73,
+          "seats": 7
+        },
+        {
+          "party_name": "Hadash–Balad",
+          "leader": "Hashem Mahameed",
+          "vote_pct": 4.24,
+          "seats": 5
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Meir Porush",
+          "vote_pct": 3.23,
+          "seats": 4
+        },
+        {
+          "party_name": "Third Way",
+          "leader": "Avigdor Kahalani",
+          "vote_pct": 3.16,
+          "seats": 4
+        },
+        {
+          "party_name": "Ra'am–Mada",
+          "leader": "Abdulmalik Dehamshe",
+          "vote_pct": 2.93,
+          "seats": 4
+        },
+        {
+          "party_name": "Moledet",
+          "leader": "Rehavam Ze'evi",
+          "vote_pct": 2.36,
+          "seats": 2
+        }
+      ]
+    },
+    {
+      "knesset_number": 15,
+      "election_date": "1999-05-17",
+      "name": "15e Knesset",
+      "turnout_pct": 78.71,
+      "threshold_pct": 1.5,
+      "pm_after": "Ehud Barak (One Israel / Parti travailliste)",
+      "notes": "Deuxième et dernière élection avec vote direct pour le Premier ministre — Ehud Barak bat Benjamin Netanyahou à ce scrutin séparé.",
+      "source_url": "https://en.wikipedia.org/wiki/1999_Israeli_general_election",
+      "results": [
+        {
+          "party_name": "One Israel",
+          "leader": "Ehud Barak",
+          "vote_pct": 20.26,
+          "seats": 26
+        },
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 14.14,
+          "seats": 19
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 13.01,
+          "seats": 17
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Yossi Sarid",
+          "vote_pct": 7.66,
+          "seats": 10
+        },
+        {
+          "party_name": "Yisrael BaAliyah",
+          "leader": "Natan Sharansky",
+          "vote_pct": 5.19,
+          "seats": 6
+        },
+        {
+          "party_name": "Shinui",
+          "leader": "Tommy Lapid",
+          "vote_pct": 5.07,
+          "seats": 6
+        },
+        {
+          "party_name": "Parti du centre",
+          "leader": "Yitzhak Mordechai",
+          "vote_pct": 5.0,
+          "seats": 6
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Yitzhak Levi",
+          "vote_pct": 4.24,
+          "seats": 5
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Meir Porush",
+          "vote_pct": 3.8,
+          "seats": 5
+        },
+        {
+          "party_name": "Ra'am",
+          "leader": "Abdulmalik Dehamshe",
+          "vote_pct": 3.47,
+          "seats": 5
+        },
+        {
+          "party_name": "Union nationale",
+          "leader": "Benny Begin",
+          "vote_pct": 3.03,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Mohammad Barakeh",
+          "vote_pct": 2.63,
+          "seats": 3
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 2.6,
+          "seats": 4
+        },
+        {
+          "party_name": "Balad",
+          "leader": "Azmi Bishara",
+          "vote_pct": 2.0,
+          "seats": 2
+        },
+        {
+          "party_name": "Am Ehad",
+          "leader": "Amir Peretz",
+          "vote_pct": 1.94,
+          "seats": 2
+        }
       ]
     },
     {
@@ -105,19 +1313,168 @@
       "notes": null,
       "source_url": "https://en.wikipedia.org/wiki/2003_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Ariel Sharon", "vote_pct": 29.39, "seats": 38 },
-        { "party_name": "Parti travailliste", "leader": "Amram Mitzna", "vote_pct": 14.46, "seats": 19 },
-        { "party_name": "Shinui", "leader": "Yosef Lapid", "vote_pct": 12.28, "seats": 15 },
-        { "party_name": "Shas", "leader": "Eli Yishai", "vote_pct": 8.22, "seats": 11 },
-        { "party_name": "Union nationale", "leader": "Avigdor Lieberman", "vote_pct": 5.52, "seats": 7 },
-        { "party_name": "Meretz", "leader": "Yossi Sarid", "vote_pct": 5.21, "seats": 6 },
-        { "party_name": "Mafdal", "leader": "Effi Eitam", "vote_pct": 4.20, "seats": 6 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yaakov Litzman", "vote_pct": 4.29, "seats": 5 },
-        { "party_name": "Hadash–Ta'al", "leader": "Mohammad Barakeh", "vote_pct": 2.98, "seats": 3 },
-        { "party_name": "Am Ehad", "leader": "Amir Peretz", "vote_pct": 2.76, "seats": 3 },
-        { "party_name": "Balad", "leader": "Azmi Bishara", "vote_pct": 2.26, "seats": 3 },
-        { "party_name": "Yisrael BaAliyah", "leader": "Natan Sharansky", "vote_pct": 2.15, "seats": 2 },
-        { "party_name": "Ra'am", "leader": "Abdulmalik Dehamshe", "vote_pct": 2.08, "seats": 2 }
+        {
+          "party_name": "Likoud",
+          "leader": "Ariel Sharon",
+          "vote_pct": 29.39,
+          "seats": 38
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Amram Mitzna",
+          "vote_pct": 14.46,
+          "seats": 19
+        },
+        {
+          "party_name": "Shinui",
+          "leader": "Yosef Lapid",
+          "vote_pct": 12.28,
+          "seats": 15
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Eli Yishai",
+          "vote_pct": 8.22,
+          "seats": 11
+        },
+        {
+          "party_name": "Union nationale",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 5.52,
+          "seats": 7
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Yossi Sarid",
+          "vote_pct": 5.21,
+          "seats": 6
+        },
+        {
+          "party_name": "Mafdal",
+          "leader": "Effi Eitam",
+          "vote_pct": 4.2,
+          "seats": 6
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 4.29,
+          "seats": 5
+        },
+        {
+          "party_name": "Hadash–Ta'al",
+          "leader": "Mohammad Barakeh",
+          "vote_pct": 2.98,
+          "seats": 3
+        },
+        {
+          "party_name": "Am Ehad",
+          "leader": "Amir Peretz",
+          "vote_pct": 2.76,
+          "seats": 3
+        },
+        {
+          "party_name": "Balad",
+          "leader": "Azmi Bishara",
+          "vote_pct": 2.26,
+          "seats": 3
+        },
+        {
+          "party_name": "Yisrael BaAliyah",
+          "leader": "Natan Sharansky",
+          "vote_pct": 2.15,
+          "seats": 2
+        },
+        {
+          "party_name": "Ra'am",
+          "leader": "Abdulmalik Dehamshe",
+          "vote_pct": 2.08,
+          "seats": 2
+        }
+      ]
+    },
+    {
+      "knesset_number": 17,
+      "election_date": "2006-03-28",
+      "name": "17e Knesset",
+      "turnout_pct": 63.55,
+      "threshold_pct": 2,
+      "pm_after": "Ehud Olmert (Kadima)",
+      "notes": "Première élection de Kadima, parti centriste fondé par Ariel Sharon peu avant, qui domine ce scrutin.",
+      "source_url": "https://en.wikipedia.org/wiki/2006_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Kadima",
+          "leader": "Ehud Olmert",
+          "vote_pct": 22.02,
+          "seats": 29
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Amir Peretz",
+          "vote_pct": 15.06,
+          "seats": 19
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Eli Yishai",
+          "vote_pct": 9.53,
+          "seats": 12
+        },
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 8.99,
+          "seats": 12
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 8.99,
+          "seats": 11
+        },
+        {
+          "party_name": "Union nationale–PNR",
+          "leader": "Benny Elon",
+          "vote_pct": 7.14,
+          "seats": 9
+        },
+        {
+          "party_name": "Gil",
+          "leader": "Rafi Eitan",
+          "vote_pct": 5.92,
+          "seats": 7
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 4.69,
+          "seats": 6
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Yossi Beilin",
+          "vote_pct": 3.77,
+          "seats": 5
+        },
+        {
+          "party_name": "Ra'am–Ta'al",
+          "leader": "Ibrahim Sarsur",
+          "vote_pct": 3.02,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Mohammad Barakeh",
+          "vote_pct": 2.74,
+          "seats": 3
+        },
+        {
+          "party_name": "Balad",
+          "leader": "Azmi Bishara",
+          "vote_pct": 2.3,
+          "seats": 3
+        }
       ]
     },
     {
@@ -130,18 +1487,162 @@
       "notes": "Kadima arrive en tête en sièges, mais Netanyahou parvient à assembler une coalition majoritaire — illustration que gagner le plus de sièges ne garantit pas de former le gouvernement.",
       "source_url": "https://en.wikipedia.org/wiki/2009_Israeli_legislative_election",
       "results": [
-        { "party_name": "Kadima", "leader": "Tzipi Livni", "vote_pct": 22.47, "seats": 28 },
-        { "party_name": "Likoud–Ahi", "leader": "Benjamin Netanyahou", "vote_pct": 21.61, "seats": 27 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 11.70, "seats": 15 },
-        { "party_name": "Parti travailliste", "leader": "Ehud Barak", "vote_pct": 9.93, "seats": 13 },
-        { "party_name": "Shas", "leader": "Eli Yishai", "vote_pct": 8.49, "seats": 11 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yaakov Litzman", "vote_pct": 4.39, "seats": 5 },
-        { "party_name": "Ra'am–Ta'al", "leader": "Ibrahim Sarsur", "vote_pct": 3.38, "seats": 4 },
-        { "party_name": "Union nationale", "leader": "Yaakov Katz", "vote_pct": 3.34, "seats": 4 },
-        { "party_name": "Hadash", "leader": "Mohammad Barakeh", "vote_pct": 3.32, "seats": 4 },
-        { "party_name": "Meretz", "leader": "Haim Oron", "vote_pct": 2.95, "seats": 3 },
-        { "party_name": "HaBayit HaYehoudi", "leader": "Daniel Hershkowitz", "vote_pct": 2.87, "seats": 3 },
-        { "party_name": "Balad", "leader": "Jamal Zahalka", "vote_pct": 2.48, "seats": 3 }
+        {
+          "party_name": "Kadima",
+          "leader": "Tzipi Livni",
+          "vote_pct": 22.47,
+          "seats": 28
+        },
+        {
+          "party_name": "Likoud–Ahi",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 21.61,
+          "seats": 27
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 11.7,
+          "seats": 15
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Ehud Barak",
+          "vote_pct": 9.93,
+          "seats": 13
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Eli Yishai",
+          "vote_pct": 8.49,
+          "seats": 11
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 4.39,
+          "seats": 5
+        },
+        {
+          "party_name": "Ra'am–Ta'al",
+          "leader": "Ibrahim Sarsur",
+          "vote_pct": 3.38,
+          "seats": 4
+        },
+        {
+          "party_name": "Union nationale",
+          "leader": "Yaakov Katz",
+          "vote_pct": 3.34,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Mohammad Barakeh",
+          "vote_pct": 3.32,
+          "seats": 4
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Haim Oron",
+          "vote_pct": 2.95,
+          "seats": 3
+        },
+        {
+          "party_name": "HaBayit HaYehoudi",
+          "leader": "Daniel Hershkowitz",
+          "vote_pct": 2.87,
+          "seats": 3
+        },
+        {
+          "party_name": "Balad",
+          "leader": "Jamal Zahalka",
+          "vote_pct": 2.48,
+          "seats": 3
+        }
+      ]
+    },
+    {
+      "knesset_number": 19,
+      "election_date": "2013-01-22",
+      "name": "19e Knesset",
+      "turnout_pct": 67.77,
+      "threshold_pct": 2,
+      "pm_after": "Benjamin Netanyahou (Likoud Yisrael Beytenou)",
+      "notes": "Likoud et Yisrael Beytenou se présentent en liste commune. Première percée de Yesh Atid (Yaïr Lapid), deuxième force du scrutin.",
+      "source_url": "https://en.wikipedia.org/wiki/2013_Israeli_legislative_election",
+      "results": [
+        {
+          "party_name": "Likoud Yisrael Beytenou",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 23.34,
+          "seats": 31
+        },
+        {
+          "party_name": "Yesh Atid",
+          "leader": "Yaïr Lapid",
+          "vote_pct": 14.33,
+          "seats": 19
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Shelly Yachimovich",
+          "vote_pct": 11.39,
+          "seats": 15
+        },
+        {
+          "party_name": "HaBayit HaYehoudi",
+          "leader": "Naftali Bennett",
+          "vote_pct": 9.12,
+          "seats": 12
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Eli Yishai",
+          "vote_pct": 8.75,
+          "seats": 11
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 5.16,
+          "seats": 7
+        },
+        {
+          "party_name": "Hatnua",
+          "leader": "Tzipi Livni",
+          "vote_pct": 4.99,
+          "seats": 6
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Zehava Gal-On",
+          "vote_pct": 4.55,
+          "seats": 6
+        },
+        {
+          "party_name": "Ra'am",
+          "leader": "Ibrahim Sarsur",
+          "vote_pct": 3.65,
+          "seats": 4
+        },
+        {
+          "party_name": "Hadash",
+          "leader": "Mohammad Barakeh",
+          "vote_pct": 2.99,
+          "seats": 4
+        },
+        {
+          "party_name": "Balad",
+          "leader": "Jamal Zahalka",
+          "vote_pct": 2.56,
+          "seats": 3
+        },
+        {
+          "party_name": "Kadima",
+          "leader": "Shaul Mofaz",
+          "vote_pct": 2.09,
+          "seats": 2
+        }
       ]
     },
     {
@@ -154,16 +1655,66 @@
       "notes": "Premier scrutin sous le seuil actuel de 3,25%.",
       "source_url": "https://en.wikipedia.org/wiki/2015_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Benjamin Netanyahou", "vote_pct": 23.40, "seats": 30 },
-        { "party_name": "Union sioniste", "leader": "Isaac Herzog", "vote_pct": 18.67, "seats": 24 },
-        { "party_name": "Liste commune", "leader": "Ayman Odeh", "vote_pct": 10.54, "seats": 13 },
-        { "party_name": "Yesh Atid", "leader": "Yaïr Lapid", "vote_pct": 8.81, "seats": 11 },
-        { "party_name": "Koulanou", "leader": "Moshe Kahlon", "vote_pct": 7.49, "seats": 10 },
-        { "party_name": "HaBayit HaYehoudi", "leader": "Naftali Bennett", "vote_pct": 6.74, "seats": 8 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 5.73, "seats": 7 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 5.11, "seats": 6 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yaakov Litzman", "vote_pct": 5.03, "seats": 6 },
-        { "party_name": "Meretz", "leader": "Zehava Gal-On", "vote_pct": 3.93, "seats": 5 }
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 23.4,
+          "seats": 30
+        },
+        {
+          "party_name": "Union sioniste",
+          "leader": "Isaac Herzog",
+          "vote_pct": 18.67,
+          "seats": 24
+        },
+        {
+          "party_name": "Liste commune",
+          "leader": "Ayman Odeh",
+          "vote_pct": 10.54,
+          "seats": 13
+        },
+        {
+          "party_name": "Yesh Atid",
+          "leader": "Yaïr Lapid",
+          "vote_pct": 8.81,
+          "seats": 11
+        },
+        {
+          "party_name": "Koulanou",
+          "leader": "Moshe Kahlon",
+          "vote_pct": 7.49,
+          "seats": 10
+        },
+        {
+          "party_name": "HaBayit HaYehoudi",
+          "leader": "Naftali Bennett",
+          "vote_pct": 6.74,
+          "seats": 8
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 5.73,
+          "seats": 7
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 5.11,
+          "seats": 6
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 5.03,
+          "seats": 6
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Zehava Gal-On",
+          "vote_pct": 3.93,
+          "seats": 5
+        }
       ]
     },
     {
@@ -176,17 +1727,72 @@
       "notes": "Aucun gouvernement n'a pu être formé (Netanyahou n'a pas réuni de majorité) : la Knesset s'est dissoute elle-même, provoquant de nouvelles élections en septembre 2019 — cas unique dans l'histoire d'Israël.",
       "source_url": "https://en.wikipedia.org/wiki/April_2019_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Benjamin Netanyahou", "vote_pct": 26.46, "seats": 35 },
-        { "party_name": "Kakhol Lavan (Bleu-Blanc)", "leader": "Benny Gantz", "vote_pct": 26.13, "seats": 35 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 5.99, "seats": 8 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yaakov Litzman", "vote_pct": 5.78, "seats": 8 },
-        { "party_name": "Hadash–Ta'al", "leader": "Ayman Odeh", "vote_pct": 4.49, "seats": 6 },
-        { "party_name": "Parti travailliste", "leader": "Avi Gabbay", "vote_pct": 4.43, "seats": 6 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 4.01, "seats": 5 },
-        { "party_name": "URWP", "leader": "Rafi Peretz", "vote_pct": 3.70, "seats": 5 },
-        { "party_name": "Meretz", "leader": "Tamar Zandberg", "vote_pct": 3.63, "seats": 4 },
-        { "party_name": "Koulanou", "leader": "Moshe Kahlon", "vote_pct": 3.54, "seats": 4 },
-        { "party_name": "Ra'am–Balad", "leader": "Mansour Abbas", "vote_pct": 3.33, "seats": 4 }
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 26.46,
+          "seats": 35
+        },
+        {
+          "party_name": "Kakhol Lavan (Bleu-Blanc)",
+          "leader": "Benny Gantz",
+          "vote_pct": 26.13,
+          "seats": 35
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 5.99,
+          "seats": 8
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 5.78,
+          "seats": 8
+        },
+        {
+          "party_name": "Hadash–Ta'al",
+          "leader": "Ayman Odeh",
+          "vote_pct": 4.49,
+          "seats": 6
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Avi Gabbay",
+          "vote_pct": 4.43,
+          "seats": 6
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 4.01,
+          "seats": 5
+        },
+        {
+          "party_name": "URWP",
+          "leader": "Rafi Peretz",
+          "vote_pct": 3.7,
+          "seats": 5
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Tamar Zandberg",
+          "vote_pct": 3.63,
+          "seats": 4
+        },
+        {
+          "party_name": "Koulanou",
+          "leader": "Moshe Kahlon",
+          "vote_pct": 3.54,
+          "seats": 4
+        },
+        {
+          "party_name": "Ra'am–Balad",
+          "leader": "Mansour Abbas",
+          "vote_pct": 3.33,
+          "seats": 4
+        }
       ]
     },
     {
@@ -199,15 +1805,60 @@
       "notes": "Deuxième échec de suite à former un gouvernement (ni Netanyahou ni Gantz n'ont réuni de majorité) : nouvelles élections en mars 2020, troisième scrutin en moins d'un an.",
       "source_url": "https://en.wikipedia.org/wiki/September_2019_Israeli_legislative_election",
       "results": [
-        { "party_name": "Kakhol Lavan (Bleu-Blanc)", "leader": "Benny Gantz", "vote_pct": 25.95, "seats": 33 },
-        { "party_name": "Likoud", "leader": "Benjamin Netanyahou", "vote_pct": 25.10, "seats": 32 },
-        { "party_name": "Liste commune", "leader": "Ayman Odeh", "vote_pct": 10.60, "seats": 13 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 7.44, "seats": 9 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 6.99, "seats": 8 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yaakov Litzman", "vote_pct": 6.06, "seats": 7 },
-        { "party_name": "Yamina", "leader": "Ayelet Shaked", "vote_pct": 5.87, "seats": 7 },
-        { "party_name": "Travailliste-Gesher", "leader": "Amir Peretz", "vote_pct": 4.80, "seats": 6 },
-        { "party_name": "Union démocratique", "leader": "Nitzan Horowitz", "vote_pct": 4.34, "seats": 5 }
+        {
+          "party_name": "Kakhol Lavan (Bleu-Blanc)",
+          "leader": "Benny Gantz",
+          "vote_pct": 25.95,
+          "seats": 33
+        },
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 25.1,
+          "seats": 32
+        },
+        {
+          "party_name": "Liste commune",
+          "leader": "Ayman Odeh",
+          "vote_pct": 10.6,
+          "seats": 13
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 7.44,
+          "seats": 9
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 6.99,
+          "seats": 8
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 6.06,
+          "seats": 7
+        },
+        {
+          "party_name": "Yamina",
+          "leader": "Ayelet Shaked",
+          "vote_pct": 5.87,
+          "seats": 7
+        },
+        {
+          "party_name": "Travailliste-Gesher",
+          "leader": "Amir Peretz",
+          "vote_pct": 4.8,
+          "seats": 6
+        },
+        {
+          "party_name": "Union démocratique",
+          "leader": "Nitzan Horowitz",
+          "vote_pct": 4.34,
+          "seats": 5
+        }
       ]
     },
     {
@@ -220,14 +1871,54 @@
       "notes": "Troisième scrutin consécutif. Aboutit à un accord de gouvernement d'union et de rotation Netanyahou-Gantz, qui ne tiendra pas jusqu'au bout.",
       "source_url": "https://en.wikipedia.org/wiki/2020_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Benjamin Netanyahou", "vote_pct": 29.46, "seats": 36 },
-        { "party_name": "Kakhol Lavan (Bleu-Blanc)", "leader": "Benny Gantz", "vote_pct": 26.59, "seats": 33 },
-        { "party_name": "Liste commune", "leader": "Ayman Odeh", "vote_pct": 12.67, "seats": 15 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 7.69, "seats": 9 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yaakov Litzman", "vote_pct": 5.98, "seats": 7 },
-        { "party_name": "Emet", "leader": "Amir Peretz", "vote_pct": 5.83, "seats": 7 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 5.74, "seats": 7 },
-        { "party_name": "Yamina", "leader": "Naftali Bennett", "vote_pct": 5.24, "seats": 6 }
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 29.46,
+          "seats": 36
+        },
+        {
+          "party_name": "Kakhol Lavan (Bleu-Blanc)",
+          "leader": "Benny Gantz",
+          "vote_pct": 26.59,
+          "seats": 33
+        },
+        {
+          "party_name": "Liste commune",
+          "leader": "Ayman Odeh",
+          "vote_pct": 12.67,
+          "seats": 15
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 7.69,
+          "seats": 9
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yaakov Litzman",
+          "vote_pct": 5.98,
+          "seats": 7
+        },
+        {
+          "party_name": "Emet",
+          "leader": "Amir Peretz",
+          "vote_pct": 5.83,
+          "seats": 7
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 5.74,
+          "seats": 7
+        },
+        {
+          "party_name": "Yamina",
+          "leader": "Naftali Bennett",
+          "vote_pct": 5.24,
+          "seats": 6
+        }
       ]
     },
     {
@@ -240,19 +1931,84 @@
       "notes": "Quatrième scrutin en deux ans. Aboutit à la coalition la plus hétérogène de l'histoire d'Israël (droite, centre, gauche et un parti arabe, Ra'am, pour la première fois dans une coalition gouvernementale), mettant fin à 12 ans de Netanyahou au pouvoir.",
       "source_url": "https://en.wikipedia.org/wiki/2021_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Benjamin Netanyahou", "vote_pct": 24.19, "seats": 30 },
-        { "party_name": "Yesh Atid", "leader": "Yaïr Lapid", "vote_pct": 13.93, "seats": 17 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 7.17, "seats": 9 },
-        { "party_name": "Kakhol Lavan (Bleu-Blanc)", "leader": "Benny Gantz", "vote_pct": 6.63, "seats": 8 },
-        { "party_name": "Yamina", "leader": "Naftali Bennett", "vote_pct": 6.21, "seats": 7 },
-        { "party_name": "Parti travailliste", "leader": "Merav Michaeli", "vote_pct": 6.09, "seats": 7 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Moshe Gafni", "vote_pct": 5.63, "seats": 7 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 5.63, "seats": 7 },
-        { "party_name": "Sionisme religieux", "leader": "Bezalel Smotrich", "vote_pct": 5.12, "seats": 6 },
-        { "party_name": "Liste commune", "leader": "Ayman Odeh", "vote_pct": 4.82, "seats": 6 },
-        { "party_name": "Tikva Hadasha (Nouvel Espoir)", "leader": "Gideon Sa'ar", "vote_pct": 4.74, "seats": 6 },
-        { "party_name": "Meretz", "leader": "Nitzan Horowitz", "vote_pct": 4.59, "seats": 6 },
-        { "party_name": "Ra'am", "leader": "Mansour Abbas", "vote_pct": 3.79, "seats": 4 }
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 24.19,
+          "seats": 30
+        },
+        {
+          "party_name": "Yesh Atid",
+          "leader": "Yaïr Lapid",
+          "vote_pct": 13.93,
+          "seats": 17
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 7.17,
+          "seats": 9
+        },
+        {
+          "party_name": "Kakhol Lavan (Bleu-Blanc)",
+          "leader": "Benny Gantz",
+          "vote_pct": 6.63,
+          "seats": 8
+        },
+        {
+          "party_name": "Yamina",
+          "leader": "Naftali Bennett",
+          "vote_pct": 6.21,
+          "seats": 7
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Merav Michaeli",
+          "vote_pct": 6.09,
+          "seats": 7
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Moshe Gafni",
+          "vote_pct": 5.63,
+          "seats": 7
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 5.63,
+          "seats": 7
+        },
+        {
+          "party_name": "Sionisme religieux",
+          "leader": "Bezalel Smotrich",
+          "vote_pct": 5.12,
+          "seats": 6
+        },
+        {
+          "party_name": "Liste commune",
+          "leader": "Ayman Odeh",
+          "vote_pct": 4.82,
+          "seats": 6
+        },
+        {
+          "party_name": "Tikva Hadasha (Nouvel Espoir)",
+          "leader": "Gideon Sa'ar",
+          "vote_pct": 4.74,
+          "seats": 6
+        },
+        {
+          "party_name": "Meretz",
+          "leader": "Nitzan Horowitz",
+          "vote_pct": 4.59,
+          "seats": 6
+        },
+        {
+          "party_name": "Ra'am",
+          "leader": "Mansour Abbas",
+          "vote_pct": 3.79,
+          "seats": 4
+        }
       ]
     },
     {
@@ -265,16 +2021,66 @@
       "notes": "Knesset sortante au moment du scrutin de 2026 couvert par PrédiCité.",
       "source_url": "https://en.wikipedia.org/wiki/2022_Israeli_legislative_election",
       "results": [
-        { "party_name": "Likoud", "leader": "Benjamin Netanyahou", "vote_pct": 23.41, "seats": 32 },
-        { "party_name": "Yesh Atid", "leader": "Yaïr Lapid", "vote_pct": 17.78, "seats": 24 },
-        { "party_name": "Sionisme religieux–Otzma Yehudit", "leader": "Bezalel Smotrich", "vote_pct": 10.84, "seats": 14 },
-        { "party_name": "Unité nationale", "leader": "Benny Gantz", "vote_pct": 9.08, "seats": 12 },
-        { "party_name": "Shas", "leader": "Aryeh Deri", "vote_pct": 8.25, "seats": 11 },
-        { "party_name": "Judaïsme unifié de la Torah", "leader": "Yitzhak Goldknopf", "vote_pct": 5.88, "seats": 7 },
-        { "party_name": "Yisrael Beytenou", "leader": "Avigdor Lieberman", "vote_pct": 4.48, "seats": 6 },
-        { "party_name": "Ra'am", "leader": "Mansour Abbas", "vote_pct": 4.07, "seats": 5 },
-        { "party_name": "Hadash–Ta'al", "leader": "Ayman Odeh", "vote_pct": 3.75, "seats": 5 },
-        { "party_name": "Parti travailliste", "leader": "Merav Michaeli", "vote_pct": 3.69, "seats": 4 }
+        {
+          "party_name": "Likoud",
+          "leader": "Benjamin Netanyahou",
+          "vote_pct": 23.41,
+          "seats": 32
+        },
+        {
+          "party_name": "Yesh Atid",
+          "leader": "Yaïr Lapid",
+          "vote_pct": 17.78,
+          "seats": 24
+        },
+        {
+          "party_name": "Sionisme religieux–Otzma Yehudit",
+          "leader": "Bezalel Smotrich",
+          "vote_pct": 10.84,
+          "seats": 14
+        },
+        {
+          "party_name": "Unité nationale",
+          "leader": "Benny Gantz",
+          "vote_pct": 9.08,
+          "seats": 12
+        },
+        {
+          "party_name": "Shas",
+          "leader": "Aryeh Deri",
+          "vote_pct": 8.25,
+          "seats": 11
+        },
+        {
+          "party_name": "Judaïsme unifié de la Torah",
+          "leader": "Yitzhak Goldknopf",
+          "vote_pct": 5.88,
+          "seats": 7
+        },
+        {
+          "party_name": "Yisrael Beytenou",
+          "leader": "Avigdor Lieberman",
+          "vote_pct": 4.48,
+          "seats": 6
+        },
+        {
+          "party_name": "Ra'am",
+          "leader": "Mansour Abbas",
+          "vote_pct": 4.07,
+          "seats": 5
+        },
+        {
+          "party_name": "Hadash–Ta'al",
+          "leader": "Ayman Odeh",
+          "vote_pct": 3.75,
+          "seats": 5
+        },
+        {
+          "party_name": "Parti travailliste",
+          "leader": "Merav Michaeli",
+          "vote_pct": 3.69,
+          "seats": 4
+        }
       ]
     }
   ]

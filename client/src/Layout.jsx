@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, MapPin, Trophy, Users, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  User, LogOut, BarChart2, Landmark, Newspaper
+  User, LogOut, BarChart2, Landmark, Newspaper, Flame
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -14,17 +14,19 @@ import { useQuery } from '@tanstack/react-query';
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMoreOpen, setIsMoreOpen] = useState(false);
+  const [isJouerOpen, setIsJouerOpen] = useState(false);
+  const [isApprendreOpen, setIsApprendreOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
-  const moreRef = useRef(null);
+  const jouerRef = useRef(null);
+  const apprendreRef = useRef(null);
   const userMenuRef = useRef(null);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
-  const { data: userProgress } = useQuery({
+  const { data: userProgress, refetch: refetchProgress } = useQuery({
     queryKey: ['user-progress-header', user?.email],
     queryFn: async () => {
       if (!user?.email) return null;
@@ -34,41 +36,56 @@ export default function Layout({ children, currentPageName }) {
     enabled: !!user?.email
   });
 
+  // Série de jours consécutifs — une fois par jour et par utilisateur, pour
+  // faire revenir les gens sans spammer l'API à chaque navigation interne.
+  useEffect(() => {
+    if (!user?.email) return;
+    const today = new Date().toISOString().slice(0, 10);
+    const key = `streak_ping_${user.email}_${today}`;
+    if (sessionStorage.getItem(key)) return;
+    base44.functions.invoke('updateStreakAndBadges', {})
+      .then(() => { sessionStorage.setItem(key, '1'); refetchProgress(); })
+      .catch(() => {});
+  }, [user?.email]);
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
-    setIsMoreOpen(false);
+    setIsJouerOpen(false);
+    setIsApprendreOpen(false);
     setIsUserMenuOpen(false);
   }, [location]);
 
   // Fermer les dropdowns au clic extérieur
   useEffect(() => {
     const handler = (e) => {
-      if (moreRef.current && !moreRef.current.contains(e.target)) setIsMoreOpen(false);
+      if (jouerRef.current && !jouerRef.current.contains(e.target)) setIsJouerOpen(false);
+      if (apprendreRef.current && !apprendreRef.current.contains(e.target)) setIsApprendreOpen(false);
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) setIsUserMenuOpen(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  // 5 items principaux
-  const mainNavItems = [
-    { name: 'Home', label: 'Accueil', icon: Home },
+  // Nav organisée autour de l'axe « jouer en apprenant, apprendre en s'amusant » :
+  // pronostiquer/comparer d'un côté, comprendre le contexte de l'autre.
+  const jouerItems = [
     { name: 'Listes', label: 'Listes', icon: MapPin },
     { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
     { name: 'Leaderboard', label: 'Classement', icon: Trophy },
-    { name: 'Learn', label: 'Comprendre', icon: BookOpen },
+    { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
   ];
 
-  // Menu "Plus" — réduit aux pages réellement routées pour l'instant
-  const moreNavItems = [
-    { name: 'Actu', label: 'Actu', icon: Newspaper },
+  const apprendreItems = [
+    { name: 'Learn', label: 'Comprendre', icon: BookOpen },
+    { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen },
     { name: 'Historique', label: 'Historique', icon: Landmark },
-    { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
+    { name: 'Actu', label: 'Actu', icon: Newspaper },
     { name: 'Methodologie', label: 'Sources', icon: BarChart2 },
   ];
 
   const isActive = (name) => currentPageName === name;
-  const isMoreActive = moreNavItems.some(i => isActive(i.name));
+  const isJouerActive = jouerItems.some(i => isActive(i.name));
+  const isApprendreActive = apprendreItems.some(i => isActive(i.name));
 
 
 
@@ -118,24 +135,24 @@ export default function Layout({ children, currentPageName }) {
           filter: 'grayscale(35%)',
         }} />
         <div className="p-bg-blob-a" style={{
-          position: 'absolute', top: '-12%', left: '-8%', width: '48vw', height: '48vw', maxWidth: 620, maxHeight: 620,
-          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.16, filter: 'blur(90px)',
+          position: 'absolute', top: '-14%', left: '-10%', width: '54vw', height: '54vw', maxWidth: 700, maxHeight: 700,
+          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.32, filter: 'blur(85px)',
         }} />
         <div className="p-bg-blob-b" style={{
-          position: 'absolute', top: '2%', right: '-12%', width: '42vw', height: '42vw', maxWidth: 560, maxHeight: 560,
-          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.13, filter: 'blur(90px)',
+          position: 'absolute', top: '0%', right: '-14%', width: '48vw', height: '48vw', maxWidth: 640, maxHeight: 640,
+          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.28, filter: 'blur(85px)',
         }} />
         <div className="p-bg-blob-c" style={{
-          position: 'absolute', top: '42%', left: '8%', width: '38vw', height: '38vw', maxWidth: 500, maxHeight: 500,
-          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.11, filter: 'blur(90px)',
+          position: 'absolute', top: '40%', left: '6%', width: '44vw', height: '44vw', maxWidth: 580, maxHeight: 580,
+          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.24, filter: 'blur(85px)',
         }} />
         <div className="p-bg-blob-d" style={{
-          position: 'absolute', bottom: '-14%', right: '-6%', width: '46vw', height: '46vw', maxWidth: 600, maxHeight: 600,
-          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.14, filter: 'blur(90px)',
+          position: 'absolute', bottom: '-16%', right: '-8%', width: '52vw', height: '52vw', maxWidth: 680, maxHeight: 680,
+          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.3, filter: 'blur(85px)',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(20,32,61,0.06) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(20,32,61,0.08) 1px, transparent 1px)',
           backgroundSize: '22px 22px',
         }} />
       </div>
@@ -156,7 +173,7 @@ export default function Layout({ children, currentPageName }) {
       <header className="hidden md:block sticky top-0.5 z-50">
         <div
           className="border-b border-[rgba(20,32,61,0.08)]"
-          style={{ background: 'rgba(248,246,240,0.92)', backdropFilter: 'blur(12px)' }}
+          style={{ background: 'rgba(248,246,240,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
         >
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
@@ -167,44 +184,78 @@ export default function Layout({ children, currentPageName }) {
                 <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold-text)' }}>PrédiCité</span>
               </Link>
 
-              {/* Nav */}
+              {/* Nav — deux axes : Jouer (pronostiquer, comparer) et Apprendre (comprendre, contexte) */}
               <div className="flex items-center gap-0.5">
-                {mainNavItems.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link key={item.name} to={createPageUrl(item.name)} className={navLinkDark(isActive(item.name))}>
-                      <Icon className="w-3.5 h-3.5" />
-                      {item.label}
-                    </Link>
-                  );
-                })}
-                {/* Règles — lien direct visible */}
-                <Link to={createPageUrl('ReglesDuJeu')} className={`${navLinkDark(isActive('ReglesDuJeu'))} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8 hover:bg-[var(--p-gold)]/15`} style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold-text)' : 'rgba(122,95,26,0.8)' }}>
-                  <BookOpen className="w-3.5 h-3.5" />
-                  Règles
+                <Link to={createPageUrl('Home')} className={navLinkDark(isActive('Home'))}>
+                  <Home className="w-3.5 h-3.5" />
+                  Accueil
                 </Link>
 
-                <div className="relative" ref={moreRef}>
+                <div className="relative" ref={jouerRef}>
                   <button
-                    onClick={() => setIsMoreOpen(!isMoreOpen)}
-                    className={navLinkDark(isMoreActive)}
+                    onClick={() => setIsJouerOpen(!isJouerOpen)}
+                    className={`${navLinkDark(isJouerActive)} border border-[#1E3A8A]/25 bg-[#1E3A8A]/8`}
+                    style={{ color: isJouerActive ? '#1E3A8A' : 'rgba(30,58,138,0.75)' }}
                     aria-haspopup="menu"
-                    aria-expanded={isMoreOpen}
+                    aria-expanded={isJouerOpen}
                   >
-                    Plus
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMoreOpen ? 'rotate-180' : ''}`} />
+                    <Vote className="w-3.5 h-3.5" />
+                    Jouer
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isJouerOpen ? 'rotate-180' : ''}`} />
                   </button>
                   <AnimatePresence>
-                    {isMoreOpen && (
+                    {isJouerOpen && (
                       <motion.div
                         initial={{ opacity: 0, y: 6 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full right-0 mt-1 w-48 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
+                        className="absolute top-full left-0 mt-1 w-48 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
                         style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
                       >
-                        {moreNavItems.map((item) => {
+                        {jouerItems.map((item) => {
+                          const Icon = item.icon;
+                          return (
+                            <Link
+                              key={item.name}
+                              to={createPageUrl(item.name)}
+                              className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
+                                isActive(item.name) ? 'text-[#1E3A8A] bg-[rgba(20,32,61,0.06)]' : 'text-[var(--p-text-60)] hover:text-[var(--p-text)] hover:bg-[rgba(20,32,61,0.05)]'
+                              }`}
+                            >
+                              <Icon className="w-4 h-4 text-[var(--p-text-25)]" />
+                              {item.label}
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <div className="relative" ref={apprendreRef}>
+                  <button
+                    onClick={() => setIsApprendreOpen(!isApprendreOpen)}
+                    className={`${navLinkDark(isApprendreActive)} border border-[var(--p-gold)]/30 bg-[var(--p-gold)]/8`}
+                    style={{ color: isApprendreActive ? 'var(--p-gold-text)' : 'rgba(122,95,26,0.8)' }}
+                    aria-haspopup="menu"
+                    aria-expanded={isApprendreOpen}
+                  >
+                    <BookOpen className="w-3.5 h-3.5" />
+                    Apprendre
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isApprendreOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  <AnimatePresence>
+                    {isApprendreOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full right-0 mt-1 w-52 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
+                        style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
+                      >
+                        {apprendreItems.map((item) => {
                           const Icon = item.icon;
                           return (
                             <Link
@@ -227,6 +278,14 @@ export default function Layout({ children, currentPageName }) {
 
               {/* User bloc */}
               <div className="flex items-center gap-3 flex-shrink-0">
+                {user && userProgress && userProgress.current_streak > 1 && (
+                  <div className="px-2.5 py-1.5 rounded-full border border-orange-400/30 flex items-center gap-1" style={{ background: 'rgba(194,65,12,0.08)' }} title={`${userProgress.current_streak} jours d'activité consécutifs`}>
+                    <Flame className="w-3.5 h-3.5" style={{ color: '#C2410C' }} />
+                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#C2410C' }}>
+                      {userProgress.current_streak}
+                    </span>
+                  </div>
+                )}
                 {user && userProgress && userProgress.total_points > 0 && (
                   <div className="px-3 py-1.5 rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5" style={{ background: 'rgba(212,175,55,0.1)' }}>
                     <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--p-gold-text)' }}>
@@ -291,7 +350,7 @@ export default function Layout({ children, currentPageName }) {
       <nav aria-label="Navigation mobile" className="md:hidden sticky top-0.5 z-50">
         <div
           className="border-b border-[rgba(20,32,61,0.08)]"
-          style={{ background: 'rgba(248,246,240,0.92)', backdropFilter: 'blur(12px)' }}
+          style={{ background: 'rgba(248,246,240,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
         >
           <div className="flex items-center justify-between h-13 px-4 py-2">
             <Link to={createPageUrl('Home')} className="flex items-center gap-2">
@@ -323,7 +382,35 @@ export default function Layout({ children, currentPageName }) {
                 className="border-t border-[rgba(20,32,61,0.06)] overflow-hidden"
               >
                 <div className="p-3 space-y-0.5">
-                  {[...mainNavItems, { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen }, ...moreNavItems].map((item) => {
+                  <Link
+                    to={createPageUrl('Home')}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive('Home') ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-gold-text)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
+                    }`}
+                  >
+                    <Home className="w-4 h-4" />
+                    Accueil
+                  </Link>
+
+                  <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(30,58,138,0.6)' }}>Jouer</p>
+                  {jouerItems.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.name}
+                        to={createPageUrl(item.name)}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                          isActive(item.name) ? 'bg-[rgba(20,32,61,0.08)] text-[#1E3A8A]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {item.label}
+                      </Link>
+                    );
+                  })}
+
+                  <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>Apprendre</p>
+                  {apprendreItems.map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link

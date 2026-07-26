@@ -91,16 +91,16 @@ export default function Home() {
           backgroundPosition: 'center 35%',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.15) 0%, rgba(5,10,24,0.3) 55%, var(--p-night) 100%)',
+          background: 'linear-gradient(180deg, rgba(5,10,24,0.28) 0%, rgba(5,10,24,0.42) 55%, var(--p-night) 100%)',
         }} />
         <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse at 50% 15%, rgba(212,175,55,0.15) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse at 50% 15%, rgba(212,175,55,0.18) 0%, transparent 60%)',
         }} />
 
         <div className="relative z-10 flex flex-col items-center">
 
         <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full"
-          style={{ background: 'rgba(212,175,55,0.1)', border: '0.5px solid rgba(212,175,55,0.3)' }}>
+          style={{ background: 'rgba(10,14,26,0.55)', border: '0.5px solid rgba(212,175,55,0.5)', backdropFilter: 'blur(4px)' }}>
           <motion.div className="w-1.5 h-1.5 rounded-full"
             style={{ background: 'var(--p-gold)' }}
             animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />

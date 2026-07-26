@@ -38,13 +38,11 @@ formes géométriques simples ou de texte, sous le seuil d'originalité
 protégeable par le droit d'auteur (donc dans le domaine public), mais
 potentiellement encore protégés par le droit des marques — usage purement
 descriptif/informatif ici (identifier la liste), pas commercial ni
-laissant croire à une approbation officielle du parti. Deux listes du
-seed n'ont volontairement pas de logo (`Ensemble Bennett-Lapid`, `Hadash-
-Ta'al`) : alliances encore hypothétiques au moment de l'import, conforme
-au principe « zéro donnée inventée » de la page Méthodologie. Pour
-« Unité nationale », le seul fichier trouvé sur Commons était un visuel
-de bulletin de vote (texte hébreu/arabe) redondant avec le `BallotChip`
-déjà affiché — non retenu comme logo.
+laissant croire à une approbation officielle du parti. `Hadash-Ta'al`
+reste volontairement sans logo : le seul fichier trouvé sur Commons est
+tagué CC BY-SA 4.0 mais son propre champ auteur admet un « usage
+loyal » (fair use) du logo — incohérence qui rend la licence non fiable,
+donc on ne l'utilise pas.
 
 | Fichier | Parti | Auteur | Licence | Source |
 |---|---|---|---|---|
@@ -57,3 +55,5 @@ déjà affiché — non retenu comme logo.
 | `logos/les-democrates.svg` | Les Démocrates | Non documenté | PD-textlogo | [File:The_Democrats_led_by_Yair_Golan.svg](https://commons.wikimedia.org/wiki/File:The_Democrats_led_by_Yair_Golan.svg) |
 | `logos/raam.svg` | Ra'am | United Arab List (vectorisation depuis PDF) | PD-textlogo | [File:Raam_logo_2021.svg](https://commons.wikimedia.org/wiki/File:Raam_logo_2021.svg) |
 | `logos/yashar.png` | Yashar (Gadi Eisenkot) | Non documenté | PD-textlogo | [File:Yashar_party_logo.png](https://commons.wikimedia.org/wiki/File:Yashar_party_logo.png) |
+| `logos/ensemble-bennett-lapid.svg` | Ensemble (Bennett-Lapid / « Together ») | רשימת ביחד (le parti lui-même) | PD-textlogo | [File:Together-logo-29April.svg](https://commons.wikimedia.org/wiki/File:Together-logo-29April.svg) |
+| `logos/unite-nationale.svg` | Unité nationale (Benny Gantz) | Fourni par le parti par e-mail | PD-textlogo | [File:National_Unity_Party_(Israel)_August_2022.svg](https://commons.wikimedia.org/wiki/File:National_Unity_Party_(Israel)_August_2022.svg) |

@@ -12,8 +12,8 @@ const SCORING_RULES = [
   { label: 'Seuil électoral correctement anticipé', pts: '+30', desc: 'Vous aviez bien anticipé qu\'une liste franchirait — ou non — les 3,25 %.' },
   { label: 'Bloc majoritaire anticipé', pts: '+50', desc: 'Vous aviez identifié le bon camp (coalition ≥ 61 sièges, ou opposition).' },
   { label: 'Premier ministre correct', pts: '+100', desc: 'La personnalité pronostiquée est effectivement investie Premier ministre.' },
-  { label: 'Défi quotidien', pts: '+20', desc: 'Répondre au quiz ou au signal du jour.' },
-  { label: 'Série de 7 jours consécutifs', pts: '+75', desc: 'Bonus de régularité pour 7 jours d\'activité d\'affilée.' },
+  { label: 'Bonne réponse à un quiz', pts: '+10', desc: 'Chaque question compte une seule fois, mais il y en a des dizaines : règles, historique, actualité.' },
+  { label: 'Série de 7 jours consécutifs', pts: '+75', desc: 'Bonus de régularité versé automatiquement tous les 7 jours d\'activité d\'affilée — le compteur 🔥 apparaît en haut du site dès le 2e jour.' },
 ];
 
 const BADGES = [

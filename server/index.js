@@ -8,6 +8,7 @@ import { initDb } from './db/index.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
 import functionsRouter from './routes/functions.js';
+import actuRouter from './routes/actu.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 8788;
@@ -30,6 +31,7 @@ app.use(session({
 app.use('/api/auth', authRouter);
 app.use('/api/entities', entitiesRouter);
 app.use('/api/functions', functionsRouter);
+app.use('/api/actu', actuRouter);
 
 app.get('/api/health', (req, res) => res.json({ ok: true, now: new Date().toISOString() }));
 

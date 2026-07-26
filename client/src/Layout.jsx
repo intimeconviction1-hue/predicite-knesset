@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, MapPin, Trophy, Users, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  User, LogOut, BarChart2, Landmark
+  User, LogOut, BarChart2, Landmark, Newspaper
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -61,6 +61,7 @@ export default function Layout({ children, currentPageName }) {
 
   // Menu "Plus" — réduit aux pages réellement routées pour l'instant
   const moreNavItems = [
+    { name: 'Actu', label: 'Actu', icon: Newspaper },
     { name: 'Historique', label: 'Historique', icon: Landmark },
     { name: 'Methodologie', label: 'Sources', icon: BarChart2 },
   ];
@@ -380,6 +381,7 @@ export default function Layout({ children, currentPageName }) {
                 <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-[var(--p-text)] transition-colors">Comment on vote à la Knesset</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Formation du gouvernement</Link></li>
                 <li><Link to={createPageUrl('Historique')} className="hover:text-[var(--p-text)] transition-colors">Historique des Knesset</Link></li>
+                <li><Link to={createPageUrl('Actu')} className="hover:text-[var(--p-text)] transition-colors">Actu de la campagne</Link></li>
               </ul>
             </div>
 

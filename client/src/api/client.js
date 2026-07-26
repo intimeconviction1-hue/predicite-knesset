@@ -70,4 +70,8 @@ export const base44 = {
   functions: {
     invoke: (name, body = {}) => request('POST', `/api/functions/${name}`, body),
   },
+
+  actu: {
+    list: () => request('GET', '/api/actu'),
+  },
 };

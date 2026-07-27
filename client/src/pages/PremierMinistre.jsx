@@ -99,13 +99,12 @@ export default function PremierMinistre() {
         </Link>
 
         {/* Header — statue de la Menorah devant la Knesset, de nuit (libre, Wikimedia Commons) */}
-        <div className="relative overflow-hidden rounded-2xl border p-6 mb-6 text-center" style={{ borderColor: 'rgba(212,175,55,0.3)' }}>
-          <div className="absolute inset-0" style={{ backgroundImage: "url('/images/pm-hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 30%' }} />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(20,10,40,0.45) 0%, rgba(5,10,24,0.6) 100%)' }} />
+        <div className="relative overflow-hidden rounded-2xl border p-6 md:p-8 mb-6 text-center" style={{ background: 'var(--p-card)', borderColor: 'var(--p-gold-border)' }}>
+          <div className="absolute inset-x-0 top-0 h-40 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)' }} />
           <div className="relative">
-            <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold)' }} />
-            <h1 className="text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'white' }}>Qui sera Premier ministre ?</h1>
-            <p className="text-sm max-w-xl mx-auto" style={{ color: 'rgba(245,240,232,0.7)' }}>
+            <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold-text)' }} />
+            <h1 className="text-2xl md:text-3xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.01em' }}>Qui sera Premier ministre ?</h1>
+            <p className="text-sm max-w-xl mx-auto" style={{ color: 'var(--p-text-60)' }}>
               Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard.
             </p>
           </div>

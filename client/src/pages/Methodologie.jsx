@@ -30,16 +30,9 @@ export default function Methodologie() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0" style={{
-          backgroundImage: "url('/images/methodologie-hero.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }} />
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.35) 0%, rgba(5,10,24,0.55) 60%, var(--p-night) 100%)',
-        }} />
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 85% 0%, rgba(34,197,94,0.1) 0%, transparent 55%)',
+        <div className="p-tricolor"><div /><div /><div /></div>
+        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(34,197,94,0.14), transparent 62%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
@@ -47,11 +40,11 @@ export default function Methodologie() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'rgba(245,240,232,0.4)' }}
+            style={{ color: 'var(--p-text-40)' }}
           >
-            <Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link>
+            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'rgba(245,240,232,0.7)' }}>Sources & Méthodologie</span>
+            <span style={{ color: 'var(--p-text-60)' }}>Sources & Méthodologie</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -62,7 +55,7 @@ export default function Methodologie() {
           >
             <motion.div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22C55E' }}
               animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#4ADE80' }}>
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#16794A' }}>
               Vérifié en continu · zéro donnée inventée
             </span>
           </motion.div>
@@ -70,8 +63,8 @@ export default function Methodologie() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.08 }}
-            className="text-3xl md:text-4xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'white' }}
+            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
           >
             Sources & Méthodologie
           </motion.h1>
@@ -79,8 +72,8 @@ export default function Methodologie() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.16 }}
-            className="text-base leading-relaxed max-w-2xl"
-            style={{ color: 'rgba(245,240,232,0.6)' }}
+            className="text-base md:text-lg leading-relaxed max-w-2xl"
+            style={{ color: 'var(--p-text-60)' }}
           >
             PrédiCité ne publie que des données réelles, sourcées et datées.
             Aucun chiffre n'est inventé, estimé ou complété pour « faire joli ».

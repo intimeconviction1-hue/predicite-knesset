@@ -28,16 +28,9 @@ export default function Learn() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0" style={{
-          backgroundImage: "url('/images/learn-hero.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }} />
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(180deg, rgba(5,10,24,0.32) 0%, rgba(5,10,24,0.52) 60%, var(--p-night) 100%)',
-        }} />
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse at 15% 0%, rgba(212,175,55,0.15) 0%, transparent 55%)',
+        <div className="p-tricolor"><div /><div /><div /></div>
+        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
+          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
         }} />
         <div className="relative max-w-4xl mx-auto px-4 py-16">
           <motion.div
@@ -45,11 +38,11 @@ export default function Learn() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
             className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'rgba(245,240,232,0.4)' }}
+            style={{ color: 'var(--p-text-40)' }}
           >
-            <Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link>
+            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'rgba(245,240,232,0.7)' }}>L'élection</span>
+            <span style={{ color: 'var(--p-text-60)' }}>L'élection</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -57,15 +50,15 @@ export default function Learn() {
             transition={{ duration: 0.4, delay: 0.06 }}
             className="flex items-center gap-2 mb-3"
           >
-            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold)' }}>Comprendre avant de pronostiquer</p>
+            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
+            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>Comprendre avant de pronostiquer</p>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.12 }}
-            className="text-3xl md:text-4xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'white' }}
+            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
+            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
           >
             Les législatives israéliennes, expliquées
           </motion.h1>
@@ -73,8 +66,8 @@ export default function Learn() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-base leading-relaxed max-w-2xl"
-            style={{ color: 'rgba(245,240,232,0.6)' }}
+            className="text-base md:text-lg leading-relaxed max-w-2xl"
+            style={{ color: 'var(--p-text-60)' }}
           >
             Le 27 octobre 2026, Israël élit les 120 membres de la 26ᵉ Knesset. Deux
             choses à comprendre avant de pronostiquer : comment les voix se

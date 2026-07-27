@@ -39,6 +39,9 @@ async function main() {
       const patch = {};
       if (l.logo_url && !existing[0].logo_url) patch.logo_url = l.logo_url;
       if (l.current_knesset_seats != null && existing[0].current_knesset_seats == null) patch.current_knesset_seats = l.current_knesset_seats;
+      // Histoire enrichie : on met à jour à chaque seed (contenu éditorial).
+      if (l.histoire) patch.histoire = l.histoire;
+      if (l.histoire_source) patch.histoire_source = l.histoire_source;
       if (Object.keys(patch).length > 0) {
         await updateEntity('Liste', existing[0].id, patch);
         updated++;
@@ -56,6 +59,8 @@ async function main() {
       bloc: l.bloc,
       color: l.color || '#6B7280',
       founded_or_merged_note: l.founded_or_merged_note || null,
+      histoire: l.histoire || null,
+      histoire_source: l.histoire_source || null,
       is_active: true,
       current_knesset_seats: l.current_knesset_seats ?? null,
       logo_url: l.logo_url || null,

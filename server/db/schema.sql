@@ -177,6 +177,10 @@ ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons_semaine TEXT;   -- sem
 -- Difficulté du quiz : 'decouverte' (+10) | 'connaisseur' (+25) | 'expert' (+50).
 ALTER TABLE quiz_questions ADD COLUMN IF NOT EXISTS difficulte TEXT NOT NULL DEFAULT 'connaisseur';
 
+-- Histoire enrichie d'une liste (narratif + source), affichée sur sa fiche.
+ALTER TABLE listes ADD COLUMN IF NOT EXISTS histoire TEXT;
+ALTER TABLE listes ADD COLUMN IF NOT EXISTS histoire_source TEXT;
+
 -- Défi série : pari en jetons sur N bonnes réponses de quiz d'affilée.
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_objectif INTEGER;
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_mise INTEGER;

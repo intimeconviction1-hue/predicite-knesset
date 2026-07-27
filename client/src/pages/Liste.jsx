@@ -201,6 +201,18 @@ export default function ListePage() {
             </p>
           )}
 
+          {liste.histoire && (
+            <div className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--p-border)' }}>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-gold-text)' }}>Histoire</p>
+              <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>{liste.histoire}</p>
+              {liste.histoire_source && (
+                <a href={liste.histoire_source} target="_blank" rel="noopener noreferrer" className="text-xs mt-2 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
+                  Source ↗
+                </a>
+              )}
+            </div>
+          )}
+
           <div className="flex items-center gap-6 mt-4 pt-4 border-t" style={{ borderColor: 'var(--p-border)' }}>
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Sièges sortants (25e Knesset)</p>

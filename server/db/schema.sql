@@ -181,6 +181,11 @@ ALTER TABLE quiz_questions ADD COLUMN IF NOT EXISTS difficulte TEXT NOT NULL DEF
 ALTER TABLE listes ADD COLUMN IF NOT EXISTS histoire TEXT;
 ALTER TABLE listes ADD COLUMN IF NOT EXISTS histoire_source TEXT;
 
+-- Bio des candidats Premier ministre (la colonne bio existait en prod mais
+-- n'était pas déclarée — on la fixe ; + source pour attribution).
+ALTER TABLE candidats_pm ADD COLUMN IF NOT EXISTS bio TEXT;
+ALTER TABLE candidats_pm ADD COLUMN IF NOT EXISTS bio_source TEXT;
+
 -- Défi série : pari en jetons sur N bonnes réponses de quiz d'affilée.
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_objectif INTEGER;
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_mise INTEGER;

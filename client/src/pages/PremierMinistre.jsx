@@ -251,6 +251,11 @@ export default function PremierMinistre() {
                 )}
                 <h3 className="font-bold text-lg mb-3" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{bioCandidat.name_fr}</h3>
                 <p className="text-sm leading-relaxed text-left" style={{ color: 'var(--p-text-60)' }}>{bioCandidat.bio}</p>
+                {bioCandidat.bio_source && (
+                  <a href={bioCandidat.bio_source} target="_blank" rel="noopener noreferrer" className="text-xs mt-3 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
+                    Source ↗
+                  </a>
+                )}
               </div>
             </motion.div>
           </motion.div>

@@ -27,7 +27,9 @@ async function main() {
       // ne touche rien d'autre — pas de risque pour les PronosticPM existants).
       const patch = {};
       if (c.photo_url && !existing[0].photo_url) patch.photo_url = c.photo_url;
-      if (c.bio && !existing[0].bio) patch.bio = c.bio;
+      // Bio : contenu éditorial, mis à jour à chaque seed.
+      if (c.bio) patch.bio = c.bio;
+      if (c.bio_source) patch.bio_source = c.bio_source;
       if (Object.keys(patch).length > 0) {
         await updateEntity('CandidatPM', existing[0].id, patch);
         updated++;
@@ -49,6 +51,8 @@ async function main() {
       name_he: c.name_he || null,
       liste_id: liste.id,
       photo_url: c.photo_url || null,
+      bio: c.bio || null,
+      bio_source: c.bio_source || null,
       is_active: true,
     });
     created++;

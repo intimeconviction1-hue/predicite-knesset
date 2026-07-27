@@ -8,7 +8,7 @@ import { ChevronRight, Coins, TrendingUp, Info, ArrowRight } from 'lucide-react'
 
 const MISE_MIN = 10, MISE_MAX = 500, MISE_STEP = 10;
 
-function MarketCard({ market, jetons, onPlaced, listeById }) {
+function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
   const [selected, setSelected] = useState(market.issues[0]?.id || null);
   const [mise, setMise] = useState(50);
   const [busy, setBusy] = useState(false);
@@ -84,13 +84,23 @@ function MarketCard({ market, jetons, onPlaced, listeById }) {
             <div className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Gain potentiel</div>
             <div className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-green)' }}>{gain}</div>
           </div>
-          <button
-            onClick={place} disabled={!canBet || busy}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform"
-            style={{ background: canBet ? 'var(--p-blue)' : 'var(--p-text-25)', boxShadow: canBet ? '0 8px 20px -8px rgba(43,92,230,0.6)' : 'none', cursor: canBet ? 'pointer' : 'not-allowed' }}
-          >
-            {busy ? 'Envoi…' : 'Placer ma mise'} <ArrowRight className="w-4 h-4" />
-          </button>
+          {loggedIn ? (
+            <button
+              onClick={place} disabled={!canBet || busy}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform"
+              style={{ background: canBet ? 'var(--p-blue)' : 'var(--p-text-25)', boxShadow: canBet ? '0 8px 20px -8px rgba(43,92,230,0.6)' : 'none', cursor: canBet ? 'pointer' : 'not-allowed' }}
+            >
+              {busy ? 'Envoi…' : 'Placer ma mise'} <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              onClick={() => base44.auth.redirectToLogin()}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform hover:-translate-y-0.5"
+              style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}
+            >
+              Se connecter pour parier <ArrowRight className="w-4 h-4" />
+            </button>
+          )}
         </div>
         {mise > (jetons ?? 0) && <p className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>Pas assez de jetons pour cette mise.</p>}
         {msg && <p className="text-xs mt-2" style={{ color: msg.ok ? 'var(--p-green)' : 'var(--p-red)' }}>{msg.text}</p>}
@@ -125,10 +135,10 @@ export default function Paris() {
     enabled: !!user?.email,
   });
 
+  // Marchés + cotes en temps réel : PUBLICS (visibles sans login).
   const { data: marchesData, refetch: refetchMarches, isLoading } = useQuery({
-    queryKey: ['paris-marches', user?.email],
-    queryFn: () => base44.functions.invoke('parisSondages', { action: 'listMarches' }),
-    enabled: !!user?.email,
+    queryKey: ['paris-marches'],
+    queryFn: () => base44.paris.marches(),
   });
   const marches = marchesData?.marches || [];
   const jetons = progress?.jetons ?? null;
@@ -192,14 +202,16 @@ export default function Paris() {
           <p>La cote s'ouvre sur la probabilité des sondages puis bouge selon les mises de tous : parier tôt et à contre-courant paie plus. La cote est verrouillée à l'instant où tu mises.</p>
         </div>
 
-        {user === false ? (
-          <div className="rounded-2xl border p-8 text-center" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
-            <p className="text-sm mb-4" style={{ color: 'var(--p-text-60)' }}>Connecte-toi pour recevoir tes jetons et parier.</p>
-            <button onClick={() => base44.auth.redirectToLogin()} className="inline-flex items-center gap-2 px-6 py-3 rounded-[10px] font-semibold text-[15px] text-white" style={{ background: 'var(--p-blue)' }}>
+        {user === false && (
+          <div className="rounded-xl border p-4 mb-4 flex items-center justify-between gap-3 flex-wrap" style={{ background: 'var(--p-gold-dim)', borderColor: 'var(--p-gold-border)' }}>
+            <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>Les cotes sont en direct ci-dessous. <b style={{ color: 'var(--p-text)' }}>Connecte-toi</b> pour recevoir tes jetons et parier.</p>
+            <button onClick={() => base44.auth.redirectToLogin()} className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] font-semibold text-sm text-white flex-shrink-0" style={{ background: 'var(--p-blue)' }}>
               Se connecter <ArrowRight className="w-4 h-4" />
             </button>
           </div>
-        ) : isLoading ? (
+        )}
+
+        {isLoading ? (
           <div className="space-y-3">{[...Array(2)].map((_, i) => <div key={i} className="h-40 rounded-2xl animate-pulse" style={{ background: 'var(--p-border)' }} />)}</div>
         ) : marches.length === 0 ? (
           <div className="rounded-2xl border p-8 text-center text-sm" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
@@ -207,7 +219,7 @@ export default function Paris() {
           </div>
         ) : (
           <div className="space-y-4">
-            {marches.map(m => <MarketCard key={m.id} market={m} jetons={jetons} onPlaced={onPlaced} listeById={listeById} />)}
+            {marches.map(m => <MarketCard key={m.id} market={m} jetons={jetons} onPlaced={onPlaced} listeById={listeById} loggedIn={!!user} />)}
           </div>
         )}
 

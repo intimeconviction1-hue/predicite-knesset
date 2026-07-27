@@ -71,6 +71,9 @@ export const base44 = {
     invoke: (name, body = {}) => request('POST', `/api/functions/${name}`, body),
   },
 
+  paris: {
+    marches: () => request('GET', '/api/paris'),
+  },
   actu: {
     list: () => request('GET', '/api/actu'),
   },

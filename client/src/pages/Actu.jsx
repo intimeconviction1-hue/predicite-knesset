@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import { ChevronRight, Newspaper, ExternalLink, Info } from 'lucide-react';
+import QuizWidget from '@/components/knesset/QuizWidget';
 
 function timeAgo(pubDate) {
   if (!pubDate) return '';
@@ -127,6 +128,10 @@ export default function Actu() {
             ))}
           </div>
         )}
+
+        <div className="mt-8">
+          <QuizWidget category="actualite" title="Quiz — l'actu de la campagne" />
+        </div>
 
         <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
           <span>Cette actu vous inspire un pronostic ? <Link to={createPageUrl('Listes')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Voir les listes</Link> ou <Link to={createPageUrl('PremierMinistre')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>pronostiquer le Premier ministre</Link>.</span>

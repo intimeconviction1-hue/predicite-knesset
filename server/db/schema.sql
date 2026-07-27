@@ -174,6 +174,9 @@ CREATE TABLE IF NOT EXISTS user_badges (
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons INTEGER NOT NULL DEFAULT 1000;
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons_semaine TEXT;   -- semaine ISO de la dernière dotation
 
+-- Difficulté du quiz : 'decouverte' (+10) | 'connaisseur' (+25) | 'expert' (+50).
+ALTER TABLE quiz_questions ADD COLUMN IF NOT EXISTS difficulte TEXT NOT NULL DEFAULT 'connaisseur';
+
 -- Un marché = une question pariable, rattachée à une manche (cadence des sondages).
 CREATE TABLE IF NOT EXISTS paris_marches (
   id TEXT PRIMARY KEY,

@@ -231,6 +231,44 @@ export default function ListePage() {
         </motion.div>
 
 
+        {/* Situation actuelle — mise en avant forte : la projection du jour + la
+            tendance vs le sondage précédent, pour que l'état du parti ressorte. */}
+        {latest && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="rounded-2xl p-5 mb-6 flex items-center justify-between gap-4 flex-wrap"
+            style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)', borderLeft: `3px solid ${liste.color || 'var(--p-gold)'}` }}
+          >
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--p-text-40)' }}>Situation actuelle</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-black font-mono leading-none" style={{ color: liste.color || 'var(--p-text)' }}>{latest.seats}</span>
+                <span className="text-sm" style={{ color: 'var(--p-text-60)' }}>sièges projetés</span>
+              </div>
+              <p className="text-xs mt-1.5" style={{ color: 'var(--p-text-40)' }}>{latest.institute} · {new Date(latest.date).toLocaleDateString('fr-FR')}</p>
+            </div>
+            {(() => {
+              const prev = history.length >= 2 ? history[history.length - 2].seats : null;
+              const delta = prev != null ? latest.seats - prev : null;
+              if (delta == null) return null;
+              const up = delta > 0, flat = delta === 0;
+              return (
+                <div className="text-right">
+                  <div className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-bold font-mono" style={{
+                    background: flat ? 'var(--p-text-10)' : up ? 'rgba(26,140,85,0.12)' : 'rgba(200,16,46,0.1)',
+                    color: flat ? 'var(--p-text-40)' : up ? 'var(--p-green)' : 'var(--p-red)',
+                  }}>
+                    {flat ? '= stable' : `${up ? '▲ +' : '▼ '}${up ? delta : Math.abs(delta)}`}
+                  </div>
+                  <p className="text-[10px] mt-1.5" style={{ color: 'var(--p-text-25)' }}>vs sondage précédent</p>
+                </div>
+              );
+            })()}
+          </motion.div>
+        )}
+
         {/* Historique sondages */}
         {history.length > 0 && (
           <motion.div

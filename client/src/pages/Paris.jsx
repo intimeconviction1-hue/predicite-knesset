@@ -8,7 +8,7 @@ import { ChevronRight, Coins, TrendingUp, Info, ArrowRight } from 'lucide-react'
 
 const MISE_MIN = 10, MISE_MAX = 500, MISE_STEP = 10;
 
-function MarketCard({ market, jetons, onPlaced }) {
+function MarketCard({ market, jetons, onPlaced, listeById }) {
   const [selected, setSelected] = useState(market.issues[0]?.id || null);
   const [mise, setMise] = useState(50);
   const [busy, setBusy] = useState(false);
@@ -95,6 +95,21 @@ function MarketCard({ market, jetons, onPlaced }) {
         {mise > (jetons ?? 0) && <p className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>Pas assez de jetons pour cette mise.</p>}
         {msg && <p className="text-xs mt-2" style={{ color: msg.ok ? 'var(--p-green)' : 'var(--p-red)' }}>{msg.text}</p>}
       </div>
+
+      {/* Se renseigner : fiches des listes en jeu (marchés « rang ») */}
+      {market.type === 'rang' && listeById && (
+        <div className="mt-3 pt-3 flex items-center gap-x-3 gap-y-1 flex-wrap" style={{ borderTop: '0.5px dashed var(--p-border)' }}>
+          <span className="text-[11px]" style={{ color: 'var(--p-text-40)' }}>Se renseigner :</span>
+          {market.issues.map(iss => {
+            const l = listeById.get(iss.match_value);
+            return l ? (
+              <Link key={iss.id} to={`${createPageUrl('Liste')}?slug=${l.slug}`} className="text-[11px] font-semibold hover:underline inline-flex items-center gap-1" style={{ color: 'var(--p-blue)' }}>
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: l.color || '#6B7280' }} />{l.name_fr}
+              </Link>
+            ) : null;
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -117,6 +132,13 @@ export default function Paris() {
   });
   const marches = marchesData?.marches || [];
   const jetons = progress?.jetons ?? null;
+
+  // Listes, pour lier chaque issue d'un marché « rang » à sa fiche.
+  const { data: listes = [] } = useQuery({
+    queryKey: ['paris-listes'],
+    queryFn: () => base44.entities.Liste.filter({ is_active: true }),
+  });
+  const listeById = new Map(listes.map(l => [l.id, l]));
 
   const onPlaced = () => { refetchJetons(); refetchMarches(); };
 
@@ -185,7 +207,7 @@ export default function Paris() {
           </div>
         ) : (
           <div className="space-y-4">
-            {marches.map(m => <MarketCard key={m.id} market={m} jetons={jetons} onPlaced={onPlaced} />)}
+            {marches.map(m => <MarketCard key={m.id} market={m} jetons={jetons} onPlaced={onPlaced} listeById={listeById} />)}
           </div>
         )}
 

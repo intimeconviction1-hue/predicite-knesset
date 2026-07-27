@@ -81,6 +81,13 @@ export default function Home() {
     select: d => d[0],
   });
 
+  const { data: actuData } = useQuery({
+    queryKey: ['home-actu'],
+    queryFn: () => base44.actu.list(),
+    staleTime: 10 * 60 * 1000,
+  });
+  const actuItems = (actuData?.items || []).slice(0, 4);
+
   const latestPoll = sondages?.[0] || null;
   const seatsByListe = new Map((latestPoll?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
   // Sur TOUTES les listes (pas seulement le top 10 affiché plus bas), sinon
@@ -276,6 +283,32 @@ export default function Home() {
           <ElectionTimeline />
         </motion.div>
       </div>
+
+      {/* Teaser Actu — la campagne en direct, visible dès l'accueil */}
+      {actuItems.length > 0 && (
+        <div className="max-w-3xl mx-auto px-4 pb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Actu de la campagne</h2>
+            <Link to={createPageUrl('Actu')} className="text-xs flex items-center gap-1 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
+              Toute l'actu <ChevronRight className="w-3 h-3" />
+            </Link>
+          </div>
+          <div className="space-y-2">
+            {actuItems.map((item, i) => (
+              <a key={item.link + i} href={item.link} target="_blank" rel="noopener noreferrer"
+                className="block rounded-xl p-3 transition-colors hover:border-[var(--p-border-hover)]"
+                style={{ background: 'var(--p-card)', border: `0.5px solid ${item.curated ? 'var(--p-gold-border)' : 'var(--p-border)'}` }}>
+                <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--p-text)' }}>{item.title}</p>
+                <div className="mt-1 text-xs">
+                  {item.curated
+                    ? <span className="p-badge p-badge-gold">Résumé PrédiCité</span>
+                    : item.source && <span className="font-semibold" style={{ color: 'var(--p-gold-text)' }}>{item.source}</span>}
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Classement des listes */}
       <div className="max-w-3xl mx-auto px-4 pb-16">

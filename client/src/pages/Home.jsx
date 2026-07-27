@@ -98,7 +98,6 @@ export default function Home() {
   // Accroche dynamique — toujours vraie, quel que soit le sondage du jour.
   const nobodyHasMajority = coalitionSeats < 61 && oppositionSeats < 61;
   const leaderIsCoalition = coalitionSeats >= oppositionSeats;
-  const heroLine1 = nobodyHasMajority ? "Personne n'a la majorité." : 'La bataille est lancée.';
   const verdict = !latestPoll
     ? null
     : nobodyHasMajority
@@ -158,15 +157,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
             className="text-4xl md:text-6xl font-black mb-4"
             style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.025em', lineHeight: 1.04 }}>
-            {heroLine1}<br />
-            Et <span style={{ color: 'var(--p-gold-text)' }}>toi</span>, tu formes quelle coalition ?
+            Le scrutin est à <span style={{ color: 'var(--p-gold-text)' }}>toi</span>.
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
             className="text-base md:text-lg mb-7 max-w-md mx-auto"
             style={{ color: 'var(--p-text-60)', lineHeight: 1.55 }}>
-            Place les 120 sièges, affronte les sondages en temps réel et grimpe au classement. C'est gratuit.
+            Pronostique les 120 sièges, parie sur chaque sondage et les événements de la campagne, grimpe au classement. C'est gratuit.
           </motion.p>
 
           {/* CTA — un seul bouton principal, mène au pronostic (page Listes) */}

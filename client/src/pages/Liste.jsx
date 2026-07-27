@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import BallotChip from '@/components/knesset/BallotChip';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
+import TrendChart from '@/components/knesset/TrendChart';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z'; // veille du scrutin, 07:00 Israël
 
@@ -245,21 +246,11 @@ export default function ListePage() {
               <TrendingUp className="w-4 h-4" style={{ color: 'var(--p-blue)' }} />
               <h2 className="font-bold text-sm" style={{ color: 'var(--p-text)' }}>Évolution des sondages sièges</h2>
             </div>
-            <div className="flex items-end gap-2 h-32 mb-3">
-              {history.map((h, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group relative">
-                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold-text)' }}>{h.seats}</span>
-                  <motion.div
-                    className="w-full rounded-t-sm"
-                    style={{ backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.7 }}
-                    initial={{ height: 0 }}
-                    whileInView={{ height: `${(h.seats / maxSeats) * 100}%` }}
-                    viewport={{ once: true, margin: '-10%' }}
-                    transition={{ duration: 0.5, delay: i * 0.05 }}
-                  />
-                </div>
-              ))}
-            </div>
+            <TrendChart
+              points={history.map(h => ({ value: h.seats, label: new Date(h.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) }))}
+              color={liste.color || '#2B5CE6'}
+              height={140}
+            />
             <div className="space-y-1.5 mt-4 pt-4 border-t" style={{ borderColor: 'var(--p-border)' }}>
               {history.slice().reverse().slice(0, 5).map((h, i) => (
                 <div key={i} className="flex items-center justify-between text-xs">
@@ -294,22 +285,11 @@ export default function ListePage() {
               <Landmark className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
               <h2 className="font-bold text-sm" style={{ color: 'var(--p-text)' }}>Évolution depuis sa création</h2>
             </div>
-            <div className="flex items-end gap-2 h-28 mb-3">
-              {partyHistory.map((h, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1">
-                  <span className="text-[10px] font-mono font-bold" style={{ color: liste.color || 'var(--p-gold-text)' }}>{h.seats}</span>
-                  <motion.div
-                    className="w-full rounded-t-sm"
-                    style={{ backgroundColor: liste.color || 'var(--p-gold)', opacity: 0.65 }}
-                    initial={{ height: 0 }}
-                    whileInView={{ height: `${(h.seats / maxPartyHistorySeats) * 100}%` }}
-                    viewport={{ once: true, margin: '-10%' }}
-                    transition={{ duration: 0.5, delay: i * 0.03 }}
-                  />
-                  <span className="text-[9px]" style={{ color: 'var(--p-text-25)' }}>{new Date(h.election_date).getFullYear()}</span>
-                </div>
-              ))}
-            </div>
+            <TrendChart
+              points={partyHistory.map(h => ({ value: h.seats, label: String(new Date(h.election_date).getFullYear()) }))}
+              color={liste.color || '#7A5F1A'}
+              height={130}
+            />
             <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>
               {partyHistory.length} élection{partyHistory.length > 1 ? 's' : ''} sous ce nom exact, de {new Date(partyHistory[0].election_date).getFullYear()} à {new Date(partyHistory[partyHistory.length - 1].election_date).getFullYear()} —
               voir <Link to={createPageUrl('Historique')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>le détail dans l'Historique</Link>.

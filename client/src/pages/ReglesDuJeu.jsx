@@ -278,6 +278,10 @@ export default function ReglesDuJeu() {
               Voir les paris ouverts <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
+
+          <p className="text-sm mt-4" style={{ color: 'var(--p-text-60)' }}>
+            <b style={{ color: 'var(--p-gold-text)' }}>Autre pari, côté quiz — le défi série :</b> mise tes jetons sur une série de bonnes réponses d'affilée (3 → ×2, 5 → ×4, 10 → ×10). Une erreur et la mise est perdue. <Link to={createPageUrl('Quiz')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Tenter un défi</Link>.
+          </p>
         </section>
 
         <section id="quiz">

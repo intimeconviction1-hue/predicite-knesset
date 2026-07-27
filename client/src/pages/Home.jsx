@@ -235,6 +235,18 @@ export default function Home() {
 
           <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={250} />
 
+          {/* Légende — décode les couleurs de l'hémicycle (chaque parti = une couleur) */}
+          {rankedListes.some(l => l._seats > 0) && (
+            <div className="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-2 mb-2 px-2">
+              {rankedListes.filter(l => l._seats > 0).map(l => (
+                <span key={l.id} className="inline-flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--p-text-60)' }}>
+                  <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: l.color || '#6B7280' }} />
+                  {l.name_fr} <span className="font-mono font-bold" style={{ color: 'var(--p-text)' }}>{l._seats}</span>
+                </span>
+              ))}
+            </div>
+          )}
+
           {verdict ? (
             <p className="text-center text-sm mt-1" style={{ color: 'var(--p-text-60)' }}>{verdict}</p>
           ) : (

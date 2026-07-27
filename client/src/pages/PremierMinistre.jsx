@@ -157,7 +157,7 @@ export default function PremierMinistre() {
                 {candidats.map(c => (
                   <motion.button
                     key={c.id}
-                    onClick={() => setSelected(c.id)}
+                    onClick={() => setBioCandidat(c)}
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.97 }}
                     className="relative rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
@@ -165,18 +165,11 @@ export default function PremierMinistre() {
                       background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
                       borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
                     }}
+                    aria-label={`Fiche de ${c.name_fr}`}
                   >
-                    {c.bio && (
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        onClick={(e) => { e.stopPropagation(); setBioCandidat(c); }}
-                        onKeyDown={(e) => { if (e.key === 'Enter') { e.stopPropagation(); setBioCandidat(c); } }}
-                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full flex items-center justify-center hover:bg-[rgba(20,32,61,0.08)] transition-colors"
-                        style={{ color: 'var(--p-text-25)' }}
-                        aria-label={`Biographie de ${c.name_fr}`}
-                      >
-                        <Info className="w-3.5 h-3.5" />
+                    {selected === c.id && (
+                      <span className="absolute top-1.5 right-1.5 text-[9px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{ background: 'var(--p-gold-dim)', color: 'var(--p-gold-text)' }}>
+                        Choisi
                       </span>
                     )}
                     {c.photo_url ? (
@@ -287,6 +280,15 @@ export default function PremierMinistre() {
                     <span className="w-2.5 h-2.5 rounded-full" style={{ background: listeById.get(bioCandidat.liste_id).color || '#6B7280' }} />
                     Voir la liste {listeById.get(bioCandidat.liste_id).name_fr} →
                   </Link>
+                )}
+                {!deadlineClosed && (
+                  <button
+                    onClick={() => { setSelected(bioCandidat.id); setBioCandidat(null); }}
+                    className="w-full mt-4 py-3 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5"
+                    style={{ background: selected === bioCandidat.id ? '#16794A' : 'var(--p-blue)' }}
+                  >
+                    {selected === bioCandidat.id ? '✓ Choisi pour ton pronostic' : 'Choisir ce candidat'}
+                  </button>
                 )}
               </div>
             </motion.div>

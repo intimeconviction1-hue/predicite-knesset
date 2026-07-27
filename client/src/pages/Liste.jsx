@@ -93,6 +93,14 @@ export default function ListePage() {
     queryFn: () => base44.entities.KnessetHistorique.list('knesset_number', 30),
   });
 
+  // Candidat Premier ministre de cette liste (lien permanent liste -> PM).
+  const { data: pmCandidats = [] } = useQuery({
+    queryKey: ['liste-candidat-pm', liste?.id],
+    queryFn: () => base44.entities.CandidatPM.filter({ liste_id: liste.id }),
+    enabled: !!liste?.id,
+  });
+  const candidatPM = pmCandidats.find(c => c.is_active) || pmCandidats[0] || null;
+
   // Ne montre l'évolution que pour les élections où le nom correspond
   // exactement (pas de rapprochement approximatif qui inventerait un lien) —
   // les partis récents (2026) n'auront donc naturellement aucun historique.
@@ -181,6 +189,15 @@ export default function ListePage() {
                   <h1 className="text-2xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{liste.name_fr}</h1>
                 </div>
                 <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
+                {candidatPM && (
+                  <Link
+                    to={`${createPageUrl('PremierMinistre')}?candidat=${candidatPM.id}`}
+                    className="inline-flex items-center gap-1 text-xs font-semibold mt-1.5 hover:opacity-80 transition-opacity"
+                    style={{ color: 'var(--p-blue)' }}
+                  >
+                    Candidat Premier ministre : {candidatPM.name_fr} →
+                  </Link>
+                )}
               </div>
             </div>
             {(() => {

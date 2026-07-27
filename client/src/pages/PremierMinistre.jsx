@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info, X } from 'lucide-react';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
@@ -45,6 +45,23 @@ export default function PremierMinistre() {
     queryKey: ['candidats-pm'],
     queryFn: () => base44.entities.CandidatPM.filter({ is_active: true }),
   });
+
+  // Listes, pour le lien permanent candidat -> fiche de sa liste.
+  const { data: listes = [] } = useQuery({
+    queryKey: ['pm-listes'],
+    queryFn: () => base44.entities.Liste.filter({ is_active: true }),
+  });
+  const listeById = new Map(listes.map(l => [l.id, l]));
+
+  // Deep-link depuis une fiche liste (?candidat=ID) : ouvre la bio du candidat.
+  const [searchParams] = useSearchParams();
+  useEffect(() => {
+    const id = searchParams.get('candidat');
+    if (id && candidats.length) {
+      const c = candidats.find(x => x.id === id);
+      if (c) setBioCandidat(c);
+    }
+  }, [candidats, searchParams]);
 
   const { data: existingPred, refetch } = useQuery({
     queryKey: ['pronostic-pm', user?.email],
@@ -176,6 +193,12 @@ export default function PremierMinistre() {
                       </div>
                     )}
                     <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{c.name_fr}</p>
+                    {listeById.get(c.liste_id) && (
+                      <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: 'var(--p-text-40)' }}>
+                        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: listeById.get(c.liste_id).color || '#6B7280' }} />
+                        {listeById.get(c.liste_id).name_fr}
+                      </span>
+                    )}
                   </motion.button>
                 ))}
                 <motion.button
@@ -255,6 +278,16 @@ export default function PremierMinistre() {
                   <a href={bioCandidat.bio_source} target="_blank" rel="noopener noreferrer" className="text-xs mt-3 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
                     Source ↗
                   </a>
+                )}
+                {listeById.get(bioCandidat.liste_id) && (
+                  <Link
+                    to={`${createPageUrl('Liste')}?slug=${listeById.get(bioCandidat.liste_id).slug}`}
+                    className="flex items-center justify-center gap-2 mt-4 pt-4 border-t text-sm font-semibold hover:opacity-80 transition-opacity"
+                    style={{ borderColor: 'var(--p-border)', color: 'var(--p-blue)' }}
+                  >
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: listeById.get(bioCandidat.liste_id).color || '#6B7280' }} />
+                    Voir la liste {listeById.get(bioCandidat.liste_id).name_fr} →
+                  </Link>
                 )}
               </div>
             </motion.div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { ChevronRight, BookOpen, ArrowRight } from 'lucide-react';
+import { ChevronRight, BookOpen, ArrowRight, Users } from 'lucide-react';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
 import QuizWidget from '@/components/knesset/QuizWidget';
@@ -126,6 +126,41 @@ export default function Learn() {
           transition={{ duration: 0.4, delay: 0.08 }}
         >
           <CoalitionRulesModule />
+        </motion.div>
+
+        {/* Les primaires — comment les partis composent leurs listes (pédagogie
+            + statut réel 2026, sourcé). */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4, delay: 0.09 }}
+          className="rounded-2xl border p-6 md:p-8"
+          style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
+        >
+          <div className="flex items-center gap-2 mb-2">
+            <Users className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
+            <h3 className="text-lg font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Les primaires : qui choisit les candidats ?</h3>
+          </div>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--p-text-60)' }}>
+            Chaque parti compose lui-même sa liste de candidats — l'ordre compte, car les sièges sont attribués de haut en bas. Deux méthodes coexistent :
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3 mb-4">
+            <div className="rounded-xl border p-4" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
+              <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-blue)' }}>Primaires</p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-60)' }}>Les adhérents (ou un comité central) votent pour classer les candidats. Minoritaire, mais démocratique en interne.</p>
+            </div>
+            <div className="rounded-xl border p-4" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
+              <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-gold-text)' }}>Sélection directe</p>
+              <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-60)' }}>Le chef du parti désigne lui-même sa liste. C'est le cas le plus courant, surtout pour les nouveaux partis.</p>
+            </div>
+          </div>
+          <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>
+            <b style={{ color: 'var(--p-text)' }}>Où on en est (fin juillet 2026) :</b> Les Démocrates (20 juillet) et le Sionisme religieux (26 juillet) ont voté ; le Likoud tient ses primaires le 4 août. La plupart des autres partis désignent directement. Toutes les listes doivent être déposées avant le <b style={{ color: 'var(--p-text)' }}>9 septembre</b>.
+          </p>
+          <a href="https://www.jpost.com/israel-news/politics-and-diplomacy/article-902333" target="_blank" rel="noopener noreferrer" className="text-xs mt-3 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
+            Source ↗
+          </a>
         </motion.div>
 
         <motion.div

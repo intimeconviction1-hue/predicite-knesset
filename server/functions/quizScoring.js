@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { filterEntity, createEntity, updateEntity } from '../db/index.js';
 import { ensureUserProgress } from './miscFunctions.js';
+import { updateDefiOnAnswer } from './defisQuiz.js';
 
 // Points par difficulté — l'expert rapporte plus (plus de risque, plus de récompense).
 const POINTS_BY_DIFFICULTE = { decouverte: 10, connaisseur: 25, expert: 50 };
@@ -32,10 +33,14 @@ export async function submitQuizAnswer(user_email, { question_id, chosen_index }
     });
   }
 
+  // Met à jour un éventuel défi série en cours (pari en jetons sur une série).
+  const defi = await updateDefiOnAnswer(user_email, is_correct);
+
   return {
     already_answered: false,
     is_correct,
     points_earned: is_correct ? points : 0,
+    defi,
     correct_index: question.correct_index,
     explanation: question.explanation,
   };

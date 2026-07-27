@@ -60,6 +60,7 @@ export default function QuizWidget({ category, title }) {
         setResult(res);
         queryClient.invalidateQueries({ queryKey: ['quiz-reponses', user.email] });
         queryClient.invalidateQueries({ queryKey: ['home-user-progress'] });
+        queryClient.invalidateQueries({ queryKey: ['defi-serie'] });
       } catch {
         setResult({ is_correct: idx === question.correct_index, correct_index: question.correct_index, explanation: question.explanation });
       }
@@ -158,6 +159,16 @@ export default function QuizWidget({ category, title }) {
                       </span>
                     )}
                   </motion.div>
+                  {result.defi && (
+                    <div className="rounded-lg px-3 py-2 font-semibold flex items-center gap-2" style={{
+                      background: result.defi.defi === 'gagne' ? 'rgba(212,175,55,0.15)' : result.defi.defi === 'perdu' ? 'rgba(217,43,43,0.08)' : 'var(--p-blue-dim)',
+                      color: result.defi.defi === 'gagne' ? 'var(--p-gold-text)' : result.defi.defi === 'perdu' ? 'var(--p-red)' : 'var(--p-blue)',
+                    }}>
+                      {result.defi.defi === 'gagne' && `🔥 Défi série réussi ! +${result.defi.gain} jetons`}
+                      {result.defi.defi === 'perdu' && 'Défi série perdu — la série est interrompue.'}
+                      {result.defi.defi === 'en_cours' && `Défi série : ${result.defi.progres}/${result.defi.objectif} bonnes réponses`}
+                    </div>
+                  )}
                   {result.already_answered && <p style={{ color: 'var(--p-text-40)' }}>Déjà répondu précédemment — pas de points supplémentaires.</p>}
                   {!user && <p style={{ color: 'var(--p-text-40)' }}>Connecte-toi pour gagner des points d'apprentissage à chaque bonne réponse.</p>}
                   {result.explanation && <p style={{ color: 'var(--p-text-60)' }}>{result.explanation}</p>}

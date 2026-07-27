@@ -177,6 +177,13 @@ ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons_semaine TEXT;   -- sem
 -- Difficulté du quiz : 'decouverte' (+10) | 'connaisseur' (+25) | 'expert' (+50).
 ALTER TABLE quiz_questions ADD COLUMN IF NOT EXISTS difficulte TEXT NOT NULL DEFAULT 'connaisseur';
 
+-- Défi série : pari en jetons sur N bonnes réponses de quiz d'affilée.
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_objectif INTEGER;
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_mise INTEGER;
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_mult REAL;
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_progres INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS defi_statut TEXT;   -- 'en_cours' | null (résolu -> effacé)
+
 -- Un marché = une question pariable, rattachée à une manche (cadence des sondages).
 CREATE TABLE IF NOT EXISTS paris_marches (
   id TEXT PRIMARY KEY,

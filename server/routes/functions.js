@@ -7,6 +7,7 @@ import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resol
 import { ensureUserProgress, updateStreakAndBadges } from '../functions/miscFunctions.js';
 import { submitQuizAnswer } from '../functions/quizScoring.js';
 import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll } from '../functions/parisSondages.js';
+import { getDefiSerie, startDefiSerie } from '../functions/defisQuiz.js';
 
 const router = express.Router();
 
@@ -60,6 +61,12 @@ router.post('/:name', requireAuth, async (req, res) => {
           if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
           return res.json(await resolveByPoll(body.sondage_id));
         }
+        return res.status(400).json({ error: 'action inconnue' });
+      }
+
+      case 'defiSerie': {
+        if (body.action === 'get') return res.json(await getDefiSerie(req.user.email));
+        if (body.action === 'start') return res.json(await startDefiSerie(req.user.email, body));
         return res.status(400).json({ error: 'action inconnue' });
       }
 

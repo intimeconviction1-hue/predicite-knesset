@@ -36,8 +36,12 @@ function MarketCard({ market, jetons, onPlaced }) {
   return (
     <div className="rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
       <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span className="p-badge p-badge-gold">Manche {market.manche}</span>
-        <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>résolu au prochain sondage</span>
+        {market.type === 'evenement'
+          ? <span className="p-badge p-badge-blue">Événement</span>
+          : <span className="p-badge p-badge-gold">Sondage</span>}
+        <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>
+          {market.type === 'evenement' ? 'résolu quand l\'événement a lieu' : 'résolu au prochain sondage'}
+        </span>
       </div>
       <h3 className="text-lg font-bold mb-4" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{market.question}</h3>
 

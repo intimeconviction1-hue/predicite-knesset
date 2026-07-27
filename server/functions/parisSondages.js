@@ -190,6 +190,72 @@ export async function placerMise(user_email, body) {
   return { ok: true, cote, gain_pot, mise };
 }
 
+// ── Marchés « événement » ────────────────────────────────────────────────
+// Fusions, désertions, primaires restantes, incidents… : tout ce qui impacte
+// la campagne. Binaires ou multi-issues, créés et résolus MANUELLEMENT par
+// l'admin (aucun sondage ne les tranche). Cotes en pari-mutuel à prior.
+
+// Catalogue de propositions (semi-auto) : événements de campagne connus, à
+// ouvrir d'un clic par l'admin. À enrichir depuis l'actu au fil de l'eau.
+export function proposerMarchesEvenements() {
+  return [
+    { question: 'Le Likoud tiendra-t-il ses primaires le 4 août comme prévu ?', issues: [{ label: 'Oui', prob_open: 0.8 }, { label: 'Non', prob_open: 0.2 }] },
+    { question: "Une nouvelle fusion de listes sera-t-elle annoncée avant le dépôt du 9 septembre ?", issues: [{ label: 'Oui', prob_open: 0.5 }, { label: 'Non', prob_open: 0.5 }] },
+    { question: 'Le Sionisme religieux franchira-t-il le seuil au prochain sondage ?', issues: [{ label: 'Oui', prob_open: 0.5 }, { label: 'Non', prob_open: 0.5 }] },
+    { question: 'Une personnalité quittera-t-elle sa liste (défection) avant le scrutin ?', issues: [{ label: 'Oui', prob_open: 0.45 }, { label: 'Non', prob_open: 0.55 }] },
+  ];
+}
+
+// Ouvre un marché événement (binaire ou multi-issues). prob_open normalisées.
+export async function openMarcheEvenement({ question, issues, liquidity_k = DEFAULT_K }) {
+  if (!question || !Array.isArray(issues) || issues.length < 2) throw new Error('question + au moins 2 issues requises.');
+  const sum = issues.reduce((s, i) => s + (Number(i.prob_open) || 0), 0);
+  const manche = await nextManche();
+  const marcheId = uuid();
+  await createEntity('ParisMarche', {
+    id: marcheId, manche, type: 'evenement', question,
+    resolver_kind: 'manuel', resolver_args: {}, liquidity_k, status: 'open',
+  });
+  for (const iss of issues) {
+    const p = sum > 0 ? (Number(iss.prob_open) || 0) / sum : 1 / issues.length;
+    await createEntity('ParisIssue', {
+      id: uuid(), marche_id: marcheId, label: iss.label,
+      match_value: iss.match_value || iss.label, prob_open: p || 1 / issues.length, pool_reel: 0,
+    });
+  }
+  return { marche_id: marcheId, manche, issues: issues.length };
+}
+
+// Résolution manuelle d'un marché (l'admin déclare l'issue gagnante).
+export async function resolveMarcheManuel(marche_id, winning_issue_id) {
+  const m = (await filterEntity('ParisMarche', { id: marche_id }))[0];
+  if (!m) throw new Error('Marché introuvable.');
+  if (m.status !== 'open') throw new Error('Marché déjà résolu ou fermé.');
+  const issues = await filterEntity('ParisIssue', { marche_id });
+  const win = issues.find(i => i.id === winning_issue_id);
+  if (!win) throw new Error('Issue gagnante inconnue.');
+
+  const mises = await filterEntity('ParisMise', { marche_id });
+  let paid = 0;
+  for (const mise of mises) {
+    if (mise.statut !== 'en_jeu') continue;
+    const gagne = mise.issue_id === win.id;
+    await updateEntity('ParisMise', mise.id, { statut: gagne ? 'gagne' : 'perdu' });
+    if (gagne) {
+      const up = (await filterEntity('UserProgress', { user_email: mise.user_email }))[0];
+      if (up) {
+        await updateEntity('UserProgress', up.id, {
+          jetons: (up.jetons ?? 0) + mise.gain_pot,
+          total_points: (up.total_points ?? 0) + Math.round(mise.gain_pot * SCORE_ON_WIN_RATIO),
+        });
+        paid++;
+      }
+    }
+  }
+  await updateEntity('ParisMarche', marche_id, { status: 'resolved', winning_issue: win.id });
+  return { ok: true, mises_payees: paid };
+}
+
 // Enchaînement complet à l'arrivée d'un nouveau sondage : on résout les marchés
 // ouverts (ils avaient été ouverts sur des données plus anciennes), puis on
 // ouvre une nouvelle manche fondée sur ce sondage. Idempotent côté résolution

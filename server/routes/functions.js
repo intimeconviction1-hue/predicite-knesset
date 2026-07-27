@@ -6,7 +6,7 @@ import { submitPronosticSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from 
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
 import { ensureUserProgress, updateStreakAndBadges } from '../functions/miscFunctions.js';
 import { submitQuizAnswer } from '../functions/quizScoring.js';
-import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll } from '../functions/parisSondages.js';
+import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll, proposerMarchesEvenements, openMarcheEvenement, resolveMarcheManuel } from '../functions/parisSondages.js';
 import { getDefiSerie, startDefiSerie } from '../functions/defisQuiz.js';
 
 const router = express.Router();
@@ -60,6 +60,19 @@ router.post('/:name', requireAuth, async (req, res) => {
         if (body.action === 'resolveByPoll') {
           if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
           return res.json(await resolveByPoll(body.sondage_id));
+        }
+        // Marchés événements (admin) : proposer / ouvrir / résoudre manuellement.
+        if (body.action === 'proposerEvenements') {
+          if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
+          return res.json({ propositions: proposerMarchesEvenements() });
+        }
+        if (body.action === 'openEvenement') {
+          if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
+          return res.json(await openMarcheEvenement(body));
+        }
+        if (body.action === 'resolveEvenement') {
+          if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
+          return res.json(await resolveMarcheManuel(body.marche_id, body.winning_issue_id));
         }
         return res.status(400).json({ error: 'action inconnue' });
       }

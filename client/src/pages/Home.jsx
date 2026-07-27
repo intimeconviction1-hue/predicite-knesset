@@ -21,21 +21,25 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.04, duration: 0.3 }}
-      className="flex items-center gap-3 py-2"
     >
-      <span className="text-xs w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
-      <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
-        <motion.div
-          className="h-full rounded-full"
-          style={{ backgroundColor: liste.color || '#6B7280', opacity: belowThreshold ? 0.3 : 1 }}
-          initial={{ width: 0 }}
-          animate={{ width: `${Math.max(2, ((seats || 0) / maxSeats) * 100)}%` }}
-          transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
-        />
-      </div>
-      <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'var(--p-text-25)' : (liste.color || 'var(--p-gold-text)') }}>
-        {belowThreshold ? 'seuil' : `${seats} sièges`}
-      </span>
+      <Link
+        to={`${createPageUrl('Liste')}?slug=${liste.slug}`}
+        className="flex items-center gap-3 py-2 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-night-2)]"
+      >
+        <span className="text-xs w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
+        <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
+          <motion.div
+            className="h-full rounded-full"
+            style={{ backgroundColor: liste.color || '#6B7280', opacity: belowThreshold ? 0.3 : 1 }}
+            initial={{ width: 0 }}
+            animate={{ width: `${Math.max(2, ((seats || 0) / maxSeats) * 100)}%` }}
+            transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
+          />
+        </div>
+        <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'var(--p-text-25)' : (liste.color || 'var(--p-gold-text)') }}>
+          {belowThreshold ? 'seuil' : `${seats} sièges`}
+        </span>
+      </Link>
     </motion.div>
   );
 }

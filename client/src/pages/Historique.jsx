@@ -56,7 +56,7 @@ function EvolutionChart({ elections }) {
   );
 }
 
-function ElectionCard({ election, index }) {
+function ElectionCard({ election, index, slugByName }) {
   const [open, setOpen] = useState(false);
   const results = [...(election.results || [])].sort((a, b) => b.seats - a.seats);
   const winner = results[0];
@@ -110,7 +110,14 @@ function ElectionCard({ election, index }) {
               <div className="space-y-1.5">
                 {results.map((r, i) => (
                   <div key={i} className="flex items-center gap-2 text-xs">
-                    <span className="w-40 truncate flex-shrink-0" style={{ color: 'var(--p-text-60)' }}>{r.party_name}</span>
+                    {(() => {
+                      const slug = slugByName?.get(r.party_name?.trim().toLowerCase());
+                      return slug ? (
+                        <Link to={`${createPageUrl('Liste')}?slug=${slug}`} className="w-40 truncate flex-shrink-0 hover:underline" style={{ color: 'var(--p-blue)' }}>{r.party_name}</Link>
+                      ) : (
+                        <span className="w-40 truncate flex-shrink-0" style={{ color: 'var(--p-text-60)' }}>{r.party_name}</span>
+                      );
+                    })()}
                     <div className="flex-1 h-2.5 rounded-full overflow-hidden" style={{ background: 'var(--p-border-hover)' }}>
                       <div
                         className="h-full rounded-full"
@@ -145,6 +152,14 @@ export default function Historique() {
     queryKey: ['knesset-historique'],
     queryFn: () => base44.entities.KnessetHistorique.list('-knesset_number', 30),
   });
+
+  // Map nom de parti -> slug de la liste actuelle, pour lier un resultat
+  // historique a la fiche du parti UNIQUEMENT si le nom correspond exactement.
+  const { data: listesActuelles = [] } = useQuery({
+    queryKey: ['historique-listes'],
+    queryFn: () => base44.entities.Liste.filter({ is_active: true }),
+  });
+  const slugByName = new Map(listesActuelles.map(l => [l.name_fr.trim().toLowerCase(), l.slug]));
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -213,7 +228,7 @@ export default function Historique() {
           <>
             <EvolutionChart elections={elections} />
             <div className="space-y-3">
-              {elections.map((e, i) => <ElectionCard key={e.id} election={e} index={i} />)}
+              {elections.map((e, i) => <ElectionCard key={e.id} election={e} index={i} slugByName={slugByName} />)}
             </div>
           </>
         )}

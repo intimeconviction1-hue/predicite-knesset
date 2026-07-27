@@ -77,7 +77,7 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   const apprendreItems = [
-    { name: 'Learn', label: 'Comprendre', icon: BookOpen },
+    { name: 'Learn', label: "L'élection", icon: BookOpen },
     { name: 'Listes', label: 'Listes', icon: MapPin },
     { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
     { name: 'Historique', label: 'Historique', icon: Landmark },

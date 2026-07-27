@@ -40,7 +40,7 @@ export default function Learn() {
           >
             <Link to={createPageUrl('Home')} className="hover:text-white transition-colors">Accueil</Link>
             <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'rgba(245,240,232,0.7)' }}>Comprendre</span>
+            <span style={{ color: 'rgba(245,240,232,0.7)' }}>L'élection</span>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 8 }}
@@ -110,40 +110,22 @@ export default function Learn() {
           </div>
         </motion.div>
 
+        {/* Les primaires — première étape : les partis composent leurs listes,
+            AVANT le vote. Pédagogie + statut réel 2026, sourcé. */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 0.4 }}
-        >
-          <KnessetRulesModule />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 0.4, delay: 0.08 }}
-        >
-          <CoalitionRulesModule />
-        </motion.div>
-
-        {/* Les primaires — comment les partis composent leurs listes (pédagogie
-            + statut réel 2026, sourcé). */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 0.4, delay: 0.09 }}
+          transition={{ duration: 0.4, delay: 0.04 }}
           className="rounded-2xl border p-6 md:p-8"
           style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
           <div className="flex items-center gap-2 mb-2">
             <Users className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
-            <h3 className="text-lg font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Les primaires : qui choisit les candidats ?</h3>
+            <h3 className="text-lg font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>1. Les primaires : qui choisit les candidats ?</h3>
           </div>
           <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--p-text-60)' }}>
-            Chaque parti compose lui-même sa liste de candidats — l'ordre compte, car les sièges sont attribués de haut en bas. Deux méthodes coexistent :
+            Avant même le vote, chaque parti compose sa liste de candidats — l'ordre compte, car les sièges sont attribués de haut en bas. Deux méthodes coexistent :
           </p>
           <div className="grid sm:grid-cols-2 gap-3 mb-4">
             <div className="rounded-xl border p-4" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
@@ -161,6 +143,24 @@ export default function Learn() {
           <a href="https://www.jpost.com/israel-news/politics-and-diplomacy/article-902333" target="_blank" rel="noopener noreferrer" className="text-xs mt-3 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
             Source ↗
           </a>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+        >
+          <KnessetRulesModule />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4, delay: 0.08 }}
+        >
+          <CoalitionRulesModule />
         </motion.div>
 
         <motion.div

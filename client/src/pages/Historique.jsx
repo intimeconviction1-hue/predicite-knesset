@@ -6,6 +6,22 @@ import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronRight, ChevronDown, Landmark, ExternalLink, Info } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
+import Hemicycle from '@/components/knesset/Hemicycle';
+
+// Palette pour colorer l'hémicycle d'une Knesset passée (par ordre de sièges).
+const HISTO_PALETTE = ['#2B5CE6', '#C8102E', '#F59E0B', '#0D9488', '#8B5CF6', '#06B6D4', '#84CC16', '#EC4899', '#F97316', '#64748B', '#14B8A6', '#7C3AED', '#0EA5E9', '#78716C'];
+
+// Durée lisible entre deux dates (ex. « 3 ans 4 mois »).
+function dureeLisible(from, to) {
+  const a = new Date(from), b = new Date(to);
+  if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return null;
+  let mois = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
+  if (mois < 0) mois = 0;
+  const ans = Math.floor(mois / 12), m = mois % 12;
+  if (ans === 0) return `${m} mois`;
+  if (m === 0) return `${ans} an${ans > 1 ? 's' : ''}`;
+  return `${ans} an${ans > 1 ? 's' : ''} ${m} mois`;
+}
 
 function EvolutionChart({ elections }) {
   if (!elections || elections.length < 2) return null;
@@ -56,7 +72,7 @@ function EvolutionChart({ elections }) {
   );
 }
 
-function ElectionCard({ election, index, slugByName }) {
+function ElectionCard({ election, index, slugByName, duree }) {
   const [open, setOpen] = useState(false);
   const results = [...(election.results || [])].sort((a, b) => b.seats - a.seats);
   const winner = results[0];
@@ -87,6 +103,7 @@ function ElectionCard({ election, index, slugByName }) {
           <p className="text-xs mt-0.5" style={{ color: 'var(--p-text-40)' }}>
             {winner ? `${winner.party_name} en tête (${winner.seats} sièges)` : ''}
             {election.pm_after ? ` · PM : ${election.pm_after}` : ' · aucun gouvernement formé'}
+            {duree ? ` · a duré ${duree}` : ''}
           </p>
         </div>
         <ChevronDown className={`w-4 h-4 flex-shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} style={{ color: 'var(--p-text-25)' }} />
@@ -105,7 +122,22 @@ function ElectionCard({ election, index, slugByName }) {
               <div className="flex flex-wrap gap-4 text-xs pt-4" style={{ color: 'var(--p-text-40)' }}>
                 {election.turnout_pct != null && <span>Participation : <strong style={{ color: 'var(--p-text)' }}>{election.turnout_pct}%</strong></span>}
                 {election.threshold_pct != null && <span>Seuil électoral : <strong style={{ color: 'var(--p-text)' }}>{election.threshold_pct}%</strong></span>}
+                {duree && <span>Durée : <strong style={{ color: 'var(--p-text)' }}>{duree}</strong></span>}
               </div>
+
+              {/* Hémicycle de composition de cette Knesset */}
+              {results.length > 0 && (
+                <div className="rounded-xl border p-3" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
+                  <p className="text-[10px] uppercase tracking-wide text-center mb-1" style={{ color: 'var(--p-text-40)' }}>Composition de la {election.knesset_number}<sup>e</sup> Knesset</p>
+                  <Hemicycle
+                    seatsByListe={results.map(r => ({ liste_id: r.party_name, seats: r.seats }))}
+                    listes={results.map((r, i) => ({ id: r.party_name, name_fr: r.party_name, color: HISTO_PALETTE[i % HISTO_PALETTE.length], bloc: 'x' }))}
+                    height={150}
+                    showMajorityLine={true}
+                    animate={false}
+                  />
+                </div>
+              )}
 
               <div className="space-y-1.5">
                 {results.map((r, i) => (
@@ -160,6 +192,8 @@ export default function Historique() {
     queryFn: () => base44.entities.Liste.filter({ is_active: true }),
   });
   const slugByName = new Map(listesActuelles.map(l => [l.name_fr.trim().toLowerCase(), l.slug]));
+  // Date de chaque Knesset -> duree = ecart jusqu'a l'election suivante.
+  const dateByKnesset = new Map(elections.map(e => [e.knesset_number, e.election_date]));
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -224,7 +258,11 @@ export default function Historique() {
           <>
             <EvolutionChart elections={elections} />
             <div className="space-y-3">
-              {elections.map((e, i) => <ElectionCard key={e.id} election={e} index={i} slugByName={slugByName} />)}
+              {elections.map((e, i) => {
+                const nextDate = dateByKnesset.get(e.knesset_number + 1);
+                const duree = nextDate ? dureeLisible(e.election_date, nextDate) : 'en cours';
+                return <ElectionCard key={e.id} election={e} index={i} slugByName={slugByName} duree={duree} />;
+              })}
             </div>
           </>
         )}

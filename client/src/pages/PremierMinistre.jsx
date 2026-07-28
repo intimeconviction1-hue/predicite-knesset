@@ -6,6 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info, X } from 'lucide-react';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
+import CinematicHero from '@/components/knesset/CinematicHero';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
 
@@ -98,17 +99,15 @@ export default function PremierMinistre() {
           <ChevronLeft className="w-4 h-4" /> Toutes les listes
         </Link>
 
-        {/* Header — statue de la Menorah devant la Knesset, de nuit (libre, Wikimedia Commons) */}
-        <div className="relative overflow-hidden rounded-2xl border p-6 md:p-8 mb-6 text-center" style={{ background: 'var(--p-card)', borderColor: 'var(--p-gold-border)' }}>
-          <div className="absolute inset-x-0 top-0 h-40 pointer-events-none" style={{ background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)' }} />
-          <div className="relative">
-            <Crown className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--p-gold-text)' }} />
-            <h1 className="text-2xl md:text-3xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.01em' }}>Qui sera Premier ministre ?</h1>
-            <p className="text-sm max-w-xl mx-auto" style={{ color: 'var(--p-text-60)' }}>
-              Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard.
-            </p>
-          </div>
-        </div>
+        {/* Hero cinématique institutionnel (composant maison CinematicHero) */}
+        <CinematicHero
+          size="md"
+          photos={['/images/pm-hero.jpg']}
+          position="center 22%"
+          title="Qui sera Premier ministre ?"
+          subtitle="Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard."
+          className="rounded-2xl mb-6"
+        />
 
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"
           style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>

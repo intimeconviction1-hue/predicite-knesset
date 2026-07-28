@@ -234,3 +234,25 @@ CREATE TABLE IF NOT EXISTS paris_mises (
 );
 CREATE INDEX IF NOT EXISTS idx_mises_user ON paris_mises(user_email);
 CREATE INDEX IF NOT EXISTS idx_mises_marche ON paris_mises(marche_id);
+
+-- ───────────────────────────────────────────────────────────────────────────
+-- Ligues privées : classements entre amis, sur invitation par code court.
+-- Rétention : jouer « contre ses potes » plutôt que contre des inconnus.
+-- Purement du jeu de points — aucune donnée sensible, aucun argent.
+CREATE TABLE IF NOT EXISTS ligues (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  invite_code TEXT UNIQUE NOT NULL,          -- code court partagé (ex. 7F3K9Q)
+  owner_email TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+
+CREATE TABLE IF NOT EXISTS ligue_membres (
+  id TEXT PRIMARY KEY,
+  ligue_id TEXT NOT NULL REFERENCES ligues(id) ON DELETE CASCADE,
+  user_email TEXT NOT NULL,
+  joined_at TEXT NOT NULL DEFAULT (now_iso()),
+  UNIQUE(ligue_id, user_email)
+);
+CREATE INDEX IF NOT EXISTS idx_ligue_membres_ligue ON ligue_membres(ligue_id);
+CREATE INDEX IF NOT EXISTS idx_ligue_membres_user ON ligue_membres(user_email);

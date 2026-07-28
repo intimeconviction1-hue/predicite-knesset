@@ -3,6 +3,7 @@ import { base44 } from '@/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
+import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 
 const CATEGORY_LABEL = { regles: 'Règles du jeu', historique: 'Historique', actualite: 'Actualité' };
 
@@ -19,6 +20,7 @@ export default function QuizWidget({ category, title }) {
   const [selected, setSelected] = useState(null);
   const [result, setResult] = useState(null);
   const [difficulte, setDifficulte] = useState('connaisseur');
+  const [celebrate, setCelebrate] = useState(0);
   const queryClient = useQueryClient();
 
   useEffect(() => { base44.auth.me().then(setUser).catch(() => {}); }, []);
@@ -58,14 +60,19 @@ export default function QuizWidget({ category, title }) {
       try {
         const res = await base44.functions.invoke('submitQuizAnswer', { question_id: question.id, chosen_index: idx });
         setResult(res);
+        if (res?.is_correct) setCelebrate(c => c + 1);
         queryClient.invalidateQueries({ queryKey: ['quiz-reponses', user.email] });
         queryClient.invalidateQueries({ queryKey: ['home-user-progress'] });
         queryClient.invalidateQueries({ queryKey: ['defi-serie'] });
       } catch {
-        setResult({ is_correct: idx === question.correct_index, correct_index: question.correct_index, explanation: question.explanation });
+        const ok = idx === question.correct_index;
+        setResult({ is_correct: ok, correct_index: question.correct_index, explanation: question.explanation });
+        if (ok) setCelebrate(c => c + 1);
       }
     } else {
-      setResult({ is_correct: idx === question.correct_index, correct_index: question.correct_index, explanation: question.explanation });
+      const ok = idx === question.correct_index;
+      setResult({ is_correct: ok, correct_index: question.correct_index, explanation: question.explanation });
+      if (ok) setCelebrate(c => c + 1);
     }
   };
 
@@ -74,6 +81,7 @@ export default function QuizWidget({ category, title }) {
 
   return (
     <div className="rounded-2xl border p-5" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+      <ConfettiBurst trigger={celebrate} />
       <div className="flex items-center justify-between mb-3 gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <HelpCircle className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />

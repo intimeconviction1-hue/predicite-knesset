@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
 import { Search, Vote, Filter, ChevronRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -10,6 +9,7 @@ import { createPageUrl } from '@/utils';
 
 import ListeCard from '@/components/cards/ListeCard';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
+import CinematicHero from '@/components/knesset/CinematicHero';
 
 const BLOC_OPTIONS = [
   { value: 'all', label: 'Tous les blocs' },
@@ -44,33 +44,23 @@ export default function Listes() {
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      {/* Header — photo réelle de l'hémicycle de la Knesset (libre, Wikimedia Commons) */}
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[300px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-7xl mx-auto px-4 py-12">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="flex items-center gap-2 mb-2">
-              <Vote className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
-              <h1 className="text-2xl md:text-3xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}>
-                Listes en lice — Knesset 2026
-              </h1>
-            </div>
-            <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>
-              {listes.length} listes suivies · Scrutin du 27 octobre 2026 · Sondages sièges mis à jour régulièrement
-            </p>
-            <button
-              onClick={() => setShowRules(!showRules)}
-              className="mt-4 text-sm font-semibold flex items-center gap-1 hover:opacity-80 transition-opacity"
-              style={{ color: 'var(--p-gold-text)' }}
-            >
-              {showRules ? 'Masquer' : 'Comment lire ces sièges ?'} <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showRules ? 'rotate-90' : ''}`} />
-            </button>
-          </motion.div>
-        </div>
-      </div>
+      {/* Header cinématique */}
+      <CinematicHero
+        size="md"
+        photos={['/images/listes-hero.jpg']}
+        position="center 30%"
+        title="Listes en lice — Knesset 2026"
+        subtitle={<>{listes.length} listes suivies · Scrutin du 27 octobre 2026 · Sondages sièges mis à jour régulièrement</>}
+        actions={
+          <button
+            onClick={() => setShowRules(!showRules)}
+            className="inline-flex items-center gap-1 px-6 py-3.5 rounded-[10px] font-semibold text-[15px] text-white hover:opacity-90 transition-opacity"
+            style={{ background: 'rgba(255,255,255,0.10)', border: '0.5px solid rgba(255,255,255,0.25)' }}
+          >
+            {showRules ? 'Masquer' : 'Comment lire ces sièges ?'} <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showRules ? 'rotate-90' : ''}`} />
+          </button>
+        }
+      />
 
       {showRules && (
         <div className="max-w-4xl mx-auto px-4 pt-8">
@@ -117,8 +107,8 @@ export default function Listes() {
         ) : filteredListes.length === 0 ? (
           <div className="text-center py-16">
             <Vote className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--p-text-25)' }} />
-            <h3 className="text-lg font-semibold" style={{ color: 'var(--p-text-60)' }}>Aucune liste trouvée</h3>
-            <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Essayez de modifier vos filtres</p>
+            <h3 className="text-lg font-semibold" style={{ color: 'var(--p-text-60)' }}>Aucune liste ne correspond</h3>
+            <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Change ta recherche ou tes filtres pour retrouver ta liste.</p>
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">

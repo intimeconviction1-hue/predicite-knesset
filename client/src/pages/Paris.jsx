@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { ChevronRight, Coins, TrendingUp, Info, ArrowRight } from 'lucide-react';
+import { Info, ArrowRight } from 'lucide-react';
+import CinematicHero from '@/components/knesset/CinematicHero';
+import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 
 const MISE_MIN = 10, MISE_MAX = 500, MISE_STEP = 10;
 
@@ -13,6 +14,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
   const [mise, setMise] = useState(50);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
+  const [celebrate, setCelebrate] = useState(0);
 
   const issue = market.issues.find(i => i.id === selected);
   const cote = issue?.cote || 0;
@@ -25,6 +27,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
     try {
       const res = await base44.functions.invoke('parisSondages', { action: 'placerMise', issue_id: selected, mise });
       setMsg({ ok: true, text: `Mise placée à ${res.cote} — gain potentiel ${res.gain_pot} jetons.` });
+      setCelebrate(c => c + 1);
       onPlaced?.();
     } catch (e) {
       setMsg({ ok: false, text: e?.message || 'Échec de la mise.' });
@@ -35,6 +38,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
 
   return (
     <div className="rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
+      <ConfettiBurst trigger={celebrate} />
       <div className="flex items-center gap-2 mb-3 flex-wrap">
         {market.type === 'evenement'
           ? <span className="p-badge p-badge-blue">Événement</span>
@@ -154,47 +158,14 @@ export default function Paris() {
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      {/* Hero clair */}
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[340px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-3xl mx-auto px-4 py-12 md:py-14">
-          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Paris sur sondages</span>
-          </div>
-          <div className="flex items-start justify-between gap-4 flex-wrap">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <TrendingUp className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-                <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>Jeu de points · gratuit</p>
-              </div>
-              <motion.h1
-                initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-                className="text-3xl md:text-5xl font-black leading-tight"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-              >
-                Parie sur les sondages
-              </motion.h1>
-            </div>
-            {jetons != null && (
-              <div className="rounded-xl px-4 py-3 text-center" style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-                <div className="flex items-center gap-1.5 justify-center">
-                  <Coins className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-                  <span className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-gold-text)' }}>{jetons.toLocaleString('fr-FR')}</span>
-                </div>
-                <div className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'var(--p-text-40)' }}>jetons</div>
-              </div>
-            )}
-          </div>
-          <p className="text-base md:text-lg leading-relaxed max-w-2xl mt-4" style={{ color: 'var(--p-text-60)' }}>
-            Mise tes jetons sur ce que diront les prochains sondages. Plus une issue est improbable, plus la cote paie. Résolution à chaque nouveau sondage. C'est gratuit — que des points, jamais d'argent.
-          </p>
-        </div>
-      </div>
+      <CinematicHero
+        size="sm"
+        photos={['/images/knesset-hero.jpg']}
+        position="center 30%"
+        kicker="Jeu de points · gratuit"
+        title="Parie sur les sondages"
+        subtitle="Mise tes jetons sur ce que diront les prochains sondages. Plus une issue est improbable, plus la cote paie. Résolution à chaque nouveau sondage. C'est gratuit — que des points, jamais d'argent."
+      />
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-40)' }}>

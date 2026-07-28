@@ -6,10 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { ChevronRight, Trophy, ArrowRight, TrendingUp } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
-import HeroBackdrop from '@/components/knesset/HeroBackdrop';
+import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
+import ShareProjection from '@/components/knesset/ShareProjection';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
-import ElectionTimeline from '@/components/knesset/ElectionTimeline';
 
 // Jour du scrutin (même convention que CountdownTimer : 07:00 heure d'Israël).
 const ELECTION_DAY = new Date('2026-10-27T04:00:00Z');
@@ -41,15 +41,6 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
         </span>
       </Link>
     </motion.div>
-  );
-}
-
-function Tile({ value, label }) {
-  return (
-    <div className="rounded-xl px-3 py-3 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
-      <p className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-text)' }}>{value}</p>
-      <p className="text-[10.5px] mt-1.5" style={{ color: 'var(--p-text-40)' }}>{label}</p>
-    </div>
   );
 }
 
@@ -131,95 +122,50 @@ export default function Home() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
 
-      {/* Hero — l'hémicycle vivant en pièce maîtresse. Thème clair unifié (le fond
-          crème + halos sont fournis par le Layout) ; un simple halo doré au sommet
-          concentre le regard. L'accroche pose l'enjeu (qui gouverne ?), un seul CTA
-          mène au pronostic. */}
-      <div className="relative overflow-hidden">
-        {/* liseré tricolore */}
-        <div className="p-tricolor"><div /><div /><div /></div>
-        {/* fond animé : plusieurs photos institutionnelles en fondu croisé (Ken Burns) */}
-        <HeroBackdrop
-          images={[
-            '/images/knesset-hero.jpg',
-            '/images/listes-hero.jpg',
-            '/images/pm-hero.jpg',
-          ]}
-          position="center 26%"
-        />
-        {/* voile crème allégé (photos bien visibles) puis fondu vers le crème avant
-            l'hémicycle, pour garder le texte lisible et les sièges nets. */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'linear-gradient(180deg, rgba(248,246,240,0.22) 0%, rgba(248,246,240,0.40) 32%, rgba(248,246,240,0.82) 58%, var(--p-night) 80%)',
-        }} />
-        {/* halo doré au sommet pour concentrer le regard */}
-        <div className="absolute inset-x-0 top-0 h-[420px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.22), transparent 62%)',
-        }} />
-
-        <div className="relative max-w-3xl mx-auto px-4 pt-12 md:pt-16 pb-6 text-center">
-          {/* badge scrutin */}
-          <div className="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full"
-            style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-            <motion.span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--p-gold)' }}
-              animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>
-              J-{daysLeft} · scrutin du 27 octobre 2026 · Knesset
+      {/* Hero cinématique institutionnel (composant maison CinematicHero) : vraie
+          photo Ken Burns + voile bleu + Menorah + parallaxe. « Campagne en direct ». */}
+      <CinematicHero
+        size="lg"
+        photos={['/images/knesset-hero.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
+        position="center 26%"
+        badge={{ text: `La campagne en direct · J-${daysLeft}`, live: true }}
+        kicker="Élections à la Knesset · 25ᵉ législature · 27 octobre 2026"
+        title={<>Le scrutin est à <HeroGold>toi</HeroGold>.</>}
+        subtitle="L'observatoire francophone de la campagne israélienne. Suis chaque sondage et chaque rebondissement, pronostique, parie, grimpe au classement. C'est gratuit."
+        actions={<>
+          <Link to={createPageUrl('Listes')}
+            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-semibold text-[15px] transition-transform hover:-translate-y-0.5"
+            style={{ background: '#fff', color: 'var(--p-text)', boxShadow: '0 12px 30px -10px rgba(0,0,0,0.5)' }}>
+            Je fais mon pronostic <ArrowRight className="w-4 h-4" />
+          </Link>
+          <Link to={createPageUrl('ReglesDuJeu')}
+            className="inline-flex items-center px-6 py-3.5 rounded-[10px] font-semibold text-[15px] transition-colors text-white"
+            style={{ background: 'rgba(255,255,255,0.10)', border: '0.5px solid rgba(255,255,255,0.25)' }}>
+            Comment ça marche
+          </Link>
+        </>}
+      >
+        {/* état joueur (réel) ou ligne d'accroche honnête pour les visiteurs */}
+        {user && progress ? (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+            className="mt-6 inline-flex items-center gap-3 px-4 py-2.5 rounded-xl"
+            style={{ background: 'rgba(255,255,255,0.10)', border: '0.5px solid rgba(255,255,255,0.20)' }}>
+            <Trophy className="w-3.5 h-3.5" style={{ color: '#ffd77a' }} />
+            <span className="text-sm text-white">Bonjour {firstName} ·</span>
+            <span className="font-bold text-sm font-mono" style={{ color: '#ffd77a' }}>
+              {(progress.total_points || 0).toLocaleString('fr-FR')} pts
             </span>
-          </div>
-
-          <p className="mb-2 text-sm font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-blue)' }}>
-            Législatives israéliennes 2026 · en français
+          </motion.div>
+        ) : (
+          <p className="mt-5 text-[13px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            Gratuit · ton score au dépouillement, le soir du 27 octobre.
           </p>
+        )}
+      </CinematicHero>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="text-4xl md:text-6xl font-black mb-4"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.025em', lineHeight: 1.04 }}>
-            Le scrutin est à <span style={{ color: 'var(--p-gold-text)' }}>toi</span>.
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }}
-            className="text-base md:text-lg mb-7 max-w-md mx-auto"
-            style={{ color: 'var(--p-text-60)', lineHeight: 1.55 }}>
-            Pronostique les 120 sièges, parie sur chaque sondage et les événements de la campagne, grimpe au classement. C'est gratuit.
-          </motion.p>
-
-          {/* CTA — un seul bouton principal, mène au pronostic (page Listes) */}
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <Link to={createPageUrl('Listes')}
-              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-semibold text-[15px] text-white transition-transform"
-              style={{ background: 'var(--p-blue)', boxShadow: '0 10px 24px -8px rgba(43,92,230,0.6)' }}>
-              Je fais mon pronostic <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link to={createPageUrl('ReglesDuJeu')}
-              className="inline-flex items-center px-6 py-3.5 rounded-[10px] font-semibold text-[15px] transition-colors"
-              style={{ color: 'var(--p-text-60)', border: '0.5px solid var(--p-border)' }}>
-              Comment ça marche
-            </Link>
-          </div>
-
-          {/* état joueur (réel) ou ligne d'accroche honnête pour les visiteurs */}
-          {user && progress ? (
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
-              className="mt-6 inline-flex items-center gap-3 px-4 py-2.5 rounded-xl"
-              style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-              <Trophy className="w-3.5 h-3.5" style={{ color: 'var(--p-gold-text)' }} />
-              <span className="text-sm" style={{ color: 'var(--p-text-60)' }}>
-                Bonjour {firstName} ·
-              </span>
-              <span className="font-bold text-sm font-mono" style={{ color: 'var(--p-gold-text)' }}>
-                {(progress.total_points || 0).toLocaleString('fr-FR')} pts
-              </span>
-            </motion.div>
-          ) : (
-            <p className="mt-5 text-[13px]" style={{ color: 'var(--p-text-40)' }}>
-              Gratuit · ton score au dépouillement, le soir du 27 octobre.
-            </p>
-          )}
-        </div>
+      {/* Bloc hémicycle — sur fond clair, juste sous le hero */}
+      <div className="relative overflow-hidden pt-2">
 
         {/* Hémicycle — pièce maîtresse, avec les totaux de blocs et la ligne 61 */}
         <div className="relative max-w-2xl mx-auto px-4 pb-4">
@@ -267,15 +213,19 @@ export default function Home() {
               ? `Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
               : 'En attente du premier sondage sièges'}
           </p>
+          {latestPoll && (
+            <div className="flex justify-center mt-3">
+              <ShareProjection
+                seatsByListe={rankedListes.filter(l => l._seats > 0).map(l => ({ seats: l._seats, color: l.color, name: l.name_fr }))}
+                coalition={coalitionSeats}
+                opposition={oppositionSeats}
+                arab={arabSeats}
+                source={`Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`}
+              />
+            </div>
+          )}
         </div>
 
-        {/* tuiles factuelles */}
-        <div className="max-w-2xl mx-auto px-4 pt-4 pb-2 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Tile value={`J-${daysLeft}`} label="avant le scrutin" />
-          <Tile value="120" label="sièges en jeu" />
-          <Tile value="61" label="pour gouverner" />
-          <Tile value={listes.length || '—'} label="listes en lice" />
-        </div>
       </div>
 
       {/* Cotes en direct — les paris visibles dès l'accueil (le hook de rétention) */}
@@ -302,36 +252,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Compte à rebours + calendrier — le scrutin approche, sentiment de progression */}
-      <div className="max-w-3xl mx-auto px-4 py-10">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 0.4 }}
-          className="rounded-3xl p-6 md:p-10 text-center"
-          style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}
-        >
-          <p className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: 'var(--p-gold-text)' }}>
-            Le scrutin approche
-          </p>
-          <div className="flex justify-center">
-            <CountdownTimer />
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 0.4, delay: 0.08 }}
-          className="rounded-3xl p-6 md:p-10 mt-4"
-          style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}
-        >
-          <ElectionTimeline />
-        </motion.div>
-      </div>
-
       {/* Teaser Actu — la campagne en direct, visible dès l'accueil */}
       {actuItems.length > 0 && (
         <div className="max-w-3xl mx-auto px-4 pb-4">
@@ -357,6 +277,25 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Compte à rebours — le scrutin approche (beat émotionnel avant le détail) */}
+      <div className="max-w-3xl mx-auto px-4 py-10">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-10%' }}
+          transition={{ duration: 0.4 }}
+          className="rounded-3xl p-6 md:p-10 text-center"
+          style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}
+        >
+          <p className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: 'var(--p-gold-text)' }}>
+            Le scrutin approche
+          </p>
+          <div className="flex justify-center">
+            <CountdownTimer />
+          </div>
+        </motion.div>
+      </div>
 
       {/* Classement des listes */}
       <div className="max-w-3xl mx-auto px-4 pb-16">

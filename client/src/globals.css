@@ -46,10 +46,13 @@
        sans y toucher — seules les VALEURS changent, vers --p-learn-bg/
        --p-learn-card/--p-ink qui existaient déjà, jamais branchés ailleurs
        que BallotChip. */
-    --p-night:        #F8F6F0;
-    --p-night-2:      #F1ECE0;
+    /* 2026-07-28 (Simon : « enlever ce beige ») — bascule du crème chaud vers
+       un blanc froid bleuté (identité Israël bleu/blanc). Mêmes noms de tokens,
+       seules les valeurs changent. */
+    --p-night:        #EDF1F9;
+    --p-night-2:      #E2E9F6;
     --p-card:         #FFFFFF;
-    --p-learn-bg:     #F8F6F0;
+    --p-learn-bg:     #EDF1F9;
     --p-learn-card:   #FFFFFF;
     --p-learn-border: rgba(5, 10, 24, 0.08);
     --p-learn-text:   #050A18;
@@ -70,7 +73,7 @@
     --p-red-dim:      rgba(200, 16, 46, 0.15);
     --p-green:        #1A8C55;
     --p-green-dim:    rgba(26, 140, 85, 0.15);
-    --p-paper:        #F3EEE3;
+    --p-paper:        #E8EEF8;
     --p-ink:          #14203D;
     --p-text:         #14203D;
     /* Alphas recalculés par mesure réelle (pas de simple report des valeurs

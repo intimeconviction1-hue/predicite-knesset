@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { ChevronRight, ShieldCheck, Globe, FileWarning, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Globe, FileWarning, ExternalLink } from 'lucide-react';
+import CinematicHero from '@/components/knesset/CinematicHero';
 
 const SOURCES = [
   {
@@ -29,57 +30,14 @@ const SOURCES = [
 export default function Methodologie() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(34,197,94,0.14), transparent 62%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'var(--p-text-40)' }}
-          >
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }}>Sources & Méthodologie</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.06 }}
-            className="flex items-center gap-2 mb-3 px-3 py-1.5 rounded-full w-fit"
-            style={{ background: 'rgba(34,197,94,0.15)', border: '0.5px solid rgba(34,197,94,0.4)' }}
-          >
-            <motion.div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22C55E' }}
-              animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
-            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: '#16794A' }}>
-              Vérifié en continu · zéro donnée inventée
-            </span>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.08 }}
-            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-          >
-            Sources & Méthodologie
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.16 }}
-            className="text-base md:text-lg leading-relaxed max-w-2xl"
-            style={{ color: 'var(--p-text-60)' }}
-          >
-            PrédiCité ne publie que des données réelles, sourcées et datées.
-            Aucun chiffre n'est inventé, estimé ou complété pour « faire joli ».
-          </motion.p>
-        </div>
-      </div>
+      <CinematicHero
+        size="sm"
+        photos={['/images/methodologie-hero.jpg']}
+        position="center 30%"
+        badge={{ text: 'Vérifié en continu · zéro donnée inventée', live: false }}
+        title="Sources & Méthodologie"
+        subtitle="PrédiCité ne publie que des données réelles, sourcées et datées. Aucun chiffre n'est inventé, estimé ou complété pour « faire joli »."
+      />
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
         {SOURCES.map(({ title, icon: Icon, color, items }, index) => (

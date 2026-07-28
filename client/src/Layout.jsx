@@ -3,13 +3,14 @@ import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   Home, MapPin, Trophy, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  LogOut, BarChart2, Landmark, Newspaper, Flame, TrendingUp
+  LogOut, BarChart2, Landmark, Newspaper, Flame, TrendingUp, Coins, Users
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
+import Onboarding from '@/components/knesset/Onboarding';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -73,6 +74,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Paris', label: 'Paris sur sondages', icon: TrendingUp },
     { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen },
     { name: 'Leaderboard', label: 'Classement', icon: Trophy },
+    { name: 'Ligues', label: 'Ligues privées', icon: Users },
     { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
   ];
 
@@ -97,6 +99,42 @@ export default function Layout({ children, currentPageName }) {
         ? 'text-[var(--p-gold-text)] bg-[rgba(20,32,61,0.06)]'
         : 'text-[var(--p-text-60)] hover:text-[var(--p-text)] hover:bg-[rgba(20,32,61,0.05)]'
     }`;
+
+  // Statut permanent du joueur : série · points · jetons. Réutilisé dans le header
+  // desktop ET dans une barre compacte mobile (mobile n'affichait rien jusque-là).
+  // N'affiche que des VRAIES valeurs issues de userProgress (jamais de faux chiffre).
+  const mono = { fontFamily: 'var(--font-mono)' };
+  const hasStats = !!(user && userProgress && (
+    (userProgress.current_streak || 0) > 1 ||
+    (userProgress.total_points || 0) > 0 ||
+    (userProgress.jetons || 0) > 0
+  ));
+  const statChips = (compact) => {
+    if (!user || !userProgress) return null;
+    const streak = userProgress.current_streak || 0;
+    const points = userProgress.total_points || 0;
+    const jetons = userProgress.jetons || 0;
+    const pad = compact ? 'px-2.5 py-1' : 'px-3 py-1.5';
+    const chips = [];
+    if (streak > 1) chips.push(
+      <div key="s" className={`rounded-full border border-orange-400/30 flex items-center gap-1 ${compact ? 'px-2 py-1' : 'px-2.5 py-1.5'}`} style={{ background: 'rgba(194,65,12,0.08)' }} title={`${streak} jours d'activité consécutifs`}>
+        <Flame className="w-3.5 h-3.5" style={{ color: '#C2410C' }} />
+        <span className="text-sm font-bold" style={{ ...mono, color: '#C2410C' }}>{streak}</span>
+      </div>
+    );
+    if (points > 0) chips.push(
+      <div key="p" className={`rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5 ${pad}`} style={{ background: 'rgba(212,175,55,0.1)' }} title="Ton score total (permanent)">
+        <span className="text-sm font-bold" style={{ ...mono, color: 'var(--p-gold-text)' }}>{points.toLocaleString('fr-FR')} pts</span>
+      </div>
+    );
+    if (jetons > 0) chips.push(
+      <div key="j" className={`rounded-full border border-[var(--p-blue)]/30 flex items-center gap-1.5 ${pad}`} style={{ background: 'var(--p-blue-dim)' }} title="Tes jetons de la semaine (à parier)">
+        <Coins className="w-3.5 h-3.5" style={{ color: 'var(--p-blue)' }} />
+        <span className="text-sm font-bold" style={{ ...mono, color: 'var(--p-blue)' }}>{jetons.toLocaleString('fr-FR')}</span>
+      </div>
+    );
+    return chips.length ? <>{chips}</> : null;
+  };
 
   const LogoSVG = () => (
     <svg width="28" height="28" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
@@ -138,7 +176,7 @@ export default function Layout({ children, currentPageName }) {
         }} />
         <div className="p-bg-blob-a" style={{
           position: 'absolute', top: '-14%', left: '-10%', width: '54vw', height: '54vw', maxWidth: 700, maxHeight: 700,
-          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.32, filter: 'blur(85px)',
+          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.15, filter: 'blur(85px)',
         }} />
         <div className="p-bg-blob-b" style={{
           position: 'absolute', top: '0%', right: '-14%', width: '48vw', height: '48vw', maxWidth: 640, maxHeight: 640,
@@ -150,7 +188,7 @@ export default function Layout({ children, currentPageName }) {
         }} />
         <div className="p-bg-blob-d" style={{
           position: 'absolute', bottom: '-16%', right: '-8%', width: '52vw', height: '52vw', maxWidth: 680, maxHeight: 680,
-          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.3, filter: 'blur(85px)',
+          borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.14, filter: 'blur(85px)',
         }} />
         <div style={{
           position: 'absolute', inset: 0,
@@ -175,7 +213,7 @@ export default function Layout({ children, currentPageName }) {
       <header className="hidden md:block sticky top-0.5 z-50">
         <div
           className="border-b border-[rgba(20,32,61,0.08)]"
-          style={{ background: 'rgba(248,246,240,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
+          style={{ background: 'rgba(237,241,249,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
         >
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
@@ -280,21 +318,7 @@ export default function Layout({ children, currentPageName }) {
 
               {/* User bloc */}
               <div className="flex items-center gap-3 flex-shrink-0">
-                {user && userProgress && userProgress.current_streak > 1 && (
-                  <div className="px-2.5 py-1.5 rounded-full border border-orange-400/30 flex items-center gap-1" style={{ background: 'rgba(194,65,12,0.08)' }} title={`${userProgress.current_streak} jours d'activité consécutifs`}>
-                    <Flame className="w-3.5 h-3.5" style={{ color: '#C2410C' }} />
-                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: '#C2410C' }}>
-                      {userProgress.current_streak}
-                    </span>
-                  </div>
-                )}
-                {user && userProgress && userProgress.total_points > 0 && (
-                  <div className="px-3 py-1.5 rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5" style={{ background: 'rgba(212,175,55,0.1)' }}>
-                    <span className="text-sm font-bold" style={{ fontFamily: "'JetBrains Mono', monospace", color: 'var(--p-gold-text)' }}>
-                      {(userProgress.total_points || 0).toLocaleString('fr-FR')} pts
-                    </span>
-                  </div>
-                )}
+                {statChips(false)}
                 {user ? (
                   <div className="relative" ref={userMenuRef}>
                     <button
@@ -352,7 +376,7 @@ export default function Layout({ children, currentPageName }) {
       <nav aria-label="Navigation mobile" className="md:hidden sticky top-0.5 z-50">
         <div
           className="border-b border-[rgba(20,32,61,0.08)]"
-          style={{ background: 'rgba(248,246,240,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
+          style={{ background: 'rgba(237,241,249,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
         >
           <div className="flex items-center justify-between h-13 px-4 py-2">
             <Link to={createPageUrl('Home')} className="flex items-center gap-2">
@@ -374,6 +398,14 @@ export default function Layout({ children, currentPageName }) {
               </button>
             </div>
           </div>
+
+          {/* Barre de statut permanente (mobile) — série · points · jetons */}
+          {hasStats && (
+            <div className="flex items-center gap-2 px-4 pb-2 pt-1.5 overflow-x-auto border-t border-[rgba(20,32,61,0.06)]">
+              <span className="text-[10px] font-bold uppercase tracking-widest flex-shrink-0" style={{ color: 'var(--p-text-40)' }}>Ton statut</span>
+              {statChips(true)}
+            </div>
+          )}
 
           <AnimatePresence>
             {isMobileMenuOpen && (
@@ -448,6 +480,9 @@ export default function Layout({ children, currentPageName }) {
       <main id="main-content" tabIndex="-1">
         {children}
       </main>
+
+      {/* Onboarding « premier pronostic » — modale au tout premier passage */}
+      <Onboarding />
 
       {/* Footer */}
       <footer role="contentinfo" className="border-t border-[rgba(20,32,61,0.08)] mt-auto" style={{ background: 'var(--p-night-2)', color: 'var(--p-text)' }}>

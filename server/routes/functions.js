@@ -8,6 +8,7 @@ import { ensureUserProgress, updateStreakAndBadges } from '../functions/miscFunc
 import { submitQuizAnswer } from '../functions/quizScoring.js';
 import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll, proposerMarchesEvenements, openMarcheEvenement, resolveMarcheManuel } from '../functions/parisSondages.js';
 import { getDefiSerie, startDefiSerie } from '../functions/defisQuiz.js';
+import { createLigue, joinLigue, myLigues, ligueLeaderboard, leaveLigue } from '../functions/ligues.js';
 
 const router = express.Router();
 
@@ -80,6 +81,15 @@ router.post('/:name', requireAuth, async (req, res) => {
       case 'defiSerie': {
         if (body.action === 'get') return res.json(await getDefiSerie(req.user.email));
         if (body.action === 'start') return res.json(await startDefiSerie(req.user.email, body));
+        return res.status(400).json({ error: 'action inconnue' });
+      }
+
+      case 'ligues': {
+        if (body.action === 'create') return res.json(await createLigue(req.user.email, body));
+        if (body.action === 'join') return res.json(await joinLigue(req.user.email, body));
+        if (body.action === 'mine') return res.json(await myLigues(req.user.email));
+        if (body.action === 'leaderboard') return res.json(await ligueLeaderboard(req.user.email, body));
+        if (body.action === 'leave') return res.json(await leaveLigue(req.user.email, body));
         return res.status(400).json({ error: 'action inconnue' });
       }
 

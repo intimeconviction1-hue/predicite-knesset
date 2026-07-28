@@ -2,13 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { ChevronRight, BookOpen, ArrowRight, Users } from 'lucide-react';
+import { ArrowRight, Users } from 'lucide-react';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
 import QuizWidget from '@/components/knesset/QuizWidget';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
 import ElectionTimeline from '@/components/knesset/ElectionTimeline';
+import CinematicHero from '@/components/knesset/CinematicHero';
 
 // Schéma « de la voix au siège » — 4 étapes clés du mécanisme, visuellement.
 const FLOW = [
@@ -27,55 +28,14 @@ const KEY_NUMBERS = [
 export default function Learn() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'var(--p-text-40)' }}
-          >
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }}>L'élection</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.06 }}
-            className="flex items-center gap-2 mb-3"
-          >
-            <BookOpen className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>Comprendre avant de pronostiquer</p>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.12 }}
-            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-          >
-            Les législatives israéliennes, expliquées
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-base md:text-lg leading-relaxed max-w-2xl"
-            style={{ color: 'var(--p-text-60)' }}
-          >
-            Le 27 octobre 2026, Israël élit les 120 membres de la 26ᵉ Knesset. Deux
-            choses à comprendre avant de pronostiquer : comment les voix se
-            transforment en sièges, et comment un gouvernement se forme une fois
-            les résultats connus.
-          </motion.p>
-        </div>
-      </div>
+      <CinematicHero
+        size="md"
+        photos={['/images/learn-hero.jpg']}
+        position="center 30%"
+        kicker="Comprendre avant de pronostiquer"
+        title="Les législatives israéliennes, expliquées"
+        subtitle="Le 27 octobre 2026, Israël élit les 120 membres de la 26ᵉ Knesset. Deux choses à comprendre avant de pronostiquer : comment les voix se transforment en sièges, et comment un gouvernement se forme une fois les résultats connus."
+      />
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-10">
 

@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { BarChart3, Target, Trophy, Vote, Crown, ChevronRight, Info, Landmark, PieChart, Flame, Zap, TrendingUp, Coins, ArrowRight } from 'lucide-react';
+import { BarChart3, Target, Trophy, Vote, Crown, Info, Landmark, PieChart, Flame, Zap, TrendingUp, Coins, ArrowRight } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
+import CinematicHero from '@/components/knesset/CinematicHero';
 
 // Barème EXACT, aligné sur le code serveur (server/functions/*) :
 //  - engagement pronostic : 10 (+50 si justification ≥20 car.)  [prediciteScoringSieges]
@@ -111,33 +112,14 @@ export default function ReglesDuJeu() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
 
-      {/* Hero — thème clair unifié (fin du yo-yo sombre), liseré tricolore + halo doré */}
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-14">
-          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Règles du jeu</span>
-          </div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3" style={{ color: 'var(--p-gold-text)' }}>
-            Comment ça marche
-          </p>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-          >
-            Les règles, en clair
-          </motion.h1>
-          <p className="text-base md:text-lg leading-relaxed max-w-2xl" style={{ color: 'var(--p-text-60)' }}>
-            PrédiCité est un jeu de pronostics gratuit. Tu prédis la composition de la Knesset, tu gagnes des points en jouant et au dépouillement, et tu grimpes au classement. Voici exactement comment les points se gagnent.
-          </p>
-        </div>
-      </div>
+      <CinematicHero
+        size="md"
+        photos={['/images/regles-hero.jpg']}
+        position="center 30%"
+        kicker="Comment ça marche"
+        title="Les règles, en clair"
+        subtitle="PrédiCité est un jeu de pronostics gratuit. Tu prédis la composition de la Knesset, tu gagnes des points en jouant et au dépouillement, et tu grimpes au classement. Voici exactement comment les points se gagnent."
+      />
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-16">
 

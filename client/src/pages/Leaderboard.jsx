@@ -338,7 +338,11 @@ export default function Leaderboard() {
             {filteredUsers.length === 0 && !isLoading && (
               <div className="py-16 text-center">
                 <Users className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--p-text-25)' }} />
-                <p style={{ color: 'var(--p-text-40)' }}>Aucun joueur trouvé</p>
+                <p className="font-semibold mb-1" style={{ color: 'var(--p-text-60)' }}>Le classement est encore vide</p>
+                <p className="text-sm mb-4" style={{ color: 'var(--p-text-40)' }}>Sois le premier à marquer des points.</p>
+                <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
+                  Faire mon pronostic
+                </Link>
               </div>
             )}
           </div>

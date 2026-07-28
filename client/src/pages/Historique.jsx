@@ -4,9 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, ChevronDown, Landmark, ExternalLink, Info } from 'lucide-react';
+import { ChevronDown, ExternalLink, Info } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
 import Hemicycle from '@/components/knesset/Hemicycle';
+import CinematicHero from '@/components/knesset/CinematicHero';
 
 // Palette pour colorer l'hémicycle d'une Knesset passée (par ordre de sièges).
 const HISTO_PALETTE = ['#2B5CE6', '#C8102E', '#F59E0B', '#0D9488', '#8B5CF6', '#06B6D4', '#84CC16', '#EC4899', '#F97316', '#64748B', '#14B8A6', '#7C3AED', '#0EA5E9', '#78716C'];
@@ -197,52 +198,14 @@ export default function Historique() {
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-14">
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm mb-6"
-            style={{ color: 'var(--p-text-40)' }}
-          >
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Historique</span>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.06 }}
-            className="flex items-center gap-2 mb-3"
-          >
-            <Landmark className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>Depuis 1949</p>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.12 }}
-            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-          >
-            L'histoire des Knesset
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-base md:text-lg leading-relaxed max-w-2xl"
-            style={{ color: 'var(--p-text-60)' }}
-          >
-            Chaque élection depuis la création de l'État, avec la composition réelle de la Knesset qui en est sortie — sourcée élection par élection, sans donnée inventée.
-          </motion.p>
-        </div>
-      </div>
+      <CinematicHero
+        size="md"
+        photos={['/images/knesset-hero.jpg']}
+        position="center 30%"
+        kicker="Depuis 1949"
+        title="L'histoire des Knesset"
+        subtitle="Chaque élection depuis la création de l'État, avec la composition réelle de la Knesset qui en est sortie — sourcée élection par élection, sans donnée inventée."
+      />
 
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'rgba(43,92,230,0.06)', border: '1px solid var(--p-border)', color: 'var(--p-text-40)' }}>

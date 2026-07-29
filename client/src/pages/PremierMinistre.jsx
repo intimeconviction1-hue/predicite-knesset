@@ -7,6 +7,7 @@ import { createPageUrl } from '@/utils';
 import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info, X } from 'lucide-react';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
 import CinematicHero from '@/components/knesset/CinematicHero';
+import PlayLearnBar from '@/components/knesset/PlayLearnBar';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
 
@@ -53,6 +54,22 @@ export default function PremierMinistre() {
     queryFn: () => base44.entities.Liste.filter({ is_active: true }),
   });
   const listeById = new Map(listes.map(l => [l.id, l]));
+
+  // Paris RÉELS impliquant les partis des candidats PM (issue.match_value ===
+  // liste_id d'un candidat) — correspondance exacte, jamais inventée.
+  const { data: parisData } = useQuery({
+    queryKey: ['pm-paris'],
+    queryFn: () => base44.paris.marches(),
+    staleTime: 60 * 1000,
+  });
+  const candListeIds = new Set(candidats.map(c => c.liste_id).filter(Boolean));
+  const pmBets = (parisData?.marches || [])
+    .filter(m => (m.issues || []).some(i => candListeIds.has(i.match_value)))
+    .slice(0, 3)
+    .map(m => {
+      const iss = (m.issues || []).find(i => candListeIds.has(i.match_value)) || m.issues[0];
+      return { question: m.question, cote: iss.cote.toFixed(2), to: createPageUrl('Paris') };
+    });
 
   // Deep-link depuis une fiche liste (?candidat=ID) : ouvre la bio du candidat.
   const [searchParams] = useSearchParams();
@@ -107,6 +124,16 @@ export default function PremierMinistre() {
           title="Qui sera Premier ministre ?"
           subtitle="Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard."
           className="rounded-2xl mb-6"
+        />
+
+        {/* Vase communicant : la course au PM se joue (paris sur les partis) et
+            se teste (quiz), en plus du pronostic ci-dessous. */}
+        <PlayLearnBar
+          className="mb-6"
+          title="Joue la course au Premier ministre"
+          subtitle="Au-delà de ton pronostic ci-dessous : parie sur les partis en lice, ou teste-toi."
+          bets={pmBets}
+          quizTo={createPageUrl('Quiz')}
         />
 
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"

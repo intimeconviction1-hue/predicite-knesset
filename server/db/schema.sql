@@ -269,3 +269,8 @@ CREATE TABLE IF NOT EXISTS poll_tracker_state (
   last_run_utc TEXT,
   last_result TEXT
 );
+
+-- Dernier sondage ayant déclenché un rollover des paris (résolution des marchés
+-- « rang » + réouverture avec de nouvelles cotes). Évite de résoudre deux fois
+-- avec le même sondage.
+ALTER TABLE poll_tracker_state ADD COLUMN IF NOT EXISTS last_rollover_poll TEXT;

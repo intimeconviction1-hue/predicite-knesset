@@ -6,8 +6,9 @@
 // la collecte AU RÉVEIL (throttlée via poll_tracker_state) + périodiquement tant
 // que le process vit. Idempotent et sûr : dédup par checksum côté collecteur, et
 // on réserve le créneau (last_run) AVANT de lancer pour éviter les doublons.
-import { queryOne, run } from '../db/index.js';
+import { queryOne, run, listEntity } from '../db/index.js';
 import { runSondagesSiegesCollector } from './sondagesSiegesCollector.js';
+import { rolloverParis } from './parisSondages.js';
 
 const INTERVAL_H = Number(process.env.POLL_TRACK_INTERVAL_HOURS || 6);
 let running = false;
@@ -31,6 +32,28 @@ async function setState(iso, result) {
   );
 }
 
+// Cotes vivantes « à la Winamax » : dès qu'un NOUVEAU sondage entre en base, on
+// résout les marchés « rang » ouverts (les gagnants sont payés) et on rouvre une
+// manche dont les cotes sont recalculées sur ce sondage. Les cotes évoluent donc
+// en permanence : à chaque sondage (le prior) et à chaque mise (le pari-mutuel).
+// Garde anti-double-résolution : on mémorise le sondage déjà utilisé.
+async function maybeRolloverParis() {
+  const latest = (await listEntity('SondageSieges', { sort: '-poll_date', limit: 1 }))[0];
+  if (!latest) return { skipped: 'aucun sondage' };
+
+  const state = await queryOne("SELECT last_rollover_poll FROM poll_tracker_state WHERE id = 'singleton'");
+  if (state?.last_rollover_poll === latest.id) return { skipped: 'déjà pris en compte' };
+
+  const res = await rolloverParis(latest.id);
+  await run(
+    `INSERT INTO poll_tracker_state (id, last_rollover_poll) VALUES ('singleton', ?)
+     ON CONFLICT (id) DO UPDATE SET last_rollover_poll = EXCLUDED.last_rollover_poll`,
+    [latest.id],
+  );
+  console.log(`[poll-tracker] cotes rafraîchies sur ${latest.institute} ${latest.poll_date} :`, JSON.stringify(res));
+  return res;
+}
+
 export async function maybeCollectPolls(reason = 'scheduler') {
   if (disabled()) return { skipped: 'disabled' };
   if (running) return { skipped: 'already_running' };
@@ -49,7 +72,14 @@ export async function maybeCollectPolls(reason = 'scheduler') {
     const r = res?.results || {};
     await setState(iso, JSON.stringify({ created: r.created, skipped: r.skipped, rejected: r.rejected }));
     console.log(`[poll-tracker/${reason}] créés=${r.created ?? '?'} skip=${r.skipped ?? '?'} rejet=${r.rejected ?? '?'}`);
-    return res;
+
+    // Un nouveau sondage → les cotes se recalculent (résolution + nouvelle manche).
+    // Isolé : un échec du rollover ne doit pas faire échouer la collecte.
+    let rollover = null;
+    try { rollover = await maybeRolloverParis(); }
+    catch (e) { console.error('[poll-tracker] rollover échoué :', e.message); rollover = { error: e.message }; }
+
+    return { ...res, rollover };
   } catch (e) {
     console.error('[poll-tracker] échec :', e.message);
     await setState(iso, `error: ${e.message}`).catch(() => {});

@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
-import { ChevronRight, Brain, Flame, Coins, ArrowRight } from 'lucide-react';
+import { Flame, Coins, ArrowRight } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
+import CinematicHero from '@/components/knesset/CinematicHero';
+import { TITLES } from '@/lib/score';
 
+// Thèmes actuels (les 3 catégories réelles en base, relabellées). D'autres
+// thèmes (partis, sondages & blocs, personnalités) arriveront avec leur contenu.
 const CATEGORIES = [
-  { key: 'regles', title: 'Règles du jeu' },
-  { key: 'historique', title: 'Historique' },
-  { key: 'actualite', title: 'Actualité 2026' },
+  { key: 'regles', title: 'Système électoral' },
+  { key: 'historique', title: 'Histoire de la Knesset' },
+  { key: 'actualite', title: 'Actu de la campagne' },
 ];
 
 const OBJECTIFS = [
@@ -115,35 +118,33 @@ function DefiSerieCard() {
 export default function Quiz() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[340px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-12 md:py-14">
-          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Quiz</span>
-          </div>
-          <div className="flex items-center gap-2 mb-3">
-            <Brain className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>Apprendre en s'amusant</p>
-          </div>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-          >
-            Quiz Knesset 2026
-          </motion.h1>
-          <p className="text-base md:text-lg leading-relaxed max-w-2xl" style={{ color: 'var(--p-text-60)' }}>
-            Règles du scrutin, histoire des Knesset, actualité de la campagne. Choisis ta difficulté, chaque bonne réponse rapporte — et tente un défi série pour miser tes jetons.
-          </p>
-        </div>
-      </div>
+      <CinematicHero
+        size="md"
+        photos={['/images/learn-hero.jpg']}
+        position="center 30%"
+        kicker="Apprendre en s'amusant"
+        title="Le quiz de la campagne"
+        subtitle="Système électoral, histoire de la Knesset, actu. Choisis ta difficulté, chaque bonne réponse rapporte — et tente un défi série pour miser tes jetons."
+      />
 
       <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
+        {/* Les niveaux — la progression par Score, de Citoyen à Oracle. Chaque
+            bonne réponse (plafonnée) et surtout tes pronostics/paris t'y font monter. */}
+        <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+          <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--p-gold-text)' }}>Tes niveaux — de Citoyen à Oracle</p>
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+            {TITLES.map((t, i) => (
+              <React.Fragment key={t.label}>
+                {i > 0 && <span className="flex-shrink-0" style={{ color: 'var(--p-text-25)' }}>→</span>}
+                <div className="rounded-lg px-2.5 py-1.5 flex-shrink-0 text-center" style={{ background: `${t.color}12`, border: `1px solid ${t.color}40` }}>
+                  <div className="text-xs font-black" style={{ color: t.color }}>{t.label}</div>
+                  <div className="text-[9px] font-mono" style={{ color: 'var(--p-text-40)' }}>{t.min.toLocaleString('fr-FR')}+ pts</div>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+
         <DefiSerieCard />
 
         {CATEGORIES.map(c => (

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, MapPin, Trophy, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  LogOut, BarChart2, Landmark, Newspaper, Flame, TrendingUp, Coins, Users, UserCheck
+  LogOut, BarChart2, Landmark, Newspaper, Flame, Coins, Users, UserCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -72,7 +72,6 @@ export default function Layout({ children, currentPageName }) {
   // Jouer = la mécanique du jeu (règles, classement, quiz) ; Apprendre = le
   // contenu de l'élection elle-même (listes, PM, historique, actu).
   const jouerItems = [
-    { name: 'Paris', label: 'Paris sur sondages', icon: TrendingUp },
     { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen },
     { name: 'Leaderboard', label: 'Classement', icon: Trophy },
     { name: 'Ligues', label: 'Ligues privées', icon: Users },

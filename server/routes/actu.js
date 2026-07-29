@@ -7,6 +7,7 @@ import express from 'express';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getActuBreves } from '../functions/actuHebrewCollector.js';
 
 const router = express.Router();
 
@@ -33,10 +34,22 @@ function loadCurated() {
   }
 }
 
-// Fusionne les brèves curatives (en tête, puis triées avec le flux par date).
-function withCurated(rssItems) {
+// Fusionne les brèves curatives + les brèves issues de la presse israélienne
+// (collecteur hébreu → faits reformulés en français, sources citées), puis trie
+// tout le flux par date. Les brèves restent taggées `curated: true` pour être
+// affichées distinctement de la presse d'origine.
+async function withCurated(rssItems) {
   const curated = loadCurated();
-  return [...curated, ...rssItems]
+  let breves = [];
+  try { breves = await getActuBreves(12); } catch { breves = []; }
+  const seen = new Set();
+  return [...breves, ...curated, ...rssItems]
+    .filter(it => {
+      const k = (it.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      if (!k || seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    })
     .sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
 }
 
@@ -66,6 +79,7 @@ const QUERIES = [
 ];
 
 const CACHE_TTL_MS = 20 * 60 * 1000;
+const SONDAGE_SLOTS = 5;   // places réservées aux articles de sondage
 let cache = { at: 0, items: [] };
 
 // Les requêtes larges (« Netanyahou », « Israël politique ») ramènent aussi de la
@@ -123,7 +137,7 @@ async function fetchQuery({ q, hl, gl, ceid }) {
 router.get('/', async (req, res) => {
   const now = Date.now();
   if (now - cache.at < CACHE_TTL_MS && cache.items.length > 0) {
-    return res.json({ items: withCurated(cache.items), cached: true });
+    return res.json({ items: await withCurated(cache.items), cached: true });
   }
   try {
     // allSettled : avec plusieurs requêtes, une seule qui échoue (timeout, 429…)
@@ -146,14 +160,21 @@ router.get('/', async (req, res) => {
     // frais d'abord) si la moisson électorale est maigre — jamais de page vide.
     const pertinents = dedup.filter(estPertinent);
     const autres = dedup.filter(it => !estPertinent(it));
-    const merged = [...pertinents, ...autres].slice(0, 30);
+
+    // Les SONDAGES sont le contenu clé d'un site de pronostics : ils sont rares
+    // en français et se feraient noyer par le tri chronologique. On leur réserve
+    // donc les premières places (les plus récents d'abord).
+    const estSondage = (it) => /sondage|intentions de vote/i.test(it.title);
+    const sondages = pertinents.filter(estSondage).slice(0, SONDAGE_SLOTS);
+    const reste = [...pertinents.filter(it => !sondages.includes(it)), ...autres];
+    const merged = [...sondages, ...reste].slice(0, 30);
 
     cache = { at: now, items: merged };
-    res.json({ items: withCurated(merged), cached: false });
+    res.json({ items: await withCurated(merged), cached: false });
   } catch (e) {
-    if (cache.items.length > 0) return res.json({ items: withCurated(cache.items), cached: true, stale: true });
+    if (cache.items.length > 0) return res.json({ items: await withCurated(cache.items), cached: true, stale: true });
     // Même si le flux automatique échoue, on sert au moins les brèves curatives.
-    const curated = withCurated([]);
+    const curated = await withCurated([]);
     if (curated.length > 0) return res.json({ items: curated, cached: false, rssDown: true });
     res.status(502).json({ error: "Impossible de récupérer l'actualité pour le moment.", detail: e.message });
   }

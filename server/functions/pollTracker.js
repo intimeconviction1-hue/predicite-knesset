@@ -9,6 +9,7 @@
 import { queryOne, run, listEntity } from '../db/index.js';
 import { runSondagesSiegesCollector } from './sondagesSiegesCollector.js';
 import { rolloverParis } from './parisSondages.js';
+import { runActuHebrewCollector } from './actuHebrewCollector.js';
 
 const INTERVAL_H = Number(process.env.POLL_TRACK_INTERVAL_HOURS || 6);
 let running = false;
@@ -79,7 +80,16 @@ export async function maybeCollectPolls(reason = 'scheduler') {
     try { rollover = await maybeRolloverParis(); }
     catch (e) { console.error('[poll-tracker] rollover échoué :', e.message); rollover = { error: e.message }; }
 
-    return { ...res, rollover };
+    // Brèves de la presse israélienne (hébreu) : faits reformulés en français,
+    // sources citées. Isolé aussi — l'actu ne doit pas casser la collecte.
+    let breves = null;
+    try {
+      breves = await runActuHebrewCollector();
+      const br = breves?.results;
+      if (br) console.log(`[poll-tracker] brèves israéliennes : +${br.created} (skip ${br.skipped}, rejet ${br.rejected})`);
+    } catch (e) { console.error('[poll-tracker] brèves échouées :', e.message); breves = { error: e.message }; }
+
+    return { ...res, rollover, breves };
   } catch (e) {
     console.error('[poll-tracker] échec :', e.message);
     await setState(iso, `error: ${e.message}`).catch(() => {});

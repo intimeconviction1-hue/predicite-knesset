@@ -274,3 +274,18 @@ CREATE TABLE IF NOT EXISTS poll_tracker_state (
 -- « rang » + réouverture avec de nouvelles cotes). Évite de résoudre deux fois
 -- avec le même sondage.
 ALTER TABLE poll_tracker_state ADD COLUMN IF NOT EXISTS last_rollover_poll TEXT;
+
+-- Brèves de campagne extraites de la presse ISRAÉLIENNE (souvent en hébreu) :
+-- des FAITS reformulés en français, jamais une traduction ni une copie, avec le
+-- média et l'URL d'origine obligatoires (voir functions/actuHebrewCollector.js).
+CREATE TABLE IF NOT EXISTS actu_breves (
+  id TEXT PRIMARY KEY,
+  title TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  source TEXT NOT NULL,          -- nom du média d'origine (obligatoire)
+  source_url TEXT NOT NULL,      -- lien vers l'article d'origine (obligatoire)
+  pub_date TEXT,
+  checksum TEXT UNIQUE,          -- dédup source|titre
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+CREATE INDEX IF NOT EXISTS idx_actu_breves_date ON actu_breves(pub_date);

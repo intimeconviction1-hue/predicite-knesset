@@ -10,14 +10,7 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
 import ElectionTimeline from '@/components/knesset/ElectionTimeline';
 import CinematicHero from '@/components/knesset/CinematicHero';
-
-// Schéma « de la voix au siège » — 4 étapes clés du mécanisme, visuellement.
-const FLOW = [
-  { emoji: '🗳️', t: 'Les voix', d: 'Chaque bulletin va à une liste, au niveau national.' },
-  { emoji: '🚪', t: 'Le seuil', d: 'Sous 3,25 %, la liste n\'a aucun siège.' },
-  { emoji: '➗', t: 'Répartition', d: 'Les 120 sièges sont répartis à la proportionnelle (méthode d\'Hondt).' },
-  { emoji: '🏛️', t: 'Les sièges', d: 'Attribués dans l\'ordre de la liste, de haut en bas.' },
-];
+import ElectionExplainer from '@/components/knesset/ElectionExplainer';
 
 const KEY_NUMBERS = [
   { value: 120, suffix: '', label: 'sièges à la Knesset', color: 'var(--p-blue)' },
@@ -116,25 +109,14 @@ export default function Learn() {
           <KnessetRulesModule />
         </motion.div>
 
-        {/* Schéma visuel « de la voix au siège » */}
+        {/* « De la voix au siège » — explainer ANIMÉ (se joue comme une vidéo) */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="rounded-2xl border p-6 md:p-8"
-          style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
-          <h3 className="text-lg font-bold mb-5" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>De la voix au siège, en 4 étapes</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {FLOW.map((s, i) => (
-              <div key={i} className="rounded-xl border p-4 text-center" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
-                <div className="text-2xl mb-2" aria-hidden="true">{s.emoji}</div>
-                <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-text)' }}>{i + 1}. {s.t}</p>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{s.d}</p>
-              </div>
-            ))}
-          </div>
+          <ElectionExplainer />
         </motion.div>
 
         <motion.div

@@ -13,6 +13,9 @@ const router = express.Router();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+const SONDAGE_SLOTS = 5;   // places réservées aux articles de sondage
+const estSondage = (it) => /sondage|intentions de vote/i.test(it.title || '');
+
 // Résumés PrédiCité (français) de sources israéliennes — traduits/résumés à la
 // main quand l'info manque en français. Chargés depuis docs/ACTU_CURATED.json
 // et fusionnés au flux automatique, mais TAGGÉS `curated: true` pour être
@@ -43,7 +46,7 @@ async function withCurated(rssItems) {
   let breves = [];
   try { breves = await getActuBreves(12); } catch { breves = []; }
   const seen = new Set();
-  return [...breves, ...curated, ...rssItems]
+  const tous = [...breves, ...curated, ...rssItems]
     .filter(it => {
       const k = (it.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
       if (!k || seen.has(k)) return false;
@@ -51,6 +54,12 @@ async function withCurated(rssItems) {
       return true;
     })
     .sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+
+  // La priorité SONDAGES doit s'appliquer APRÈS le tri par date — sinon le tri
+  // chronologique final annulerait les places réservées (bug corrigé le 29/07).
+  const sondages = tous.filter(estSondage).slice(0, SONDAGE_SLOTS);
+  const reste = tous.filter(it => !sondages.includes(it));
+  return [...sondages, ...reste];
 }
 
 // Uniquement des requêtes francophones — pas de résultats en anglais/hébreu.
@@ -79,7 +88,6 @@ const QUERIES = [
 ];
 
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const SONDAGE_SLOTS = 5;   // places réservées aux articles de sondage
 let cache = { at: 0, items: [] };
 
 // Les requêtes larges (« Netanyahou », « Israël politique ») ramènent aussi de la
@@ -161,13 +169,8 @@ router.get('/', async (req, res) => {
     const pertinents = dedup.filter(estPertinent);
     const autres = dedup.filter(it => !estPertinent(it));
 
-    // Les SONDAGES sont le contenu clé d'un site de pronostics : ils sont rares
-    // en français et se feraient noyer par le tri chronologique. On leur réserve
-    // donc les premières places (les plus récents d'abord).
-    const estSondage = (it) => /sondage|intentions de vote/i.test(it.title);
-    const sondages = pertinents.filter(estSondage).slice(0, SONDAGE_SLOTS);
-    const reste = [...pertinents.filter(it => !sondages.includes(it)), ...autres];
-    const merged = [...sondages, ...reste].slice(0, 30);
+    // La priorité SONDAGES est appliquée dans withCurated (après le tri final).
+    const merged = [...pertinents, ...autres].slice(0, 30);
 
     cache = { at: now, items: merged };
     res.json({ items: await withCurated(merged), cached: false });

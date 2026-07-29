@@ -10,6 +10,7 @@ import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
+import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
 import { computeScore } from '@/lib/score';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
@@ -253,6 +254,18 @@ export default function Home() {
             betCote={topMarket?.issues?.[0]?.cote?.toFixed(2)}
             betTo={createPageUrl('Paris')}
             quizTo={createPageUrl('Quiz')}
+          />
+        </div>
+      )}
+
+      {/* Le terrain de jeu — le registre JEU (or, énergie) : ce qui se joue
+          maintenant, jouable en un clic. Contrepoids du registre Marbre. */}
+      {(parisData?.marches?.length > 0) && (
+        <div className="max-w-3xl mx-auto px-4 pt-2 pb-5">
+          <TerrainDeJeu
+            marches={parisData.marches}
+            jetons={progress?.jetons ?? null}
+            streak={progress?.current_streak ?? 0}
           />
         </div>
       )}

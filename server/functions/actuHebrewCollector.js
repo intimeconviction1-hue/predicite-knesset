@@ -48,7 +48,7 @@ Maximum ${MAX_PAR_PASSE} brèves, les plus importantes.`;
 
   const jsonSchemaHint = `{ "breves": [ { "title": "titre court en français", "summary": "1 à 2 phrases de faits, reformulés", "source": "nom du média", "source_url": "https://...", "pub_date": "YYYY-MM-DD" } ] }`;
 
-  const out = await invokeLLMWithWebSearch({ prompt, jsonSchemaHint, maxTokens: 4000 });
+  const out = await invokeLLMWithWebSearch({ prompt, jsonSchemaHint, maxTokens: 8000 });
   const breves = Array.isArray(out?.breves) ? out.breves : [];
   const results = { found: breves.length, created: 0, skipped: 0, rejected: 0, errors: [] };
   if (breves.length === 0) return { success: true, results };

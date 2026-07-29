@@ -10,7 +10,7 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
 import ElectionTimeline from '@/components/knesset/ElectionTimeline';
 import CinematicHero from '@/components/knesset/CinematicHero';
-import ElectionExplainer from '@/components/knesset/ElectionExplainer';
+import AnimatedExplainer, { ELECTION_STEPS } from '@/components/knesset/AnimatedExplainer';
 
 const KEY_NUMBERS = [
   { value: 120, suffix: '', label: 'sièges à la Knesset', color: 'var(--p-blue)' },
@@ -116,7 +116,7 @@ export default function Learn() {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: 0.05 }}
         >
-          <ElectionExplainer />
+          <AnimatedExplainer steps={ELECTION_STEPS} label="De la voix au siège · en 20 s" />
         </motion.div>
 
         <motion.div

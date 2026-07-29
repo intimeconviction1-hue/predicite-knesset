@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { BarChart3, Target, Trophy, Vote, Crown, Info, Landmark, PieChart, Flame, Zap, TrendingUp, Coins, ArrowRight } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
 import CinematicHero from '@/components/knesset/CinematicHero';
+import AnimatedExplainer, { GAME_STEPS } from '@/components/knesset/AnimatedExplainer';
 import { TITLES } from '@/lib/score';
 
 // Barème EXACT, aligné sur le code serveur (server/functions/*) :
@@ -125,9 +126,13 @@ export default function ReglesDuJeu() {
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-16">
 
         <section id="boucle">
-          <h2 className="text-xl font-bold mb-8" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
+          <h2 className="text-xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
             La boucle de jeu en 3 étapes
           </h2>
+          {/* Explainer animé « comment jouer » — pédagogie de NOS règles */}
+          <div className="mb-8">
+            <AnimatedExplainer steps={GAME_STEPS} label="Comment jouer · en 20 s" />
+          </div>
           <div className="space-y-4">
             {STEPS.map(({ id, icon: Icon, num, label, color, title, description, tips, link, linkLabel }, index) => (
               <motion.div

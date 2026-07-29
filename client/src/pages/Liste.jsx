@@ -14,6 +14,7 @@ import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import BallotChip from '@/components/knesset/BallotChip';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 import TrendChart from '@/components/knesset/TrendChart';
+import PlayLearnBar from '@/components/knesset/PlayLearnBar';
 
 const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z'; // veille du scrutin, 07:00 Israël
 
@@ -100,6 +101,23 @@ export default function ListePage() {
     enabled: !!liste?.id,
   });
   const candidatPM = pmCandidats.find(c => c.is_active) || pmCandidats[0] || null;
+
+  // Paris RÉELS qui référencent EXACTEMENT cette liste (une issue dont
+  // match_value === liste.id). Aucun rapprochement inventé : si rien ne matche,
+  // la barre « joue-le » renverra simplement vers le hub des paris.
+  const { data: parisData } = useQuery({
+    queryKey: ['liste-paris', liste?.id],
+    queryFn: () => base44.paris.marches(),
+    enabled: !!liste?.id,
+    staleTime: 60 * 1000,
+  });
+  const listeBets = (parisData?.marches || [])
+    .map(m => {
+      const iss = (m.issues || []).find(i => i.match_value === liste?.id);
+      return iss ? { question: m.question, cote: iss.cote.toFixed(2), to: createPageUrl('Paris') } : null;
+    })
+    .filter(Boolean)
+    .slice(0, 3);
 
   // Ne montre l'évolution que pour les élections où le nom correspond
   // exactement (pas de rapprochement approximatif qui inventerait un lien) —
@@ -285,6 +303,17 @@ export default function ListePage() {
             })()}
           </motion.div>
         )}
+
+        {/* Joue-le / apprends-le — vase communicant : ce qu'on vient de lire se
+            joue (paris réels sur cette liste) et se teste (quiz). */}
+        <div className="mb-6">
+          <PlayLearnBar
+            title={`Joue « ${liste.name_fr} »`}
+            subtitle="Ce que tu viens de lire se joue : parie sur cette liste, ou teste tes connaissances."
+            bets={listeBets}
+            quizTo={createPageUrl('Quiz')}
+          />
+        </div>
 
         {/* Historique sondages */}
         {history.length > 0 && (

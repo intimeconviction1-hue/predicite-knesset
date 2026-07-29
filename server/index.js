@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { initDb } from './db/index.js';
+import { startPollTracker } from './functions/pollTracker.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
 import functionsRouter from './routes/functions.js';
@@ -53,6 +54,8 @@ initDb()
   .then(() => {
     app.listen(PORT, () => {
       console.log(`PrédiCité (Knesset) — serveur sur http://localhost:${PORT}`);
+      // Traque les sondages en continu (LLM + web_search), throttlé.
+      startPollTracker();
     });
   })
   .catch(e => {

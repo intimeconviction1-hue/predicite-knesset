@@ -256,3 +256,11 @@ CREATE TABLE IF NOT EXISTS ligue_membres (
 );
 CREATE INDEX IF NOT EXISTS idx_ligue_membres_ligue ON ligue_membres(ligue_id);
 CREATE INDEX IF NOT EXISTS idx_ligue_membres_user ON ligue_membres(user_email);
+
+-- État du traqueur de sondages : horodatage du dernier passage automatique, pour
+-- throttler la collecte (le serveur peut redémarrer souvent en tier gratuit).
+CREATE TABLE IF NOT EXISTS poll_tracker_state (
+  id TEXT PRIMARY KEY,
+  last_run_utc TEXT,
+  last_result TEXT
+);

@@ -56,7 +56,13 @@ const QUERIES = [
   { q: 'Eisenkot', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
   { q: 'Likoud primaires', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
   { q: 'Bennett Israël', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
-  { q: 'Knesset 2026 élections', hl: 'fr', gl: 'IL', ceid: 'IL:fr' },
+  // Sondages — le contenu clé d'un site de pronostics. Il n'y en avait AUCUNE
+  // requête dédiée jusqu'ici (le mot n'était que dans le filtre de pertinence).
+  { q: 'sondage Israël', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'sondage Netanyahou', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  // Anciennement gl=IL/ceid=IL:fr : mesuré à 0 résultat (Google News n'a pas
+  // d'édition francophone israélienne). Basculé sur l'édition FR, qui répond.
+  { q: 'Knesset 2026 élections', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
 ];
 
 const CACHE_TTL_MS = 20 * 60 * 1000;

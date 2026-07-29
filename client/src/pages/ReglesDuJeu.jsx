@@ -6,7 +6,19 @@ import { BarChart3, Target, Trophy, Vote, Crown, Info, Landmark, PieChart, Flame
 import QuizWidget from '@/components/knesset/QuizWidget';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import AnimatedExplainer, { GAME_STEPS } from '@/components/knesset/AnimatedExplainer';
+import ColonneAlternee from '@/components/knesset/ColonneAlternee';
 import { TITLES } from '@/lib/score';
+
+// La colonne alternée : le va-et-vient info ↔ jeu (liens réels, aucune donnée
+// inventée — ce sont des portes de navigation).
+const VA_ET_VIENT = [
+  { type: 'info', kicker: 'un sondage tombe', title: 'Le fait est vérifié', desc: 'Chaque sondage sièges est sourcé et daté.', linkLabel: 'Les listes', to: createPageUrl('Listes') },
+  { type: 'jeu', kicker: 'il se parie', title: 'Parie sur le prochain', desc: 'Mise tes jetons sur ce que diront les sondages.', linkLabel: 'Le direct', to: createPageUrl('Paris') },
+  { type: 'info', kicker: 'un événement', title: 'La campagne bouge', desc: 'Primaires, fusions, défections — expliqués.', linkLabel: "L'actu", to: createPageUrl('Actu') },
+  { type: 'jeu', kicker: 'il se joue aussi', title: 'Parie sur son issue', desc: 'Cotes vivantes, 100 % en jetons gratuits.', linkLabel: 'Parier', to: createPageUrl('Paris') },
+  { type: 'info', kicker: "l'histoire éclaire", title: "D'où viennent les partis", desc: 'Le récit de chaque liste, sourcé.', linkLabel: 'Historique', to: createPageUrl('Historique') },
+  { type: 'jeu', kicker: 'elle se teste', title: 'Un quiz né du contenu', desc: '6 thèmes, de Citoyen à Oracle.', linkLabel: 'Le quiz', to: createPageUrl('Quiz') },
+];
 
 // Barème EXACT, aligné sur le code serveur (server/functions/*) :
 //  - engagement pronostic : 10 (+50 si justification ≥20 car.)  [prediciteScoringSieges]
@@ -212,6 +224,15 @@ export default function ReglesDuJeu() {
           <p className="text-sm mt-4" style={{ color: 'var(--p-text-60)' }}>
             <b style={{ color: 'var(--p-gold-text)' }}>Et côté quiz — le défi série :</b> mise sur une série de bonnes réponses d'affilée (3 → ×2, 5 → ×4, 10 → ×10). <Link to={createPageUrl('Quiz')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Tenter un défi</Link>.
           </p>
+        </section>
+
+        {/* Le va-et-vient info ↔ jeu — la colonne alternée (vases communicants) */}
+        <section id="va-et-vient">
+          <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Info et jeu se répondent</h2>
+          <p className="text-sm mb-6 max-w-2xl" style={{ color: 'var(--p-text-40)' }}>
+            Toute info se joue, tout jeu s'explique. Le fil coud les deux — tu passes de l'un à l'autre en un clic.
+          </p>
+          <ColonneAlternee items={VA_ET_VIENT} />
         </section>
 
         <section id="points" className="space-y-8">

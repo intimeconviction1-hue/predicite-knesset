@@ -4,7 +4,12 @@
     {
       "category": "regles",
       "question": "Quel pourcentage des suffrages une liste doit-elle obtenir pour entrer à la Knesset ?",
-      "choices": ["1 %", "2 %", "3,25 %", "5 %"],
+      "choices": [
+        "1 %",
+        "2 %",
+        "3,25 %",
+        "5 %"
+      ],
       "correct_index": 2,
       "explanation": "Le seuil électoral est de 3,25 % depuis 2015. Il était de 1 % de 1949 à 1992, 1,5 % de 1992 à 2003, puis 2 % de 2003 à 2014.",
       "source_url": "https://en.wikipedia.org/wiki/List_of_political_parties_in_Israel"
@@ -12,7 +17,12 @@
     {
       "category": "regles",
       "question": "Combien de sièges faut-il pour la majorité à la Knesset ?",
-      "choices": ["50", "55", "61", "70"],
+      "choices": [
+        "50",
+        "55",
+        "61",
+        "70"
+      ],
       "correct_index": 2,
       "explanation": "La Knesset compte 120 sièges ; la majorité absolue est donc de 61.",
       "source_url": null
@@ -33,7 +43,12 @@
     {
       "category": "regles",
       "question": "Comment s'appelle la méthode utilisée pour répartir les 120 sièges entre les listes ?",
-      "choices": ["Méthode Sainte-Laguë", "Méthode Bader-Ofer", "Scrutin à deux tours", "Vote unique transférable"],
+      "choices": [
+        "Méthode Sainte-Laguë",
+        "Méthode Bader-Ofer",
+        "Scrutin à deux tours",
+        "Vote unique transférable"
+      ],
       "correct_index": 1,
       "explanation": "La méthode Bader-Ofer, une variante de la méthode d'Hondt, avantage légèrement les grandes listes par rapport aux petites.",
       "source_url": null
@@ -67,7 +82,12 @@
     {
       "category": "historique",
       "question": "Comment appelle-t-on le bouleversement politique de 1977, quand le Likoud a battu le Parti travailliste pour la première fois ?",
-      "choices": ["La Mahapakh", "L'Intifada", "Le Kach", "La Nakba"],
+      "choices": [
+        "La Mahapakh",
+        "L'Intifada",
+        "Le Kach",
+        "La Nakba"
+      ],
       "correct_index": 0,
       "explanation": "Le \"Mahapakh\" a mis fin à 29 ans de domination ininterrompue du Mapaï/Alignement travailliste, avec Menahem Begin devenant Premier ministre.",
       "source_url": "https://en.wikipedia.org/wiki/1977_Israeli_legislative_election"
@@ -75,7 +95,12 @@
     {
       "category": "historique",
       "question": "Qui était Premier ministre après la toute première élection israélienne, en 1949 ?",
-      "choices": ["Menahem Begin", "Golda Meir", "David Ben Gourion", "Yitzhak Rabin"],
+      "choices": [
+        "Menahem Begin",
+        "Golda Meir",
+        "David Ben Gourion",
+        "Yitzhak Rabin"
+      ],
       "correct_index": 2,
       "explanation": "David Ben Gourion (Mapaï) a formé le premier gouvernement d'Israël après l'élection du 25 janvier 1949.",
       "source_url": "https://en.wikipedia.org/wiki/1949_Israeli_Constituent_Assembly_election"
@@ -83,7 +108,12 @@
     {
       "category": "historique",
       "question": "Combien d'élections législatives ont eu lieu en Israël entre avril 2019 et mars 2020 ?",
-      "choices": ["Une seule", "Deux", "Trois", "Quatre"],
+      "choices": [
+        "Une seule",
+        "Deux",
+        "Trois",
+        "Quatre"
+      ],
       "correct_index": 2,
       "explanation": "Avril 2019, septembre 2019 puis mars 2020 : un cas unique dans l'histoire d'Israël, faute de coalition majoritaire formée après les deux premiers scrutins.",
       "source_url": "https://en.wikipedia.org/wiki/2020_Israeli_legislative_election"
@@ -104,7 +134,12 @@
     {
       "category": "historique",
       "question": "Depuis quelle année le seuil électoral de 3,25 % est-il en vigueur ?",
-      "choices": ["1992", "2003", "2015", "2022"],
+      "choices": [
+        "1992",
+        "2003",
+        "2015",
+        "2022"
+      ],
       "correct_index": 2,
       "explanation": "Le seuil est passé de 2 % à 3,25 % pour l'élection de 2015, la première Knesset couverte par PrédiCité sous ce seuil.",
       "source_url": "https://en.wikipedia.org/wiki/2015_Israeli_legislative_election"
@@ -112,7 +147,12 @@
     {
       "category": "actualite",
       "question": "Quelle est la date du scrutin législatif israélien couvert par PrédiCité ?",
-      "choices": ["17 juillet 2026", "26 octobre 2026", "27 octobre 2026", "1er novembre 2026"],
+      "choices": [
+        "17 juillet 2026",
+        "26 octobre 2026",
+        "27 octobre 2026",
+        "1er novembre 2026"
+      ],
       "correct_index": 2,
       "explanation": "Le scrutin de la 26e Knesset est prévu le 27 octobre 2026. Le 17 juillet est la date de dissolution de la Knesset sortante, le 26 octobre la clôture des pronostics sur PrédiCité.",
       "source_url": null
@@ -120,7 +160,12 @@
     {
       "category": "actualite",
       "question": "Qui dirige Yashar, l'un des partis qui a percé dans les sondages de la campagne 2026 ?",
-      "choices": ["Naftali Bennett", "Gadi Eisenkot", "Yaïr Lapid", "Benny Gantz"],
+      "choices": [
+        "Naftali Bennett",
+        "Gadi Eisenkot",
+        "Yaïr Lapid",
+        "Benny Gantz"
+      ],
       "correct_index": 1,
       "explanation": "Gadi Eisenkot, ancien chef d'état-major, dirige Yashar — donné en tête ou ex-aequo avec le Likoud dans plusieurs sondages de juillet 2026.",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
@@ -128,7 +173,12 @@
     {
       "category": "actualite",
       "question": "Autour de quel seuil le Sionisme religieux de Bezalel Smotrich oscille-t-il dans les sondages de la campagne 2026 ?",
-      "choices": ["Le seuil de majorité (61 sièges)", "Le seuil électoral (3,25 %)", "Le seuil de blocage (25 sièges)", "Aucun, il est loin devant"],
+      "choices": [
+        "Le seuil de majorité (61 sièges)",
+        "Le seuil électoral (3,25 %)",
+        "Le seuil de blocage (25 sièges)",
+        "Aucun, il est loin devant"
+      ],
       "correct_index": 1,
       "explanation": "Plusieurs sondages de juillet 2026 placent le Sionisme religieux tout près du seuil des 3,25 %, ce qui peut faire basculer plusieurs sièges pour tout un bloc.",
       "source_url": null
@@ -136,7 +186,12 @@
     {
       "category": "actualite",
       "question": "Quand la Knesset sortante (la 25e) a-t-elle été dissoute, ouvrant la campagne 2026 ?",
-      "choices": ["13 mai 2026", "17 juillet 2026", "1er novembre 2022", "26 octobre 2026"],
+      "choices": [
+        "13 mai 2026",
+        "17 juillet 2026",
+        "1er novembre 2022",
+        "26 octobre 2026"
+      ],
       "correct_index": 1,
       "explanation": "La Knesset a approuvé sa dissolution le 17 juillet 2026, lançant officiellement la campagne électorale.",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
@@ -144,7 +199,12 @@
     {
       "category": "regles",
       "question": "Combien de sièges compte la Knesset au total ?",
-      "choices": ["100", "120", "150", "80"],
+      "choices": [
+        "100",
+        "120",
+        "150",
+        "80"
+      ],
       "correct_index": 1,
       "explanation": "La Knesset compte 120 membres depuis sa création.",
       "source_url": null
@@ -152,7 +212,12 @@
     {
       "category": "regles",
       "question": "Qui charge officiellement un chef de liste de former le gouvernement après les élections ?",
-      "choices": ["Le président de la Cour suprême", "Le Président de l'État", "Le chef de la liste arrivée en tête, automatiquement", "La Knesset, par un vote"],
+      "choices": [
+        "Le président de la Cour suprême",
+        "Le Président de l'État",
+        "Le chef de la liste arrivée en tête, automatiquement",
+        "La Knesset, par un vote"
+      ],
       "correct_index": 1,
       "explanation": "Le Président de l'État consulte les chefs de listes élues puis charge celui qui lui semble avoir les meilleures chances de réunir 61 sièges — ce n'est pas automatiquement le chef de la liste arrivée en tête.",
       "source_url": null
@@ -160,7 +225,12 @@
     {
       "category": "regles",
       "question": "Combien de temps le mandataire dispose-t-il légalement pour former une coalition, avant prolongation possible ?",
-      "choices": ["14 jours", "28 jours", "60 jours", "90 jours"],
+      "choices": [
+        "14 jours",
+        "28 jours",
+        "60 jours",
+        "90 jours"
+      ],
       "correct_index": 1,
       "explanation": "Le délai légal est de 28 jours, prolongeable de 14 jours supplémentaires si nécessaire.",
       "source_url": null
@@ -181,7 +251,12 @@
     {
       "category": "regles",
       "question": "Un gouvernement « de transition » (démissionnaire, entre deux Knesset) compte-t-il pour le pronostic Premier ministre de PrédiCité ?",
-      "choices": ["Oui, toujours", "Non, seule l'investiture formelle avec vote de confiance compte", "Seulement s'il dure plus de 3 mois", "Seulement si son chef change"],
+      "choices": [
+        "Oui, toujours",
+        "Non, seule l'investiture formelle avec vote de confiance compte",
+        "Seulement s'il dure plus de 3 mois",
+        "Seulement si son chef change"
+      ],
       "correct_index": 1,
       "explanation": "Entre la dissolution de la Knesset et l'investiture d'un nouveau gouvernement, l'exécutif sortant expédie les affaires courantes ; ça ne valide pas le pronostic.",
       "source_url": null
@@ -189,7 +264,12 @@
     {
       "category": "regles",
       "question": "Que deviennent les voix d'une liste qui n'atteint pas le seuil électoral de 3,25 % ?",
-      "choices": ["Elles sont annulées", "Elles sont redistribuées entre les listes qui ont franchi le seuil", "Elles sont reportées à l'élection suivante", "Elles comptent pour l'abstention"],
+      "choices": [
+        "Elles sont annulées",
+        "Elles sont redistribuées entre les listes qui ont franchi le seuil",
+        "Elles sont reportées à l'élection suivante",
+        "Elles comptent pour l'abstention"
+      ],
       "correct_index": 1,
       "explanation": "Sous le seuil, une liste n'obtient aucun siège et ses voix sont redistribuées entre les listes qui l'ont franchi.",
       "source_url": null
@@ -197,7 +277,12 @@
     {
       "category": "regles",
       "question": "Comment appelle-t-on, en hébreu, l'accord d'excédents de voix entre deux listes ?",
-      "choices": ["Mahapakh", "Hescem odafim", "Knesset odafim", "Bader-Ofer"],
+      "choices": [
+        "Mahapakh",
+        "Hescem odafim",
+        "Knesset odafim",
+        "Bader-Ofer"
+      ],
       "correct_index": 1,
       "explanation": "« Hescem odafim » (accord d'excédents) permet à deux listes de mettre en commun leurs restes de voix inutilisés.",
       "source_url": null
@@ -205,7 +290,12 @@
     {
       "category": "historique",
       "question": "Quel est, depuis 1949, le record du plus grand nombre de sièges obtenu par une seule liste à la Knesset ?",
-      "choices": ["44 (Parti travailliste, 1992)", "48 (Likoud, 1981)", "56 (Alignement, 1969)", "51 (Alignement, 1973)"],
+      "choices": [
+        "44 (Parti travailliste, 1992)",
+        "48 (Likoud, 1981)",
+        "56 (Alignement, 1969)",
+        "51 (Alignement, 1973)"
+      ],
       "correct_index": 2,
       "explanation": "L'Alignement de Golda Meir a obtenu 56 sièges en 1969, un record jamais égalé depuis — loin des 61 nécessaires pour une majorité absolue à lui seul.",
       "source_url": "https://en.wikipedia.org/wiki/1969_Israeli_legislative_election"
@@ -213,7 +303,12 @@
     {
       "category": "historique",
       "question": "Quel événement a retardé le scrutin de la 8e Knesset, initialement prévu en octobre 1973 ?",
-      "choices": ["La guerre du Kippour", "Une crise budgétaire", "Une épidémie", "Un attentat contre le Premier ministre"],
+      "choices": [
+        "La guerre du Kippour",
+        "Une crise budgétaire",
+        "Une épidémie",
+        "Un attentat contre le Premier ministre"
+      ],
       "correct_index": 0,
       "explanation": "La guerre du Kippour (octobre 1973) a retardé le scrutin de deux mois, jusqu'au 31 décembre 1973.",
       "source_url": "https://en.wikipedia.org/wiki/1973_Israeli_legislative_election"
@@ -221,7 +316,12 @@
     {
       "category": "historique",
       "question": "Qui est devenue Première ministre en mars 1969, après le décès de Levi Eshkol, avant même le scrutin de cette année-là ?",
-      "choices": ["Golda Meir", "Shulamit Aloni", "Yitzhak Rabin", "Ada Maimon"],
+      "choices": [
+        "Golda Meir",
+        "Shulamit Aloni",
+        "Yitzhak Rabin",
+        "Ada Maimon"
+      ],
       "correct_index": 0,
       "explanation": "Golda Meir a succédé à Levi Eshkol en mars 1969, puis mené l'Alignement à son record de 56 sièges la même année.",
       "source_url": "https://en.wikipedia.org/wiki/1969_Israeli_legislative_election"
@@ -242,7 +342,12 @@
     {
       "category": "historique",
       "question": "Combien de fois un Premier ministre israélien a-t-il été élu directement par les citoyens, avant l'abandon de ce système en 2001 ?",
-      "choices": ["Une seule fois", "Deux fois (1996 et 1999)", "Trois fois", "Jamais, ce système n'a jamais été appliqué"],
+      "choices": [
+        "Une seule fois",
+        "Deux fois (1996 et 1999)",
+        "Trois fois",
+        "Jamais, ce système n'a jamais été appliqué"
+      ],
       "correct_index": 1,
       "explanation": "Benjamin Netanyahou (1996) puis Ehud Barak (1999) ont été les deux seuls Premiers ministres élus par ce système, abandonné ensuite.",
       "source_url": "https://en.wikipedia.org/wiki/1999_Israeli_general_election"
@@ -250,7 +355,12 @@
     {
       "category": "historique",
       "question": "Quel parti centriste, fondé par Ariel Sharon peu avant le scrutin de 2006, l'a remporté dès sa toute première participation ?",
-      "choices": ["Yesh Atid", "Kadima", "Koulanou", "HaTnua"],
+      "choices": [
+        "Yesh Atid",
+        "Kadima",
+        "Koulanou",
+        "HaTnua"
+      ],
       "correct_index": 1,
       "explanation": "Kadima, fondé par Ariel Sharon en 2005, a remporté l'élection de 2006 avec 29 sièges sous la direction d'Ehud Olmert.",
       "source_url": "https://en.wikipedia.org/wiki/2006_Israeli_legislative_election"
@@ -258,7 +368,12 @@
     {
       "category": "historique",
       "question": "En 2013, Benjamin Netanyahou s'est présenté en liste commune avec quel autre parti ?",
-      "choices": ["Shas", "Yisrael Beytenou", "HaBayit HaYehoudi", "Yesh Atid"],
+      "choices": [
+        "Shas",
+        "Yisrael Beytenou",
+        "HaBayit HaYehoudi",
+        "Yesh Atid"
+      ],
       "correct_index": 1,
       "explanation": "« Likoud Yisrael Beytenou » a réuni les deux partis en une seule liste pour ce scrutin, avant qu'ils ne se séparent à nouveau ensuite.",
       "source_url": "https://en.wikipedia.org/wiki/2013_Israeli_legislative_election"
@@ -266,7 +381,12 @@
     {
       "category": "historique",
       "question": "Parmi les élections documentées sur PrédiCité, laquelle a connu le taux de participation le plus faible ?",
-      "choices": ["1949 (86,9 %)", "1999 (78,7 %)", "2006 (63,6 %)", "2020 (71,5 %)"],
+      "choices": [
+        "1949 (86,9 %)",
+        "1999 (78,7 %)",
+        "2006 (63,6 %)",
+        "2020 (71,5 %)"
+      ],
       "correct_index": 2,
       "explanation": "L'élection de 2006 a connu une participation de seulement 63,55 %, la plus basse de l'historique documenté ici.",
       "source_url": "https://en.wikipedia.org/wiki/2006_Israeli_legislative_election"
@@ -274,7 +394,12 @@
     {
       "category": "actualite",
       "question": "Quel institut a publié, le 23 juillet 2026, le sondage montrant pour la première fois une égalité entre le Likoud et Yashar ?",
-      "choices": ["Midgam", "Kantar (pour Israel Hayom)", "Direct Polls", "Panels Politics"],
+      "choices": [
+        "Midgam",
+        "Kantar (pour Israel Hayom)",
+        "Direct Polls",
+        "Panels Politics"
+      ],
       "correct_index": 1,
       "explanation": "Ce sondage Kantar pour Israel Hayom du 23 juillet 2026 plaçait Likoud et Yashar à égalité, à 23 sièges chacun.",
       "source_url": "https://www.israelhayom.co.il/news/politics/article/21046119"
@@ -282,7 +407,12 @@
     {
       "category": "actualite",
       "question": "Comment s'appelle l'alliance formée en avril 2026 par Naftali Bennett et Yaïr Lapid ?",
-      "choices": ["Ensemble (« Together »)", "HaMachane HaMamlachti", "Kadima 2026", "Yesh Atid Hadash"],
+      "choices": [
+        "Ensemble (« Together »)",
+        "HaMachane HaMamlachti",
+        "Kadima 2026",
+        "Yesh Atid Hadash"
+      ],
       "correct_index": 0,
       "explanation": "L'alliance « Together » (Ensemble), regroupant Bennett 2026 et Yesh Atid, a été annoncée le 26 avril 2026.",
       "source_url": "https://en.wikipedia.org/wiki/Together_(Israel)"
@@ -305,7 +435,12 @@
       "theme": "systeme_electoral",
       "difficulte": "decouverte",
       "question": "Combien de sièges compte la Knesset ?",
-      "choices": ["100", "120", "150", "61"],
+      "choices": [
+        "100",
+        "120",
+        "150",
+        "61"
+      ],
       "correct_index": 1,
       "explanation": "La Knesset, le parlement israélien, compte 120 sièges depuis 1949.",
       "source_url": "https://fr.wikipedia.org/wiki/Knesset"
@@ -315,7 +450,12 @@
       "theme": "systeme_electoral",
       "difficulte": "connaisseur",
       "question": "Quel pourcentage des voix une liste doit-elle atteindre pour entrer à la Knesset ?",
-      "choices": ["1 %", "2 %", "3,25 %", "5 %"],
+      "choices": [
+        "1 %",
+        "2 %",
+        "3,25 %",
+        "5 %"
+      ],
       "correct_index": 2,
       "explanation": "Le seuil électoral est de 3,25 % depuis 2014 ; en dessous, une liste n'obtient aucun siège.",
       "source_url": "https://fr.wikipedia.org/wiki/Knesset"
@@ -325,7 +465,12 @@
       "theme": "sondages_blocs",
       "difficulte": "decouverte",
       "question": "Combien de sièges faut-il pour disposer d'une majorité à la Knesset ?",
-      "choices": ["50", "60", "61", "70"],
+      "choices": [
+        "50",
+        "60",
+        "61",
+        "70"
+      ],
       "correct_index": 2,
       "explanation": "Il faut 61 sièges sur 120 pour une majorité — le seuil pour former un gouvernement.",
       "source_url": "https://fr.wikipedia.org/wiki/Knesset"
@@ -335,7 +480,12 @@
       "theme": "sondages_blocs",
       "difficulte": "connaisseur",
       "question": "Dans un sondage, qu'appelle-t-on un « bloc » ?",
-      "choices": ["Un seul parti", "Un regroupement de listes susceptibles de gouverner ensemble", "Les électeurs indécis", "Les sièges laissés vacants"],
+      "choices": [
+        "Un seul parti",
+        "Un regroupement de listes susceptibles de gouverner ensemble",
+        "Les électeurs indécis",
+        "Les sièges laissés vacants"
+      ],
       "correct_index": 1,
       "explanation": "Un bloc réunit les listes prêtes à former ou soutenir une même coalition ; on lit un sondage en additionnant les blocs.",
       "source_url": "https://fr.wikipedia.org/wiki/Knesset"
@@ -345,7 +495,12 @@
       "theme": "histoire",
       "difficulte": "connaisseur",
       "question": "En quelle année a eu lieu la première élection de la Knesset ?",
-      "choices": ["1948", "1949", "1952", "1967"],
+      "choices": [
+        "1948",
+        "1949",
+        "1952",
+        "1967"
+      ],
       "correct_index": 1,
       "explanation": "La première Knesset a été élue en janvier 1949, quelques mois après la création de l'État d'Israël.",
       "source_url": "https://fr.wikipedia.org/wiki/Knesset"
@@ -355,7 +510,12 @@
       "theme": "histoire",
       "difficulte": "expert",
       "question": "Quel dirigeant a mené la première alternance politique d'Israël, en 1977 ?",
-      "choices": ["David Ben Gourion", "Menachem Begin", "Yitzhak Rabin", "Shimon Peres"],
+      "choices": [
+        "David Ben Gourion",
+        "Menachem Begin",
+        "Yitzhak Rabin",
+        "Shimon Peres"
+      ],
       "correct_index": 1,
       "explanation": "En 1977, Menachem Begin (Likoud) met fin à près de trois décennies de domination travailliste.",
       "source_url": "https://fr.wikipedia.org/wiki/Menachem_Begin"
@@ -365,7 +525,12 @@
       "theme": "partis",
       "difficulte": "decouverte",
       "question": "Sur l'échiquier politique, le Likoud se situe historiquement... ?",
-      "choices": ["à gauche", "au centre", "à droite", "hors du spectre"],
+      "choices": [
+        "à gauche",
+        "au centre",
+        "à droite",
+        "hors du spectre"
+      ],
       "correct_index": 2,
       "explanation": "Le Likoud est le grand parti de la droite nationale-libérale israélienne, fondé en 1973.",
       "source_url": "https://fr.wikipedia.org/wiki/Likoud"
@@ -375,7 +540,12 @@
       "theme": "partis",
       "difficulte": "connaisseur",
       "question": "Le parti Shas représente principalement... ?",
-      "choices": ["les laïcs de gauche", "le judaïsme religieux séfarade", "les colons", "les citoyens arabes"],
+      "choices": [
+        "les laïcs de gauche",
+        "le judaïsme religieux séfarade",
+        "les colons",
+        "les citoyens arabes"
+      ],
       "correct_index": 1,
       "explanation": "Le Shas est un parti religieux représentant surtout le judaïsme séfarade et mizrahi.",
       "source_url": "https://fr.wikipedia.org/wiki/Shas"
@@ -385,7 +555,12 @@
       "theme": "personnalites",
       "difficulte": "connaisseur",
       "question": "Qui fut la seule femme à diriger le gouvernement israélien ?",
-      "choices": ["Tzipi Livni", "Golda Meir", "Shelly Yachimovich", "Dalia Itzik"],
+      "choices": [
+        "Tzipi Livni",
+        "Golda Meir",
+        "Shelly Yachimovich",
+        "Dalia Itzik"
+      ],
       "correct_index": 1,
       "explanation": "Golda Meir fut Première ministre d'Israël de 1969 à 1974.",
       "source_url": "https://fr.wikipedia.org/wiki/Golda_Meir"
@@ -395,9 +570,359 @@
       "theme": "personnalites",
       "difficulte": "expert",
       "question": "Quel Premier ministre israélien a signé les accords d'Oslo en 1993 ?",
-      "choices": ["Menachem Begin", "Yitzhak Rabin", "Ariel Sharon", "Ehud Barak"],
+      "choices": [
+        "Menachem Begin",
+        "Yitzhak Rabin",
+        "Ariel Sharon",
+        "Ehud Barak"
+      ],
       "correct_index": 1,
       "explanation": "Yitzhak Rabin signe les accords d'Oslo en 1993 ; il est assassiné en novembre 1995.",
+      "source_url": "https://fr.wikipedia.org/wiki/Yitzhak_Rabin"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "decouverte",
+      "question": "Pour l'élection de la Knesset, comment le territoire israélien est-il découpé en circonscriptions ?",
+      "choices": [
+        "Tout le pays forme une seule circonscription nationale",
+        "Il est divisé en circonscriptions de district, une par région",
+        "Une circonscription par ville de plus de 100 000 habitants",
+        "Un système mixte : moitié national, moitié circonscriptions locales"
+      ],
+      "correct_index": 0,
+      "explanation": "Israël applique une représentation proportionnelle où l'ensemble du pays constitue une circonscription unique : les sièges sont répartis entre les listes selon leur score national global.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "connaisseur",
+      "question": "Que dépose exactement l'électeur dans l'urne lors d'une élection à la Knesset ?",
+      "choices": [
+        "Un bulletin désignant une liste de parti (liste bloquée)",
+        "Un bulletin où il classe les candidats par ordre de préférence",
+        "Deux bulletins : un pour un candidat local, un pour un parti",
+        "Un bulletin où il nomme directement le Premier ministre"
+      ],
+      "correct_index": 0,
+      "explanation": "Le scrutin repose sur des listes bloquées : l'électeur vote pour une liste de parti, dont l'ordre des candidats est fixé à l'avance par le parti, et non pour des personnes individuelles.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "connaisseur",
+      "question": "Israël a connu une parenthèse où le Premier ministre était élu au suffrage universel direct, séparément de la Knesset. Sur quelle période cela s'est-il appliqué ?",
+      "choices": [
+        "De 1996 à 2001",
+        "De 1948 à 1955",
+        "De 1977 à 1984",
+        "Depuis 2003 sans interruption"
+      ],
+      "correct_index": 0,
+      "explanation": "Une loi votée en 1992 a instauré l'élection directe du Premier ministre, appliquée aux scrutins de 1996, 1999 et 2001, avant d'être abrogée : le pays est revenu au régime parlementaire classique.",
+      "source_url": "https://fr.wikipedia.org/wiki/Premier_ministre_d%27Isra%C3%ABl"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "decouverte",
+      "question": "Israël attribue-t-il ses sièges parlementaires selon une constitution écrite unique ?",
+      "choices": [
+        "Non : le pays n'a pas de constitution unique, il fonctionne avec des Lois fondamentales",
+        "Oui : une constitution adoptée dès 1948 régit tout le système",
+        "Oui : une constitution rédigée en 1992 fixe les 120 sièges",
+        "Non : le fonctionnement repose uniquement sur des décrets présidentiels"
+      ],
+      "correct_index": 0,
+      "explanation": "Israël n'a jamais adopté de constitution unique et codifiée ; son cadre institutionnel repose sur une série de Lois fondamentales, dont la Loi fondamentale sur la Knesset.",
+      "source_url": "https://fr.wikipedia.org/wiki/Lois_fondamentales_d%27Isra%C3%ABl"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "expert",
+      "question": "La répartition des sièges à la Knesset s'appuie sur la loi dite Bader-Ofer. À quelle méthode de calcul mathématique correspond-elle ?",
+      "choices": [
+        "La méthode d'Hondt (méthode de la plus forte moyenne)",
+        "La méthode du plus fort reste (méthode de Hare)",
+        "Le scrutin uninominal majoritaire à un tour",
+        "La méthode de Sainte-Laguë modifiée à quotient fixe"
+      ],
+      "correct_index": 0,
+      "explanation": "Adoptée en 1973 et nommée d'après les députés Bader et Ofer, cette règle applique la méthode d'Hondt (plus forte moyenne) et autorise deux listes à signer un accord de report des restes de voix.",
+      "source_url": "https://fr.wikipedia.org/wiki/M%C3%A9thode_d%27Hondt"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "expert",
+      "question": "Après une élection, le Président de l'État charge un député de former le gouvernement. De combien de temps dispose d'abord ce député pour y parvenir ?",
+      "choices": [
+        "28 jours, prolongeables d'au plus 14 jours supplémentaires",
+        "7 jours, sans aucune prolongation possible",
+        "90 jours, prolongeables une seule fois de 90 jours",
+        "6 mois, faute de quoi le Président nomme lui-même le gouvernement"
+      ],
+      "correct_index": 0,
+      "explanation": "Selon la Loi fondamentale sur le gouvernement, le député désigné dispose de 28 jours pour former une coalition, délai que le Président peut prolonger d'au maximum 14 jours supplémentaires.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "connaisseur",
+      "question": "Quelle population le parti Judaïsme unifié de la Torah représente-t-il traditionnellement ?",
+      "choices": [
+        "Les juifs ultra-orthodoxes (haredim) ashkénazes",
+        "Les colons du sionisme religieux",
+        "Les juifs traditionalistes séfarades",
+        "La minorité druze du nord du pays"
+      ],
+      "correct_index": 0,
+      "explanation": "Judaïsme unifié de la Torah est une coalition des partis haredim ashkénazes Agoudat Israël (hassidiques) et Degel HaTorah (« lituaniens » non hassidiques).",
+      "source_url": "https://fr.wikipedia.org/wiki/Judaïsme_unifié_de_la_Torah"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "decouverte",
+      "question": "Qui fut la figure dirigeante du Likoud, grande formation de la droite israélienne, dès sa création en 1973 ?",
+      "choices": [
+        "Menahem Begin",
+        "David Ben Gourion",
+        "Shimon Peres",
+        "Yitzhak Rabin"
+      ],
+      "correct_index": 0,
+      "explanation": "Le Likoud naît en 1973 du rassemblement du Gahal (Hérout + libéraux) et d'autres factions, sous la direction de Menahem Begin ; Ben Gourion, Peres et Rabin étaient des figures travaillistes.",
+      "source_url": "https://fr.wikipedia.org/wiki/Likoud"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "connaisseur",
+      "question": "Quel parti, ancêtre du Parti travailliste, a dominé la vie politique des premières décennies d'Israël sous David Ben Gourion ?",
+      "choices": [
+        "Le Mapaï",
+        "Le Likoud",
+        "Le Shas",
+        "Le Meretz"
+      ],
+      "correct_index": 0,
+      "explanation": "Le Mapaï, créé en 1930, fut le parti dominant du jeune État d'Israël sous Ben Gourion, avant de fusionner en 1968 dans le Parti travailliste israélien.",
+      "source_url": "https://fr.wikipedia.org/wiki/Mapaï"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "connaisseur",
+      "question": "Sur l'échiquier politique israélien, où le parti Meretz est-il traditionnellement situé ?",
+      "choices": [
+        "À gauche",
+        "À l'extrême droite nationaliste",
+        "Dans le bloc religieux haredi",
+        "Sur une ligne centriste conservatrice"
+      ],
+      "correct_index": 0,
+      "explanation": "Le Meretz est un parti de gauche, laïque et social-démocrate, favorable au dialogue et à la solution à deux États.",
+      "source_url": "https://fr.wikipedia.org/wiki/Meretz"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "expert",
+      "question": "Qu'est-ce qui caractérise le courant du « sionisme religieux », incarné historiquement par le Parti national religieux (Mafdal) ?",
+      "choices": [
+        "L'alliance d'une vie juive religieuse (Torah) et de l'engagement sioniste national",
+        "Le rejet du sionisme au nom de la stricte observance religieuse",
+        "Un mouvement laïque d'inspiration marxiste",
+        "Un courant exclusivement arabe et non juif"
+      ],
+      "correct_index": 0,
+      "explanation": "Le sionisme religieux combine pratique juive religieuse et projet national sioniste (« la Terre d'Israël pour le Peuple d'Israël selon la Torah d'Israël ») ; à l'inverse, certains ultra-orthodoxes rejettent le sionisme au nom de la religion.",
+      "source_url": "https://fr.wikipedia.org/wiki/Parti_national_religieux"
+    },
+    {
+      "category": "historique",
+      "theme": "histoire",
+      "difficulte": "expert",
+      "question": "Faute d'accord sur une constitution écrite unique, quel compromis la Knesset adopta-t-elle en 1950 ?",
+      "choices": [
+        "La décision Harari : adopter des Lois fondamentales chapitre par chapitre",
+        "L'adoption immédiate d'une constitution rédigée par la Cour suprême",
+        "La reprise intégrale de la constitution mandataire britannique",
+        "Le renoncement définitif à tout texte à valeur constitutionnelle"
+      ],
+      "correct_index": 0,
+      "explanation": "La résolution Harari de 1950 prévoyait de bâtir la future constitution par étapes, sous forme de Lois fondamentales successives à valeur constitutionnelle.",
+      "source_url": "https://fr.wikipedia.org/wiki/Lois_fondamentales_d%27Isra%C3%ABl"
+    },
+    {
+      "category": "historique",
+      "theme": "histoire",
+      "difficulte": "connaisseur",
+      "question": "Quel parti Menachem Begin fonda-t-il en 1948, principal rival de la gauche travailliste et futur socle du Likoud ?",
+      "choices": [
+        "Le Hérout",
+        "Le Mapaï",
+        "Le Shas",
+        "Le Meretz"
+      ],
+      "correct_index": 0,
+      "explanation": "Begin fonda le Hérout (« Liberté ») en 1948 ; ce parti fut la principale opposition au camp travailliste et forma en 1973 le noyau du Likoud.",
+      "source_url": "https://fr.wikipedia.org/wiki/Menahem_Begin"
+    },
+    {
+      "category": "historique",
+      "theme": "histoire",
+      "difficulte": "expert",
+      "question": "Après les élections de 1984, sans vainqueur net, un gouvernement d'union nationale reposa sur une rotation du poste de Premier ministre entre quels deux dirigeants ?",
+      "choices": [
+        "Shimon Peres et Yitzhak Shamir",
+        "Golda Meir et Menachem Begin",
+        "Yitzhak Rabin et Ariel Sharon",
+        "David Ben-Gourion et Levi Eshkol"
+      ],
+      "correct_index": 0,
+      "explanation": "Le scrutin de 1984 étant serré, l'Alignement de Peres et le Likoud de Shamir formèrent une union nationale avec rotation : Peres puis Shamir se succédèrent à la tête du gouvernement.",
+      "source_url": "https://fr.wikipedia.org/wiki/%C3%89lections_l%C3%A9gislatives_isra%C3%A9liennes_de_1984"
+    },
+    {
+      "category": "regles",
+      "theme": "sondages_blocs",
+      "difficulte": "decouverte",
+      "question": "Sous quelle forme les sondages israéliens présentent-ils le plus souvent leurs résultats ?",
+      "choices": [
+        "En projection de nombre de sièges",
+        "En nombre de circonscriptions remportées",
+        "En nombre de ministères attribués",
+        "En pourcentage du budget de l'État"
+      ],
+      "correct_index": 0,
+      "explanation": "La Knesset étant élue à la proportionnelle dans une circonscription nationale unique, les sondages traduisent les intentions de vote en projections de sièges pour chaque liste.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "sondages_blocs",
+      "difficulte": "connaisseur",
+      "question": "Pourquoi un parti proche du seuil électoral rend-il une projection de sondage particulièrement incertaine ?",
+      "choices": [
+        "S'il passe sous le seuil, il n'obtient aucun siège, ce qui redistribue d'un coup plusieurs sièges vers les autres listes",
+        "Le franchissement du seuil impose de recompter la totalité des bulletins",
+        "Un parti sous le seuil reçoit automatiquement un siège de compensation",
+        "Les instituts excluent d'office les partis proches du seuil"
+      ],
+      "correct_index": 0,
+      "explanation": "Le passage du seuil est binaire : une liste juste en dessous perd tous ses sièges, qui sont réattribués aux autres, si bien qu'un léger écart peut faire basculer l'équilibre entre blocs.",
+      "source_url": "https://fr.wikipedia.org/wiki/Repr%C3%A9sentation_proportionnelle"
+    },
+    {
+      "category": "regles",
+      "theme": "sondages_blocs",
+      "difficulte": "connaisseur",
+      "question": "Que signifie la « marge d'erreur » annoncée avec un sondage ?",
+      "choices": [
+        "Une plage d'incertitude statistique autour du résultat mesuré, liée à la taille de l'échantillon",
+        "Le nombre d'électeurs qui changent d'avis le jour du scrutin",
+        "L'écart systématique observé entre deux instituts concurrents",
+        "La proportion attendue de bulletins nuls ou blancs"
+      ],
+      "correct_index": 0,
+      "explanation": "La marge d'erreur exprime l'incertitude due à l'échantillonnage : le résultat réel se situe, avec une probabilité donnée, dans une fourchette autour du chiffre publié.",
+      "source_url": "https://fr.wikipedia.org/wiki/Marge_d%27erreur"
+    },
+    {
+      "category": "regles",
+      "theme": "sondages_blocs",
+      "difficulte": "expert",
+      "question": "Dans une analyse de blocs, qu'appelle-t-on un parti « charnière » (ou faiseur de rois) ?",
+      "choices": [
+        "Un parti dont les sièges peuvent donner la majorité à l'un ou à l'autre bloc selon son choix d'alliance",
+        "Le parti ayant recueilli le plus grand nombre de sièges",
+        "Un parti auquel la loi interdit d'entrer dans une coalition",
+        "Le parti qui préside systématiquement la Knesset"
+      ],
+      "correct_index": 0,
+      "explanation": "Un parti charnière détient des sièges décisifs : sans majorité propre, aucun bloc ne peut gouverner sans lui, ce qui lui confère un pouvoir de négociation disproportionné.",
+      "source_url": "https://fr.wikipedia.org/wiki/Gouvernement_de_coalition"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "decouverte",
+      "question": "Qui fut le tout premier président de l'État d'Israël, élu en 1949 ?",
+      "choices": [
+        "David Ben Gourion",
+        "Chaim Weizmann",
+        "Moshe Sharett",
+        "Golda Meir"
+      ],
+      "correct_index": 1,
+      "explanation": "Chaim Weizmann fut le premier président d'Israël (1949-1952), fonction largement honorifique ; David Ben Gourion, lui, occupait le poste de Premier ministre.",
+      "source_url": "https://fr.wikipedia.org/wiki/Chaim_Weizmann"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "connaisseur",
+      "question": "Quel homme succéda à David Ben Gourion comme deuxième Premier ministre d'Israël en 1954 ?",
+      "choices": [
+        "Levi Eshkol",
+        "Moshe Sharett",
+        "Menachem Begin",
+        "Yitzhak Shamir"
+      ],
+      "correct_index": 1,
+      "explanation": "Moshe Sharett fut le deuxième Premier ministre d'Israël (1954-1955), lors du premier retrait temporaire de Ben Gourion de la vie politique.",
+      "source_url": "https://fr.wikipedia.org/wiki/Moshe_Sharett"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "expert",
+      "question": "Quel Premier ministre israélien était en fonction lors de la guerre des Six Jours de juin 1967 ?",
+      "choices": [
+        "Golda Meir",
+        "David Ben Gourion",
+        "Levi Eshkol",
+        "Yitzhak Rabin"
+      ],
+      "correct_index": 2,
+      "explanation": "Levi Eshkol, troisième Premier ministre d'Israël (1963-1969), dirigeait le pays pendant la guerre des Six Jours de 1967.",
+      "source_url": "https://fr.wikipedia.org/wiki/Levi_Eshkol"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "connaisseur",
+      "question": "En quelle année Menachem Begin reçut-il le prix Nobel de la paix, conjointement avec Anouar el-Sadate ?",
+      "choices": [
+        "1977",
+        "1978",
+        "1979",
+        "1981"
+      ],
+      "correct_index": 1,
+      "explanation": "Menachem Begin et le président égyptien Anouar el-Sadate reçurent le prix Nobel de la paix en 1978, dans le contexte des accords de Camp David.",
+      "source_url": "https://fr.wikipedia.org/wiki/Menachem_Begin"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "expert",
+      "question": "Qui était le chef d'état-major de Tsahal pendant la guerre des Six Jours de 1967 ?",
+      "choices": [
+        "Moshe Dayan",
+        "Yitzhak Rabin",
+        "Ariel Sharon",
+        "Ehud Barak"
+      ],
+      "correct_index": 1,
+      "explanation": "Yitzhak Rabin fut chef d'état-major de Tsahal (1964-1968) durant la guerre des Six Jours ; Moshe Dayan en était alors le ministre de la Défense.",
       "source_url": "https://fr.wikipedia.org/wiki/Yitzhak_Rabin"
     }
   ]

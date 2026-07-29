@@ -10,6 +10,7 @@ import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import { computeScore } from '@/lib/score';
+import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
 
@@ -121,54 +122,8 @@ export default function Home() {
   const daysLeft = Math.max(0, Math.ceil((ELECTION_DAY.getTime() - Date.now()) / 86400000));
   const firstName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
 
-  // Flux « en direct » : uniquement des faits RÉELS (sondage, listes, mouvements,
-  // cotes, événements, actu, repères). Aucun item fabriqué — une source vide
-  // n'apparaît pas.
-  const trunc = (s, n = 58) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s);
-  const prevPoll = sondages?.[1] || null;
-  const tickerItems = [];
-  tickerItems.push({ emoji: '⏳', text: 'Scrutin', value: `J-${daysLeft}`, valueColor: 'var(--p-gold-text)', to: createPageUrl('Learn') });
-  if (latestPoll) {
-    tickerItems.push({ emoji: '📊', text: `${latestPoll.institute} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`, to: createPageUrl('Listes') });
-    rankedListes.filter(l => l._seats > 0).slice(0, 4).forEach(l =>
-      tickerItems.push({ emoji: '▪️', text: l.name_fr, value: `${l._seats}`, valueColor: l.color || 'var(--p-text)', to: `${createPageUrl('Liste')}?slug=${l.slug}` }),
-    );
-    tickerItems.push({ emoji: '⚖️', text: nobodyHasMajority ? "Aucun bloc n'atteint 61" : 'Un bloc franchit 61', to: createPageUrl('Listes') });
-  }
-  // Mouvements de sièges — seulement entre deux sondages du MÊME institut (comparer
-  // des méthodologies différentes serait trompeur).
-  if (latestPoll && prevPoll && prevPoll.institute === latestPoll.institute) {
-    const prevMap = new Map((prevPoll.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
-    listesAvecSieges
-      .map(l => ({ ...l, delta: l._seats - (prevMap.get(l.id) ?? 0) }))
-      .filter(l => l.delta !== 0)
-      .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
-      .slice(0, 4)
-      .forEach(l => tickerItems.push({
-        emoji: l.delta > 0 ? '📈' : '📉',
-        text: l.name_fr,
-        value: `${l.delta > 0 ? '+' : ''}${l.delta}`,
-        valueColor: l.delta > 0 ? 'var(--p-green)' : 'var(--p-red)',
-        to: `${createPageUrl('Liste')}?slug=${l.slug}`,
-      }));
-  }
-  // Cotes / événements du moment (2 issues pour les événements binaires).
-  (parisData?.marches || []).slice(0, 10).forEach(m => {
-    (m.issues || []).slice(0, m.type === 'evenement' ? 2 : 1).forEach((iss, idx) => tickerItems.push({
-      emoji: idx > 0 ? '↔️' : (m.type === 'evenement' ? '🗳️' : '⚡'),
-      text: idx > 0 ? iss.label : trunc(m.question),
-      value: `×${iss.cote.toFixed(2)}`,
-      valueColor: 'var(--p-blue)',
-      to: createPageUrl('Paris'),
-    }));
-  });
-  // Actu de la campagne.
-  (actuData?.items || []).slice(0, 8).forEach(a => {
-    tickerItems.push({ emoji: '📰', text: trunc(a.source ? `${a.source} : ${a.title}` : a.title, 72), href: a.link });
-  });
-  // Repères institutionnels (faits stables, non inventés).
-  tickerItems.push({ emoji: '📐', text: "Seuil d'entrée à la Knesset", value: '3,25 %', to: createPageUrl('Learn') });
-  if (listes.length) tickerItems.push({ emoji: '🏳️', text: 'Listes en lice', value: `${listes.length}`, to: createPageUrl('Listes') });
+  // Flux « en direct » de la campagne (faits réels agrégés) — hook partagé Home/Paris.
+  const tickerItems = useCampaignFlux();
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>

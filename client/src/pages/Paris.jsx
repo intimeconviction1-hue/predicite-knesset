@@ -4,8 +4,10 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { Info, ArrowRight } from 'lucide-react';
-import CinematicHero from '@/components/knesset/CinematicHero';
+import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ConfettiBurst from '@/components/knesset/ConfettiBurst';
+import LiveTicker from '@/components/knesset/LiveTicker';
+import { useCampaignFlux } from '@/lib/useCampaignFlux';
 
 const MISE_MIN = 10, MISE_MAX = 500, MISE_STEP = 10;
 
@@ -155,6 +157,7 @@ export default function Paris() {
   const listeById = new Map(listes.map(l => [l.id, l]));
 
   const onPlaced = () => { refetchJetons(); refetchMarches(); };
+  const flux = useCampaignFlux();
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -162,10 +165,14 @@ export default function Paris() {
         size="sm"
         photos={['/images/knesset-hero.jpg']}
         position="center 30%"
-        kicker="Jeu de points · gratuit"
-        title="Parie sur les sondages"
-        subtitle="Mise tes jetons sur ce que diront les prochains sondages. Plus une issue est improbable, plus la cote paie. Résolution à chaque nouveau sondage. C'est gratuit — que des points, jamais d'argent."
+        badge={{ text: 'La campagne en direct', live: true }}
+        kicker="Paris · cotes · événements · flux"
+        title={<>Le <HeroGold>direct</HeroGold></>}
+        subtitle="Le hub de la campagne minute par minute — sondages, cotes, événements. Parie sur tout ce qui bouge. 100 % en jetons gratuits, jamais d'argent : bien parier fait monter ton Score."
       />
+
+      {/* Le flux en direct — même bandeau que la Home (faits réels) */}
+      <LiveTicker items={flux} />
 
       <div className="max-w-3xl mx-auto px-4 py-8">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-40)' }}>

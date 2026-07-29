@@ -4,11 +4,12 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ChevronRight, Trophy, ArrowRight, TrendingUp } from 'lucide-react';
+import { ChevronRight, Trophy, ArrowRight } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
+import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import { computeScore } from '@/lib/score';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
@@ -237,27 +238,22 @@ export default function Home() {
 
       </div>
 
-      {/* Cotes en direct — les paris visibles dès l'accueil (le hook de rétention) */}
-      {topMarket && topMarket.issues?.length > 0 && (
-        <div className="max-w-3xl mx-auto px-4 pt-2 pb-4">
-          <Link to={createPageUrl('Paris')} className="block rounded-2xl p-5 transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
-            <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-                <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>Cotes en direct · jetons gratuits</span>
-              </div>
-              <span className="text-xs font-semibold inline-flex items-center gap-1" style={{ color: 'var(--p-blue)' }}>Parier <ArrowRight className="w-3.5 h-3.5" /></span>
-            </div>
-            <p className="text-sm font-bold mb-3" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{topMarket.question}</p>
-            <div className="flex gap-2 flex-wrap">
-              {topMarket.issues.slice(0, 4).map(iss => (
-                <span key={iss.id} className="inline-flex items-center gap-2 rounded-lg px-3 py-2" style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)' }}>
-                  <span className="text-xs font-semibold" style={{ color: 'var(--p-text-60)' }}>{iss.label}</span>
-                  <span className="font-mono font-bold text-sm" style={{ color: 'var(--p-blue)' }}>{iss.cote.toFixed(2)}<span className="text-[10px]"> ×</span></span>
-                </span>
-              ))}
-            </div>
-          </Link>
+      {/* Le fait du jour se joue — carte recto/verso (signature « vases
+          communicants » : le sondage vérifié se retourne sur son pari + quiz) */}
+      {latestPoll && (
+        <div className="max-w-md mx-auto px-4 pt-2 pb-4">
+          <p className="text-[10px] font-black uppercase tracking-widest text-center mb-3" style={{ color: 'var(--p-gold-text)' }}>Le fait du jour se joue — retourne la carte</p>
+          <RectoVersoCard
+            badge="Sondage · fait vérifié"
+            title={`${latestPoll.institute} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`}
+            fact={nobodyHasMajority ? "Aucun bloc n'atteint la majorité de 61 sièges." : 'Un bloc franchit la barre des 61 sièges.'}
+            nums={rankedListes.filter(l => l._seats > 0).slice(0, 2).map(l => ({ n: l._seats, label: l.name_fr }))}
+            source={`Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''}`}
+            betQuestion={topMarket?.question}
+            betCote={topMarket?.issues?.[0]?.cote?.toFixed(2)}
+            betTo={createPageUrl('Paris')}
+            quizTo={createPageUrl('Quiz')}
+          />
         </div>
       )}
 

@@ -39,10 +39,26 @@ export function HeroGold({ children }) {
   );
 }
 
+// Deux registres d'identité (« Le Marbre & le Jeu ») :
+//  - 'marbre' (défaut) : voile BLEU institutionnel — l'info, l'élection, l'histoire
+//  - 'jeu'             : voile AMBRÉ/or — les pages où l'on joue (paris, quiz,
+//                        ligues, classement). Même grammaire, énergie différente.
+const REGISTRES = {
+  marbre: {
+    voile: 'linear-gradient(180deg, rgba(0,22,74,0.82) 0%, rgba(0,40,140,0.42) 26%, rgba(0,45,130,0.30) 48%, rgba(237,241,249,0.60) 70%, FADE 90%)',
+    kicker: '#9fc0ff',
+  },
+  jeu: {
+    voile: 'linear-gradient(180deg, rgba(38,26,4,0.84) 0%, rgba(96,68,12,0.48) 26%, rgba(120,86,16,0.32) 48%, rgba(237,241,249,0.60) 70%, FADE 90%)',
+    kicker: '#ffd77a',
+  },
+};
+
 export default function CinematicHero({
   photos = [],
   position = 'center 30%',
   size = 'md',
+  registre = 'marbre',
   badge,
   kicker,
   title,
@@ -61,6 +77,7 @@ export default function CinematicHero({
   const y = useTransform(scrollYProgress, [0, 1], [0, reduced ? 0 : -60]);
 
   const s = SIZES[size] || SIZES.md;
+  const reg = REGISTRES[registre] || REGISTRES.marbre;
   const alignCls = align === 'left' ? 'items-start text-left' : 'items-center text-center';
 
   return (
@@ -76,7 +93,7 @@ export default function CinematicHero({
       {/* voile bleu institutionnel : sombre en haut (texte blanc lisible),
           photo visible au milieu, fondu vers le clair avant le contenu */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: `linear-gradient(180deg, rgba(0,22,74,0.82) 0%, rgba(0,40,140,0.42) 26%, rgba(0,45,130,0.30) 48%, rgba(237,241,249,0.60) 70%, ${fadeTo} 90%)`,
+        background: reg.voile.replace('FADE', fadeTo),
       }} />
       {/* vignette cinéma */}
       <div className="absolute inset-0 pointer-events-none" style={{
@@ -111,7 +128,7 @@ export default function CinematicHero({
         )}
 
         {kicker && (
-          <p className="mb-2 text-sm font-bold" style={{ fontFamily: 'var(--font-display)', color: '#9fc0ff' }}>{kicker}</p>
+          <p className="mb-2 text-sm font-bold" style={{ fontFamily: 'var(--font-display)', color: reg.kicker }}>{kicker}</p>
         )}
 
         {title && (

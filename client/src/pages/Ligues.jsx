@@ -98,6 +98,7 @@ export default function Ligues() {
       <ConfettiBurst trigger={celebrate} />
 
       <CinematicHero
+        registre="jeu"
         size="sm"
         photos={['/images/listes-hero.jpg']}
         position="center 30%"

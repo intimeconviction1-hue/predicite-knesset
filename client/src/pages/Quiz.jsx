@@ -122,6 +122,7 @@ export default function Quiz() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <CinematicHero
+        registre="jeu"
         size="md"
         photos={['/images/learn-hero.jpg']}
         position="center 30%"

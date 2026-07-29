@@ -162,6 +162,7 @@ export default function Paris() {
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <CinematicHero
+        registre="jeu"
         size="sm"
         photos={['/images/knesset-hero.jpg']}
         position="center 30%"

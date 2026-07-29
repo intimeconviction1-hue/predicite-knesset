@@ -60,6 +60,7 @@ import Historique from './pages/Historique';
 import Actu from './pages/Actu';
 import Quiz from './pages/Quiz';
 import Ligues from './pages/Ligues';
+import Voter from './pages/Voter';
 import __Layout from './Layout.jsx';
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
@@ -84,6 +85,7 @@ export const PAGES = {
     "Actu": Actu,
     "Quiz": Quiz,
     "Ligues": Ligues,
+    "Voter": Voter,
 }
 
 export const pagesConfig = {

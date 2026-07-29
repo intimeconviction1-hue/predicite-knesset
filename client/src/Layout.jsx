@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, MapPin, Trophy, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  LogOut, BarChart2, Landmark, Newspaper, Flame, TrendingUp, Coins, Users
+  LogOut, BarChart2, Landmark, Newspaper, Flame, TrendingUp, Coins, Users, UserCheck
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -81,6 +81,7 @@ export default function Layout({ children, currentPageName }) {
 
   const apprendreItems = [
     { name: 'Learn', label: "L'élection", icon: BookOpen },
+    { name: 'Voter', label: 'Comment voter', icon: UserCheck },
     { name: 'Listes', label: 'Listes', icon: MapPin },
     { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
     { name: 'Historique', label: 'Historique', icon: Landmark },

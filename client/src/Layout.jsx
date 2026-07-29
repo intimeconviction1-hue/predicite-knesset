@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import Onboarding from '@/components/knesset/Onboarding';
+import { computeScore } from '@/lib/score';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -112,7 +113,7 @@ export default function Layout({ children, currentPageName }) {
   const statChips = (compact) => {
     if (!user || !userProgress) return null;
     const streak = userProgress.current_streak || 0;
-    const points = userProgress.total_points || 0;
+    const points = computeScore(userProgress);
     const jetons = userProgress.jetons || 0;
     const pad = compact ? 'px-2.5 py-1' : 'px-3 py-1.5';
     const chips = [];

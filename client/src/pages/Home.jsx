@@ -9,6 +9,7 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
+import { computeScore } from '@/lib/score';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
 
@@ -204,7 +205,7 @@ export default function Home() {
             <Trophy className="w-3.5 h-3.5" style={{ color: '#ffd77a' }} />
             <span className="text-sm text-white">Bonjour {firstName} ·</span>
             <span className="font-bold text-sm font-mono" style={{ color: '#ffd77a' }}>
-              {(progress.total_points || 0).toLocaleString('fr-FR')} pts
+              {computeScore(progress).toLocaleString('fr-FR')} pts
             </span>
           </motion.div>
         ) : (

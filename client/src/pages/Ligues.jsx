@@ -229,7 +229,7 @@ export default function Ligues() {
                           {m.name}{m.is_you && <span className="ml-1.5 text-xs" style={{ color: 'var(--p-blue)' }}>(toi)</span>}
                         </span>
                         <span className="text-[11px]" style={{ color: 'var(--p-text-40)' }}>{m.correct_predictions}/{m.predictions_count} justes</span>
-                        <span className="font-mono font-bold text-sm w-16 text-right flex-shrink-0" style={{ color: 'var(--p-gold-text)' }}>{m.total_points.toLocaleString('fr-FR')}</span>
+                        <span className="font-mono font-bold text-sm w-16 text-right flex-shrink-0" style={{ color: 'var(--p-gold-text)' }}>{(m.score ?? 0).toLocaleString('fr-FR')}</span>
                       </div>
                     ))}
                   </div>

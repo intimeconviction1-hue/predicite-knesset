@@ -110,9 +110,15 @@ export async function ligueLeaderboard(user_email, body) {
   const membership = await queryOne('SELECT id FROM ligue_membres WHERE ligue_id = ? AND user_email = ?', [ligue_id, user_email]);
   if (!membership) { const e = new Error("Tu ne fais pas partie de cette ligue."); e.status = 403; throw e; }
 
+  // SCORE unique = même formule que le classement général (client lib/score.js) :
+  // précision (total − quiz − régularité, = pronostics + 25% des gains de paris)
+  // + quiz plafonné à 300 + régularité plafonnée à 900. On classe là-dessus.
   const rows = await queryAll(
     `SELECT lm.user_email,
             COALESCE(up.total_points, 0)        AS total_points,
+            (GREATEST(COALESCE(up.total_points, 0) - COALESCE(up.learning_points, 0) - COALESCE(up.regularity_points, 0), 0)
+              + LEAST(COALESCE(up.learning_points, 0), 300)
+              + LEAST(COALESCE(up.regularity_points, 0), 900))    AS score,
             COALESCE(up.predictions_count, 0)   AS predictions_count,
             COALESCE(up.correct_predictions, 0) AS correct_predictions,
             COALESCE(NULLIF(usr.full_name, ''), 'Joueur ' || substr(md5(lm.user_email), 1, 4)) AS name
@@ -120,7 +126,7 @@ export async function ligueLeaderboard(user_email, body) {
      LEFT JOIN user_progress up ON up.user_email = lm.user_email
      LEFT JOIN users usr        ON usr.email     = lm.user_email
      WHERE lm.ligue_id = ?
-     ORDER BY total_points DESC, name ASC`,
+     ORDER BY score DESC, name ASC`,
     [ligue_id]
   );
 
@@ -128,7 +134,7 @@ export async function ligueLeaderboard(user_email, body) {
     rank: i + 1,
     name: r.name,
     is_you: r.user_email === user_email,
-    total_points: Number(r.total_points || 0),
+    score: Number(r.score || 0),
     predictions_count: Number(r.predictions_count || 0),
     correct_predictions: Number(r.correct_predictions || 0),
   }));

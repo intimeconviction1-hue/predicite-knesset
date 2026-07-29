@@ -6,25 +6,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Trophy, Medal, Crown, Users, Target, Flame, Search, BookOpen } from 'lucide-react';
 import CountUp from '@/components/knesset/CountUp';
+import { computeScore, titleForScore } from '@/lib/score';
 
 const formatFr = (v) => Math.round(v).toLocaleString('fr-FR');
-
-// Indice citoyen /100 — calculé côté client depuis les compteurs déjà exposés
-// par user_progress (aucune migration nécessaire, toujours à jour) :
-//   précision  = points de pronostics = total − apprentissage − régularité
-//   apprentissage = learning_points (quiz) · régularité = regularity_points (streak)
-// Chaque composante est ramenée à 0..1 via un plafond de référence (« excellent
-// engagement » sur la campagne), puis pondérée 40 / 30 / 30.
-const CITIZEN_CAP = { precision: 2000, learning: 300, regularity: 900 };
-function computeCitizenIndex(p) {
-  const learning = p.learning_points || 0;
-  const regularity = p.regularity_points || 0;
-  const precision = Math.max(0, (p.total_points || 0) - learning - regularity);
-  const idx = 40 * Math.min(1, precision / CITIZEN_CAP.precision)
-            + 30 * Math.min(1, learning / CITIZEN_CAP.learning)
-            + 30 * Math.min(1, regularity / CITIZEN_CAP.regularity);
-  return Math.round(idx);
-}
 
 export default function Leaderboard() {
   const [user, setUser] = useState(null);
@@ -39,9 +23,10 @@ export default function Leaderboard() {
     queryFn: () => base44.entities.UserProgress.list('-total_points', 100)
   });
 
-  // Le classement se fait sur l'indice citoyen (l'API renvoie les lignes triées
-  // par total_points ; on re-trie par indice, qui est la vraie métrique de rang).
-  const ranked = [...allUsers].sort((a, b) => computeCitizenIndex(b) - computeCitizenIndex(a));
+  // Le classement se fait sur le SCORE unique (l'API renvoie les lignes triées
+  // par total_points ; on re-trie par Score, la vraie métrique de rang — même
+  // formule que les ligues, voir lib/score.js).
+  const ranked = [...allUsers].sort((a, b) => computeScore(b) - computeScore(a));
   const filteredUsers = ranked.filter(u =>
     u.user_email?.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -63,8 +48,8 @@ export default function Leaderboard() {
     return `${Math.round((player.correct_predictions || 0) / player.predictions_count * 100)}%`;
   };
 
-  const getScore = (player) => computeCitizenIndex(player);
-  const getScoreLabel = () => 'indice';
+  const getScore = (player) => computeScore(player);
+  const getScoreLabel = () => 'pts';
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -75,16 +60,16 @@ export default function Leaderboard() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-3 mb-3">
               <Trophy className="w-7 h-7" style={{ color: 'var(--p-gold)' }} />
-              <h1 className="p-display text-3xl">Classement citoyen</h1>
+              <h1 className="p-display text-3xl">Le classement</h1>
             </div>
             <p className="p-body text-sm max-w-xl mb-5">
-              Indice citoyen /100 = précision ×40 % + apprentissage ×30 % + régularité ×30 %. Tes points bruts continuent de s'accumuler ; l'indice, lui, mesure ton équilibre.
+              Ton <b>Score</b>, c'est ton rang — ici comme dans tes ligues. La précision de tes <b>pronostics</b> et de tes <b>paris</b> compte sans plafond ; le quiz et la régularité sont plafonnés, pour récompenser le flair plus que le volume.
             </p>
             <div className="flex items-center gap-6 flex-wrap">
               {[
-                { icon: Target,   label: 'Précision × 40 %',    color: 'var(--p-red)' },
-                { icon: BookOpen, label: 'Apprentissage × 30 %', color: 'var(--p-gold)' },
-                { icon: Flame,    label: 'Régularité × 30 %',   color: '#F97316' },
+                { icon: Target,   label: 'Pronostics + paris',     color: 'var(--p-red)' },
+                { icon: BookOpen, label: 'Quiz (plafonné)',        color: 'var(--p-gold)' },
+                { icon: Flame,    label: 'Régularité (plafonnée)', color: '#F97316' },
               ].map(({ icon: Icon, label, color }) => (
                 <div key={label} className="flex items-center gap-1.5 text-sm" style={{ color: 'var(--p-text-60)' }}>
                   <Icon className="w-4 h-4" style={{ color }} />
@@ -118,11 +103,17 @@ export default function Leaderboard() {
                       sur {allUsers.length}
                     </span>
                   </p>
+                  {(() => {
+                    const t = titleForScore(getScore(currentUserProgress));
+                    return (
+                      <span className="inline-block text-[10px] font-black uppercase tracking-widest mt-1 px-2 py-0.5 rounded-full" style={{ color: t.color, background: `${t.color}18`, border: `1px solid ${t.color}40` }}>{t.label}</span>
+                    );
+                  })()}
                 </div>
               </div>
               <div className="flex items-center gap-6 text-center">
                 {[
-                  { label: 'Points', count: currentUserProgress.total_points || 0 },
+                  { label: 'Score', count: getScore(currentUserProgress) },
                   { label: 'Prédictions', count: currentUserProgress.predictions_count || 0 },
                   { label: 'Précision', value: getPrecision(currentUserProgress), color: 'var(--p-green)' },
                   { label: 'Série', value: `${currentUserProgress.daily_streak || 0}j`, color: '#F97316' },

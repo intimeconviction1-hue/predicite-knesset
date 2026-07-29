@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { BarChart3, Target, Trophy, Vote, Crown, Info, Landmark, PieChart, Flame, Zap, TrendingUp, Coins, ArrowRight } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
 import CinematicHero from '@/components/knesset/CinematicHero';
+import { TITLES } from '@/lib/score';
 
 // Barème EXACT, aligné sur le code serveur (server/functions/*) :
 //  - engagement pronostic : 10 (+50 si justification ≥20 car.)  [prediciteScoringSieges]
@@ -34,10 +35,10 @@ const POINTS_RESULTAT = [
 // Les 4 sources de points qui composent ton total (pas une formule pondérée cachée :
 // le classement additionne simplement tout ce que tu gagnes).
 const SOURCES = [
-  { max: 'jusqu\'à +150', unit: '/ liste', label: 'Précision sièges', desc: 'Le cœur du jeu : la justesse de tes pronostics au dépouillement.', color: '#2B5CE6', icon: Target },
-  { max: '+100', unit: 'à l\'investiture', label: 'Premier ministre', desc: 'Un pronostic binaire qui se résout séparément.', color: '#6D28D9', icon: Crown },
-  { max: '+10', unit: '/ bonne réponse', label: 'Quiz', desc: 'Apprends le système électoral et l\'histoire, gagne des points.', color: 'var(--p-gold-text)', icon: PieChart },
-  { max: '+75', unit: '/ 7 jours', label: 'Régularité', desc: 'Reviens chaque jour : la série est récompensée.', color: '#16794A', icon: Flame },
+  { max: 'jusqu\'à +150', unit: '/ liste', label: 'Précision sièges', desc: 'Le cœur : la justesse de tes pronostics au dépouillement. Sans plafond.', color: '#2B5CE6', icon: Target },
+  { max: '+25 %', unit: 'du gain, en Score', label: 'Paris gagnés', desc: 'Bien parier sur les sondages et les événements fait monter ton Score — pas seulement tes jetons.', color: 'var(--p-blue)', icon: TrendingUp },
+  { max: '+100', unit: 'à l\'investiture', label: 'Premier ministre', desc: 'Un pronostic binaire qui se résout séparément, à l\'investiture.', color: '#6D28D9', icon: Crown },
+  { max: 'plafonnés', unit: 'quiz + régularité', label: 'Apprentissage', desc: 'Quiz (+10) et série (+75) comptent, mais plafonnés : du flair, pas du volume.', color: 'var(--p-gold-text)', icon: PieChart },
 ];
 
 const BADGES = [
@@ -174,8 +175,11 @@ export default function ReglesDuJeu() {
             <TrendingUp className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
             <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Parie sur tout — le cœur du jeu</h2>
           </div>
-          <p className="text-sm mb-6 max-w-2xl" style={{ color: 'var(--p-text-40)' }}>
+          <p className="text-sm mb-3 max-w-2xl" style={{ color: 'var(--p-text-40)' }}>
             À la façon d'un Winamax, mais <b style={{ color: 'var(--p-gold-text)' }}>100 % en jetons gratuits</b> : mise sur ce que diront les prochains sondages, mais aussi sur les <b style={{ color: 'var(--p-text-60)' }}>événements de la campagne</b> — primaires, fusions, défections, incidents. Plus une issue est improbable, plus la cote paie.
+          </p>
+          <p className="text-sm mb-6 max-w-2xl font-semibold rounded-xl px-4 py-3" style={{ color: 'var(--p-blue)', background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
+            ⚡ Et surtout : <b>bien parier fait monter ton Score</b> au classement (25 % du gain te reviennent en Score) — pas seulement tes jetons. Le pari, c'est du rang.
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3 mb-5">
             {[
@@ -244,7 +248,7 @@ export default function ReglesDuJeu() {
         <section id="classement">
           <h2 className="text-xl font-bold mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Comment on te classe</h2>
           <p className="text-sm mb-6 max-w-2xl" style={{ color: 'var(--p-text-40)' }}>
-            Tes points s'accumulent selon le barème ci-dessus. Ton <b style={{ color: 'var(--p-text-60)' }}>rang</b>, lui, se lit sur l'<b style={{ color: 'var(--p-gold-text)' }}>indice citoyen /100</b> — un équilibre entre <b style={{ color: 'var(--p-text-60)' }}>précision (40 %)</b>, <b style={{ color: 'var(--p-text-60)' }}>apprentissage (30 %)</b> et <b style={{ color: 'var(--p-text-60)' }}>régularité (30 %)</b>, pour ne pas récompenser que le volume. Voici tes sources de points :
+            Un seul chiffre décide de ton rang : ton <b style={{ color: 'var(--p-gold-text)' }}>Score</b> — ici comme dans tes <Link to={createPageUrl('Ligues')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>ligues privées</Link>. La <b style={{ color: 'var(--p-text-60)' }}>précision</b> de tes pronostics <b style={{ color: 'var(--p-text-60)' }}>et de tes paris</b> compte sans plafond ; le quiz et la régularité comptent aussi, mais <b style={{ color: 'var(--p-text-60)' }}>plafonnés</b>, pour récompenser le flair plutôt que le volume. Voici tes sources de Score :
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             {SOURCES.map(({ max, unit, label, desc, color, icon: Icon }, index) => (
@@ -263,6 +267,19 @@ export default function ReglesDuJeu() {
                 <div className="text-xs leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{desc}</div>
               </motion.div>
             ))}
+          </div>
+
+          {/* Paliers de titre — la progression par Score, de Citoyen à Oracle */}
+          <div className="mt-8">
+            <p className="text-sm font-bold mb-3" style={{ color: 'var(--p-text)' }}>Tes paliers, de Citoyen à Oracle</p>
+            <div className="flex flex-wrap gap-2">
+              {TITLES.map((t) => (
+                <div key={t.label} className="rounded-xl border px-3.5 py-2 flex items-baseline gap-2" style={{ borderColor: `${t.color}55`, background: `${t.color}12` }}>
+                  <span className="text-sm font-black" style={{ color: t.color }}>{t.label}</span>
+                  <span className="text-[11px] font-mono" style={{ color: 'var(--p-text-40)' }}>{t.min.toLocaleString('fr-FR')}+ pts</span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

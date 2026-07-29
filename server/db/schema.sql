@@ -177,6 +177,11 @@ ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS jetons_semaine TEXT;   -- sem
 -- Difficulté du quiz : 'decouverte' (+10) | 'connaisseur' (+25) | 'expert' (+50).
 ALTER TABLE quiz_questions ADD COLUMN IF NOT EXISTS difficulte TEXT NOT NULL DEFAULT 'connaisseur';
 
+-- Thème du quiz (évolutif) — découplé de `category` (qui a un CHECK à 3 valeurs).
+-- 6 thèmes : systeme_electoral | partis | histoire | sondages_blocs | personnalites | actu.
+-- Dérivé de la catégorie pour l'existant, explicite pour les nouvelles questions.
+ALTER TABLE quiz_questions ADD COLUMN IF NOT EXISTS theme TEXT;
+
 -- Histoire enrichie d'une liste (narratif + source), affichée sur sa fiche.
 ALTER TABLE listes ADD COLUMN IF NOT EXISTS histoire TEXT;
 ALTER TABLE listes ADD COLUMN IF NOT EXISTS histoire_source TEXT;

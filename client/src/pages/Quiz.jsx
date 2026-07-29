@@ -8,12 +8,15 @@ import QuizWidget from '@/components/knesset/QuizWidget';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import { TITLES } from '@/lib/score';
 
-// Thèmes actuels (les 3 catégories réelles en base, relabellées). D'autres
-// thèmes (partis, sondages & blocs, personnalités) arriveront avec leur contenu.
-const CATEGORIES = [
-  { key: 'regles', title: 'Système électoral' },
-  { key: 'historique', title: 'Histoire de la Knesset' },
-  { key: 'actualite', title: 'Actu de la campagne' },
+// Les 6 thèmes du quiz-moteur (colonne `theme` en base — évolutif). Un widget
+// par thème ; chaque widget s'efface tout seul s'il n'a pas encore de question.
+const THEMES = [
+  { key: 'systeme_electoral', title: 'Système électoral' },
+  { key: 'partis', title: 'Les partis' },
+  { key: 'histoire', title: 'Histoire de la Knesset' },
+  { key: 'sondages_blocs', title: 'Sondages & blocs' },
+  { key: 'personnalites', title: 'Personnalités' },
+  { key: 'actu', title: 'Actu de la campagne' },
 ];
 
 const OBJECTIFS = [
@@ -147,8 +150,8 @@ export default function Quiz() {
 
         <DefiSerieCard />
 
-        {CATEGORIES.map(c => (
-          <QuizWidget key={c.key} category={c.key} title={c.title} />
+        {THEMES.map(t => (
+          <QuizWidget key={t.key} theme={t.key} title={t.title} />
         ))}
 
         <div className="flex items-center justify-center gap-2 pt-4 text-sm text-center" style={{ color: 'var(--p-text-40)' }}>

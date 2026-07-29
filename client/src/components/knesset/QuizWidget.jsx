@@ -5,8 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { HelpCircle, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
 import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 
-const CATEGORY_LABEL = { regles: 'Règles du jeu', historique: 'Historique', actualite: 'Actualité' };
-
 // Niveaux : mêmes points que le barème serveur (quizScoring.js).
 const NIVEAUX = [
   { key: 'decouverte', label: 'Découverte', pts: 10, color: '#16794A' },
@@ -14,7 +12,7 @@ const NIVEAUX = [
   { key: 'expert', label: 'Expert', pts: 50, color: 'var(--p-gold-text)' },
 ];
 
-export default function QuizWidget({ category, title }) {
+export default function QuizWidget({ theme, title }) {
   const [user, setUser] = useState(null);
   const [round, setRound] = useState(0);
   const [selected, setSelected] = useState(null);
@@ -26,8 +24,8 @@ export default function QuizWidget({ category, title }) {
   useEffect(() => { base44.auth.me().then(setUser).catch(() => {}); }, []);
 
   const { data: questions = [] } = useQuery({
-    queryKey: ['quiz-questions', category || 'all'],
-    queryFn: () => base44.entities.QuizQuestion.filter(category ? { category } : {}),
+    queryKey: ['quiz-questions', theme || 'all'],
+    queryFn: () => base44.entities.QuizQuestion.filter(theme ? { theme } : {}),
   });
 
   const { data: answered = [] } = useQuery({
@@ -86,7 +84,7 @@ export default function QuizWidget({ category, title }) {
         <div className="flex items-center gap-2">
           <HelpCircle className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
           <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>
-            {title || (category ? CATEGORY_LABEL[category] : 'Quiz éclair')}
+            {title || 'Quiz éclair'}
           </span>
         </div>
         <span className="text-[10px] font-semibold" style={{ color: 'var(--p-text-25)' }}>+{niveau.pts} pts{user ? '' : ' si logué'}</span>

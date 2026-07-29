@@ -299,6 +299,106 @@
       "correct_index": 1,
       "explanation": "Hadash-Ta'al et Balad ont convenu de reformer la Liste commune (Joint List) le 10 juin 2026, mettant fin aux négociations qu'ils menaient de leur côté avec Ra'am.",
       "source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2026_Israeli_legislative_election"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "decouverte",
+      "question": "Combien de sièges compte la Knesset ?",
+      "choices": ["100", "120", "150", "61"],
+      "correct_index": 1,
+      "explanation": "La Knesset, le parlement israélien, compte 120 sièges depuis 1949.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "systeme_electoral",
+      "difficulte": "connaisseur",
+      "question": "Quel pourcentage des voix une liste doit-elle atteindre pour entrer à la Knesset ?",
+      "choices": ["1 %", "2 %", "3,25 %", "5 %"],
+      "correct_index": 2,
+      "explanation": "Le seuil électoral est de 3,25 % depuis 2014 ; en dessous, une liste n'obtient aucun siège.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "sondages_blocs",
+      "difficulte": "decouverte",
+      "question": "Combien de sièges faut-il pour disposer d'une majorité à la Knesset ?",
+      "choices": ["50", "60", "61", "70"],
+      "correct_index": 2,
+      "explanation": "Il faut 61 sièges sur 120 pour une majorité — le seuil pour former un gouvernement.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "regles",
+      "theme": "sondages_blocs",
+      "difficulte": "connaisseur",
+      "question": "Dans un sondage, qu'appelle-t-on un « bloc » ?",
+      "choices": ["Un seul parti", "Un regroupement de listes susceptibles de gouverner ensemble", "Les électeurs indécis", "Les sièges laissés vacants"],
+      "correct_index": 1,
+      "explanation": "Un bloc réunit les listes prêtes à former ou soutenir une même coalition ; on lit un sondage en additionnant les blocs.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "historique",
+      "theme": "histoire",
+      "difficulte": "connaisseur",
+      "question": "En quelle année a eu lieu la première élection de la Knesset ?",
+      "choices": ["1948", "1949", "1952", "1967"],
+      "correct_index": 1,
+      "explanation": "La première Knesset a été élue en janvier 1949, quelques mois après la création de l'État d'Israël.",
+      "source_url": "https://fr.wikipedia.org/wiki/Knesset"
+    },
+    {
+      "category": "historique",
+      "theme": "histoire",
+      "difficulte": "expert",
+      "question": "Quel dirigeant a mené la première alternance politique d'Israël, en 1977 ?",
+      "choices": ["David Ben Gourion", "Menachem Begin", "Yitzhak Rabin", "Shimon Peres"],
+      "correct_index": 1,
+      "explanation": "En 1977, Menachem Begin (Likoud) met fin à près de trois décennies de domination travailliste.",
+      "source_url": "https://fr.wikipedia.org/wiki/Menachem_Begin"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "decouverte",
+      "question": "Sur l'échiquier politique, le Likoud se situe historiquement... ?",
+      "choices": ["à gauche", "au centre", "à droite", "hors du spectre"],
+      "correct_index": 2,
+      "explanation": "Le Likoud est le grand parti de la droite nationale-libérale israélienne, fondé en 1973.",
+      "source_url": "https://fr.wikipedia.org/wiki/Likoud"
+    },
+    {
+      "category": "regles",
+      "theme": "partis",
+      "difficulte": "connaisseur",
+      "question": "Le parti Shas représente principalement... ?",
+      "choices": ["les laïcs de gauche", "le judaïsme religieux séfarade", "les colons", "les citoyens arabes"],
+      "correct_index": 1,
+      "explanation": "Le Shas est un parti religieux représentant surtout le judaïsme séfarade et mizrahi.",
+      "source_url": "https://fr.wikipedia.org/wiki/Shas"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "connaisseur",
+      "question": "Qui fut la seule femme à diriger le gouvernement israélien ?",
+      "choices": ["Tzipi Livni", "Golda Meir", "Shelly Yachimovich", "Dalia Itzik"],
+      "correct_index": 1,
+      "explanation": "Golda Meir fut Première ministre d'Israël de 1969 à 1974.",
+      "source_url": "https://fr.wikipedia.org/wiki/Golda_Meir"
+    },
+    {
+      "category": "historique",
+      "theme": "personnalites",
+      "difficulte": "expert",
+      "question": "Quel Premier ministre israélien a signé les accords d'Oslo en 1993 ?",
+      "choices": ["Menachem Begin", "Yitzhak Rabin", "Ariel Sharon", "Ehud Barak"],
+      "correct_index": 1,
+      "explanation": "Yitzhak Rabin signe les accords d'Oslo en 1993 ; il est assassiné en novembre 1995.",
+      "source_url": "https://fr.wikipedia.org/wiki/Yitzhak_Rabin"
     }
   ]
 }

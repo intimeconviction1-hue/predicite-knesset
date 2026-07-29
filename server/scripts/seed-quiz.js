@@ -21,6 +21,12 @@ function difficulteFor(q, i) {
   return DIFF_CYCLE.includes(q.difficulte) ? q.difficulte : DIFF_CYCLE[i % 3];
 }
 
+// Thème : explicite dans le JSON, sinon dérivé de la catégorie (rétrocompat).
+const CATEGORY_TO_THEME = { regles: 'systeme_electoral', historique: 'histoire', actualite: 'actu' };
+function themeFor(q) {
+  return q.theme || CATEGORY_TO_THEME[q.category] || null;
+}
+
 async function main() {
   if (!fs.existsSync(seedPath)) {
     console.error(`Fichier introuvable : ${seedPath}`);
@@ -36,13 +42,14 @@ async function main() {
     const q = questions[i];
     const id = idFor(q);
     const difficulte = difficulteFor(q, i);
+    const theme = themeFor(q);
     const existing = await filterEntity('QuizQuestion', { id });
     if (existing.length > 0) {
-      // Met à jour la difficulté (nouveau champ) sans toucher au reste.
-      if (existing[0].difficulte !== difficulte) {
-        await updateEntity('QuizQuestion', id, { difficulte });
-        updated++;
-      }
+      // Met à jour difficulté + thème (nouveaux champs) sans toucher au reste.
+      const patch = {};
+      if (existing[0].difficulte !== difficulte) patch.difficulte = difficulte;
+      if (theme && existing[0].theme !== theme) patch.theme = theme;
+      if (Object.keys(patch).length > 0) { await updateEntity('QuizQuestion', id, patch); updated++; }
       continue;
     }
 
@@ -50,6 +57,7 @@ async function main() {
       id,
       category: q.category,
       difficulte,
+      theme,
       question: q.question,
       choices: q.choices,
       correct_index: q.correct_index,

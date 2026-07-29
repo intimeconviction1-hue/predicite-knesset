@@ -41,13 +41,44 @@ function withCurated(rssItems) {
 }
 
 // Uniquement des requêtes francophones — pas de résultats en anglais/hébreu.
+//
+// 2026-07-29 : les deux requêtes d'origine (« Knesset 2026 élections » et
+// « Israël Knesset campagne électorale ») étaient trop étroites — mesuré, elles
+// ne remontaient plus rien après le 19 juillet, d'où une actu qui « datait de
+// deux jours ». On élargit avec des requêtes vérifiées comme fraîches (acteurs
+// + termes de campagne), dédupliquées ensuite par titre.
 const QUERIES = [
+  { q: 'Knesset', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'élections israéliennes', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'Israël élections législatives', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'Israël politique', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'Netanyahou', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'Eisenkot', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'Likoud primaires', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
+  { q: 'Bennett Israël', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
   { q: 'Knesset 2026 élections', hl: 'fr', gl: 'IL', ceid: 'IL:fr' },
-  { q: 'Israël Knesset campagne électorale', hl: 'fr', gl: 'FR', ceid: 'FR:fr' },
 ];
 
 const CACHE_TTL_MS = 20 * 60 * 1000;
 let cache = { at: 0, items: [] };
+
+// Les requêtes larges (« Netanyahou », « Israël politique ») ramènent aussi de la
+// géopolitique sans lien avec la campagne (Iran, Gaza, diplomatie…). On ne garde
+// que ce qui touche VRAIMENT à l'élection. Filtre volontairement large, avec
+// repli : si trop peu d'articles passent, on complète avec les plus récents.
+// NB : pas de simples noms de personnes ici — « Netanyahou » seul ramènerait
+// toute la diplomatie. Il faut un marqueur ÉLECTORAL (ou un nom de parti).
+const CAMPAGNE_RE = new RegExp([
+  'knesset', 'élection', 'election', 'électoral', 'electoral', 'scrutin', 'sondage',
+  'urnes', 'campagne', 'primaire', 'coalition coalition', 'député', 'depute',
+  'majorité parlementaire', 'majorite parlementaire', 'tête de liste', 'tete de liste',
+  'candidat', 'parti', 'listes?\\b', 'siège', 'siege', 'électeur', 'electeur',
+  'likoud', 'shas', 'yesh atid', 'yisrael beytenu', 'sionisme religieux', 'otzma',
+].join('|'), 'i');
+
+function estPertinent(item) {
+  return CAMPAGNE_RE.test(`${item.title} ${item.source || ''}`);
+}
 
 function decodeEntities(str) {
   return (str || '')
@@ -89,14 +120,27 @@ router.get('/', async (req, res) => {
     return res.json({ items: withCurated(cache.items), cached: true });
   }
   try {
-    const results = await Promise.all(QUERIES.map(fetchQuery));
+    // allSettled : avec plusieurs requêtes, une seule qui échoue (timeout, 429…)
+    // ne doit pas priver le site de TOUT le flux.
+    const settled = await Promise.allSettled(QUERIES.map(fetchQuery));
+    const results = settled.filter(r => r.status === 'fulfilled').map(r => r.value);
+    if (results.length === 0) throw new Error('Toutes les requêtes ont échoué.');
+
     const seen = new Set();
-    const merged = results.flat().filter(it => {
-      const key = it.title.toLowerCase();
+    const dedup = results.flat().filter(it => {
+      // Dédup par titre normalisé : le même article remonte souvent via
+      // plusieurs requêtes (Netanyahou / Knesset / élections…).
+      const key = it.title.toLowerCase().replace(/\s+/g, ' ').trim();
       if (seen.has(key)) return false;
       seen.add(key);
       return true;
-    }).sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0)).slice(0, 24);
+    }).sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
+
+    // Priorité aux articles de campagne ; on complète avec le reste (le plus
+    // frais d'abord) si la moisson électorale est maigre — jamais de page vide.
+    const pertinents = dedup.filter(estPertinent);
+    const autres = dedup.filter(it => !estPertinent(it));
+    const merged = [...pertinents, ...autres].slice(0, 30);
 
     cache = { at: now, items: merged };
     res.json({ items: withCurated(merged), cached: false });

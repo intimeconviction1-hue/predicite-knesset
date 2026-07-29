@@ -11,6 +11,7 @@ import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
+import ProgressionPalier from '@/components/knesset/ProgressionPalier';
 import { computeScore } from '@/lib/score';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
@@ -255,6 +256,14 @@ export default function Home() {
             betTo={createPageUrl('Paris')}
             quizTo={createPageUrl('Quiz')}
           />
+        </div>
+      )}
+
+      {/* Ta progression vers le palier suivant (joueur connecté) — la montée
+          en grade rendue désirable, et célébrée quand elle arrive. */}
+      {user && progress && (
+        <div className="max-w-3xl mx-auto px-4 pt-2">
+          <ProgressionPalier progress={progress} />
         </div>
       )}
 

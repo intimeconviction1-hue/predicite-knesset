@@ -7,6 +7,7 @@ import { createPageUrl } from '@/utils';
 import { Trophy, Medal, Crown, Users, Target, Flame, Search, BookOpen } from 'lucide-react';
 import CountUp from '@/components/knesset/CountUp';
 import { computeScore, titleForScore } from '@/lib/score';
+import ProgressionPalier from '@/components/knesset/ProgressionPalier';
 
 const formatFr = (v) => Math.round(v).toLocaleString('fr-FR');
 
@@ -128,6 +129,11 @@ export default function Leaderboard() {
               </div>
             </div>
           </motion.div>
+
+          {/* Progression vers le palier suivant — la montée en grade, célébrée */}
+          <div className="mt-4">
+            <ProgressionPalier progress={currentUserProgress} />
+          </div>
         </div>
       )}
 

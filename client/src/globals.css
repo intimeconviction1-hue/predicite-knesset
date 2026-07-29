@@ -164,6 +164,20 @@
 .p-bg-blob-c { animation: p-blob-c 29s ease-in-out infinite; }
 .p-bg-blob-d { animation: p-blob-d 37s ease-in-out infinite; }
 
+/* Bandeau live défilant (LiveTicker) — le flux d'infos réelles de la campagne
+   qui défile en continu. La piste contient deux copies identiques ; translater
+   de -50% recale la 2e copie sur la 1re → boucle sans couture. Pause au survol.
+   Sous prefers-reduced-motion : pas de défilement, on masque la copie et on
+   laisse le scroll horizontal manuel. */
+@keyframes p-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.p-marquee-track { display: inline-flex; align-items: center; white-space: nowrap; will-change: transform; animation: p-marquee linear infinite; }
+.p-marquee:hover .p-marquee-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .p-marquee { overflow-x: auto; }
+  .p-marquee-track { animation: none !important; transform: none !important; }
+  .p-marquee-dup { display: none !important; }
+}
+
 button, [role="button"], a { min-height: 44px; display: inline-flex; align-items: center; }
 span[role="button"] { min-height: auto; }
 :focus-visible { outline: 2px solid var(--p-blue); outline-offset: 2px; border-radius: 4px; }

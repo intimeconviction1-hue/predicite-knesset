@@ -29,7 +29,7 @@ async function setState(iso, result) {
   await run(
     `INSERT INTO poll_tracker_state (id, last_run_utc, last_result) VALUES ('singleton', ?, ?)
      ON CONFLICT (id) DO UPDATE SET last_run_utc = EXCLUDED.last_run_utc, last_result = EXCLUDED.last_result`,
-    [iso, (result || '').slice(0, 500)],
+    [iso, (result || '').slice(0, 20000)],
   );
 }
 
@@ -71,8 +71,24 @@ export async function maybeCollectPolls(reason = 'scheduler') {
     await setState(iso, 'running');            // réserve le créneau tôt
     const res = await runSondagesSiegesCollector();
     const r = res?.results || {};
-    await setState(iso, JSON.stringify({ created: r.created, skipped: r.skipped, rejected: r.rejected }));
-    console.log(`[poll-tracker/${reason}] créés=${r.created ?? '?'} skip=${r.skipped ?? '?'} rejet=${r.rejected ?? '?'}`);
+
+    // SURVEILLANCE : on persiste la trace COMPLÈTE du run — chaque sondage vu et
+    // ce qu'on en a fait — pour qu'aucun raté ne soit invisible (consultable via
+    // l'action admin `pollTrackerStatus`). `missed_fresh` = sondages plus récents
+    // que le dernier en base, vus mais NON ingérés : le signal à surveiller.
+    const surveillance = {
+      at: iso,
+      reason,
+      polls_found: res?.polls_found ?? 0,
+      created: r.created ?? 0, skipped: r.skipped ?? 0, rejected: r.rejected ?? 0, surveilled: r.surveilled ?? 0,
+      missed_fresh: (r.missed_fresh || []).map(t => ({ institute: t.institute, media: t.publisher_media, poll_date: t.poll_date, reason: t.reason })),
+      seen: (r.seen || []).map(t => ({ institute: t.institute, media: t.publisher_media, poll_date: t.poll_date, disposition: t.disposition, reason: t.reason, mapped_seats: t.mapped_seats })),
+    };
+    await setState(iso, JSON.stringify(surveillance));
+    console.log(`[poll-tracker/${reason}] vus=${surveillance.polls_found} créés=${surveillance.created} skip=${surveillance.skipped} rejet=${surveillance.rejected} surveillés=${surveillance.surveilled}`);
+    if (surveillance.missed_fresh.length) {
+      console.warn(`[poll-tracker] ⚠ ${surveillance.missed_fresh.length} sondage(s) frais VUS mais NON ingérés :`, JSON.stringify(surveillance.missed_fresh));
+    }
 
     // Un nouveau sondage → les cotes se recalculent (résolution + nouvelle manche).
     // Isolé : un échec du rollover ne doit pas faire échouer la collecte.
@@ -97,6 +113,25 @@ export async function maybeCollectPolls(reason = 'scheduler') {
   } finally {
     running = false;
   }
+}
+
+// SURVEILLANCE (admin) : renvoie l'état du traqueur + la trace du dernier run
+// (sondages vus, ingérés, surveillés, ratés frais). Sert de tableau de bord pour
+// vérifier qu'aucun sondage ne passe entre les mailles.
+export async function getPollTrackerStatus() {
+  const row = await queryOne(
+    "SELECT last_run_utc, last_result, last_rollover_poll FROM poll_tracker_state WHERE id = 'singleton'",
+  );
+  let last = null;
+  try { last = row?.last_result ? JSON.parse(row.last_result) : null; }
+  catch { last = row?.last_result || null; }
+  return {
+    disabled: disabled(),
+    interval_hours: INTERVAL_H,
+    last_run_utc: row?.last_run_utc || null,
+    last_rollover_poll: row?.last_rollover_poll || null,
+    last_run: last,
+  };
 }
 
 export function startPollTracker() {

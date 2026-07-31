@@ -1,6 +1,7 @@
 import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { runSondagesSiegesCollector } from '../functions/sondagesSiegesCollector.js';
+import { getPollTrackerStatus } from '../functions/pollTracker.js';
 import { runResultatsKnessetCollector } from '../functions/resultatsKnessetCollector.js';
 import { submitPronosticSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from '../functions/prediciteScoringSieges.js';
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
@@ -96,6 +97,11 @@ router.post('/:name', requireAuth, async (req, res) => {
       case 'sondagesSiegesCollector':
         if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
         return res.json(await runSondagesSiegesCollector());
+
+      // Surveillance des sondages : état du traqueur + trace du dernier run.
+      case 'pollTrackerStatus':
+        if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
+        return res.json(await getPollTrackerStatus());
 
       case 'resultatsKnessetCollector':
         if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });

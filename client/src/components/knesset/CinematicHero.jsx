@@ -45,11 +45,11 @@ export function HeroGold({ children }) {
 //                        ligues, classement). Même grammaire, énergie différente.
 const REGISTRES = {
   marbre: {
-    voile: 'linear-gradient(180deg, rgba(0,19,62,0.90) 0%, rgba(0,36,118,0.62) 26%, rgba(0,38,120,0.48) 48%, rgba(237,241,249,0.55) 72%, FADE 90%)',
+    voile: 'linear-gradient(180deg, rgba(3,14,52,0.93) 0%, rgba(5,30,104,0.78) 30%, rgba(8,40,122,0.60) 52%, rgba(237,241,249,0.5) 74%, FADE 92%)',
     kicker: '#9fc0ff',
   },
   jeu: {
-    voile: 'linear-gradient(180deg, rgba(38,26,4,0.84) 0%, rgba(96,68,12,0.48) 26%, rgba(120,86,16,0.32) 48%, rgba(237,241,249,0.60) 70%, FADE 90%)',
+    voile: 'linear-gradient(180deg, rgba(30,20,2,0.91) 0%, rgba(92,64,10,0.76) 30%, rgba(120,86,16,0.56) 52%, rgba(237,241,249,0.5) 74%, FADE 92%)',
     kicker: '#ffd77a',
   },
 };

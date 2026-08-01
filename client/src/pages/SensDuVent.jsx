@@ -5,6 +5,8 @@ import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, TrendingDown, Wind, RotateCcw, ArrowRight, Trophy, Flame } from 'lucide-react';
+import { useGuestGate } from '@/lib/useGuestGate';
+import TrialWall from '@/components/knesset/TrialWall';
 
 const ROUNDS = 5;
 const fr = (d) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
@@ -61,6 +63,7 @@ export default function SensDuVent() {
 
   const listeById = useMemo(() => new Map(listes.map(l => [l.id, l])), [listes]);
   const pool = useMemo(() => buildPool(sondages, listeById), [sondages, listeById]);
+  const gate = useGuestGate();
 
   const [rounds, setRounds] = useState([]);
   const [idx, setIdx] = useState(0);
@@ -73,6 +76,7 @@ export default function SensDuVent() {
   const q = rounds[idx];
 
   const start = () => {
+    if (gate.blocked) { setPhase('intro'); return; }   // invité à court d'essais → mur
     const r = pickRounds(pool);
     if (!r.length) return;
     setRounds(r); setIdx(0); setScore(0); setStreak(0); setBest(0); setReveal(null); setPhase('play');
@@ -90,11 +94,7 @@ export default function SensDuVent() {
 
   const next = () => {
     if (idx + 1 >= rounds.length) {
-      // Compteur « mode découverte » — servira au mur d'inscription (tâche à venir).
-      try {
-        const k = 'predicite_guest_plays';
-        localStorage.setItem(k, String((parseInt(localStorage.getItem(k) || '0', 10) || 0) + 1));
-      } catch (_) { /* localStorage indisponible : on ignore */ }
+      gate.record();          // +1 partie « découverte » (invités only ; alimente le mur)
       setPhase('done');
     } else { setIdx(i => i + 1); setReveal(null); }
   };
@@ -118,8 +118,12 @@ export default function SensDuVent() {
 
       <div className="max-w-md mx-auto px-4 pb-16">
         <AnimatePresence mode="wait">
-          {/* ── INTRO ── */}
-          {phase === 'intro' && (
+          {/* ── INTRO (ou mur d'inscription si l'invité a épuisé sa découverte) ── */}
+          {phase === 'intro' && (gate.blocked ? (
+            <motion.div key="wall" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <TrialWall plays={gate.plays} />
+            </motion.div>
+          ) : (
             <motion.div key="intro" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-card p-6 text-center">
               {pool.length === 0 ? (
                 <p className="p-body text-sm">Il faut au moins deux sondages du même institut pour jouer — reviens quand la campagne aura livré quelques vagues 😉</p>
@@ -133,7 +137,7 @@ export default function SensDuVent() {
                 </>
               )}
             </motion.div>
-          )}
+          ))}
 
           {/* ── PLAY ── */}
           {phase === 'play' && q && (

@@ -75,6 +75,9 @@ export async function runSondagesSiegesCollector() {
 
   const existingPolls = await listEntity('SondageSieges', { sort: '-poll_date', limit: 200 });
   const latestDate = existingPolls[0]?.poll_date || null;
+  // Dédup robuste au cross-collecteur : un sondage déjà posé par le collecteur Kan
+  // (même média + même date) ne doit pas être re-créé ici avec un autre checksum.
+  const seenKeys = new Set(existingPolls.map(p => `${(p.publisher_media || '').toLowerCase()}|${p.poll_date}`));
 
   const prompt = `Tu es un assistant de veille électorale. Nous sommes le ${todayFR}.
 
@@ -168,8 +171,9 @@ RÈGLES ABSOLUES :
         continue;
       }
 
+      const mediaKey = `${(poll.publisher_media || poll.institute || '').toLowerCase()}|${poll.poll_date}`;
       const checksum = buildChecksum(poll.institute, poll.poll_date, poll.seats_by_liste);
-      if (existingPolls.some(p => p.checksum === checksum)) {
+      if (seenKeys.has(mediaKey) || existingPolls.some(p => p.checksum === checksum)) {
         trace.disposition = 'duplicate';
         results.skipped++; continue;
       }
@@ -185,6 +189,7 @@ RÈGLES ABSOLUES :
         seats_by_liste: seatsResolved,
         checksum,
       });
+      seenKeys.add(mediaKey);
       trace.disposition = 'created';
       results.created++;
     } catch (e) {

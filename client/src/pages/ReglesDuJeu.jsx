@@ -132,10 +132,41 @@ export default function ReglesDuJeu() {
         position="center 30%"
         kicker="Comment ça marche"
         title="Les règles, en clair"
-        subtitle="PrédiCité est un jeu de pronostics gratuit. Tu prédis la composition de la Knesset, tu gagnes des points en jouant et au dépouillement, et tu grimpes au classement. Voici exactement comment les points se gagnent."
+        subtitle="Tout ce qu'il faut comprendre, en clair — et en 30 secondes. PrédiCité est un jeu civique gratuit : tu prédis les élections, tu joues (paris en jetons, mini-jeux), tu apprends — et tu grimpes au classement. Jamais d'argent réel."
       />
 
       <div className="max-w-4xl mx-auto px-4 py-12 space-y-16">
+
+        {/* ARCHI IMMÉDIAT — le jeu compris en 5 secondes, AVANT tout le détail. */}
+        <section id="en-bref">
+          <div className="p-card p-6 md:p-7 text-center mb-5">
+            <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: 'var(--p-text-40)' }}>PrédiCité, en une phrase</p>
+            <p className="text-lg md:text-xl leading-snug mx-auto" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', maxWidth: 640 }}>
+              Un <b style={{ color: 'var(--p-blue)' }}>jeu civique gratuit</b> : tu <b>prédis</b> les élections israéliennes du 27 octobre, tu <b>joues</b> et tu <b>apprends</b> — <b>zéro argent réel</b>, juste ton flair.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-3 mb-5">
+            {[
+              { n: '1', t: 'Prédis', c: '#2B5CE6', Icon: Target, d: 'Compose la Knesset du 27 octobre : à ton avis, qui gouverne ?' },
+              { n: '2', t: 'Joue', c: '#7A5F1A', Icon: Zap, d: 'Paris en jetons gratuits + mini-jeux. On ne mise jamais d\'argent.' },
+              { n: '3', t: 'Apprends', c: '#16794A', Icon: BarChart3, d: 'Le scrutin, les partis, l\'actu — sourcé et neutre.' },
+            ].map(({ n, t, c, Icon, d }) => (
+              <div key={n} className="p-card p-5 text-center">
+                <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-2" style={{ background: c + '1f' }}>
+                  <Icon className="w-5 h-5" style={{ color: c }} />
+                </div>
+                <p className="text-lg font-bold" style={{ fontFamily: 'var(--font-display)', color: c }}>{t}</p>
+                <p className="text-sm mt-1" style={{ color: 'var(--p-text-60)', lineHeight: 1.5 }}>{d}</p>
+              </div>
+            ))}
+          </div>
+          <div className="rounded-2xl p-5 text-center" style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text)' }}>
+              <b>Comment on gagne ?</b> Tu marques des points en jouant, puis — le soir du 27 octobre — selon la <b>justesse de tes prédictions</b>. Le total te classe : le meilleur pronostiqueur l'emporte.
+            </p>
+          </div>
+          <p className="text-center text-[11px] font-bold uppercase tracking-widest mt-8" style={{ color: 'var(--p-text-25)' }}>Le détail, pour aller plus loin ↓</p>
+        </section>
 
         <section id="boucle">
           <h2 className="text-xl font-bold mb-6" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>

@@ -178,6 +178,10 @@ export default function Home() {
       {/* Flux « en direct » de la campagne — défile juste sous le héros */}
       <LiveTicker items={tickerItems} />
 
+      {/* Orientation : comprendre la plateforme en un coup d'œil + les deux portes.
+          Placé HAUT (avant l'hémicycle) pour capter le sens dès l'arrivée. */}
+      <HomeIntro />
+
       {/* Bloc hémicycle — sur fond clair, juste sous le hero */}
       <div className="relative overflow-hidden pt-2">
 
@@ -245,9 +249,6 @@ export default function Home() {
       {/* Consensus des sondages — l'hémicycle montre UN sondage ; ici on dit si
           les derniers s'accordent sur le leader, ou s'ils divergent (honnêteté). */}
       <ConsensusSondages sondages={sondages} listes={listes} />
-
-      {/* Orientation : comprendre la plateforme en 30 s + les deux portes Jouer/Apprendre */}
-      <HomeIntro />
 
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}

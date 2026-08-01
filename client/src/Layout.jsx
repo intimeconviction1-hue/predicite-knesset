@@ -383,7 +383,7 @@ export default function Layout({ children, currentPageName }) {
           className="border-b border-[rgba(20,32,61,0.08)]"
           style={{ background: 'rgba(237,241,249,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
         >
-          <div className="flex items-center justify-between h-13 px-4 py-2">
+          <div className="flex items-center justify-between h-14 px-4 py-2">
             <Link to={createPageUrl('Home')} className="flex items-center gap-2">
               <LogoSVG />
               <span className="font-bold text-sm tracking-wide" style={{ color: 'var(--p-gold-text)' }}>PrédiCité</span>

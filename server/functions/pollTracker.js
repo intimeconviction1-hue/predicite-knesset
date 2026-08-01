@@ -8,6 +8,7 @@
 // on réserve le créneau (last_run) AVANT de lancer pour éviter les doublons.
 import { queryOne, run, listEntity } from '../db/index.js';
 import { runSondagesSiegesCollector } from './sondagesSiegesCollector.js';
+import { runKanSheetCollector } from './kanSheetCollector.js';
 import { rolloverParis } from './parisSondages.js';
 import { runActuHebrewCollector } from './actuHebrewCollector.js';
 
@@ -69,6 +70,15 @@ export async function maybeCollectPolls(reason = 'scheduler') {
   const iso = now.toISOString();
   try {
     await setState(iso, 'running');            // réserve le créneau tôt
+
+    // Source PRIMAIRE : le Google Sheet public de Kan (agrège TOUS les instituts,
+    // fiable, structuré, sans LLM ni blocage bot). On n'ingère que ce qui est plus
+    // récent que la base. Le collecteur LLM ci-dessous ne fait plus que compléter.
+    let kan = null;
+    try { kan = await runKanSheetCollector({ onlyNewer: true }); }
+    catch (e) { console.error('[poll-tracker] Kan sheet échoué :', e.message); kan = { error: e.message }; }
+    if (kan?.created) console.log(`[poll-tracker] Kan sheet : +${kan.created} sondage(s), ${kan.surveilled || 0} surveillé(s)`);
+
     const res = await runSondagesSiegesCollector();
     const r = res?.results || {};
 
@@ -80,6 +90,7 @@ export async function maybeCollectPolls(reason = 'scheduler') {
       at: iso,
       reason,
       polls_found: res?.polls_found ?? 0,
+      kan: kan?.error ? { error: kan.error } : { created: kan?.created ?? 0, skipped: kan?.skipped ?? 0, surveilled: kan?.surveilled ?? 0 },
       created: r.created ?? 0, skipped: r.skipped ?? 0, rejected: r.rejected ?? 0, surveilled: r.surveilled ?? 0,
       missed_fresh: (r.missed_fresh || []).map(t => ({ institute: t.institute, media: t.publisher_media, poll_date: t.poll_date, reason: t.reason })),
       seen: (r.seen || []).map(t => ({ institute: t.institute, media: t.publisher_media, poll_date: t.poll_date, disposition: t.disposition, reason: t.reason, mapped_seats: t.mapped_seats })),

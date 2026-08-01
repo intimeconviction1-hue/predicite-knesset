@@ -2,6 +2,7 @@ import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { runSondagesSiegesCollector } from '../functions/sondagesSiegesCollector.js';
 import { getPollTrackerStatus } from '../functions/pollTracker.js';
+import { runKanSheetCollector } from '../functions/kanSheetCollector.js';
 import { runResultatsKnessetCollector } from '../functions/resultatsKnessetCollector.js';
 import { submitPronosticSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from '../functions/prediciteScoringSieges.js';
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
@@ -97,6 +98,11 @@ router.post('/:name', requireAuth, async (req, res) => {
       case 'sondagesSiegesCollector':
         if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
         return res.json(await runSondagesSiegesCollector());
+
+      // Collecteur maître : le Google Sheet de Kan. body.dryRun / body.all possibles.
+      case 'kanSheetCollector':
+        if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
+        return res.json(await runKanSheetCollector({ onlyNewer: !body.all, dryRun: !!body.dryRun }));
 
       // Surveillance des sondages : état du traqueur + trace du dernier run.
       case 'pollTrackerStatus':

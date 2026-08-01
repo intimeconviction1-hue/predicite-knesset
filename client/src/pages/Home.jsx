@@ -9,6 +9,7 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
+import ConsensusSondages from '@/components/knesset/ConsensusSondages';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
 import ProgressionPalier from '@/components/knesset/ProgressionPalier';
@@ -72,7 +73,7 @@ export default function Home() {
 
   const { data: sondages = [] } = useQuery({
     queryKey: ['home-sondages-latest'],
-    queryFn: () => base44.entities.SondageSieges.list('-poll_date', 3),
+    queryFn: () => base44.entities.SondageSieges.list('-poll_date', 8),
   });
 
   const { data: progress } = useQuery({
@@ -239,6 +240,10 @@ export default function Home() {
         </div>
 
       </div>
+
+      {/* Consensus des sondages — l'hémicycle montre UN sondage ; ici on dit si
+          les derniers s'accordent sur le leader, ou s'ils divergent (honnêteté). */}
+      <ConsensusSondages sondages={sondages} listes={listes} />
 
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}

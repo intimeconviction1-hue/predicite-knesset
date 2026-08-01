@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, MapPin, Trophy, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  LogOut, BarChart2, Landmark, Newspaper, Flame, Coins, Users, UserCheck, Zap, Wind
+  LogOut, BarChart2, Landmark, Newspaper, Flame, Coins, Users, UserCheck, Zap, Wind, Compass
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -82,6 +82,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
     { name: 'SensDuVent', label: 'Le sens du vent', icon: Wind },
     { name: 'FormeCoalition', label: 'Forme ta coalition', icon: Landmark },
+    { name: 'Boussole', label: 'Quel parti te ressemble ?', icon: Compass },
   ];
 
   const apprendreItems = [

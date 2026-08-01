@@ -45,7 +45,7 @@ export function HeroGold({ children }) {
 //                        ligues, classement). Même grammaire, énergie différente.
 const REGISTRES = {
   marbre: {
-    voile: 'linear-gradient(180deg, rgba(0,22,74,0.82) 0%, rgba(0,40,140,0.42) 26%, rgba(0,45,130,0.30) 48%, rgba(237,241,249,0.60) 70%, FADE 90%)',
+    voile: 'linear-gradient(180deg, rgba(0,19,62,0.90) 0%, rgba(0,36,118,0.62) 26%, rgba(0,38,120,0.48) 48%, rgba(237,241,249,0.55) 72%, FADE 90%)',
     kicker: '#9fc0ff',
   },
   jeu: {

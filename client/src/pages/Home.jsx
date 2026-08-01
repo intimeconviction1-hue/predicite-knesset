@@ -252,12 +252,12 @@ export default function Home() {
 
       </div>
 
+      {/* Courbe de tendance — juste sous l'hémicycle : la photo du jour, puis l'évolution */}
+      <SondagesTrend />
+
       {/* Consensus des sondages — l'hémicycle montre UN sondage ; ici on dit si
           les derniers s'accordent sur le leader, ou s'ils divergent (honnêteté). */}
       <ConsensusSondages sondages={sondages} listes={listes} />
-
-      {/* Courbe de tendance — une ligne par parti (l'historique enrichi rendu lisible) */}
-      <SondagesTrend />
 
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}

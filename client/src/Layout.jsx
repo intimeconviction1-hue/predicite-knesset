@@ -81,6 +81,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Ligues', label: 'Ligues privées', icon: Users },
     { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
     { name: 'SensDuVent', label: 'Le sens du vent', icon: Wind },
+    { name: 'FormeCoalition', label: 'Forme ta coalition', icon: Landmark },
   ];
 
   const apprendreItems = [

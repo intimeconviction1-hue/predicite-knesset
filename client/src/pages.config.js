@@ -62,6 +62,7 @@ import Quiz from './pages/Quiz';
 import Ligues from './pages/Ligues';
 import Voter from './pages/Voter';
 import SensDuVent from './pages/SensDuVent';
+import FormeCoalition from './pages/FormeCoalition';
 import __Layout from './Layout.jsx';
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
@@ -88,6 +89,7 @@ export const PAGES = {
     "Ligues": Ligues,
     "Voter": Voter,
     "SensDuVent": SensDuVent,
+    "FormeCoalition": FormeCoalition,
 }
 
 export const pagesConfig = {

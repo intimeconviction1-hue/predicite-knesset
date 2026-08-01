@@ -4,7 +4,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { ChevronRight, Trophy, ArrowRight } from 'lucide-react';
+import { ChevronRight, Trophy, ArrowRight, Vote, Gamepad2, BookOpen } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
@@ -145,14 +145,19 @@ export default function Home() {
         subtitle="L'observatoire-jeu de la campagne israélienne. Prédis les sièges, parie tes jetons, trouve ton parti, apprends le scrutin — en français, gratuit et neutre."
         actions={<>
           <Link to={createPageUrl('Listes')}
-            className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-bold text-[15px] transition-transform hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -10px rgba(212,175,55,0.6), 0 2px 8px rgba(0,0,0,0.28)' }}>
-            Je fais mon pronostic <ArrowRight className="w-4 h-4" />
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-bold text-sm transition-transform hover:-translate-y-0.5"
+            style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 12px 30px -12px rgba(212,175,55,0.6), 0 2px 8px rgba(0,0,0,0.28)' }}>
+            <Vote className="w-4 h-4" /> Prédis
           </Link>
-          <Link to={createPageUrl('ReglesDuJeu')}
-            className="inline-flex items-center px-6 py-3.5 rounded-[10px] font-semibold text-[15px] transition-colors text-white"
-            style={{ background: 'rgba(255,255,255,0.10)', border: '0.5px solid rgba(255,255,255,0.25)' }}>
-            Comment ça marche
+          <Link to={createPageUrl('Paris')}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-bold text-sm text-white transition-transform hover:-translate-y-0.5"
+            style={{ background: 'rgba(255,255,255,0.14)', border: '0.5px solid rgba(255,255,255,0.30)' }}>
+            <Gamepad2 className="w-4 h-4" /> Joue
+          </Link>
+          <Link to={createPageUrl('Learn')}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-bold text-sm text-white transition-transform hover:-translate-y-0.5"
+            style={{ background: 'rgba(255,255,255,0.14)', border: '0.5px solid rgba(255,255,255,0.30)' }}>
+            <BookOpen className="w-4 h-4" /> Apprends
           </Link>
         </>}
       >

@@ -71,34 +71,84 @@ export default function Layout({ children, currentPageName }) {
   // Nav organisée autour de l'axe « jouer en apprenant, apprendre en s'amusant » :
   // Jouer = la mécanique du jeu (règles, classement, quiz) ; Apprendre = le
   // contenu de l'élection elle-même (listes, PM, historique, actu).
-  const jouerItems = [
-    // « Le direct » = le LIEU où l'on joue (cotes, événements, flux). Parier
-    // reste une RÈGLE (expliquée dans Règles du jeu), mais il faut une porte
-    // d'entrée évidente — sinon on ne trouve plus où miser.
-    { name: 'Paris', label: 'Le direct', icon: Zap },
-    { name: 'ReglesDuJeu', label: 'Règles du jeu', icon: BookOpen },
-    { name: 'Leaderboard', label: 'Classement', icon: Trophy },
-    { name: 'Ligues', label: 'Ligues privées', icon: Users },
-    { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
-    { name: 'SensDuVent', label: 'Le sens du vent', icon: Wind },
-    { name: 'FormeCoalition', label: 'Forme ta coalition', icon: Landmark },
-    { name: 'Boussole', label: 'Quel parti te ressemble ?', icon: Compass },
-    { name: 'VraiOuFake', label: 'Vrai ou Fake ?', icon: ShieldCheck },
+  // Nav en GROUPES (forme + fond) avec un « pont » explicite vers l'autre axe —
+  // « jouer en apprenant, apprendre en jouant ». « Comment ça marche » (les
+  // règles) est SORTI des menus pour une place centrale (lien de nav dédié + Home).
+  const jouerGroups = [
+    { group: 'Parier', items: [
+      { name: 'Paris', label: 'Le direct', icon: Zap, hint: 'Mise tes jetons sur les sondages' },
+    ] },
+    { group: 'Mini-jeux', items: [
+      { name: 'SensDuVent', label: 'Le sens du vent', icon: Wind },
+      { name: 'FormeCoalition', label: 'Forme ta coalition', icon: Landmark },
+      { name: 'Boussole', label: 'Quel parti te ressemble ?', icon: Compass },
+      { name: 'VraiOuFake', label: 'Vrai ou Fake ?', icon: ShieldCheck },
+      { name: 'Quiz', label: 'Quiz', icon: HelpCircle },
+    ] },
+    { group: 'Ta progression', items: [
+      { name: 'Leaderboard', label: 'Classement', icon: Trophy },
+      { name: 'Ligues', label: 'Ligues privées', icon: Users },
+    ] },
   ];
+  const jouerBridge = { name: 'ReglesDuJeu', label: 'Nouveau ? Comment ça marche', icon: BookOpen };
 
-  const apprendreItems = [
-    { name: 'Learn', label: "L'élection", icon: BookOpen },
-    { name: 'Voter', label: 'Comment voter', icon: UserCheck },
-    { name: 'Listes', label: 'Listes', icon: MapPin },
-    { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
-    { name: 'Historique', label: 'Historique', icon: Landmark },
-    { name: 'Actu', label: 'Actu', icon: Newspaper },
-    { name: 'Methodologie', label: 'Sources', icon: BarChart2 },
+  const apprendreGroups = [
+    { group: "L'élection", items: [
+      { name: 'Learn', label: "L'élection en bref", icon: BookOpen },
+      { name: 'Voter', label: 'Comment on vote', icon: UserCheck },
+    ] },
+    { group: 'Les acteurs', items: [
+      { name: 'Listes', label: 'Les listes', icon: MapPin },
+      { name: 'PremierMinistre', label: 'Premier ministre', icon: Vote },
+    ] },
+    { group: 'Suivre & vérifier', items: [
+      { name: 'Actu', label: 'Actu de la campagne', icon: Newspaper },
+      { name: 'Historique', label: 'Historique', icon: Landmark },
+      { name: 'Methodologie', label: 'Sources & méthodo', icon: BarChart2 },
+    ] },
   ];
+  const apprendreBridge = { name: 'Quiz', label: 'Teste-toi : le Quiz', icon: HelpCircle };
+
+  const jouerFlat = jouerGroups.flatMap(g => g.items);
+  const apprendreFlat = apprendreGroups.flatMap(g => g.items);
 
   const isActive = (name) => currentPageName === name;
-  const isJouerActive = jouerItems.some(i => isActive(i.name));
-  const isApprendreActive = apprendreItems.some(i => isActive(i.name));
+  const isJouerActive = jouerFlat.some(i => isActive(i.name));
+  const isApprendreActive = apprendreFlat.some(i => isActive(i.name));
+
+  // Rendu d'un menu déroulant en GROUPES (titre + items) suivi d'un PONT vers
+  // l'autre axe. Réutilisé par les deux menus desktop.
+  const renderGroups = (groups, bridge, activeColor) => {
+    const BIcon = bridge?.icon;
+    return (
+      <>
+        {groups.map((g, gi) => (
+          <div key={g.group} style={gi > 0 ? { borderTop: '0.5px solid rgba(20,32,61,0.07)', marginTop: 4, paddingTop: 4 } : undefined}>
+            <p className="px-4 pt-1.5 pb-1 text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--p-text-25)' }}>{g.group}</p>
+            {g.items.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.name);
+              return (
+                <Link key={item.name} to={createPageUrl(item.name)}
+                  className="flex items-start gap-2.5 px-4 py-2 text-sm transition-colors hover:bg-[rgba(20,32,61,0.05)]"
+                  style={{ color: active ? activeColor : 'var(--p-text-60)', background: active ? 'rgba(20,32,61,0.06)' : 'transparent' }}>
+                  <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--p-text-25)' }} />
+                  <span className="leading-tight">{item.label}{item.hint ? <span className="block text-[10px]" style={{ color: 'var(--p-text-25)' }}>{item.hint}</span> : null}</span>
+                </Link>
+              );
+            })}
+          </div>
+        ))}
+        {bridge ? (
+          <Link to={createPageUrl(bridge.name)}
+            className="flex items-center gap-2 px-4 py-2.5 mt-1 text-xs font-semibold transition-colors hover:bg-[var(--p-blue-dim)]"
+            style={{ color: 'var(--p-blue)', borderTop: '0.5px solid rgba(20,32,61,0.08)' }}>
+            <BIcon className="w-3.5 h-3.5" /> {bridge.label}
+          </Link>
+        ) : null}
+      </>
+    );
+  };
 
 
 
@@ -240,6 +290,13 @@ export default function Layout({ children, currentPageName }) {
                   Accueil
                 </Link>
 
+                <Link to={createPageUrl('ReglesDuJeu')}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-colors hover:bg-[rgba(20,32,61,0.05)]"
+                  style={{ color: isActive('ReglesDuJeu') ? 'var(--p-gold-text)' : 'var(--p-text-60)' }}>
+                  <HelpCircle className="w-3.5 h-3.5" />
+                  Comment ça marche
+                </Link>
+
                 <div className="relative" ref={jouerRef}>
                   <button
                     onClick={() => setIsJouerOpen(!isJouerOpen)}
@@ -259,24 +316,10 @@ export default function Layout({ children, currentPageName }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full left-0 mt-1 w-48 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
+                        className="absolute top-full left-0 mt-1 w-64 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
                         style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
                       >
-                        {jouerItems.map((item) => {
-                          const Icon = item.icon;
-                          return (
-                            <Link
-                              key={item.name}
-                              to={createPageUrl(item.name)}
-                              className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
-                                isActive(item.name) ? 'text-[#1E3A8A] bg-[rgba(20,32,61,0.06)]' : 'text-[var(--p-text-60)] hover:text-[var(--p-text)] hover:bg-[rgba(20,32,61,0.05)]'
-                              }`}
-                            >
-                              <Icon className="w-4 h-4 text-[var(--p-text-25)]" />
-                              {item.label}
-                            </Link>
-                          );
-                        })}
+                        {renderGroups(jouerGroups, jouerBridge, '#1E3A8A')}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -301,24 +344,10 @@ export default function Layout({ children, currentPageName }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full right-0 mt-1 w-52 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
+                        className="absolute top-full right-0 mt-1 w-64 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
                         style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
                       >
-                        {apprendreItems.map((item) => {
-                          const Icon = item.icon;
-                          return (
-                            <Link
-                              key={item.name}
-                              to={createPageUrl(item.name)}
-                              className={`flex items-center gap-2.5 px-4 py-2.5 text-sm transition-colors ${
-                                isActive(item.name) ? 'text-[var(--p-gold-text)] bg-[rgba(20,32,61,0.06)]' : 'text-[var(--p-text-60)] hover:text-[var(--p-text)] hover:bg-[rgba(20,32,61,0.05)]'
-                              }`}
-                            >
-                              <Icon className="w-4 h-4 text-[var(--p-text-25)]" />
-                              {item.label}
-                            </Link>
-                          );
-                        })}
+                        {renderGroups(apprendreGroups, apprendreBridge, 'var(--p-gold-text)')}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -435,8 +464,18 @@ export default function Layout({ children, currentPageName }) {
                     Accueil
                   </Link>
 
+                  <Link
+                    to={createPageUrl('ReglesDuJeu')}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                      isActive('ReglesDuJeu') ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-gold-text)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
+                    }`}
+                  >
+                    <HelpCircle className="w-4 h-4" />
+                    Comment ça marche
+                  </Link>
+
                   <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(30,58,138,0.6)' }}>Jouer</p>
-                  {jouerItems.map((item) => {
+                  {jouerFlat.map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link
@@ -453,7 +492,7 @@ export default function Layout({ children, currentPageName }) {
                   })}
 
                   <p className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>Apprendre</p>
-                  {apprendreItems.map((item) => {
+                  {apprendreFlat.map((item) => {
                     const Icon = item.icon;
                     return (
                       <Link

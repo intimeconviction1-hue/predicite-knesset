@@ -10,6 +10,7 @@ import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import ConsensusSondages from '@/components/knesset/ConsensusSondages';
+import HomeIntro from '@/components/knesset/HomeIntro';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
 import ProgressionPalier from '@/components/knesset/ProgressionPalier';
@@ -141,7 +142,7 @@ export default function Home() {
         badge={{ text: `La campagne en direct · J-${daysLeft}`, live: true }}
         kicker="Élections à la Knesset · 25ᵉ législature · 27 octobre 2026"
         title={<>Le scrutin est à <HeroGold>toi</HeroGold>.</>}
-        subtitle="L'observatoire francophone de la campagne israélienne. Suis chaque sondage et chaque rebondissement, pronostique, parie, grimpe au classement. C'est gratuit."
+        subtitle="L'observatoire-jeu de la campagne israélienne. Prédis les sièges, parie tes jetons, trouve ton parti, apprends le scrutin — en français, gratuit et neutre."
         actions={<>
           <Link to={createPageUrl('Listes')}
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-bold text-[15px] transition-transform hover:-translate-y-0.5"
@@ -244,6 +245,9 @@ export default function Home() {
       {/* Consensus des sondages — l'hémicycle montre UN sondage ; ici on dit si
           les derniers s'accordent sur le leader, ou s'ils divergent (honnêteté). */}
       <ConsensusSondages sondages={sondages} listes={listes} />
+
+      {/* Orientation : comprendre la plateforme en 30 s + les deux portes Jouer/Apprendre */}
+      <HomeIntro />
 
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}

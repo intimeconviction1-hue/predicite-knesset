@@ -64,6 +64,7 @@ import Voter from './pages/Voter';
 import SensDuVent from './pages/SensDuVent';
 import FormeCoalition from './pages/FormeCoalition';
 import Boussole from './pages/Boussole';
+import VraiOuFake from './pages/VraiOuFake';
 import __Layout from './Layout.jsx';
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
@@ -92,6 +93,7 @@ export const PAGES = {
     "SensDuVent": SensDuVent,
     "FormeCoalition": FormeCoalition,
     "Boussole": Boussole,
+    "VraiOuFake": VraiOuFake,
 }
 
 export const pagesConfig = {

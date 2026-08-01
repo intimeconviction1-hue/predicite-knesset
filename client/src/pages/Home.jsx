@@ -11,6 +11,7 @@ import ShareProjection from '@/components/knesset/ShareProjection';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import ConsensusSondages from '@/components/knesset/ConsensusSondages';
 import HomeIntro from '@/components/knesset/HomeIntro';
+import SondagesTrend from '@/components/knesset/SondagesTrend';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
 import ProgressionPalier from '@/components/knesset/ProgressionPalier';
@@ -254,6 +255,9 @@ export default function Home() {
       {/* Consensus des sondages — l'hémicycle montre UN sondage ; ici on dit si
           les derniers s'accordent sur le leader, ou s'ils divergent (honnêteté). */}
       <ConsensusSondages sondages={sondages} listes={listes} />
+
+      {/* Courbe de tendance — une ligne par parti (l'historique enrichi rendu lisible) */}
+      <SondagesTrend />
 
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}

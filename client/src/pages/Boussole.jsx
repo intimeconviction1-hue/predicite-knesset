@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Compass, ThumbsUp, ThumbsDown, Minus, RotateCcw, ArrowRight, Share2 } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
+import { texteLisible } from '@/lib/couleurs';
 import TrialWall from '@/components/knesset/TrialWall';
 
 // ⚠️ CONTENU VALIDÉ AVEC DAVID (2026-08) — positions des partis par affirmation.
@@ -142,7 +143,7 @@ export default function Boussole() {
               <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: 'var(--p-text-40)' }}>Ton parti le plus proche</p>
               <div className="inline-flex items-center gap-2.5 mb-1">
                 <span className="w-4 h-4 rounded-full" style={{ background: top.liste.color || '#6B7280' }} />
-                <span className="p-display text-2xl" style={{ color: top.liste.color || 'var(--p-text)' }}>{top.liste.name_fr}</span>
+                <span className="p-display text-2xl" style={{ color: top.liste.color ? texteLisible(top.liste.color) : 'var(--p-text)' }}>{top.liste.name_fr}</span>
               </div>
               <p className="p-body text-sm mb-5"><b className="font-mono" style={{ color: 'var(--p-text)' }}>{top.pct}%</b> d'affinité sur tes réponses</p>
 

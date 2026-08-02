@@ -6,6 +6,7 @@ import Tooltip from '@/components/shared/Tooltip';
 import BallotChip from '@/components/knesset/BallotChip';
 import CountUp from '@/components/knesset/CountUp';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
+import { texteLisible } from '@/lib/couleurs';
 
 export default function ListeCard({ liste, latestPoll, index = 0 }) {
   const projectedSeats = latestPoll?.seats_by_liste?.find(s => s.liste_id === liste.id)?.seats ?? null;
@@ -64,7 +65,7 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
               {belowThreshold ? (
                 <p className="text-sm font-bold mt-0.5" style={{ color: 'var(--p-red)' }}>Sous le seuil (3,25%)</p>
               ) : (
-                <p className="text-2xl font-black mt-0.5" style={{ fontFamily: 'monospace', color: liste.color || blocColor }}>
+                <p className="text-2xl font-black mt-0.5" style={{ fontFamily: 'monospace', color: texteLisible(liste.color || blocColor) }}>
                   {projectedSeats != null ? <CountUp value={projectedSeats} duration={800} /> : '—'}
                   <span className="text-xs font-normal" style={{ color: 'var(--p-text-25)' }}> / 120</span>
                 </p>

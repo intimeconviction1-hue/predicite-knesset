@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { texteLisible } from '@/lib/couleurs';
 import {
   ChevronLeft, Users, TrendingUp, CheckCircle, PenLine, Lock, Clock, Trophy, ExternalLink, Landmark
 } from 'lucide-react';
@@ -257,7 +258,7 @@ export default function ListePage() {
             <div>
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Dernière projection</p>
               {latest ? (
-                <p className="text-xl font-bold font-mono" style={{ color: liste.color || 'var(--p-gold-text)' }}>{latest.seats} sièges</p>
+                <p className="text-xl font-bold font-mono" style={{ color: liste.color ? texteLisible(liste.color) : 'var(--p-gold-text)' }}>{latest.seats} sièges</p>
               ) : (
                 <p className="text-sm font-medium" style={{ color: 'var(--p-text-25)' }}>Pas encore de sondage</p>
               )}
@@ -279,7 +280,7 @@ export default function ListePage() {
             <div>
               <p className="text-[10px] font-bold uppercase tracking-widest mb-1" style={{ color: 'var(--p-text-40)' }}>Situation actuelle</p>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-black font-mono leading-none" style={{ color: liste.color || 'var(--p-text)' }}>{latest.seats}</span>
+                <span className="text-4xl font-black font-mono leading-none" style={{ color: liste.color ? texteLisible(liste.color) : 'var(--p-text)' }}>{latest.seats}</span>
                 <span className="text-sm" style={{ color: 'var(--p-text-60)' }}>sièges projetés</span>
               </div>
               <p className="text-xs mt-1.5" style={{ color: 'var(--p-text-40)' }}>{latest.institute} · {new Date(latest.date).toLocaleDateString('fr-FR')}</p>
@@ -434,7 +435,7 @@ export default function ListePage() {
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                     className="text-5xl font-black font-mono inline-block"
-                    style={{ color: liste.color || 'var(--p-gold-text)' }}
+                    style={{ color: liste.color ? texteLisible(liste.color) : 'var(--p-gold-text)' }}
                   >
                     {seats[0]}
                   </motion.span>

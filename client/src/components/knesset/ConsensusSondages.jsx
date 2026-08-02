@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Users, AlertTriangle, Check } from 'lucide-react';
+import { texteLisible } from '@/lib/couleurs';
 
 // « Consensus des sondages » — honnêteté avant fausse précision. L'hémicycle
 // n'affiche qu'UN sondage (le plus récent) ; ici on regarde les derniers et on
@@ -40,7 +41,7 @@ export default function ConsensusSondages({ sondages = [], listes = [], max = 6 
               <Check className="w-3.5 h-3.5" style={{ color: 'var(--p-green)' }} />
             </span>
             <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>
-              Ils s'accordent : <b style={{ color: recents[0].leader.color || 'var(--p-text)' }}>{recents[0].leader.name_fr}</b> arrive en tête dans les {recents.length} derniers sondages.
+              Ils s'accordent : <b style={{ color: recents[0].leader.color ? texteLisible(recents[0].leader.color) : 'var(--p-text)' }}>{recents[0].leader.name_fr}</b> arrive en tête dans les {recents.length} derniers sondages.
             </p>
           </div>
         ) : (
@@ -58,7 +59,7 @@ export default function ConsensusSondages({ sondages = [], listes = [], max = 6 
                 <div key={i} className="inline-flex items-center gap-2 rounded-full px-3 py-1.5" style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)' }}>
                   <span className="text-[11px] font-semibold" style={{ color: 'var(--p-text-60)' }}>{r.media} · {fmt(r.date)}</span>
                   <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: r.leader.color || '#6B7280' }} />
-                  <span className="text-[11px] font-bold" style={{ color: r.leader.color || 'var(--p-text)' }}>{r.leader.name_fr}</span>
+                  <span className="text-[11px] font-bold" style={{ color: r.leader.color ? texteLisible(r.leader.color) : 'var(--p-text)' }}>{r.leader.name_fr}</span>
                 </div>
               ))}
             </div>

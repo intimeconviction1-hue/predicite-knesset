@@ -16,6 +16,7 @@ import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
 import ProgressionPalier from '@/components/knesset/ProgressionPalier';
 import { computeScore } from '@/lib/score';
+import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
@@ -45,7 +46,7 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
             transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
           />
         </div>
-        <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'var(--p-text-25)' : (liste.color || 'var(--p-gold-text)') }}>
+        <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'var(--p-text-25)' : (liste.color ? texteLisible(liste.color) : 'var(--p-gold-text)') }}>
           {belowThreshold ? 'seuil' : `${seats} sièges`}
         </span>
       </Link>

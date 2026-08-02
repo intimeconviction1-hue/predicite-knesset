@@ -13,8 +13,11 @@ const router = express.Router();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const SONDAGE_SLOTS = 5;   // places réservées aux articles de sondage
-const estSondage = (it) => /sondage|intentions de vote/i.test(it.title || '');
+// 2026-08-02 (demande de Simon : « mets les plus récents en premier ») — les
+// places réservées aux articles de sondage ont été retirées. Elles remontaient
+// jusqu'à 5 articles « sondage » en tête QUELLE QUE SOIT leur date, ce qui
+// faisait passer l'actualité du jour derrière des articles plus anciens. Le flux
+// est désormais strictement antéchronologique.
 
 // Résumés PrédiCité (français) de sources israéliennes — traduits/résumés à la
 // main quand l'info manque en français. Chargés depuis docs/ACTU_CURATED.json
@@ -46,20 +49,23 @@ async function withCurated(rssItems) {
   let breves = [];
   try { breves = await getActuBreves(12); } catch { breves = []; }
   const seen = new Set();
-  const tous = [...breves, ...curated, ...rssItems]
+  // Une date illisible ou absente ne doit pas être traitée comme « 1970 » : elle
+  // enverrait l'article tout en bas. On la remplace par 0 seulement après avoir
+  // vérifié qu'elle est invalide, et le tri reste strictement du plus récent au
+  // plus ancien — aucune catégorie d'article n'est remontée artificiellement.
+  const quand = (it) => {
+    const t = new Date(it.pubDate || 0).getTime();
+    return Number.isNaN(t) ? 0 : t;
+  };
+
+  return [...breves, ...curated, ...rssItems]
     .filter(it => {
       const k = (it.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
       if (!k || seen.has(k)) return false;
       seen.add(k);
       return true;
     })
-    .sort((a, b) => new Date(b.pubDate || 0) - new Date(a.pubDate || 0));
-
-  // La priorité SONDAGES doit s'appliquer APRÈS le tri par date — sinon le tri
-  // chronologique final annulerait les places réservées (bug corrigé le 29/07).
-  const sondages = tous.filter(estSondage).slice(0, SONDAGE_SLOTS);
-  const reste = tous.filter(it => !sondages.includes(it));
-  return [...sondages, ...reste];
+    .sort((a, b) => quand(b) - quand(a));
 }
 
 // Uniquement des requêtes francophones — pas de résultats en anglais/hébreu.
@@ -169,7 +175,8 @@ router.get('/', async (req, res) => {
     const pertinents = dedup.filter(estPertinent);
     const autres = dedup.filter(it => !estPertinent(it));
 
-    // La priorité SONDAGES est appliquée dans withCurated (après le tri final).
+    // Le tri final (strictement du plus récent au plus ancien) est fait dans
+    // withCurated, une fois les brèves fusionnées au flux RSS.
     const merged = [...pertinents, ...autres].slice(0, 30);
 
     cache = { at: now, items: merged };

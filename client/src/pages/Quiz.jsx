@@ -65,7 +65,7 @@ function DefiSerieCard() {
   }
 
   return (
-    <div className="rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
+    <div className="p-reveal rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
       <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
         <div className="flex items-center gap-2">
           <Flame className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
@@ -108,7 +108,7 @@ function DefiSerieCard() {
             <span className="font-mono" style={{ color: 'var(--p-text)' }}>{mise} → gain {mise * (OBJECTIFS.find(o => o.n === objectif)?.mult || 1)}</span>
           </div>
           <input type="range" min={20} max={Math.max(20, Math.min(300, jetons ?? 300))} step={10} value={mise} onChange={e => setMise(Number(e.target.value))} className="w-full mb-3" style={{ accentColor: 'var(--p-blue)' }} />
-          <button onClick={start} disabled={busy} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm text-white" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
+          <button onClick={start} disabled={busy} className="p-btn-gold-solid inline-flex items-center gap-2">
             {busy ? 'Envoi…' : 'Lancer le défi'} <ArrowRight className="w-4 h-4" />
           </button>
           {err && <p className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>{err}</p>}
@@ -127,14 +127,14 @@ export default function Quiz() {
         photos={['/images/learn-hero.jpg']}
         position="center 30%"
         kicker="Apprendre en s'amusant"
-        title="Le quiz de la campagne"
+        title={<>Le <span className="p-gradient-gold">quiz</span> de la campagne</>}
         subtitle="Système électoral, histoire de la Knesset, actu. Choisis ta difficulté, chaque bonne réponse rapporte — et tente un défi série pour miser tes jetons."
       />
 
-      <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
+      <div className="max-w-2xl mx-auto px-4 py-10 space-y-6 p-glow-gold">
         {/* Les niveaux — la progression par Score, de Citoyen à Oracle. Chaque
             bonne réponse (plafonnée) et surtout tes pronostics/paris t'y font monter. */}
-        <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+        <div className="p-reveal p-elev-1 rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
           <p className="text-[10px] font-black uppercase tracking-widest mb-3" style={{ color: 'var(--p-gold-text)' }}>Tes niveaux — de Citoyen à Oracle</p>
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
             {TITLES.map((t, i) => (
@@ -155,7 +155,7 @@ export default function Quiz() {
           <QuizWidget key={t.key} theme={t.key} title={t.title} />
         ))}
 
-        <div className="flex items-center justify-center gap-2 pt-4 text-sm text-center" style={{ color: 'var(--p-text-40)' }}>
+        <div className="p-reveal flex items-center justify-center gap-2 pt-4 text-sm text-center" style={{ color: 'var(--p-text-40)' }}>
           <span>Envie d'aller plus loin ? <Link to={createPageUrl('Learn')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Comprendre les législatives</Link>, <Link to={createPageUrl('Historique')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>l'Historique</Link> ou <Link to={createPageUrl('ReglesDuJeu')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>les règles du jeu</Link>.</span>
         </div>
       </div>

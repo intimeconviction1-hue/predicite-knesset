@@ -263,7 +263,7 @@ export default function Home() {
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}
       {latestPoll && (
-        <div className="max-w-md mx-auto px-4 pt-2 pb-4">
+        <div className="p-reveal p-glow-gold max-w-md mx-auto px-4 pt-2 pb-4">
           <p className="text-[10px] font-black uppercase tracking-widest text-center mb-3" style={{ color: 'var(--p-gold-text)' }}>Le fait du jour se joue — retourne la carte</p>
           <RectoVersoCard
             badge="Sondage · fait vérifié"
@@ -290,7 +290,7 @@ export default function Home() {
       {/* Le terrain de jeu — le registre JEU (or, énergie) : ce qui se joue
           maintenant, jouable en un clic. Contrepoids du registre Marbre. */}
       {(parisData?.marches?.length > 0) && (
-        <div className="max-w-3xl mx-auto px-4 pt-2 pb-5">
+        <div className="p-reveal max-w-3xl mx-auto px-4 pt-2 pb-5">
           <TerrainDeJeu
             marches={parisData.marches}
             jetons={progress?.jetons ?? null}
@@ -301,7 +301,7 @@ export default function Home() {
 
       {/* Teaser Actu — la campagne en direct, visible dès l'accueil */}
       {actuItems.length > 0 && (
-        <div className="max-w-3xl mx-auto px-4 pb-4">
+        <div className="p-reveal max-w-3xl mx-auto px-4 pb-4">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Actu de la campagne</h2>
             <Link to={createPageUrl('Actu')} className="text-xs flex items-center gap-1 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
@@ -311,8 +311,8 @@ export default function Home() {
           <div className="space-y-2">
             {actuItems.map((item, i) => (
               <a key={item.link + i} href={item.link} target="_blank" rel="noopener noreferrer"
-                className="block rounded-xl p-3 transition-colors hover:border-[var(--p-border-hover)]"
-                style={{ background: 'var(--p-card)', border: `0.5px solid ${item.curated ? 'var(--p-gold-border)' : 'var(--p-border)'}` }}>
+                className="p-card block p-3"
+                style={item.curated ? { borderColor: 'var(--p-gold-border)' } : undefined}>
                 <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--p-text)' }}>{item.title}</p>
                 <div className="mt-1 text-xs">
                   {item.curated
@@ -326,14 +326,14 @@ export default function Home() {
       )}
 
       {/* Compte à rebours — le scrutin approche (beat émotionnel avant le détail) */}
-      <div className="max-w-3xl mx-auto px-4 py-10">
+      <div className="p-glow-gold max-w-3xl mx-auto px-4 py-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="rounded-3xl p-6 md:p-10 text-center"
-          style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}
+          className="p-card p-6 md:p-10 text-center"
+          style={{ borderRadius: '24px' }}
         >
           <p className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: 'var(--p-gold-text)' }}>
             Le scrutin approche
@@ -345,10 +345,10 @@ export default function Home() {
       </div>
 
       {/* Classement des listes */}
-      <div className="max-w-3xl mx-auto px-4 pb-16">
+      <div className="p-reveal max-w-3xl mx-auto px-4 pb-16">
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
-            Dernière projection sièges
+            Dernière projection <span className="p-gradient-gold">sièges</span>
           </h2>
           <Link to={createPageUrl('Listes')}
             className="text-xs flex items-center gap-1 hover:text-[var(--p-text)] transition-colors"
@@ -362,7 +362,7 @@ export default function Home() {
             <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Sondages à venir…</p>
           </div>
         ) : (
-          <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+          <div className="p-card p-5" style={{ borderRadius: '18px' }}>
             {rankedListes.map((l, i) => (
               <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
             ))}
@@ -375,8 +375,8 @@ export default function Home() {
         )}
 
         {/* Liens secondaires */}
-        <div className="flex items-center justify-center gap-6 mt-12 pt-10 flex-wrap"
-          style={{ borderTop: '0.5px solid var(--p-border)' }}>
+        <hr className="p-hairline-gold mt-12" />
+        <div className="flex items-center justify-center gap-6 pt-10 flex-wrap">
           {[
             { label: 'Classement', to: 'Leaderboard' },
             { label: 'Comprendre', to: 'Learn' },

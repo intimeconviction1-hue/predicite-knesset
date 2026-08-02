@@ -41,9 +41,9 @@ function EvolutionChart({ elections }) {
   const majorityY = y(61);
 
   return (
-    <div className="rounded-2xl border p-5 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
-      <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-text)' }}>Évolution : 1er et 2e parti, élection par élection</p>
-      <p className="text-xs mb-4" style={{ color: 'var(--p-text-40)' }}>De la domination Mapaï/Alignement à la fragmentation actuelle — chaque point est un vrai résultat, pas une estimation.</p>
+    <div className="p-card p-reveal p-5 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+      <p className="p-title text-base mb-1" style={{ color: 'var(--p-text)' }}>Évolution : 1er et 2e parti, élection par élection</p>
+      <p className="p-body text-xs mb-4 max-w-prose" style={{ color: 'var(--p-text-40)' }}>De la domination Mapaï/Alignement à la fragmentation actuelle — chaque point est un vrai résultat, pas une estimation.</p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }}>
         <line x1={padL} y1={majorityY} x2={W - padR} y2={majorityY} stroke="var(--p-gold)" strokeDasharray="3 4" strokeWidth="1" opacity="0.5" />
         <text x={W - padR} y={majorityY - 5} textAnchor="end" fontSize="9" fill="var(--p-gold-text)">majorité (61)</text>
@@ -84,7 +84,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-10%' }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3) }}
-      className="rounded-2xl border overflow-hidden transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+      className="p-card overflow-hidden transition-colors duration-300 hover:border-[var(--p-border-hover)]"
       style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
     >
       <button onClick={() => setOpen(o => !o)} className="w-full text-left px-5 py-4 flex items-center gap-4">
@@ -96,7 +96,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="font-bold text-sm" style={{ color: 'var(--p-text)' }}>{election.name}</h3>
+            <h3 className="p-title text-sm" style={{ color: 'var(--p-text)' }}>{election.name}</h3>
             <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>
               {new Date(election.election_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
             </span>
@@ -210,7 +210,7 @@ export default function Historique() {
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'rgba(43,92,230,0.06)', border: '1px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
-          <p>Les 25 élections de l'histoire d'Israël, de 1949 à 2022, chacune sourcée et vérifiée individuellement (la somme des sièges de chaque scrutin fait exactement 120).</p>
+          <p className="max-w-prose">Les 25 élections de l'histoire d'Israël, de 1949 à 2022, chacune sourcée et vérifiée individuellement (la somme des sièges de chaque scrutin fait exactement 120).</p>
         </div>
 
         {isLoading ? (
@@ -230,11 +230,11 @@ export default function Historique() {
           </>
         )}
 
-        <div className="mt-8">
+        <div className="mt-12 p-reveal">
           <QuizWidget category="historique" title="Testez vos connaissances" />
         </div>
 
-        <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
+        <div className="flex items-center justify-center gap-2 mt-12 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
           <span>Envie de pronostiquer plutôt que de regarder en arrière ? <Link to={createPageUrl('Listes')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Voir les listes 2026</Link></span>
         </div>
       </div>

@@ -107,9 +107,9 @@ export default function Ligues() {
         subtitle="Crée une ligue, invite tes amis avec un code, et comparez vos scores dans un classement rien qu'à vous."
       />
 
-      <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="max-w-3xl mx-auto px-4 py-8 p-glow-gold">
         {!user ? (
-          <div className="rounded-2xl p-8 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+          <div className="p-reveal p-elev-1 rounded-2xl p-8 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
             <Users className="w-10 h-10 mx-auto mb-3" style={{ color: 'var(--p-text-25)' }} />
             <h2 className="text-lg font-bold mb-1" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Connecte-toi pour jouer entre amis</h2>
             <p className="text-sm mb-5" style={{ color: 'var(--p-text-60)' }}>Les ligues privées demandent un compte (gratuit) pour te classer.</p>
@@ -120,8 +120,8 @@ export default function Ligues() {
         ) : (
           <>
             {/* Créer / rejoindre */}
-            <div className="grid md:grid-cols-2 gap-4 mb-6">
-              <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
+            <div className="p-reveal grid md:grid-cols-2 gap-4 mb-6">
+              <div className="p-elev-1 rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
                 <div className="flex items-center gap-2 mb-3">
                   <Plus className="w-4 h-4" style={{ color: 'var(--p-blue)' }} />
                   <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--p-blue)' }}>Créer une ligue</span>
@@ -140,7 +140,7 @@ export default function Ligues() {
                 </button>
               </div>
 
-              <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)' }}>
+              <div className="p-elev-1 rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)' }}>
                 <div className="flex items-center gap-2 mb-3">
                   <Users className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
                   <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>Rejoindre par code</span>
@@ -175,7 +175,7 @@ export default function Ligues() {
                 <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Crée-en une et invite tes amis, ou rejoins-en une avec un code.</p>
               </div>
             ) : (
-              <div className="space-y-2 mb-6">
+              <div className="p-reveal space-y-2 mb-6">
                 {ligues.map(l => (
                   <button key={l.id} onClick={() => setSelected(selected === l.id ? null : l.id)}
                     className="w-full text-left rounded-2xl p-4 flex items-center justify-between gap-3 transition-colors"
@@ -195,7 +195,7 @@ export default function Ligues() {
 
             {/* Classement de la ligue sélectionnée */}
             {selectedLigue && (
-              <div className="rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-blue-border)' }}>
+              <div className="p-reveal p-elev-2 rounded-2xl p-5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-blue-border)' }}>
                 <div className="p-tricolor mb-4"><div /><div /><div /></div>
                 <div className="flex items-center justify-between gap-3 mb-4 flex-wrap">
                   <div>

@@ -121,15 +121,15 @@ export default function PremierMinistre() {
           size="md"
           photos={['/images/pm-hero.jpg']}
           position="center 22%"
-          title="Qui sera Premier ministre ?"
+          title={<>Qui sera <span className="p-gradient-gold">Premier ministre</span> ?</>}
           subtitle="Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard."
-          className="rounded-2xl mb-6"
+          className="p-elev-2 rounded-2xl mb-6"
         />
 
         {/* Vase communicant : la course au PM se joue (paris sur les partis) et
             se teste (quiz), en plus du pronostic ci-dessous. */}
         <PlayLearnBar
-          className="mb-6"
+          className="p-reveal mb-6"
           title="Joue la course au Premier ministre"
           subtitle="Au-delà de ton pronostic ci-dessous : parie sur les partis en lice, ou teste-toi."
           bets={pmBets}
@@ -145,7 +145,7 @@ export default function PremierMinistre() {
         </div>
 
         {/* Formulaire */}
-        <div className="rounded-2xl border p-6 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+        <div className="p-reveal p-elev-1 rounded-2xl border p-6 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
           {existingPred ? (
             <div className="rounded-xl p-4 flex items-center justify-between" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
               <div className="flex items-center gap-3">
@@ -239,8 +239,7 @@ export default function PremierMinistre() {
               <button
                 onClick={handleSubmit}
                 disabled={!selected || isSubmitting || deadlineClosed}
-                className="w-full py-3 rounded-xl font-bold text-sm text-white disabled:opacity-40 transition-opacity"
-                style={{ background: 'linear-gradient(135deg,#7C3AED,var(--p-gold))' }}
+                className="p-btn-gold-solid w-full justify-center disabled:opacity-40"
               >
                 {isSubmitting ? 'Enregistrement...' : '✓ Valider mon pronostic'}
               </button>
@@ -272,7 +271,7 @@ export default function PremierMinistre() {
               exit={{ opacity: 0, y: 12, scale: 0.97 }}
               transition={{ duration: 0.18 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl p-6 relative"
+              className="p-glow-gold p-elev-3 w-full max-w-sm rounded-2xl p-6 relative"
               style={{ background: 'var(--p-card)', border: '1px solid var(--p-border)' }}
             >
               <button
@@ -310,7 +309,7 @@ export default function PremierMinistre() {
                 {!deadlineClosed && (
                   <button
                     onClick={() => { setSelected(bioCandidat.id); setBioCandidat(null); }}
-                    className="w-full mt-4 py-3 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5"
+                    className="w-full justify-center mt-4 py-3 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5"
                     style={{ background: selected === bioCandidat.id ? '#16794A' : 'var(--p-blue)' }}
                   >
                     {selected === bioCandidat.id ? '✓ Choisi pour ton pronostic' : 'Choisir ce candidat'}

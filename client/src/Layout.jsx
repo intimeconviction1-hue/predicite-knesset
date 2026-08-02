@@ -270,10 +270,20 @@ export default function Layout({ children, currentPageName }) {
 
       {/* ── Desktop Header ── */}
       <header className="hidden md:block sticky top-0.5 z-50">
+        {/* Verre dépoli plus franc (flou + saturation) : la photo de fond et les
+            halos transparaissent sous la barre — de la profondeur, au lieu d'un
+            bandeau opaque posé dessus. Le filet doré remplace la bordure grise. */}
         <div
-          className="border-b border-[rgba(20,32,61,0.08)]"
-          style={{ background: 'rgba(237,241,249,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
+          className="relative"
+          style={{
+            background: 'var(--p-header-bg)',
+            backdropFilter: 'var(--p-header-blur)',
+            WebkitBackdropFilter: 'var(--p-header-blur)',
+            boxShadow: 'var(--p-header-shadow)',
+          }}
         >
+          <div aria-hidden="true" className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+            style={{ background: 'linear-gradient(90deg, transparent, var(--p-gold-border), transparent)' }} />
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-between h-14">
 
@@ -412,10 +422,20 @@ export default function Layout({ children, currentPageName }) {
 
       {/* ── Mobile Header ── */}
       <nav aria-label="Navigation mobile" className="md:hidden sticky top-0.5 z-50">
+        {/* Verre dépoli plus franc (flou + saturation) : la photo de fond et les
+            halos transparaissent sous la barre — de la profondeur, au lieu d'un
+            bandeau opaque posé dessus. Le filet doré remplace la bordure grise. */}
         <div
-          className="border-b border-[rgba(20,32,61,0.08)]"
-          style={{ background: 'rgba(237,241,249,0.97)', backdropFilter: 'blur(16px)', boxShadow: '0 1px 0 rgba(20,32,61,0.06), 0 4px 20px rgba(20,32,61,0.05)' }}
+          className="relative"
+          style={{
+            background: 'var(--p-header-bg)',
+            backdropFilter: 'var(--p-header-blur)',
+            WebkitBackdropFilter: 'var(--p-header-blur)',
+            boxShadow: 'var(--p-header-shadow)',
+          }}
         >
+          <div aria-hidden="true" className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+            style={{ background: 'linear-gradient(90deg, transparent, var(--p-gold-border), transparent)' }} />
           <div className="flex items-center justify-between h-14 px-4 py-2">
             <Link to={createPageUrl('Home')} className="flex items-center gap-2">
               <LogoSVG />

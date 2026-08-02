@@ -194,8 +194,14 @@ span[role="button"] { min-height: auto; }
 .p-body    { font-family:var(--font-body); font-weight:400; line-height:1.65; color:var(--p-text-60); }
 .p-mono    { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; color:var(--p-gold-text); }
 
-.p-card { background:var(--p-card); border:0.5px solid var(--p-border); border-radius:12px; box-shadow:0 1px 2px rgba(20,32,61,0.04), 0 8px 24px -14px rgba(20,32,61,0.18); transition:border-color 0.15s, box-shadow 0.2s, transform 0.15s; }
-.p-card:hover { border-color:var(--p-border-hover); box-shadow:0 2px 4px rgba(20,32,61,0.05), 0 14px 34px -14px rgba(20,32,61,0.24); }
+/* Carte « marbre » : le liseré clair en haut (inset blanc) imite la lumière qui
+   frappe une arête polie — c'est ce qui donne l'épaisseur. L'élévation au survol
+   suit la courbe --p-ease (décélération franche), pas un linéaire mou. */
+.p-card { position:relative; background:var(--p-card); border:0.5px solid var(--p-border); border-radius:14px;
+  box-shadow:var(--p-elev-1); transition:border-color .25s var(--p-ease), box-shadow .35s var(--p-ease), transform .35s var(--p-ease); }
+.p-card::before { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(180deg, rgba(255,255,255,.55), transparent 42%); opacity:.7; }
+.p-card:hover { border-color:var(--p-border-hover); box-shadow:var(--p-elev-2); transform:translateY(-2px); }
 .p-card-alert { border-left:2px solid var(--p-red); border-radius:0 12px 12px 0; }
 .p-learn-card { background:var(--p-learn-card); border:0.5px solid var(--p-learn-border); border-radius:12px; color:var(--p-learn-text); }
 
@@ -206,10 +212,27 @@ span[role="button"] { min-height: auto; }
 .p-badge-green   { background:var(--p-green-dim); color:#16794A;            border-color:rgba(26,140,85,0.3); }
 .p-badge-neutral { background:var(--p-text-10);   color:var(--p-text-40); border-color:var(--p-border); }
 
-.p-btn-primary { background:var(--p-blue); color:#fff; border:none; padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:opacity 0.15s; }
-.p-btn-primary:hover { opacity:0.88; }
-.p-btn-gold { background:transparent; color:var(--p-gold-text); border:0.5px solid var(--p-gold-border); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer; transition:background 0.15s; }
-.p-btn-gold:hover { background:var(--p-gold-dim); }
+/* Boutons : dégradé vertical léger (jamais plat) + halo coloré au survol, et un
+   retour tactile à l'enfoncement (:active). Le halo est porté par box-shadow —
+   pas de pseudo-élément — pour rester utilisable sur n'importe quel fond. */
+.p-btn-primary { background:linear-gradient(180deg, var(--p-blue-lift), var(--p-blue)); color:#fff; border:none; padding:11px 21px; border-radius:10px;
+  font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
+  box-shadow:0 1px 2px rgba(20,32,61,.18), 0 10px 22px -12px rgba(43,92,230,.7);
+  transition:transform .25s var(--p-ease), box-shadow .3s var(--p-ease), filter .2s; }
+.p-btn-primary:hover { transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 2px 4px rgba(20,32,61,.2), 0 18px 34px -14px rgba(43,92,230,.85); }
+.p-btn-primary:active { transform:translateY(0) scale(.985); }
+.p-btn-gold { background:transparent; color:var(--p-gold-text); border:0.5px solid var(--p-gold-border); padding:11px 21px; border-radius:10px;
+  font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
+  transition:background .25s var(--p-ease), transform .25s var(--p-ease), box-shadow .3s var(--p-ease); }
+.p-btn-gold:hover { background:var(--p-gold-dim); transform:translateY(-2px); box-shadow:0 12px 26px -14px rgba(212,175,55,.75); }
+.p-btn-gold:active { transform:translateY(0) scale(.985); }
+/* Bouton or plein — le CTA le plus fort du site (« Prédis », « Parie »). */
+.p-btn-gold-solid { background:linear-gradient(180deg,#ffe08a,#D4AF37); color:#14203D; border:none; padding:11px 21px; border-radius:10px;
+  font-family:var(--font-body); font-size:13px; font-weight:700; cursor:pointer;
+  box-shadow:0 1px 2px rgba(20,32,61,.2), 0 12px 28px -12px rgba(212,175,55,.8);
+  transition:transform .25s var(--p-ease), box-shadow .3s var(--p-ease), filter .2s; }
+.p-btn-gold-solid:hover { transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 2px 5px rgba(20,32,61,.22), 0 20px 40px -14px rgba(212,175,55,.95); }
+.p-btn-gold-solid:active { transform:translateY(0) scale(.985); }
 .p-btn-ghost { background:transparent; color:var(--p-text-60); border:0.5px solid var(--p-border-hover); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; cursor:pointer; transition:color 0.15s, border-color 0.15s; }
 .p-btn-ghost:hover { color:var(--p-text); border-color:var(--p-text-40); }
 
@@ -223,3 +246,129 @@ span[role="button"] { min-height: auto; }
 
 .source-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:9999px; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; background:var(--p-blue-dim); color:var(--p-blue); border:0.5px solid var(--p-blue-border); cursor:pointer; text-decoration:none; transition:background 0.15s, color 0.15s; min-height:auto; }
 .source-badge:hover { background:var(--p-blue); color:white; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COUCHE PREMIUM — 2026-08-02
+   Amplifie l'identité « Le Marbre & le Jeu » sans la remplacer : mêmes couleurs,
+   mêmes typos, mais de la MATIÈRE (dégradés, élévation, verre) et du MOUVEMENT
+   qui a du sens. Rien ici n'est décoratif seul : chaque effet sert la lecture
+   (profondeur = hiérarchie, mouvement = provenance).
+   Tout se coupe sous prefers-reduced-motion (règle globale plus haut + garde
+   explicite en fin de bloc).
+   ═════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* Courbe signature : décélération franche (démarre vite, se pose doucement).
+     C'est ce qui distingue un mouvement « cher » d'un ease générique. */
+  --p-ease:       cubic-bezier(.16, 1, .3, 1);
+  --p-ease-out:   cubic-bezier(.22, .61, .36, 1);
+
+  /* Échelle d'élévation — trois niveaux seulement, pour rester lisible.
+     Double ombre : un contact net + une diffusion large (comme la vraie lumière). */
+  --p-elev-1: 0 1px 2px rgba(20,32,61,.05), 0 8px 24px -14px rgba(20,32,61,.20);
+  --p-elev-2: 0 2px 5px rgba(20,32,61,.07), 0 18px 40px -18px rgba(20,32,61,.30);
+  --p-elev-3: 0 4px 10px rgba(20,32,61,.09), 0 34px 70px -26px rgba(20,32,61,.40);
+
+  --p-blue-lift:  #4a76ee;   /* haut du dégradé des boutons bleus */
+
+  /* Surfaces de marque */
+  --p-grad-gold:   linear-gradient(135deg, #ffe08a 0%, #D4AF37 55%, #a97e22 100%);
+  --p-grad-night:  linear-gradient(160deg, #101a30 0%, #0B1120 55%, #080d18 100%);
+  --p-grad-paper:  linear-gradient(180deg, var(--p-night) 0%, var(--p-night-2) 100%);
+
+  --p-glass-bg:    rgba(255,255,255,.62);
+  --p-glass-brd:   rgba(255,255,255,.70);
+
+  /* Barre de navigation : verre dépoli laissant transparaître la photo de fond.
+     Défini ici (et pas en dur dans Layout.jsx) pour rester la source unique. */
+  --p-header-bg:     linear-gradient(180deg, rgba(240,244,251,.92), rgba(233,239,249,.86));
+  --p-header-blur:   blur(18px) saturate(1.4);
+  --p-header-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 6px 28px -10px rgba(20,32,61,.16);
+}
+
+/* ── Verre dépoli : pour les surfaces posées AU-DESSUS d'une photo ou d'un
+   dégradé (barres, cartes de hero). Sur fond plat, préférer .p-card. ── */
+.p-glass {
+  background:var(--p-glass-bg);
+  border:1px solid var(--p-glass-brd);
+  backdrop-filter:blur(14px) saturate(1.1);
+  -webkit-backdrop-filter:blur(14px) saturate(1.1);
+  border-radius:18px;
+  box-shadow:var(--p-elev-2);
+}
+
+/* ── Texte en or : réservé aux mots-clés d'un titre, jamais à un paragraphe
+   (un dégradé sur du texte long fatigue la lecture). ── */
+.p-gradient-gold {
+  background:var(--p-grad-gold);
+  background-size:200% 100%;
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  animation:p-shimmer 7s ease-in-out infinite;
+}
+@keyframes p-shimmer { 0%,100% { background-position:0% 50%; } 50% { background-position:100% 50%; } }
+
+/* ── Halos d'ambiance de section : la couleur de marque qui « respire » derrière
+   le contenu. À poser sur un conteneur en position:relative. ── */
+.p-glow-gold, .p-glow-blue { position:relative; isolation:isolate; }
+.p-glow-gold::before, .p-glow-blue::before {
+  content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+}
+.p-glow-gold::before { background:radial-gradient(70% 60% at 50% 0%, var(--p-gold-dim), transparent 62%); }
+.p-glow-blue::before { background:radial-gradient(70% 60% at 50% 0%, var(--p-blue-dim), transparent 62%); }
+
+/* ── Élévation utilitaire ── */
+.p-elev-1 { box-shadow:var(--p-elev-1); }
+.p-elev-2 { box-shadow:var(--p-elev-2); }
+.p-elev-3 { box-shadow:var(--p-elev-3); }
+
+/* ── Filet dégradé : remplace les traits gris uniformes, qui « coupent » la page.
+   Celui-ci s'éteint sur les bords, donc il structure sans cloisonner. ── */
+.p-hairline { height:1px; border:0; background:linear-gradient(90deg, transparent, var(--p-border-hover), transparent); }
+.p-hairline-gold { height:1px; border:0; background:linear-gradient(90deg, transparent, var(--p-gold-border), transparent); }
+
+/* ── Révélation au défilement, SANS JavaScript ──
+   Utilise les animations pilotées par le scroll (animation-timeline: view()).
+   Navigateur non compatible → @supports non satisfait → le contenu reste
+   simplement visible. Aucune dépendance, aucun risque de contenu invisible.
+
+   ⚠️ DEUX PIÈGES, vérifiés en vrai le 2026-08-02 :
+
+   1. `transform` crée un BLOC CONTENEUR pour les descendants en `position:fixed`.
+      Ne pas poser `p-reveal` sur un conteneur qui contient un élément fixed —
+      typiquement `ConfettiBurst` (position:fixed) dans les cartes de Paris.jsx :
+      la salve partirait à côté de l'écran au lieu du centre. Dans ce cas, utiliser
+      `p-glow-gold` (qui ne pose qu'`isolation`) ou ne rien mettre.
+
+   2. Ne pas poser `p-reveal` sur un `motion.div` (framer-motion) : l'animation CSS
+      entre en concurrence avec les styles inline animés par la librairie et écrase
+      son entrée. Choisir l'un OU l'autre, jamais les deux sur le même élément. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .p-reveal {
+      animation:p-reveal-in linear both;
+      animation-timeline:view();
+      animation-range:entry 8% cover 26%;
+    }
+  }
+}
+@keyframes p-reveal-in {
+  from { opacity:0; transform:translateY(22px); }
+  to   { opacity:1; transform:none; }
+}
+
+/* ── Tracé de courbe (SVG) : la ligne se dessine à l'entrée. On l'applique à un
+   <path> dont on a défini stroke-dasharray/offset = longueur. ── */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .p-draw { animation:p-draw-in linear both; animation-timeline:view(); animation-range:entry 10% cover 40%; }
+  }
+}
+@keyframes p-draw-in { from { stroke-dashoffset:var(--p-len, 1000); } to { stroke-dashoffset:0; } }
+
+/* ── Garde-fou accessibilité : sous prefers-reduced-motion, tout état d'entrée
+   est neutralisé et le contenu reste pleinement visible. ── */
+@media (prefers-reduced-motion: reduce) {
+  .p-reveal { animation:none !important; opacity:1 !important; transform:none !important; }
+  .p-draw   { animation:none !important; stroke-dashoffset:0 !important; }
+  .p-gradient-gold { animation:none !important; }
+  .p-card:hover { transform:none; }
+}

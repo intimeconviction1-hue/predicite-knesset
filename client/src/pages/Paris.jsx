@@ -175,14 +175,14 @@ export default function Paris() {
       {/* Le flux en direct — même bandeau que la Home (faits réels) */}
       <LiveTicker items={flux} />
 
-      <div className="max-w-3xl mx-auto px-4 py-8">
-        <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-40)' }}>
+      <div className="max-w-3xl mx-auto px-4 py-8 p-glow-gold">
+        <div className="p-reveal flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
           <p>La cote s'ouvre sur la probabilité des sondages puis bouge selon les mises de tous : parier tôt et à contre-courant paie plus. La cote est verrouillée à l'instant où tu mises.</p>
         </div>
 
         {user === false && (
-          <div className="rounded-xl border p-4 mb-4 flex items-center justify-between gap-3 flex-wrap" style={{ background: 'var(--p-gold-dim)', borderColor: 'var(--p-gold-border)' }}>
+          <div className="p-reveal rounded-xl border p-4 mb-4 flex items-center justify-between gap-3 flex-wrap" style={{ background: 'var(--p-gold-dim)', borderColor: 'var(--p-gold-border)' }}>
             <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>Les cotes sont en direct ci-dessous. <b style={{ color: 'var(--p-text)' }}>Connecte-toi</b> pour recevoir tes jetons et parier.</p>
             <button onClick={() => base44.auth.redirectToLogin()} className="inline-flex items-center gap-2 px-4 py-2 rounded-[10px] font-semibold text-sm text-white flex-shrink-0" style={{ background: 'var(--p-blue)' }}>
               Se connecter <ArrowRight className="w-4 h-4" />
@@ -202,7 +202,7 @@ export default function Paris() {
           </div>
         )}
 
-        <div className="flex items-center justify-center gap-6 mt-10 pt-8 flex-wrap" style={{ borderTop: '0.5px solid var(--p-border)' }}>
+        <div className="p-reveal flex items-center justify-center gap-6 mt-10 pt-8 flex-wrap" style={{ borderTop: '0.5px solid var(--p-border)' }}>
           <Link to={createPageUrl('ReglesDuJeu')} className="text-sm hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>Règles du jeu</Link>
           <Link to={createPageUrl('Leaderboard')} className="text-sm hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>Classement</Link>
           <Link to={createPageUrl('Listes')} className="text-sm hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>Les listes</Link>

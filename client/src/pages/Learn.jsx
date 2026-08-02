@@ -30,7 +30,7 @@ export default function Learn() {
         subtitle="Le 27 octobre 2026, Israël élit les 120 membres de la 26ᵉ Knesset. Deux choses à comprendre avant de pronostiquer : comment les voix se transforment en sièges, et comment un gouvernement se forme une fois les résultats connus."
       />
 
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-10">
+      <div className="max-w-4xl mx-auto px-4 py-12 space-y-12 md:space-y-16">
 
         {/* Hémicycle vierge — même composant signature que Home, ici pour visualiser
             d'un coup d'œil les deux chiffres qui structurent tout le reste : 120 sièges, majorité à 61 */}
@@ -39,7 +39,7 @@ export default function Learn() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="relative overflow-hidden rounded-3xl px-6 pt-8 pb-4 md:px-10"
+          className="relative overflow-hidden rounded-3xl px-6 pt-8 pb-4 md:px-10 p-elev-2"
           style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}
         >
           <div className="absolute inset-0" style={{
@@ -72,14 +72,14 @@ export default function Learn() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: 0.04 }}
-          className="rounded-2xl border p-6 md:p-8"
+          className="p-card p-6 md:p-8"
           style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
           <div className="flex items-center gap-2 mb-2">
             <Users className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
-            <h3 className="text-lg font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>1. Les primaires : qui choisit les candidats ?</h3>
+            <h3 className="p-title text-lg" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>1. Les primaires : qui choisit les candidats ?</h3>
           </div>
-          <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--p-text-60)' }}>
+          <p className="p-body text-sm mb-4 max-w-prose" style={{ color: 'var(--p-text-60)' }}>
             Avant même le vote, chaque parti compose sa liste de candidats — l'ordre compte, car les sièges sont attribués de haut en bas. Deux méthodes coexistent :
           </p>
           <div className="grid sm:grid-cols-2 gap-3 mb-4">
@@ -92,7 +92,7 @@ export default function Learn() {
               <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-60)' }}>Le chef du parti désigne lui-même sa liste. C'est le cas le plus courant, surtout pour les nouveaux partis.</p>
             </div>
           </div>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>
+          <p className="p-body text-sm max-w-prose" style={{ color: 'var(--p-text-60)' }}>
             <b style={{ color: 'var(--p-text)' }}>Où on en est (fin juillet 2026) :</b> Les Démocrates (20 juillet) et le Sionisme religieux (26 juillet) ont voté ; le Likoud tient ses primaires le 4 août. La plupart des autres partis désignent directement. Toutes les listes doivent être déposées avant le <b style={{ color: 'var(--p-text)' }}>9 septembre</b>.
           </p>
           <a href="https://www.jpost.com/israel-news/politics-and-diplomacy/article-902333" target="_blank" rel="noopener noreferrer" className="text-xs mt-3 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
@@ -134,10 +134,10 @@ export default function Learn() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="rounded-2xl border p-6 md:p-8"
+          className="p-card p-6 md:p-8"
           style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
-          <h3 className="text-lg font-bold mb-4" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Le calendrier de l'élection</h3>
+          <h3 className="p-title text-lg mb-4" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Le calendrier de l'élection</h3>
           <ElectionTimeline />
         </motion.div>
 
@@ -156,14 +156,13 @@ export default function Learn() {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
           whileHover={{ y: -2 }}
-          className="rounded-2xl border p-8 text-center transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+          className="p-glow-blue rounded-2xl border p-8 text-center transition-colors duration-300 hover:border-[var(--p-border-hover)]"
           style={{ background: 'rgba(30,58,138,0.08)', borderColor: 'var(--p-border)' }}
         >
           <p className="text-sm mb-4" style={{ color: 'var(--p-text-40)' }}>Prêt à mettre ça en pratique ?</p>
           <Link
             to={createPageUrl('Listes')}
-            className="group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-sm text-white transition-opacity hover:opacity-85"
-            style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}
+            className="p-btn-gold-solid group inline-flex items-center justify-center gap-2"
           >
             Voir les listes et pronostiquer
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />

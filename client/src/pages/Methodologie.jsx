@@ -39,7 +39,7 @@ export default function Methodologie() {
         subtitle="PrédiCité ne publie que des données réelles, sourcées et datées. Aucun chiffre n'est inventé, estimé ou complété pour « faire joli »."
       />
 
-      <div className="max-w-4xl mx-auto px-4 py-12 space-y-8">
+      <div className="max-w-4xl mx-auto px-4 py-12 space-y-10 md:space-y-12">
         {SOURCES.map(({ title, icon: Icon, color, items }, index) => (
           <motion.div
             key={title}
@@ -48,7 +48,7 @@ export default function Methodologie() {
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4, delay: index * 0.08 }}
             whileHover={{ y: -2 }}
-            className="rounded-2xl border p-6 md:p-8 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+            className="p-card p-6 md:p-8 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
             style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
           >
             <div className="flex items-center gap-3 mb-4">
@@ -60,11 +60,11 @@ export default function Methodologie() {
               >
                 <Icon className="w-4 h-4" style={{ color }} />
               </motion.div>
-              <h2 className="text-lg font-bold" style={{ color: 'var(--p-text)' }}>{title}</h2>
+              <h2 className="p-title text-xl" style={{ color: 'var(--p-text)' }}>{title}</h2>
             </div>
             <ul className="space-y-3">
               {items.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>
+                <li key={i} className="p-body flex items-start gap-2 text-sm max-w-prose" style={{ color: 'var(--p-text-60)' }}>
                   <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
                   {item}
                 </li>
@@ -78,16 +78,16 @@ export default function Methodologie() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: SOURCES.length * 0.08 }}
-          className="rounded-2xl border p-6 md:p-8"
-          style={{ borderColor: 'rgba(212,175,55,0.25)', background: 'rgba(212,175,55,0.05)' }}
+          className="rounded-2xl border p-6 md:p-8 p-elev-1"
+          style={{ borderColor: 'var(--p-gold-border)', background: 'rgba(212,175,55,0.05)' }}
         >
           <div className="flex items-center gap-3 mb-3">
             <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />
-            <h2 className="text-lg font-bold" style={{ color: 'var(--p-text)' }}>Transparence sur une limite actuelle</h2>
+            <h2 className="p-title text-xl" style={{ color: 'var(--p-text)' }}>Transparence sur une limite actuelle</h2>
             <motion.div className="w-1.5 h-1.5 rounded-full ml-auto flex-shrink-0" style={{ background: 'var(--p-gold)' }}
               animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.2, repeat: Infinity }} />
           </div>
-          <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text-60)' }}>
+          <p className="p-body text-sm max-w-prose" style={{ color: 'var(--p-text-60)' }}>
             Au moment où ces lignes sont écrites, le site officiel de la 26ᵉ Knesset
             n'était pas encore structuré (la Knesset a été dissoute le 17 juillet
             2026, le scrutin est fixé au 27 octobre). Le collecteur de résultats
@@ -99,8 +99,7 @@ export default function Methodologie() {
         <div className="text-center pt-4">
           <Link
             to={createPageUrl('Listes')}
-            className="group inline-flex items-center gap-2 text-sm font-semibold hover:opacity-80 transition-opacity"
-            style={{ color: 'var(--p-blue)' }}
+            className="p-btn-gold group inline-flex items-center gap-2"
           >
             Voir les listes suivies <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>

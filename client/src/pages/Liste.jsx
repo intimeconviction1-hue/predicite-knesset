@@ -191,7 +191,7 @@ export default function ListePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
           whileHover={{ y: -2 }}
-          className="rounded-2xl border p-6 mb-6 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+          className="p-elev-2 rounded-2xl border p-6 mb-6 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
           style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
           <div className="flex items-start justify-between flex-wrap gap-3">
@@ -274,7 +274,7 @@ export default function ListePage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="rounded-2xl p-5 mb-6 flex items-center justify-between gap-4 flex-wrap"
+            className="p-elev-1 rounded-2xl p-5 mb-6 flex items-center justify-between gap-4 flex-wrap"
             style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)', borderLeft: `3px solid ${liste.color || 'var(--p-gold)'}` }}
           >
             <div>
@@ -307,7 +307,7 @@ export default function ListePage() {
 
         {/* Joue-le / apprends-le — vase communicant : ce qu'on vient de lire se
             joue (paris réels sur cette liste) et se teste (quiz). */}
-        <div className="mb-6">
+        <div className="p-reveal mb-6">
           <PlayLearnBar
             title={`Joue « ${liste.name_fr} »`}
             subtitle="Ce que tu viens de lire se joue : parie sur cette liste, ou teste tes connaissances."
@@ -324,7 +324,7 @@ export default function ListePage() {
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4 }}
             whileHover={{ y: -2 }}
-            className="rounded-2xl border p-6 mb-6 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
+            className="p-elev-1 rounded-2xl border p-6 mb-6 transition-colors duration-300 hover:border-[var(--p-border-hover)]"
             style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
           >
             <div className="flex items-center gap-2 mb-4">
@@ -363,7 +363,7 @@ export default function ListePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-10%' }}
             transition={{ duration: 0.4 }}
-            className="rounded-2xl border p-6 mb-6"
+            className="p-elev-1 rounded-2xl border p-6 mb-6"
             style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
           >
             <div className="flex items-center gap-2 mb-4">
@@ -388,7 +388,7 @@ export default function ListePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
-          className="rounded-2xl border overflow-hidden mb-6"
+          className="p-elev-2 rounded-2xl border overflow-hidden mb-6"
           style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
           <div className="px-6 py-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
@@ -481,8 +481,7 @@ export default function ListePage() {
                   <Button
                     onClick={handleSubmit}
                     disabled={isSubmitting || deadlineClosed}
-                    className="flex-1"
-                    style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}
+                    className="flex-1 p-btn-gold-solid"
                   >
                     {isSubmitting ? 'Enregistrement...' : '✓ Valider mon pronostic'}
                   </Button>
@@ -494,7 +493,7 @@ export default function ListePage() {
 
         <KnessetRulesModule compact />
 
-        <div className="flex items-center justify-center gap-6 mt-8">
+        <div className="p-reveal flex items-center justify-center gap-6 mt-8">
           <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-[var(--p-text)] transition-colors flex items-center gap-1.5" style={{ color: 'var(--p-text-40)' }}>
             <Users className="w-3.5 h-3.5" /> Pronostic Premier ministre
           </Link>

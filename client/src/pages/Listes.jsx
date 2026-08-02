@@ -49,12 +49,12 @@ export default function Listes() {
         size="md"
         photos={['/images/listes-hero.jpg']}
         position="center 30%"
-        title="Listes en lice — Knesset 2026"
+        title={<>Listes en lice — <span className="p-gradient-gold">Knesset 2026</span></>}
         subtitle={<>{listes.length} listes suivies · Scrutin du 27 octobre 2026 · Sondages sièges mis à jour régulièrement</>}
         actions={
           <button
             onClick={() => setShowRules(!showRules)}
-            className="inline-flex items-center gap-1 px-6 py-3.5 rounded-[10px] font-semibold text-[15px] text-white hover:opacity-90 transition-opacity"
+            className="p-glass inline-flex items-center gap-1 px-6 py-3.5 font-semibold text-[15px] text-white hover:opacity-90 transition-opacity"
             style={{ background: 'rgba(255,255,255,0.10)', border: '0.5px solid rgba(255,255,255,0.25)' }}
           >
             {showRules ? 'Masquer' : 'Comment lire ces sièges ?'} <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showRules ? 'rotate-90' : ''}`} />
@@ -69,8 +69,8 @@ export default function Listes() {
       )}
 
       {/* Filters */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="rounded-2xl border p-4" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+      <div className="p-reveal max-w-7xl mx-auto px-4 py-6">
+        <div className="p-elev-1 rounded-2xl border p-4" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5" style={{ color: 'var(--p-text-25)' }} />
@@ -118,7 +118,7 @@ export default function Listes() {
           </div>
         )}
 
-        <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t" style={{ borderColor: 'var(--p-border)' }}>
+        <div className="p-reveal flex items-center justify-center gap-6 mt-12 pt-8 border-t" style={{ borderColor: 'var(--p-border)' }}>
           <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
             Pronostic Premier ministre
           </Link>

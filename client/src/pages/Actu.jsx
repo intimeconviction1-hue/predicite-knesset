@@ -53,12 +53,12 @@ export default function Actu() {
           </div>
           <motion.h1
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="text-3xl md:text-5xl font-black mb-4 leading-tight"
+            className="p-display text-3xl md:text-5xl mb-4"
             style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
           >
             Actu Knesset 2026
           </motion.h1>
-          <p className="text-base md:text-lg leading-relaxed max-w-2xl" style={{ color: 'var(--p-text-60)' }}>
+          <p className="p-body text-base md:text-lg max-w-prose" style={{ color: 'var(--p-text-60)' }}>
             Un flux automatique de vrais médias francophones, complété par quelques résumés PrédiCité traduits de sources israéliennes quand l'info manque en français — toujours signalés et sourcés.
           </p>
         </div>
@@ -67,7 +67,7 @@ export default function Actu() {
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'rgba(43,92,230,0.06)', border: '1px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
-          <p>Flux automatique (Google News) rafraîchi régulièrement, plus quelques <b style={{ color: 'var(--p-gold-text)', fontWeight: 600 }}>résumés PrédiCité</b> traduits de sources israéliennes — toujours signalés comme tels et sourcés. Chaque élément renvoie vers l'article d'origine.</p>
+          <p className="max-w-prose">Flux automatique (Google News) rafraîchi régulièrement, plus quelques <b style={{ color: 'var(--p-gold-text)', fontWeight: 600 }}>résumés PrédiCité</b> traduits de sources israéliennes — toujours signalés comme tels et sourcés. Chaque élément renvoie vers l'article d'origine.</p>
         </div>
 
         {isLoading ? (
@@ -90,7 +90,7 @@ export default function Actu() {
                 viewport={{ once: true, margin: '-5%' }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.3) }}
                 whileHover={{ y: -1 }}
-                className="block rounded-xl p-4 transition-colors duration-200"
+                className="block p-card p-4 transition-colors duration-200"
                 style={{ background: 'var(--p-card)', border: '1px solid var(--p-gold-border)', borderLeft: '3px solid var(--p-gold)' }}
               >
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
@@ -112,7 +112,7 @@ export default function Actu() {
                 viewport={{ once: true, margin: '-5%' }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.3) }}
                 whileHover={{ y: -1 }}
-                className="flex items-start gap-3 rounded-xl border p-4 transition-colors duration-200 hover:border-[var(--p-border-hover)]"
+                className="flex items-start gap-3 p-card p-4 transition-colors duration-200 hover:border-[var(--p-border-hover)]"
                 style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
               >
                 <div className="flex-1 min-w-0">
@@ -129,11 +129,11 @@ export default function Actu() {
           </div>
         )}
 
-        <div className="mt-8">
+        <div className="mt-12 p-reveal">
           <QuizWidget category="actualite" title="Quiz — l'actu de la campagne" />
         </div>
 
-        <div className="flex items-center justify-center gap-2 mt-8 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
+        <div className="flex items-center justify-center gap-2 mt-12 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
           <span>Cette actu vous inspire un pronostic ? <Link to={createPageUrl('Listes')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>Voir les listes</Link> ou <Link to={createPageUrl('PremierMinistre')} className="underline hover:opacity-80" style={{ color: 'var(--p-blue)' }}>pronostiquer le Premier ministre</Link>.</span>
         </div>
       </div>

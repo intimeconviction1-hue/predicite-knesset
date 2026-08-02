@@ -88,7 +88,7 @@ export default function Leaderboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl p-4"
+            className="rounded-2xl p-4 p-elev-2"
             style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)' }}
           >
             <div className="flex items-center justify-between flex-wrap gap-4">
@@ -139,7 +139,7 @@ export default function Leaderboard() {
 
       {/* Podium */}
       {topThree.length >= 3 && !searchQuery && (
-        <div className="max-w-4xl mx-auto px-4 mt-10 mb-8">
+        <div className="max-w-4xl mx-auto px-4 mt-10 mb-8 p-glow-gold">
           <div className="flex items-end justify-center gap-6">
             {/* 2e */}
             <motion.div
@@ -215,7 +215,7 @@ export default function Leaderboard() {
       )}
 
       {/* Recherche */}
-      <div className="max-w-4xl mx-auto px-4 py-6">
+      <div className="p-reveal max-w-4xl mx-auto px-4 py-6">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--p-text-25)' }} />
           <input
@@ -235,8 +235,8 @@ export default function Leaderboard() {
       </div>
 
       {/* Liste */}
-      <div className="max-w-4xl mx-auto px-4 pb-16">
-        <div className="rounded-2xl overflow-hidden" style={{ border: '0.5px solid var(--p-border)' }}>
+      <div className="p-reveal max-w-4xl mx-auto px-4 pb-16">
+        <div className="p-elev-1 rounded-2xl overflow-hidden" style={{ border: '0.5px solid var(--p-border)' }}>
 
           {/* En-tête */}
           <div className="px-4 py-3 flex items-center justify-between text-[10px] uppercase tracking-widest"

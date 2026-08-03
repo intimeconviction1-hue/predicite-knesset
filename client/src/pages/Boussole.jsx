@@ -128,6 +128,27 @@ const STATEMENTS = [
     pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
 
+  // Affirmation DISCRIMINANTE : elle sépare les partis HAREDIM des nationaux-
+  // religieux, à l'intérieur d'une même coalition. Ce n'est pas une nuance
+  // théologique de salon — les partis haredim ont envisagé de quitter le
+  // gouvernement quand Ben Gvir a poussé la prière juive sur le site.
+  //
+  // Le député du JUT Moshe Gafni : « monter sur le mont du Temple implique une
+  // interdiction grave de karet » et « nous exigeons la fermeture du mont du
+  // Temple aux juifs ». Côté Shas, le grand rabbin séfarade Yitzhak Yosef, fils
+  // d'Ovadia Yosef, a écrit à Ben Gvir pour rappeler la « sévérité de
+  // l'interdit » et l'avertir qu'il risquait de « faire pécher la multitude ».
+  // Le motif est l'impureté rituelle : sans les cendres de la vache rousse, nul
+  // ne peut atteindre la pureté requise, et l'emplacement exact du Saint des
+  // Saints est inconnu.
+  //
+  // En face, Ben Gvir y monte et y prie régulièrement, et Netanyahou a soutenu
+  // l'extension de la prière juive en janvier 2026 — c'est d'ailleurs pour cela
+  // que ce sujet ne sépare PAS le Likoud d'Otzma (voir docs/BOUSSOLE_SOURCES.md).
+  { text: 'Les juifs doivent pouvoir monter prier sur le mont du Temple.',
+    pour: ['otzma-yehudit', 'sionisme-religieux', 'likoud'],
+    contre: ['shas', 'judaisme-unifie-de-la-torah'] },
+
   // Affirmation DISCRIMINANTE : elle sépare la gauche sioniste de la gauche arabe,
   // dernière paire confondue de ce foyer. Hadash est un parti explicitement NON
   // SIONISTE, héritier du parti communiste, qui défend un « État de tous ses

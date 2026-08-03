@@ -287,7 +287,34 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 12 paires (2026-08-03)
+### Avancement : 20 → 10 paires (2026-08-03)
+
+**Résolu — Otzma Yehudit vs Shas et le JUT.** Nouvelle affirmation : la montée
+des juifs sur le mont du Temple. C'est la faille qui sépare les partis **haredim**
+des **nationaux-religieux**, à l'intérieur d'une même coalition — et ce n'est pas
+une nuance de salon : les partis haredim ont envisagé de quitter le gouvernement
+quand Ben Gvir a poussé la prière juive sur le site.
+
+Moshe Gafni (JUT) : « Monter sur le mont du Temple implique une interdiction grave
+de *karet* », et « nous exigeons la fermeture du mont du Temple aux juifs ». Côté
+Shas, le grand rabbin séfarade Yitzhak Yosef — fils d'Ovadia Yosef — a écrit à Ben
+Gvir pour rappeler la « sévérité de l'interdit » et l'avertir qu'il risquait de
+« faire pécher la multitude ». Le motif est l'impureté rituelle : sans les cendres
+de la vache rousse nul ne peut atteindre la pureté requise, et l'emplacement du
+Saint des Saints est inconnu.
+
+En face, Ben Gvir y monte et y prie régulièrement. Le Likoud est du même côté
+qu'Otzma, Netanyahou ayant soutenu l'extension de la prière juive en janvier
+2026 — c'est pourquoi ce sujet ne sépare pas ces deux-là (voir la piste abandonnée
+plus bas, qui reste valable sur ce point précis).
+
+  - https://www.timesofisrael.com/haredi-parties-mull-bolting-coalition-as-ben-gvir-pushes-jewish-prayer-on-temple-mount/
+  - https://www.timesofisrael.com/ben-gvir-again-ascends-temple-mount-haredi-mk-slams-visit-as-desecration/
+  - https://israel365news.com/373665/sephardi-chief-rabbi-ben-gvir-sinning-by-visiting-temple-mount/
+
+  **Certitude : élevée** pour Shas, le JUT et Otzma ; **moyenne** pour le Sionisme
+  religieux, dont le camp porte cet activisme sans que j'aie de déclaration de
+  parti datée.
 
 **Résolu — Les Démocrates vs Hadash-Ta'al, dernière paire du foyer
 gauche/arabe.** Nouvelle affirmation : Israël comme État juif plutôt que comme
@@ -476,11 +503,19 @@ La clé la plus prometteuse reste **la position propre de Bennett** sur les text
 que Lapid a combattus — peine de mort, accord sur les otages — puisque c'est elle
 qui débloquerait Ensemble sans hériter d'une position par fusion.
 
-**Les partis haredim et Otzma — 4 paires.** Shas, le JUT et Otzma Yehudit. Le vote
-sur la peine de mort a séparé les deux composantes du JUT en pratique (Degel
-HaTorah pour, Agoudat Israël abstenue), ce qui prive le JUT de position. Chercher
-un sujet social où Shas, parti des classes populaires séfarades, s'oppose au JUT
-ashkénaze — le logement ou les allocations sont des pistes plausibles.
+**Les partis religieux — 2 paires.** Otzma est réglé. Restent :
+
+- **Shas vs le JUT.** Séfarades contre ashkénazes. Le vote sur la peine de mort
+  les a séparés en pratique — Shas pour, le JUT divisé donc sans position — mais
+  une absence ne crée pas de désaccord. Chercher un sujet social où Shas, parti
+  des classes populaires et de la périphérie, s'oppose franchement au monde des
+  yeshivot ashkénazes : le logement, les allocations, ou l'enseignement du tronc
+  commun dans les écoles, que le réseau El HaMa'ayan de Shas accepte davantage
+  que les écoles ashkénazes.
+- **Otzma Yehudit vs Sionisme religieux.** Les deux formations d'extrême droite,
+  alliées et rivales. Piste : Otzma est kahaniste et populiste, le Sionisme
+  religieux est légaliste et rabbinique ; ils divergent sur les méthodes
+  policières et sur le rapport à l'État de droit plus que sur les objectifs.
 
 **La gauche et les partis arabes — 1 paire.** Ra'am est réglé. Reste
 **Les Démocrates vs Hadash-Ta'al**, et la ligne qui les sépare est connue : les

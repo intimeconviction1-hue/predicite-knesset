@@ -698,6 +698,51 @@ La tension est réelle mais elle porte sur le prix du soutien, pas sur son princ
 
 ---
 
+## Dette de sourçage — inventaire chiffré (2026-08-03)
+
+| | Positions |
+|---|---|
+| **Sourcées** — affirmations créées le 03/08, chacune justifiée ci-dessus | **66** (41 %) |
+| **Héritées** — de la rédaction initiale, jamais vérifiées une par une | **95** (59 %) |
+| Total | 161 |
+
+Parmi les positions héritées que j'ai effectivement contrôlées ce jour, **trois se
+sont révélées fausses** : Les Réservistes en « contre » Netanyahou, Yashar et
+Ensemble en « contre » les implantations. Les trois concernaient des listes
+récentes ou fusionnées, et les trois les tiraient vers la gauche.
+
+### Ordre de priorité — et une bonne nouvelle
+
+Le classement ne doit pas suivre le nombre de positions mais **l'exposition** :
+ce qu'on vous reprochera le plus cher.
+
+1. **Affirmations 5 (négociations de paix) et 7 (égalité des citoyens arabes) —
+   12 positions à elles deux.** Ce sont les deux sujets les plus sensibles du
+   questionnaire, et ce sont aussi les **moins fournis**. Une demi-journée de
+   sourçage solderait la partie la plus risquée de toute la dette. À faire en
+   premier, sans hésiter.
+2. **Affirmation 1 (Netanyahou), 12 positions**, dont trois déjà vérifiées. Elle
+   structure le résultat plus que les autres.
+3. **Affirmation 2 (réforme judiciaire), 13 positions** — la plus fournie du
+   fichier, donc la plus coûteuse, mais aussi la plus consensuelle à documenter :
+   les votes existent.
+4. **Affirmations 8 (sécurité, 12) et 3 (halakha, 11)** — beaucoup de positions
+   d'alignement, du type de celle que j'ai dû retirer au JUT. À traiter avec la
+   table des cas sous les yeux.
+5. **Affirmation 19 (économie, 9)** — la plus faible du lot. Aucune des positions
+   n'est sourcée, et l'économie est le domaine où les partis israéliens sont le
+   moins nettement identifiés. Envisager de la retirer plutôt que de la sourcer.
+
+### Positions héritées explicitement repérées comme douteuses
+
+- **Yashar, affirmation 3 (halakha)** — « contre », non documenté. Le programme
+  d'Eisenkot parle d'un « État juif et démocratique » sans se prononcer sur la
+  place de la halakha.
+- **Les Réservistes, affirmation 2 (réforme judiciaire)** — « contre », non
+  documenté. Rien dans le programme de Hendel ne porte sur ce sujet.
+- **Les Réservistes, affirmation 19 (économie)** — « pour », non documenté.
+- **Ensemble, affirmation 19 (économie)** — « pour », non documenté.
+
 ## Dette de sourçage
 
 Les positions **antérieures au 2026-08-03** — l'essentiel du tableau — n'ont pas

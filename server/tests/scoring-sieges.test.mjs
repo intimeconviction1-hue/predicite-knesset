@@ -13,19 +13,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { mock } from 'node:test';
 import { createMemoryDb } from './helpers/memory-db.mjs';
+import { optionsMock } from './helpers/option-mock.mjs';
 
 // Le mock délègue à `db`, réassigné avant chaque scénario : les modules testés
 // ne sont importés qu'une fois, mais repartent d'une base vierge à chaque fois.
 let db = createMemoryDb();
 
-mock.module('../db/index.js', {
-  exports: {
-    filterEntity: (...a) => db.filterEntity(...a),
-    listEntity: (...a) => db.listEntity(...a),
-    createEntity: (...a) => db.createEntity(...a),
-    updateEntity: (...a) => db.updateEntity(...a),
-  },
-});
+// optionsMock() choisit `exports` ou `namedExports` selon le Node installé :
+// l'option a été renommée, et se tromper de nom fait mourir ce fichier à
+// l'import, silencieusement, pendant que les autres passent au vert.
+mock.module('../db/index.js', optionsMock({
+  filterEntity: (...a) => db.filterEntity(...a),
+  listEntity: (...a) => db.listEntity(...a),
+  createEntity: (...a) => db.createEntity(...a),
+  updateEntity: (...a) => db.updateEntity(...a),
+}));
 
 const { validerRepartition, MIN_SIEGES_AU_SEUIL, TOTAL_SIEGES } =
   await import('../functions/repartitionSieges.js');

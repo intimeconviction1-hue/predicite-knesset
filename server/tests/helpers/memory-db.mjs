@@ -51,9 +51,11 @@ export function createMemoryDb(seed = {}) {
     async filterEntity(name, query = {}) {
       return tableOf(name).filter(r => matches(r, query)).map(clone);
     },
-    async listEntity(name, { sort, limit } = {}) {
+    async listEntity(name, { sort, limit, offset } = {}) {
       const rows = applySort(tableOf(name), sort);
-      return (limit ? rows.slice(0, Number(limit)) : rows).map(clone);
+      const debut = Number(offset) || 0;
+      const fin = limit ? debut + Number(limit) : undefined;
+      return rows.slice(debut, fin).map(clone);
     },
     async createEntity(name, payload) {
       const row = { id: payload.id || randomUUID(), created_at: nextStamp(), ...payload };

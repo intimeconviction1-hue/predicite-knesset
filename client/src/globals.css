@@ -355,6 +355,34 @@ span[role="button"] { min-height: auto; }
   to   { opacity:1; transform:none; }
 }
 
+/* ── Tracé de courbe, version robuste (utilisée par TrendChartMulti) ──
+   Problème : `animation-timeline: view()` posé sur un <path> SVG ne marche pas
+   de façon fiable (les enfants SVG n'ont pas de boîte de mise en page normale).
+   Solution : on anime une PROPRIÉTÉ PERSONNALISÉE sur le <svg> (lui, a bien une
+   boîte), et les <path> en héritent — les propriétés personnalisées héritent.
+   @property la déclare interpolable ; sa valeur initiale 0 = courbe entièrement
+   tracée, donc un navigateur qui ne suit pas affiche simplement le graphique
+   normal. Aucun risque de courbe invisible. */
+@property --p-draw-o {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+.p-trend-line {
+  stroke-dasharray: 1;                    /* fonctionne car les <path> portent pathLength="1" */
+  stroke-dashoffset: var(--p-draw-o, 0);
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .p-trend-draw {
+      animation: p-trend-draw-in linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 55%;
+    }
+  }
+}
+@keyframes p-trend-draw-in { from { --p-draw-o: 1; } to { --p-draw-o: 0; } }
+
 /* ── Tracé de courbe (SVG) : la ligne se dessine à l'entrée. On l'applique à un
    <path> dont on a défini stroke-dasharray/offset = longueur. ── */
 @supports (animation-timeline: view()) {
@@ -369,6 +397,8 @@ span[role="button"] { min-height: auto; }
 @media (prefers-reduced-motion: reduce) {
   .p-reveal { animation:none !important; opacity:1 !important; transform:none !important; }
   .p-draw   { animation:none !important; stroke-dashoffset:0 !important; }
+  .p-trend-draw { animation:none !important; }
+  .p-trend-line { stroke-dasharray:none !important; stroke-dashoffset:0 !important; }
   .p-gradient-gold { animation:none !important; }
   .p-card:hover { transform:none; }
 }

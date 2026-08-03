@@ -14,7 +14,7 @@ export default function TrendChartMulti({ series = [], labels = [], height = 200
   const yAt = (v) => H - mB - ((v - lo) / (hi - lo || 1)) * (H - mT - mB);
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" height={height} style={{ overflow: 'visible' }} role="img" aria-label="Tendance des sondages par parti">
+    <svg className="p-trend-draw" viewBox={`0 0 ${W} ${H}`} width="100%" height={height} style={{ overflow: 'visible' }} role="img" aria-label="Tendance des sondages par parti">
       {/* lignes de repère horizontales discrètes */}
       {[0.25, 0.5, 0.75].map((f, i) => (
         <line key={i} x1={mL} x2={W - mR} y1={mT + f * (H - mT - mB)} y2={mT + f * (H - mT - mB)} stroke="var(--p-text-10)" strokeWidth="1" />
@@ -27,7 +27,10 @@ export default function TrendChartMulti({ series = [], labels = [], height = 200
           d += `${started ? 'L' : 'M'} ${xAt(i).toFixed(1)} ${yAt(v).toFixed(1)} `;
           started = true;
         });
-        return <path key={si} d={d} fill="none" stroke={s.color} strokeWidth="2.25" strokeLinejoin="round" strokeLinecap="round" opacity="0.95" />;
+        // pathLength="1" normalise la longueur du tracé : le dash/offset devient
+        // une fraction (0 → 1), donc l'animation de dessin n'a pas besoin de
+        // mesurer quoi que ce soit en JavaScript. Voir .p-trend-line/.p-trend-draw.
+        return <path key={si} className="p-trend-line" pathLength="1" d={d} fill="none" stroke={s.color} strokeWidth="2.25" strokeLinejoin="round" strokeLinecap="round" opacity="0.95" />;
       })}
 
       {/* pastille + valeur au dernier point de chaque série */}

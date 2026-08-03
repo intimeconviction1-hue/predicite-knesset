@@ -61,6 +61,35 @@ function seatPointsForError(err) {
   return 0;
 }
 
+const TAILLE_PAGE = 1000;
+// Garde-fou : une boucle de pagination qui ne se termine pas est un bug, pas
+// une raison de tronquer. On leve plutot que de rendre un classement partiel.
+const PLAFOND_LIGNES = 500000;
+
+/**
+ * Lit TOUTES les lignes d'une entite, page par page.
+ *
+ * L'ancienne version demandait 5000 lignes d'un coup. A douze listes par
+ * joueur, la troncature mordait vers 400 joueurs — silencieusement, et le tri
+ * par `-created_at` faisait disparaitre les inscrits les PLUS ANCIENS, donc les
+ * plus fideles. Un classement faux le soir du scrutin, sans le moindre message.
+ *
+ * Le tri se fait sur `id` : cle unique, donc pagination stable. `created_at`
+ * peut avoir des ex aequo, qui feraient sauter ou repeter des lignes d'une
+ * page a l'autre. L'ordre n'a aucune importance ici, tout est parcouru.
+ */
+async function lireTout(entite) {
+  const tout = [];
+  for (let offset = 0; ; offset += TAILLE_PAGE) {
+    const page = await listEntity(entite, { sort: 'id', limit: TAILLE_PAGE, offset });
+    tout.push(...page);
+    if (page.length < TAILLE_PAGE) return tout;
+    if (tout.length > PLAFOND_LIGNES) {
+      throw new Error(`Lecture de ${entite} au-dela de ${PLAFOND_LIGNES} lignes : pagination suspecte, scoring interrompu.`);
+    }
+  }
+}
+
 async function getUserProgress(user_email) {
   const up = (await filterEntity('UserProgress', { user_email }))[0];
   if (!up) throw new Error('UserProgress introuvable pour cet utilisateur.');
@@ -157,7 +186,7 @@ export async function scoreSiegesAndSync() {
   requireField(!!resultat, 'ResultatSieges (is_final=true) introuvable.');
 
   const seatsByListe = new Map((resultat.seats_by_liste || []).map(r => [r.liste_id, r.seats]));
-  const preds = await listEntity('PronosticSieges', { sort: '-created_at', limit: 5000 });
+  const preds = await lireTout('PronosticSieges');
 
   const deltaByUser = new Map();
 
@@ -196,7 +225,7 @@ export async function scoreBlocMajoritaire() {
   const resultat = (await filterEntity('ResultatSieges', { is_final: true }))[0];
   requireField(!!resultat, 'ResultatSieges (is_final=true) introuvable.');
 
-  const listes = await listEntity('Liste', { sort: '-created_at', limit: 200 });
+  const listes = await lireTout('Liste');
   const blocById = new Map(listes.map(l => [l.id, l.bloc]));
   const seatsByListe = new Map((resultat.seats_by_liste || []).map(r => [r.liste_id, r.seats]));
 
@@ -206,7 +235,7 @@ export async function scoreBlocMajoritaire() {
   }
   const realCoalitionMajority = coalitionSeats >= MAJORITY_SEATS;
 
-  const preds = await listEntity('PronosticSieges', { sort: '-created_at', limit: 5000 });
+  const preds = await lireTout('PronosticSieges');
   const byUser = new Map();
   for (const p of preds) {
     if (!byUser.has(p.user_email)) byUser.set(p.user_email, []);

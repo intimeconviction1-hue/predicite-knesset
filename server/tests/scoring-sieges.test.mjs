@@ -265,6 +265,49 @@ test('scoring de bout en bout', async (t) => {
   });
 });
 
+test('lecture paginée du scoring', async (t) => {
+  await t.test('score toutes les lignes, pas seulement la première page', async () => {
+    seed();
+
+    // 400 joueurs × 3 listes = 1200 pronostics, soit deux pages de 1000.
+    // Ce que le test verrouille, c'est que la boucle de pagination assemble
+    // TOUTES les pages : si elle s'arrêtait à la première, 1000 lignes
+    // seraient scorées au lieu de 1200. (Il ne rejoue pas l'ancien plafond de
+    // 5000 lignes — ce code n'existe plus ; c'est la lecture complète qui doit
+    // rester vraie quand le nombre de joueurs grandit.)
+    const NB_JOUEURS = 400;
+    const reels = [[LIKOUD, 50], [YESH, 40], [PETITE, 30]];
+    let n = 0;
+
+    for (let u = 0; u < NB_JOUEURS; u++) {
+      const email = `joueur${String(u).padStart(4, '0')}@exemple.fr`;
+      await db.createEntity('UserProgress', { id: `up-${u}`, user_email: email, total_points: 0 });
+      for (const [liste_id, seats] of reels) {
+        // id zéro-padé : la pagination trie sur id, on veut un ordre stable.
+        await db.createEntity('PronosticSieges', {
+          id: `p-${String(n++).padStart(5, '0')}`,
+          user_email: email, liste_id,
+          predicted_seats: seats,
+          predicted_above_threshold: true,
+          justification: '', points_earned: 0, is_correct: false,
+        });
+      }
+    }
+
+    await saveResultatsManuels({ seats_by_liste: resultatsReels });
+    const res = await scoreSiegesAndSync();
+
+    assert.equal(res.predictions_scored, 1200, 'les 1200 pronostics doivent être scorés');
+    assert.equal(res.users_updated, NB_JOUEURS);
+
+    // Un joueur de la DERNIÈRE page doit être crédité comme celui de la première.
+    const premier = (await db.filterEntity('UserProgress', { user_email: 'joueur0000@exemple.fr' }))[0];
+    const dernier = (await db.filterEntity('UserProgress', { user_email: 'joueur0399@exemple.fr' }))[0];
+    assert.equal(premier.total_points, 540); // 3 × (150 exact + 30 seuil)
+    assert.equal(dernier.total_points, 540, 'la dernière page ne doit pas être perdue');
+  });
+});
+
 test('saisie manuelle des résultats', async (t) => {
   t.beforeEach(seed);
 

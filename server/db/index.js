@@ -126,7 +126,16 @@ function serializeForWrite(cfg, payload) {
   return out;
 }
 
-export async function listEntity(entityName, { sort, limit } = {}) {
+// LIMIT/OFFSET ne sont pas parametrables comme des valeurs ici : on les
+// interpole, donc on refuse tout ce qui n'est pas un entier positif plutot que
+// de laisser passer un NaN qui casserait la requete.
+function assertEntier(valeur, nom) {
+  const n = Number(valeur);
+  if (!Number.isInteger(n) || n < 0) throw new Error(`${nom} invalide : ${valeur}`);
+  return n;
+}
+
+export async function listEntity(entityName, { sort, limit, offset } = {}) {
   const cfg = getConfig(entityName);
   let sql = `SELECT * FROM ${cfg.table}`;
   if (sort) {
@@ -134,7 +143,8 @@ export async function listEntity(entityName, { sort, limit } = {}) {
     const col = assertIdent(desc ? sort.slice(1) : sort);
     sql += ` ORDER BY ${col} ${desc ? 'DESC' : 'ASC'}`;
   }
-  if (limit) sql += ` LIMIT ${Number(limit)}`;
+  if (limit) sql += ` LIMIT ${assertEntier(limit, 'limit')}`;
+  if (offset) sql += ` OFFSET ${assertEntier(offset, 'offset')}`;
   const rows = await queryAll(sql);
   return rows.map(r => deserializeRow(cfg, r));
 }

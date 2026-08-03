@@ -503,19 +503,41 @@ La clé la plus prometteuse reste **la position propre de Bennett** sur les text
 que Lapid a combattus — peine de mort, accord sur les otages — puisque c'est elle
 qui débloquerait Ensemble sans hériter d'une position par fusion.
 
-**Les partis religieux — 2 paires.** Otzma est réglé. Restent :
+**Les partis religieux — 2 paires, probablement IRRÉDUCTIBLES.**
 
-- **Shas vs le JUT.** Séfarades contre ashkénazes. Le vote sur la peine de mort
-  les a séparés en pratique — Shas pour, le JUT divisé donc sans position — mais
-  une absence ne crée pas de désaccord. Chercher un sujet social où Shas, parti
-  des classes populaires et de la périphérie, s'oppose franchement au monde des
-  yeshivot ashkénazes : le logement, les allocations, ou l'enseignement du tronc
-  commun dans les écoles, que le réseau El HaMa'ayan de Shas accepte davantage
-  que les écoles ashkénazes.
-- **Otzma Yehudit vs Sionisme religieux.** Les deux formations d'extrême droite,
-  alliées et rivales. Piste : Otzma est kahaniste et populiste, le Sionisme
-  religieux est légaliste et rabbinique ; ils divergent sur les méthodes
-  policières et sur le rapport à l'État de droit plus que sur les objectifs.
+Les deux pistes ont été explorées et **toutes deux échouent, pour de bonnes
+raisons**. C'est un résultat, pas un échec : toutes les paires ne peuvent pas être
+séparées, parce que certains partis ne diffèrent réellement pas sur les
+politiques.
+
+- **Shas vs le JUT — différence sociologique, pas politique.** Le réseau scolaire
+  séfarade de Shas enseigne le tronc commun (maths, sciences, anglais) jusqu'au
+  bout, là où les écoles de garçons ashkénazes du JUT s'arrêtent en sixième ou
+  avant ; le JUT revendique une opposition de principe au contrôle de l'État sur
+  le contenu de son enseignement. Mais **politiquement les deux partis ont soutenu
+  ensemble l'abrogation** de la loi imposant ce tronc commun — au point que la
+  presse décrit une fracture entre la base haredi, qui réclame ces matières, et sa
+  direction politique. Encoder une pratique institutionnelle comme une position de
+  parti serait la même faute que d'inférer la position du JUT sur la sécurité.
+  **Refusé.**
+
+  - https://www.shomrim.news/eng/380
+  - https://www.timesofisrael.com/no-math-no-problem-government-flip-flops-on-haredi-core-curricula/
+
+- **Otzma Yehudit vs Sionisme religieux — pas de divergence de fond, de l'aveu
+  même de Ben Gvir.** Il a exclu une liste commune en 2026 en expliquant que les
+  deux partis s'adressent à des électorats « fondamentalement différents » —
+  Mizrahim de la périphérie pour lui, sionisme religieux classique pour Smotrich —
+  tout en reconnaissant qu'ils tiennent « des positions similaires ». Leur
+  divergence est électorale et stratégique, pas programmatique. Une boussole qui
+  les séparerait inventerait une différence que les intéressés nient.
+
+  - https://www.jpost.com/israel-news/politics-and-diplomacy/article-903791
+
+**Conséquence méthodologique.** L'objectif n'est donc pas zéro paire. Deux partis
+qui défendent le même programme *doivent* sortir ensemble : c'est le résultat
+juste. Le vrai objectif est qu'aucune paire ne subsiste **par défaut de
+documentation** — et c'est exactement ce qui reste vrai des 8 paires du centre.
 
 **La gauche et les partis arabes — 1 paire.** Ra'am est réglé. Reste
 **Les Démocrates vs Hadash-Ta'al**, et la ligne qui les sépare est connue : les

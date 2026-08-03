@@ -40,10 +40,28 @@ function normHe(s) {
 // Matching par SOUS-CHAÎNE distinctive (pas d'égalité exacte, fragile) : ex.
 // « איזנקוט » (Eisenkot) pour Yashar — surtout PAS « ישר », qui collisionnerait
 // avec « ישראל » (Yisrael Beiteinu). Premier match l'emporte, ordre important.
-const MAPPED_RULES = [
+// Exporté pour que tests/collecteur-slugs.test.mjs vérifie que chaque slug
+// correspond à une liste du seed — la garde qui manquait quand 'yachad-bennett'
+// visait une liste présente en base mais dans aucun seed.
+export const MAPPED_RULES = [
   [/הליכוד/, 'likoud'],
   [/איזנקוט/, 'yashar-gadi-eisenkot'],
-  [/ביחד|בנט/, 'yachad-bennett'],
+  // « ביחד » (Beyachad / Ensemble, mesuré depuis le 27.4.26) et « בנט 2026 »
+  // (la liste de Bennett avant la fusion) désignent la MÊME liste ; leurs colonnes
+  // ne se chevauchent jamais, le Math.max plus bas ne double donc rien.
+  //
+  // Pointait vers 'yachad-bennett' jusqu'au 2026-08-03 : un slug hérité de Base44,
+  // absent de tout seed, qui existait bel et bien en base — donc rien n'échouait,
+  // et 146 des 156 sondages ont atterri sur cette liste fantôme pendant que la
+  // vraie ('ensemble-bennett-lapid', alimentée par le seed curé) en recevait 10.
+  //
+  // Le motif était « בנט » tout court : il matchait AUSSI la ligne « בנט » de la
+  // section « cote de bon Premier ministre », dont la valeur du 2.8.26 est « 31% ».
+  // Seul le filtre endsWith('%') empêchait Math.max d'attribuer 31 sièges à
+  // Ensemble. On exige donc « בנט 2026 », qui ne désigne que la liste. Si Kan
+  // renommait un jour la ligne en « בנט » seul, le sondage serait REJETÉ par la
+  // garde de perte (> 4 sièges non reconnus) — un échec bruyant, pas un chiffre faux.
+  [/ביחד|בנט 2026/, 'ensemble-bennett-lapid'],
   [/הדמוקרטים/, 'les-democrates'],
   [/עוצמה/, 'otzma-yehudit'],
   [/התורה/, 'judaisme-unifie-de-la-torah'],
@@ -73,6 +91,14 @@ const MAPPED_RULES = [
 // de PM, lien) ne matche aucune règle → ignoré.
   // Ne reste ici que Balad, absent de notre modèle et présent dans 2 colonnes
   // sur 152 : le mapper ne débloquerait aucun sondage (mesuré).
+  //
+  // Recontrôlé le 2026-08-03, détail utile : sa LIGNE existe dans les 8 onglets,
+  // mais la valeur y vaut 0 partout sauf chez Channel 13 — 20.1.26 (4 sièges) et
+  // 10.3.26 (16). Le 0 est écarté en amont par `seats <= 0`, d'où les 2 colonnes.
+  // Ces 16 sièges, invraisemblables pour Balad, sont justement ce qui fait tomber
+  // le sondage du 10.3.26 à 104/120 et le fait rejeter : le comportement voulu.
+  // Le vrai déclencheur pour l'ajouter au modèle est le dépôt des listes du
+  // 9 septembre, si la configuration Hadash-Ta'al-Balad se confirme.
   const UNMAPPED_RULES = [/^בלד$/];
 
 function matchParty(label) {

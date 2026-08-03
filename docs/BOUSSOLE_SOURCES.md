@@ -287,7 +287,7 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 18 paires (2026-08-03)
+### Avancement : 20 → 16 paires (2026-08-03)
 
 **Résolu — Sionisme religieux vs Shas et JUT.** Ajouté à l'affirmation 4 du côté
 « contre ». Déclaration officielle du parti le 10/12/2025 : il ne votera « que
@@ -303,6 +303,36 @@ mais déclarée, datée, et opposée à celle des partis haredim.
 
   **Certitude : moyenne-élevée.**
 
+**Résolu — Likoud vs Otzma Yehudit et Sionisme religieux.** Nouvelle affirmation :
+l'accord de cessez-le-feu et de libération des otages. C'est la fracture réelle de
+la droite israélienne, et elle est parfaitement documentée.
+
+Ben Gvir et Smotrich ont annoncé voter **contre** l'accord et menacé de faire
+tomber la coalition. Smotrich : « Nous n'accepterons pas la fin de la guerre avant
+la destruction du Hamas. » Ben Gvir a menacé de quitter le gouvernement si le
+Hamas « continue d'exister » après la libération des otages — il l'avait déjà fait
+lors d'une trêve précédente, avant de revenir. Les deux ont publiquement reproché
+à Netanyahou d'avoir consenti à la trêve proposée : c'est ce reproche même qui
+documente la position du Likoud.
+
+Côté opposition : Lapid a offert un « filet de sécurité » parlementaire pour faire
+passer un accord malgré la défection de l'extrême droite ; Gantz s'est dit prêt à
+entrer au gouvernement pour le garantir ; Lieberman réclame le retour de tous les
+otages sans conditions ; Eisenkot accuse le Premier ministre d'« ignorer et faire
+obstruction » alors que le chef d'état-major juge les conditions réunies.
+
+**Ensemble en est absent**, par la même règle que pour la peine de mort : le
+« filet de sécurité » est une position de Lapid, et Ensemble est dirigé par
+Bennett. On n'hérite pas d'une position par fusion.
+
+  - https://www.haaretz.com/israel-news/2025-10-04/ty-article/.premium/far-right-ben-gvir-smotrich-slam-netanyahu-for-assenting-to-trumps-gaza-truce-proposal/00000199-b052-d5a6-afff-f4df5c4b0000
+  - https://www.timesofisrael.com/ben-gvir-threatens-to-bolt-government-if-hamas-continues-to-exist-after-hostages-freed/
+  - https://www.timesofisrael.com/smotrich-says-he-will-oppose-hostage-deal-as-his-party-weighs-quitting-the-government/
+  - https://thehill.com/policy/international/5546764-yair-lapid-netanyahu-israel-hamas-ceasefire-terms/
+  - https://www.timesofisrael.com/gantzs-party-signals-it-may-join-coalition-if-pms-far-right-allies-bolt-over-gaza-deal/
+
+  **Certitude : élevée.** Effet : le Likoud n'est plus confondu avec AUCUN parti.
+
 **Piste abandonnée — le mont du Temple ne sépare pas le Likoud d'Otzma.**
 L'hypothèse était que le Likoud défendait le statu quo contre Ben Gvir. C'est
 faux : en janvier 2026, Netanyahou a publiquement soutenu l'extension de la prière
@@ -313,19 +343,32 @@ affirmant que le statu quo n'existe plus. Trop ténu pour une affirmation.
 
   - https://www.haaretz.com/israel-news/2026-01-05/ty-article/.premium/netanyahu-backs-expanded-jewish-prayer-at-jerusalems-most-sensitive-religious-site/0000019b-8ae7-dbc2-a3df-8ae775f00000
 
-### Pistes restantes
+### Pistes restantes — 16 paires
 
-- **Ensemble vs Yisrael Beytenou** : Yisrael Beytenou a voté la peine de mort ;
-  documenter la position propre de Bennett sur ce texte les séparerait aussitôt.
-- **Shas vs JUT** : séfarades contre ashkénazes. Le vote sur la peine de mort les
-  a séparés en pratique (Degel HaTorah pour, Agoudat Israël abstenue), mais le JUT
-  y est sans position faute d'unité interne. Chercher un sujet social où Shas,
-  parti des classes populaires, s'oppose franchement au JUT.
-- **Likoud vs Otzma Yehudit** : chercher ailleurs que le mont du Temple. Piste
-  possible : l'accord sur les otages et la fin de la guerre à Gaza, sur lesquels
-  Ben Gvir a menacé de quitter la coalition.
-- **Le centre (Yashar, Ensemble, Unité nationale, Les Réservistes, Yisrael
-  Beytenou)** : c'est le groupe le plus confondu et le plus disputé du scrutin.
+Le blocage s'est déplacé. Le Likoud n'est plus confondu avec personne ; ce qui
+reste se concentre sur trois foyers.
+
+**Le centre — 8 paires sur 16, le foyer principal.** Yashar, Ensemble, Unité
+nationale, Les Réservistes et Yisrael Beytenou restent mutuellement
+indiscernables. C'est le groupe le plus disputé du scrutin, et donc le plus
+coûteux à confondre. Difficulté de fond : ces partis se définissent moins par des
+politiques que par des lignes de coalition, or celles-ci bougent chaque semaine.
+La clé la plus prometteuse reste **la position propre de Bennett** sur les textes
+que Lapid a combattus — peine de mort, accord sur les otages — puisque c'est elle
+qui débloquerait Ensemble sans hériter d'une position par fusion.
+
+**Les partis haredim et Otzma — 4 paires.** Shas, le JUT et Otzma Yehudit. Le vote
+sur la peine de mort a séparé les deux composantes du JUT en pratique (Degel
+HaTorah pour, Agoudat Israël abstenue), ce qui prive le JUT de position. Chercher
+un sujet social où Shas, parti des classes populaires séfarades, s'oppose au JUT
+ashkénaze — le logement ou les allocations sont des pistes plausibles.
+
+**La gauche et les partis arabes — 3 paires.** Les Démocrates, Hadash-Ta'al,
+Ra'am. Piste solide et bien documentée : Ra'am est un parti islamiste
+socialement conservateur, Hadash est communiste et laïque. Le mariage civil ou les
+droits LGBT les opposeraient franchement — l'affirmation 13 existe déjà mais
+aucun des deux n'y a de position faute de source. C'est probablement le foyer le
+plus facile à débloquer.
 
 Tant que ce travail n'est pas fait, le titre de la page promet plus que le
 questionnaire ne délivre.

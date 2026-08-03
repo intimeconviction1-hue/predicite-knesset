@@ -128,6 +128,24 @@ const STATEMENTS = [
     pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
 
+  // Affirmation DISCRIMINANTE : c'est elle qui sépare enfin le Likoud de ses
+  // alliés d'extrême droite. Ben Gvir et Smotrich ont annoncé voter CONTRE
+  // l'accord et menacé de faire tomber la coalition — « nous n'accepterons pas la
+  // fin de la guerre avant la destruction du Hamas » (Smotrich) — pendant que
+  // Netanyahou consentait à la trêve proposée, ce que les deux lui ont
+  // publiquement reproché. Côté opposition : Lapid a offert un « filet de
+  // sécurité » parlementaire pour faire passer un accord, Gantz s'est dit prêt à
+  // entrer au gouvernement pour le garantir, Lieberman réclame le retour de tous
+  // les otages sans conditions, et Eisenkot accuse le Premier ministre
+  // d'« ignorer et faire obstruction ».
+  //
+  // Ensemble en est absent, par la même règle que pour la peine de mort : le
+  // « filet de sécurité » est une position de Lapid, et Ensemble est dirigé par
+  // Bennett. On n'hérite pas d'une position par fusion.
+  { text: "Il fallait accepter l'accord de cessez-le-feu et de libération des otages, même sans destruction complète du Hamas.",
+    pour: ['likoud', 'unite-nationale', 'yisrael-beytenou', 'yashar-gadi-eisenkot'],
+    contre: ['otzma-yehudit', 'sionisme-religieux'] },
+
   // Affirmation DISCRIMINANTE, ajoutée le 2026-08-03. Diagnostic : sur les 13
   // affirmations précédentes, Yashar, Yisrael Beytenou, Ensemble, Unité nationale
   // et Les Réservistes ne s'opposaient sur AUCUNE — la boussole désignait un bloc,

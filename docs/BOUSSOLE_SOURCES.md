@@ -114,6 +114,29 @@ pleine et la place au gouvernement.
 
 ## Positions retirées
 
+### Les Réservistes — 1. Netanyahou doit rester Premier ministre (était : contre)
+
+**Retirée le 2026-08-03. Erreur factuelle, et sur l'affirmation la plus lourde du
+questionnaire.** Le parti était classé « contre ». Or Yoaz Hendel refuse
+explicitement de faire de Netanyahou l'axe du scrutin :
+
+> « S'il y a demain un gouvernement de 70-80 sièges sionistes et que Netanyahou en
+> fait partie, bien sûr que je le rejoindrais. »
+>
+> « Ma ligne rouge, c'est quelle idéologie le gouvernement représente, si c'est un
+> gouvernement sioniste. »
+
+Sa réserve ne porte pas sur la personne mais sur la composition : « un gouvernement
+à 61 sièges pour Netanyahou n'arrivera pas, parce que cela signifie siéger avec les
+partis ultra-orthodoxes ». C'est une objection aux haredim, pas à Netanyahou — et
+elle est déjà encodée à l'affirmation 9.
+
+Conséquence concrète de l'erreur : un utilisateur répondant « Netanyahou doit
+rester » était écarté des Réservistes sur la base d'une position que le parti
+rejette. Absence de position = position documentée, pas oubli.
+
+- https://www.jpost.com/israel-news/politics-and-diplomacy/article-903510 (23/07/2026)
+
 ### Judaïsme unifié de la Torah — 8. Fermeté sécuritaire (était : pour)
 
 **Retirée le 2026-08-03, faute de source — et contredite par la meilleure
@@ -135,13 +158,35 @@ religieux. La déduction était illégitime.
 
 ---
 
+## Positions antérieures vérifiées
+
+Début du remboursement de la dette décrite plus bas, en commençant par
+l'affirmation 1 comme prévu.
+
+### Shas et le Judaïsme unifié de la Torah — 1. Netanyahou → **pour** (confirmé)
+
+Malgré une crise ouverte sur la loi de conscription — Shas a menacé de faire tomber
+le budget 2026 — les deux partis sont restés dans la coalition, et Aryeh Deri y est
+décrit comme « celui qui tient le gouvernement ». Netanyahou a fait avancer leurs
+priorités législatives en échange de leur soutien, jusqu'à la Loi fondamentale sur
+l'étude de la Torah adoptée le 13/07/2026 par 63 voix contre 52.
+
+La tension est réelle mais elle porte sur le prix du soutien, pas sur son principe.
+
+- https://www.timesofisrael.com/shas-vows-to-oppose-2026-budget-unless-coalition-passes-haredi-draft-exemption-bill/
+- https://www.timesofisrael.com/knesset-passes-contentious-basic-law-declaring-torah-study-a-constitutional-value/
+
+**Certitude : élevée.**
+
+---
+
 ## Trous laissés volontairement
 
 | Parti | Affirmations sans position | Motif |
 |---|---|---|
 | Shas | 5, 6, 7 | Pas de ligne propre et stable. L'IDI note même que Shas « soutient la conclusion d'accords de paix avec les États arabes », en tension avec ses votes. |
 | Judaïsme unifié de la Torah | 5, 6, 7, 8 | Parti religieux et social, sans doctrine diplomatique ni sécuritaire propre (IDI). |
-| Les Réservistes | 3, 5, 6 | Liste neuve ; positions non documentées à ce jour hors sécurité, conscription et composition de coalition. |
+| Les Réservistes | 1, 3, 5, 6 | Liste neuve ; positions non documentées à ce jour hors sécurité, conscription et composition de coalition. Sur l'affirmation 1, l'absence est **documentée** : Hendel refuse de faire de Netanyahou sa ligne rouge (voir plus haut). |
 
 ---
 
@@ -156,7 +201,10 @@ avant comme une référence sourcée au même titre que l'historique des 25 Knes
 
 Ordre de priorité suggéré, du plus exposé au moins exposé :
 
-1. Affirmation 1 (Netanyahou) — elle structure le résultat plus que les autres.
+1. ~~Affirmation 1 (Netanyahou)~~ — **faite le 2026-08-03**. Elle a livré une
+   erreur factuelle (Les Réservistes) sur l'affirmation qui pèse le plus lourd.
+   Taux de correction à ce stade : 3 positions invalidées sur 12 vérifiées. Il
+   faut s'attendre à un taux comparable sur le reste.
 2. Affirmations 5, 6, 7 (paix, implantations, citoyens arabes) — les plus
    sensibles, celles sur lesquelles une erreur se paierait le plus cher.
 3. Les partis les mieux couverts (Les Démocrates 10/10, Sionisme religieux,

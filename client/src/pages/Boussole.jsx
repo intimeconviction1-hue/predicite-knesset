@@ -30,9 +30,16 @@ import TrialWall from '@/components/knesset/TrialWall';
 // reviendrait à fabriquer de la donnée — le pourcentage affiché avec son
 // dénominateur dit déjà l'inégalité de couverture.
 const STATEMENTS = [
+  // ⚠️ AFFIRMATION STRUCTURANTE — elle pèse plus lourd que les autres dans le
+  // résultat, une erreur ici se propage partout. Les Réservistes en ont été
+  // RETIRÉS le 2026-08-03 : ils y figuraient « contre », alors que Yoaz Hendel
+  // refuse explicitement de faire de Netanyahou l'axe du scrutin (« s'il y a
+  // demain un gouvernement de 70-80 sièges sionistes et que Netanyahou en fait
+  // partie, bien sûr que je le rejoindrais », JPost 23/07/2026). Absence de
+  // position = position documentée, pas oubli.
   { text: 'Benyamin Netanyahou doit rester Premier ministre.',
     pour: ['likoud', 'shas', 'judaisme-unifie-de-la-torah', 'otzma-yehudit', 'sionisme-religieux'],
-    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   // Shas et le JUT ont été « au premier rang de la poussée réformatrice » : la
   // clause de dérogation est vue par les deux comme l'outil qui mettrait la loi
   // d'exemption militaire à l'abri du contrôle judiciaire (ToI). Nuance à garder

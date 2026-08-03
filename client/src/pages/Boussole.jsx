@@ -50,9 +50,17 @@ const STATEMENTS = [
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+  // Le Sionisme religieux a été ajouté du côté « contre » le 2026-08-03 : c'est la
+  // faille qui sépare enfin les nationaux-religieux des haredim, alors qu'ils
+  // siègent dans la même coalition. Déclaration officielle du 10/12/2025 — le
+  // parti ne votera « que pour une loi qui amènera un enrôlement RÉEL ET RAPIDE
+  // des haredim dans Tsahal ». Un de ses députés, Moshe Solomon, a d'ailleurs
+  // rompu les rangs contre la loi interdisant l'arrestation des réfractaires
+  // (adoptée 58-54). Position sous tension — le parti reste sous pression de
+  // coalition — mais elle est déclarée, datée, et opposée à celle de Shas et du JUT.
   { text: 'Les étudiants des yeshivot (Haredim) doivent rester exemptés de service militaire.',
     pour: ['shas', 'judaisme-unifie-de-la-torah'],
-    contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid', 'unite-nationale', 'sionisme-religieux'] },
   // ⚠️ TROU ASSUMÉ : « Ensemble » n'a pas de position ici. Le slug fantôme
   // yachad-bennett était son SEUL porteur sur cette affirmation (ailleurs il
   // faisait doublon avec ensemble-bennett-lapid). Le trancher demande un

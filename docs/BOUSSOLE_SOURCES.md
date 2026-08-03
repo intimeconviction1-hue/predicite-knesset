@@ -285,18 +285,47 @@ baisser le compteur** : Ensemble, Yisrael Beytenou et Les Réservistes y sont to
 du même côté, et Yashar en est absent — or une absence ne crée pas de désaccord.
 
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
-prennent des positions **opposées**. Pistes à sourcer :
+prennent des positions **opposées**.
 
-- **Likoud vs Otzma Yehudit / Sionisme religieux** : prière juive sur le mont du
-  Temple (le Likoud défend officiellement le statu quo, Ben Gvir veut le changer).
-- **Shas / JUT vs Otzma / Sionisme religieux** : la conscription des haredim.
-  Les partis nationaux-religieux servent ; Hendel accuse d'ailleurs le Sionisme
-  religieux d'« encourager l'évasion massive du service ». Piste solide.
-- **Shas vs JUT** : le vote sur la peine de mort les a déjà séparés en pratique
-  (Degel HaTorah pour, Agoudat Israël abstenue) ; il faudrait un sujet où Shas,
-  parti social séfarade, s'oppose franchement au JUT ashkénaze.
+### Avancement : 20 → 18 paires (2026-08-03)
+
+**Résolu — Sionisme religieux vs Shas et JUT.** Ajouté à l'affirmation 4 du côté
+« contre ». Déclaration officielle du parti le 10/12/2025 : il ne votera « que
+pour une loi qui amènera un enrôlement **réel et rapide** des haredim dans Tsahal,
+afin de répondre aux besoins sécuritaires d'Israël et d'alléger le fardeau des
+combattants ». Son député Moshe Solomon a rompu les rangs contre la loi
+interdisant l'arrestation des réfractaires (adoptée 58-54). Position sous tension
+— le parti subit la pression de coalition et a démenti avoir arrêté sa décision —
+mais déclarée, datée, et opposée à celle des partis haredim.
+
+  - https://www.timesofisrael.com/religious-zionism-denies-it-agreed-to-back-controversial-haredi-draft-exemption-bill/
+  - https://www.timesofisrael.com/knesset-passes-law-banning-arrests-of-haredi-draft-dodgers-legitimizing-ongoing-non-enlistment/
+
+  **Certitude : moyenne-élevée.**
+
+**Piste abandonnée — le mont du Temple ne sépare pas le Likoud d'Otzma.**
+L'hypothèse était que le Likoud défendait le statu quo contre Ben Gvir. C'est
+faux : en janvier 2026, Netanyahou a publiquement soutenu l'extension de la prière
+juive sur le site — « les changements que fait Ben-Gvir ne modifient pas le statu
+quo et se font en coordination avec moi. C'est moi qui décide de la politique. »
+Les deux partis sont du même côté ; la seule différence est rhétorique, Ben Gvir
+affirmant que le statu quo n'existe plus. Trop ténu pour une affirmation.
+
+  - https://www.haaretz.com/israel-news/2026-01-05/ty-article/.premium/netanyahu-backs-expanded-jewish-prayer-at-jerusalems-most-sensitive-religious-site/0000019b-8ae7-dbc2-a3df-8ae775f00000
+
+### Pistes restantes
+
 - **Ensemble vs Yisrael Beytenou** : Yisrael Beytenou a voté la peine de mort ;
-  documenter la position de Bennett sur ce texte les séparerait aussitôt.
+  documenter la position propre de Bennett sur ce texte les séparerait aussitôt.
+- **Shas vs JUT** : séfarades contre ashkénazes. Le vote sur la peine de mort les
+  a séparés en pratique (Degel HaTorah pour, Agoudat Israël abstenue), mais le JUT
+  y est sans position faute d'unité interne. Chercher un sujet social où Shas,
+  parti des classes populaires, s'oppose franchement au JUT.
+- **Likoud vs Otzma Yehudit** : chercher ailleurs que le mont du Temple. Piste
+  possible : l'accord sur les otages et la fin de la guerre à Gaza, sur lesquels
+  Ben Gvir a menacé de quitter la coalition.
+- **Le centre (Yashar, Ensemble, Unité nationale, Les Réservistes, Yisrael
+  Beytenou)** : c'est le groupe le plus confondu et le plus disputé du scrutin.
 
 Tant que ce travail n'est pas fait, le titre de la page promet plus que le
 questionnaire ne délivre.

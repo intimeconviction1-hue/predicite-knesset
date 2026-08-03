@@ -19,7 +19,7 @@ Ordre conseillé, du plus structurant au plus dépendant :
 ## Champs à ajouter aux entités existantes (pas de fichier séparé, elles existent déjà)
 
 **`CampaignSettings`** : ajouter
-- `predictions_deadline_utc` (string, date-time) — si pas déjà présent depuis l'édition municipale, sinon juste mettre à jour la valeur à `2026-10-26T04:00:00Z` (veille du scrutin, 07:00 heure d'Israël).
+- `predictions_deadline_utc` (string, date-time) — si pas déjà présent depuis l'édition municipale, sinon juste mettre à jour la valeur à `2026-10-27T05:00:00Z` (ouverture des bureaux, 07:00 heure d'Israël — l'heure d'été israélienne se termine le 25 octobre 2026, le pays est donc à UTC+2 le jour du scrutin).
 - `pm_resolution_deadline_utc` (string, date-time) — ex. `2027-12-31T23:59:59Z`, la date au-delà de laquelle un pronostic PM non résolu bascule automatiquement sur "autre".
 
 **`UserProgress`** : ajouter

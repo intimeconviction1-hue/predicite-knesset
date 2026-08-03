@@ -15,10 +15,16 @@ const FRICTIONS = [
   // Le « mur » anti-Netanyahou (la friction la plus structurante).
   ['likoud', 'les-democrates', 42, 'La gauche exclut Netanyahou'],
   ['likoud', 'yashar-gadi-eisenkot', 35, 'Eisenkot fait campagne contre Netanyahou'],
-  ['likoud', 'ensemble-bennett-lapid', 32, 'Lapid : bloc du changement'],
+  // ⚠️ POIDS À REVOIR (David) : cette paire absorbe une seconde friction qui
+  // existait en double. Une ligne ['likoud','yachad-bennett',16,'Bennett :
+  // histoire compliquée avec Bibi'] visait le slug fantôme hérité de Base44,
+  // désactivé le 2026-08-03 — elle ne s'appliquait donc JAMAIS. Les deux
+  // fondateurs d'Ensemble n'ont pas le même passif avec Netanyahou : Lapid
+  // pesait 32, Bennett 16. On garde 32, mais c'est le chiffre de Lapid pour une
+  // liste que Bennett dirige : à trancher.
+  ['likoud', 'ensemble-bennett-lapid', 32, 'Bloc du changement : Bennett et Lapid hors coalition Netanyahou'],
   ['likoud', 'yisrael-beytenou', 30, 'Lieberman, ennemi juré de Netanyahou'],
   ['likoud', 'unite-nationale', 22, 'Passif anti-Netanyahou'],
-  ['likoud', 'yachad-bennett', 16, 'Bennett : histoire compliquée avec Bibi'],
   // Lieberman ⊥ partis religieux.
   ['yisrael-beytenou', 'shas', 30, 'Lieberman contre les partis ultra-orthodoxes'],
   ['yisrael-beytenou', 'judaisme-unifie-de-la-torah', 30, 'Lieberman contre les Haredim'],
@@ -31,6 +37,17 @@ const FRICTIONS = [
   ['likoud', 'hadash-ta-al-liste-commune', 40, 'Hadash-Ta\'al hors gouvernement Likoud'],
   ['likoud', 'ra-am', 24, 'Ra\'am au gouvernement Likoud : improbable, pas inédit'],
 ];
+
+// Garde de cohérence, même principe que celle de Boussole.jsx : une friction dont
+// un slug ne correspond à aucune liste active ne se déclenche JAMAIS, sans que
+// rien ne le signale. C'est ce qui a laissé vivre ici la paire 'yachad-bennett'
+// après la désactivation de la liste fantôme. En dev on le dit ; en prod on
+// ignore sans casser la page.
+function verifierFrictions(bySlug) {
+  if (!import.meta.env?.DEV || Object.keys(bySlug).length === 0) return;
+  const orphelins = [...new Set(FRICTIONS.flatMap(([a, b]) => [a, b]))].filter(s => !bySlug[s]);
+  if (orphelins.length) console.error('[FormeCoalition] frictions sans liste correspondante :', orphelins.join(', '));
+}
 
 function plausibility(slugs) {
   const set = new Set(slugs);
@@ -56,7 +73,11 @@ export default function FormeCoalition() {
     return listes.map(l => ({ id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280', seats: seatsById.get(l.id) || 0 }))
       .filter(p => p.seats > 0).sort((a, b) => b.seats - a.seats);
   }, [listes, latest]);
-  const bySlug = useMemo(() => Object.fromEntries(parties.map(p => [p.slug, p])), [parties]);
+  const bySlug = useMemo(() => {
+    const map = Object.fromEntries(parties.map(p => [p.slug, p]));
+    verifierFrictions(map);
+    return map;
+  }, [parties]);
 
   const [selected, setSelected] = useState([]);
   const [result, setResult] = useState(null);

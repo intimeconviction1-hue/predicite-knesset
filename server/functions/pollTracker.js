@@ -13,6 +13,11 @@ import { rolloverParis } from './parisSondages.js';
 import { runActuHebrewCollector } from './actuHebrewCollector.js';
 
 const INTERVAL_H = Number(process.env.POLL_TRACK_INTERVAL_HOURS || 6);
+// Périodicité du balayage COMPLET du sheet de Kan (voir schema.sql,
+// last_full_sweep_utc). 24 h par défaut : assez rare pour ne pas relire les 8
+// onglets à chaque passage, assez fréquent pour rattraper un ajout rétroactif
+// dans la journée.
+const FULL_SWEEP_H = Number(process.env.POLL_FULL_SWEEP_HOURS || 24);
 let running = false;
 
 function disabled() {
@@ -24,6 +29,28 @@ async function getLastRun() {
     const row = await queryOne("SELECT last_run_utc FROM poll_tracker_state WHERE id = 'singleton'");
     return row?.last_run_utc ? new Date(row.last_run_utc) : null;
   } catch { return null; }
+}
+
+// Un balayage complet est dû si on n'en a jamais fait, ou s'il date de plus de
+// FULL_SWEEP_H. Lecture tolérante aux pannes : en cas d'erreur on répond « non dû »
+// plutôt que de relancer un balayage intégral à chaque passage.
+async function fullSweepDue(now) {
+  try {
+    const row = await queryOne("SELECT last_full_sweep_utc FROM poll_tracker_state WHERE id = 'singleton'");
+    if (!row?.last_full_sweep_utc) return true;
+    const last = new Date(row.last_full_sweep_utc).getTime();
+    if (Number.isNaN(last)) return true;
+    return (now.getTime() - last) >= FULL_SWEEP_H * 3600 * 1000;
+  } catch { return false; }
+}
+
+async function markFullSweep(iso) {
+  try {
+    await run(
+      `UPDATE poll_tracker_state SET last_full_sweep_utc = ? WHERE id = 'singleton'`,
+      [iso],
+    );
+  } catch (e) { console.error('[poll-tracker] horodatage du balayage complet échoué :', e.message); }
 }
 
 async function setState(iso, result) {
@@ -74,10 +101,17 @@ export async function maybeCollectPolls(reason = 'scheduler') {
     // Source PRIMAIRE : le Google Sheet public de Kan (agrège TOUS les instituts,
     // fiable, structuré, sans LLM ni blocage bot). On n'ingère que ce qui est plus
     // récent que la base. Le collecteur LLM ci-dessous ne fait plus que compléter.
+    // Une fois par jour, on relit TOUT le sheet au lieu du seul incrément : c'est
+    // le seul moyen de récupérer un sondage ancien ajouté rétroactivement par Kan,
+    // ou un sondage autrefois rejeté que de nouvelles règles rendent ingérable.
+    const sweep = await fullSweepDue(now);
     let kan = null;
-    try { kan = await runKanSheetCollector({ onlyNewer: true }); }
+    try { kan = await runKanSheetCollector({ onlyNewer: !sweep }); }
     catch (e) { console.error('[poll-tracker] Kan sheet échoué :', e.message); kan = { error: e.message }; }
-    if (kan?.created) console.log(`[poll-tracker] Kan sheet : +${kan.created} sondage(s), ${kan.surveilled || 0} surveillé(s)`);
+    // Horodaté seulement si le balayage a abouti — un échec réseau ne doit pas
+    // faire passer le tour et repousser le rattrapage de 24 h.
+    if (sweep && !kan?.error) await markFullSweep(iso);
+    if (kan?.created) console.log(`[poll-tracker] Kan sheet${sweep ? ' (balayage complet)' : ''} : +${kan.created} sondage(s), ${kan.surveilled || 0} surveillé(s)`);
 
     const res = await runSondagesSiegesCollector();
     const r = res?.results || {};
@@ -90,7 +124,7 @@ export async function maybeCollectPolls(reason = 'scheduler') {
       at: iso,
       reason,
       polls_found: res?.polls_found ?? 0,
-      kan: kan?.error ? { error: kan.error } : { created: kan?.created ?? 0, skipped: kan?.skipped ?? 0, surveilled: kan?.surveilled ?? 0 },
+      kan: kan?.error ? { error: kan.error } : { full_sweep: sweep, created: kan?.created ?? 0, skipped: kan?.skipped ?? 0, surveilled: kan?.surveilled ?? 0 },
       created: r.created ?? 0, skipped: r.skipped ?? 0, rejected: r.rejected ?? 0, surveilled: r.surveilled ?? 0,
       missed_fresh: (r.missed_fresh || []).map(t => ({ institute: t.institute, media: t.publisher_media, poll_date: t.poll_date, reason: t.reason })),
       seen: (r.seen || []).map(t => ({ institute: t.institute, media: t.publisher_media, poll_date: t.poll_date, disposition: t.disposition, reason: t.reason, mapped_seats: t.mapped_seats })),

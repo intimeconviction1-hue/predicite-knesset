@@ -275,6 +275,14 @@ CREATE TABLE IF NOT EXISTS poll_tracker_state (
 -- avec le même sondage.
 ALTER TABLE poll_tracker_state ADD COLUMN IF NOT EXISTS last_rollover_poll TEXT;
 
+-- Dernier BALAYAGE COMPLET du sheet de Kan (onlyNewer = false). La collecte
+-- ordinaire ne regarde que ce qui est plus récent que la base : elle ne verrait
+-- donc jamais un sondage ancien ajouté rétroactivement par Kan, ni un sondage
+-- autrefois rejeté que de nouvelles règles de correspondance rendent ingérable
+-- (cas vécu le 2026-08-03 : 55 sondages récupérés d'un coup). D'où un balayage
+-- intégral périodique, espacé car il relit les 8 onglets en entier.
+ALTER TABLE poll_tracker_state ADD COLUMN IF NOT EXISTS last_full_sweep_utc TEXT;
+
 -- Brèves de campagne extraites de la presse ISRAÉLIENNE (souvent en hébreu) :
 -- des FAITS reformulés en français, jamais une traduction ni une copie, avec le
 -- média et l'URL d'origine obligatoires (voir functions/actuHebrewCollector.js).

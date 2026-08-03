@@ -12,6 +12,7 @@
     "seed:sondages": "node scripts/seed-sondages.js",
     "seed:historique": "node scripts/seed-historique.js",
     "seed:quiz": "node scripts/seed-quiz.js",
+    "seed:badges": "node scripts/seed-badges.js",
     "db:migrate": "node scripts/apply-schema.js",
     "paris:open": "node scripts/paris-open.js"
   },

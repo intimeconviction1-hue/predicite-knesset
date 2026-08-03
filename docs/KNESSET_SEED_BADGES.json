@@ -1,0 +1,79 @@
+{
+  "_note": "Définition des badges PrédiCité (édition Knesset 2026). Importé par `npm run seed:badges` (server/scripts/seed-badges.js), idempotent. ⚠️ Ce fichier ne décrit QUE la vitrine : libellé, condition affichée au joueur, icône. Le CRITÈRE machine (les seuils réellement évalués) vit dans server/functions/miscFunctions.js, table REGLES_BADGES — les deux doivent rester en phase, la description est ce que le joueur lit dans l'infobulle. L'ordre du tableau est l'ordre d'affichage : le seed le grave dans l'`id` (badge-01-…, badge-02-…) parce que la table `badges` n'a pas de colonne de tri, et le client trie sur `id`. Réordonner ici suffit, le seed corrige les ids au passage.",
+  "_progression": "Les 7 premiers sont atteignables la première semaine (un badge inatteignable démotive) ; « semaine-pleine » et « flair-des-paris » demandent quelques jours ; « politologue » et « inusable » sont les paliers longs ; « analyste-precis » est le badge du dépouillement, le seul qui ne peut tomber qu'après le 27 octobre 2026.",
+  "_icones": "Noms de composants lucide-react (jamais d'emoji : règle du design system). Toute icône ajoutée ici doit être ajoutée à la table ICONES de client/src/components/knesset/BadgeShelf.jsx, sinon elle retombe sur l'icône par défaut.",
+  "badges": [
+    {
+      "code": "premier-pronostic",
+      "label": "Premier pronostic",
+      "description": "Déposer sa première répartition complète des 120 sièges.",
+      "icon": "Landmark"
+    },
+    {
+      "code": "plume-analyste",
+      "label": "La plume",
+      "description": "Justifier au moins 5 de ses pronostics de sièges (20 caractères minimum).",
+      "icon": "PenLine"
+    },
+    {
+      "code": "faiseur-de-rois",
+      "label": "Faiseur de rois",
+      "description": "Déposer son pronostic de Premier ministre.",
+      "icon": "Crown"
+    },
+    {
+      "code": "serie-3",
+      "label": "Trois jours de suite",
+      "description": "Revenir sur PrédiCité 3 jours consécutifs.",
+      "icon": "Flame"
+    },
+    {
+      "code": "curieux",
+      "label": "Curieux",
+      "description": "Trouver 5 bonnes réponses au quiz.",
+      "icon": "BookOpen"
+    },
+    {
+      "code": "premiere-mise",
+      "label": "Première mise",
+      "description": "Placer sa première mise en jetons sur un marché de sondage.",
+      "icon": "Coins"
+    },
+    {
+      "code": "esprit-de-ligue",
+      "label": "Esprit de ligue",
+      "description": "Créer une ligue privée, ou en rejoindre une avec un code d'invitation.",
+      "icon": "Users"
+    },
+    {
+      "code": "semaine-pleine",
+      "label": "Semaine pleine",
+      "description": "Revenir 7 jours consécutifs — c'est aussi le jour où tombe le bonus de régularité.",
+      "icon": "CalendarCheck"
+    },
+    {
+      "code": "flair-des-paris",
+      "label": "Le flair",
+      "description": "Remporter 5 paris sur sondages.",
+      "icon": "Dices"
+    },
+    {
+      "code": "politologue",
+      "label": "Politologue",
+      "description": "Trouver 30 bonnes réponses au quiz.",
+      "icon": "GraduationCap"
+    },
+    {
+      "code": "inusable",
+      "label": "Inusable",
+      "description": "Revenir 30 jours consécutifs.",
+      "icon": "Zap"
+    },
+    {
+      "code": "analyste-precis",
+      "label": "Analyste précis",
+      "description": "Au dépouillement : 3 listes pronostiquées au siège exact.",
+      "icon": "Crosshair"
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import { Trophy, Medal, Crown, Users, Target, Flame, Search, BookOpen } from 'lu
 import CountUp from '@/components/knesset/CountUp';
 import { computeScore, titleForScore } from '@/lib/score';
 import ProgressionPalier from '@/components/knesset/ProgressionPalier';
+import BadgeShelf from '@/components/knesset/BadgeShelf';
 
 const formatFr = (v) => Math.round(v).toLocaleString('fr-FR');
 
@@ -122,7 +123,9 @@ export default function Leaderboard() {
                   { label: 'Score', count: getScore(currentUserProgress) },
                   { label: 'Prédictions', count: currentUserProgress.predictions_count || 0 },
                   { label: 'Précision', value: getPrecision(currentUserProgress), color: 'var(--p-green)' },
-                  { label: 'Série', value: `${currentUserProgress.daily_streak || 0}j`, color: '#F97316' },
+                  // La colonne s'appelle current_streak (voir schema.sql) : `daily_streak`
+                  // n'a jamais existé, donc cette statistique affichait « 0j » en permanence.
+                  { label: 'Série', value: `${currentUserProgress.current_streak || 0}j`, color: '#F97316' },
                 ].map(({ label, value, count, color }) => (
                   <div key={label}>
                     <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>{label}</p>
@@ -138,6 +141,13 @@ export default function Leaderboard() {
           {/* Progression vers le palier suivant — la montée en grade, célébrée */}
           <div className="mt-4">
             <ProgressionPalier progress={currentUserProgress} />
+          </div>
+
+          {/* Vitrine des badges : ce qui est acquis, et surtout ce qui reste à
+              décrocher. Placée ici et non sur l'accueil — c'est la page des
+              accomplissements, et elle n'est vue que par un joueur connecté. */}
+          <div className="p-card mt-4 p-4">
+            <BadgeShelf />
           </div>
         </div>
       )}

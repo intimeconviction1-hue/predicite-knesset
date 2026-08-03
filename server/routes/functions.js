@@ -7,7 +7,7 @@ import { runResultatsKnessetCollector } from '../functions/resultatsKnessetColle
 import { saveResultatsManuels } from '../functions/resultatsManuels.js';
 import { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from '../functions/prediciteScoringSieges.js';
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
-import { ensureUserProgress, updateStreakAndBadges } from '../functions/miscFunctions.js';
+import { ensureUserProgress, updateStreakAndBadges, getUserBadges } from '../functions/miscFunctions.js';
 import { submitQuizAnswer } from '../functions/quizScoring.js';
 import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll, proposerMarchesEvenements, openMarcheEvenement, resolveMarcheManuel } from '../functions/parisSondages.js';
 import { getDefiSerie, startDefiSerie } from '../functions/defisQuiz.js';
@@ -27,6 +27,16 @@ router.post('/:name', requireAuth, async (req, res) => {
 
       case 'updateStreakAndBadges':
         return res.json(await updateStreakAndBadges(req.user.email));
+
+      // Badges du joueur connecté. La table user_badges n'est pas exposée via
+      // /api/entities (elle n'a pas de config d'entité, et n'a pas à être
+      // écrite depuis le client) : la lecture passe donc par ici, toujours
+      // limitée à sa propre ligne — on ne consulte jamais le palmarès d'autrui.
+      // Les DÉFINITIONS (Badge) restent lisibles publiquement via /api/entities.
+      case 'badges': {
+        if (body.action === 'mine') return res.json(await getUserBadges(req.user.email));
+        return res.status(400).json({ error: 'action inconnue' });
+      }
 
       case 'submitQuizAnswer':
         return res.json(await submitQuizAnswer(req.user.email, body));

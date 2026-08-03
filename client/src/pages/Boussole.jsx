@@ -76,9 +76,27 @@ const STATEMENTS = [
   // docs/BOUSSOLE_SOURCES.md : l'affirmation mêle extension ET annexion, or seule
   // l'extension est documentée chez lui. C'est la seconde erreur factuelle
   // trouvée sur ce parti, après son classement en « anti-Netanyahou ».
+  // ⚠️ DEUX CORRECTIONS du 2026-08-03, même erreur sur les deux listes récentes.
+  //
+  // Yashar y figurait « contre ». Eisenkot, juin 2026 : « je crois beaucoup à
+  // l'implantation en Judée-Samarie », « je n'ai jamais dit deux États pour deux
+  // peuples ».
+  //
+  // Ensemble y figurait « contre ». Bennett, EN TANT QUE CHEF DE LA LISTE, se dit
+  // « favorable à l'implantation légale en zone C » et affirme que « la zone C
+  // fera partie de l'État d'Israël, les zones A et B de l'autonomie
+  // palestinienne ». Nuance conservée : il réclame le démantèlement des avant-
+  // postes illégaux, ce qui lui a valu l'ire de la droite — il distingue
+  // construction légale et sauvage, il ne s'oppose pas au principe.
+  //
+  // Distinction de méthode : « on n'hérite pas d'une position par fusion » vise à
+  // ne pas prêter à la liste les positions de LAPID, son numéro deux. La ligne du
+  // CHEF, elle, est la ligne de la liste. C'est pourquoi Ensemble reste sans
+  // position sur la peine de mort — Bennett s'y est dit favorable en 2015, sous
+  // une autre étiquette, pas comme chef d'Ensemble.
   { text: 'Il faut étendre les implantations, voire annexer une partie de la Cisjordanie.',
-    pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud', 'yashar-gadi-eisenkot'],
-    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid'],
+    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'unite-nationale'] },
   // Les Réservistes : position la MIEUX documentée du lot. Yoaz Hendel veut un
   // « gouvernement d'unité sioniste sans partis arabes ni haredim » et déclare :
   // « Quiconque choisit de ne pas servir choisit d'être un citoyen de seconde

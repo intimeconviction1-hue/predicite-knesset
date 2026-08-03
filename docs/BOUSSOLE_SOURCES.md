@@ -289,6 +289,53 @@ prennent des positions **opposées**.
 
 ### Avancement : 20 → 8 paires (2026-08-03)
 
+**Correction sans gain — Ensemble n'est pas contre les implantations.** Troisième
+erreur factuelle héritée, et le même motif : une liste récente rangée trop à
+gauche.
+
+Ensemble figurait « contre » l'affirmation 6. Or Naftali Bennett, **en tant que
+chef de la liste**, se dit « favorable à l'implantation légale en zone C » et
+affirme que « la zone C fera partie de l'État d'Israël, les zones A et B de
+l'autonomie palestinienne ». Il défend une « autonomie palestinienne sous
+stéroïdes » et refuse un État. Nuance conservée : il réclame le démantèlement des
+avant-postes illégaux, ce qui lui a valu l'ire de la droite — il distingue
+construction légale et sauvage, il ne conteste pas le principe.
+
+**Effet sur le compteur : nul.** La correction brise la paire Ensemble ↔ Unité
+nationale, mais en fait réapparaître une autre — Yashar ↔ Ensemble, puisque
+l'affirmation 6 était devenue leur seule opposition. C'est le résultat juste :
+ces deux partis se ressemblent réellement sur ce point. **La justesse et le
+compteur ne vont pas toujours dans le même sens, et c'est la justesse qui
+tranche.**
+
+  - https://www.timesofisrael.com/what-occupation-asks-bennett-rejecting-two-state-solution/
+  - https://www.timesofisrael.com/bennett-calls-to-dismantle-illegal-settlement-outposts-draws-right-wing-leaders-ire/
+  - https://arabcenterdc.org/resource/bennetts-agenda-on-palestine-shrinking-the-conflict/
+
+### Précision de méthode : la ligne du chef n'est pas un héritage
+
+La règle **« on n'hérite pas d'une position par fusion »** a été affinée le
+2026-08-03. Elle visait à ne pas prêter à Ensemble les positions de **Lapid**, son
+numéro deux — c'est ce qui justifie de laisser la liste sans position sur la peine
+de mort et sur l'accord otages, où seul Lapid s'est exprimé.
+
+Mais elle ne dit rien de la ligne du **chef de liste**, qui est par définition la
+ligne de la liste. Quand Bennett s'exprime en tant que chef d'Ensemble, il engage
+Ensemble.
+
+Critère retenu, à appliquer uniformément :
+
+| Situation | Traitement |
+|---|---|
+| Le chef de liste déclare une position pendant la campagne, ès qualités | Position **de la liste** |
+| Un composant ou un numéro deux s'exprime seul | **Pas** de position |
+| Chef et composant documentés en sens opposés | **Pas** de position (parti divisé) |
+| Position ancienne du chef sous une autre étiquette | **Pas** de position |
+
+C'est ce dernier cas qui maintient Ensemble hors de l'affirmation sur la peine de
+mort : Bennett s'y est dit favorable en 2015, à la tête du Foyer juif, pas comme
+chef d'Ensemble.
+
 **Résolu par une CORRECTION — Yashar vs Ensemble et Unité nationale.** Aucune
 affirmation ajoutée : Yashar était simplement **du mauvais côté** de l'affirmation
 6, sur l'extension des implantations.

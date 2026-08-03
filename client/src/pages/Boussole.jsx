@@ -16,16 +16,28 @@ import TrialWall from '@/components/knesset/TrialWall';
 // tout seed, qui coexistait en base avec « ensemble-bennett-lapid » et pouvait
 // donc sortir en tête de la boussole alors qu'elle n'existe plus depuis avril.
 // La garde de cohérence en bas de computeMatches empêche que ça se reproduise.
+//
+// TROUS VOLONTAIRES (2026-08-03) — Shas, le Judaïsme unifié de la Torah et Les
+// Réservistes couvrent 7 affirmations sur 10, contre 10 pour Les Démocrates. Les
+// 3 manquantes de chacun ne sont PAS des oublis : sur les négociations de paix,
+// les implantations et l'égalité des citoyens arabes, ces trois partis n'ont pas
+// de ligne propre et stable. Shas a même historiquement accepté des concessions
+// territoriales sous l'autorité d'Ovadia Yosef. Leur prêter une position pour
+// homogénéiser les dénominateurs reviendrait à fabriquer de la donnée — le
+// pourcentage affiché avec son dénominateur dit déjà l'inégalité de couverture.
 const STATEMENTS = [
   { text: 'Benyamin Netanyahou doit rester Premier ministre.',
     pour: ['likoud', 'shas', 'judaisme-unifie-de-la-torah', 'otzma-yehudit', 'sionisme-religieux'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+  // Shas et le JUT ont voté la réforme judiciaire de la coalition ; Aryeh Deri y
+  // avait de surcroît un intérêt direct, la Cour suprême l'ayant écarté d'un
+  // poste ministériel en janvier 2023.
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
-    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux'],
+    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
-    contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper'] },
   { text: 'Les étudiants des yeshivot (Haredim) doivent rester exemptés de service militaire.',
     pour: ['shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid', 'unite-nationale'] },
@@ -43,15 +55,24 @@ const STATEMENTS = [
   { text: 'Les citoyens arabes doivent avoir pleine égalité et une place au gouvernement.',
     pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
     contre: ['otzma-yehudit', 'sionisme-religieux'] },
+  // Les Réservistes : la sécurité est l'identité même d'une liste née du
+  // mouvement des réservistes. Shas et le JUT votent constamment la ligne
+  // sécuritaire de la coalition, sans doctrine propre — position d'alignement,
+  // moins ferme que les précédentes, mais documentée par leurs votes.
   { text: 'Face au Hamas et à l\'Iran, la fermeté sécuritaire prime sur tout.',
-    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale'],
+    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper', 'shas', 'judaisme-unifie-de-la-torah'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
+  // Les Réservistes : l'inégalité devant la conscription est le grief fondateur
+  // du mouvement, d'où sa position ici comme sur l'exemption des yeshivot.
   { text: 'Les partis ultra-orthodoxes ont trop d\'influence sur la vie quotidienne.',
-    pour: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid'],
+    pour: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'les-reservistes-hendel-tropper'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux'] },
+  // Shas et le JUT sont des partis SOCIAUX autant que religieux : ils défendent
+  // les allocations et le soutien public aux familles nombreuses, donc contre le
+  // désengagement de l'État. C'est leur ligne la mieux établie hors du religieux.
   { text: "L'État doit moins intervenir dans l'économie (plus de libéralisme).",
     pour: ['likoud', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid'],
-    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
+    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'shas', 'judaisme-unifie-de-la-torah'] },
 ];
 
 // Nombre d'affirmations où chaque liste se positionne. C'est le DÉNOMINATEUR

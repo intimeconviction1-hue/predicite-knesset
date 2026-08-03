@@ -698,13 +698,68 @@ La tension est réelle mais elle porte sur le prix du soutien, pas sur son princ
 
 ---
 
+## Les deux affirmations les plus sensibles, soldées
+
+Priorité n°1 de l'inventaire, traitée le 2026-08-03.
+
+### Affirmation « processus de paix visant deux États » — sourcée, et reformulée
+
+L'énoncé disait « Il faut relancer des négociations de paix avec les
+Palestiniens ». Trop vague : **toutes** les sources disponibles portent sur
+l'horizon des deux États, pas sur le principe d'une négociation. Plutôt que
+d'étirer les preuves pour les faire entrer dans la question, j'ai précisé la
+question pour qu'elle colle aux preuves.
+
+- **Contre** — Netanyahou : « aucun État palestinien ne sera établi », après la
+  reconnaissance par le Royaume-Uni, le Canada et l'Australie. Smotrich exige
+  qu'il le « dise clairement au monde entier », jugeant son silence « une honte
+  diplomatique ». Ben Gvir réclame « l'application immédiate de la souveraineté »
+  sur la Cisjordanie. **Eisenkot ajouté** : « je n'ai jamais dit deux États pour
+  deux peuples ».
+- **Pour** — Yair Golan est décrit comme « le seul chef de parti **juif** qui se
+  batte encore pour maintenir en vie la solution à deux États ». Formule précieuse
+  en creux : elle confirme qu'aucune autre liste juive ne doit figurer « pour ».
+  Hadash et Ra'am suivent.
+- **Sans position** — Ensemble (chef et numéro deux opposés), Unité nationale,
+  Yisrael Beytenou, Les Réservistes, Shas, le JUT.
+
+  - https://www.haaretz.com/israel-news/2025-09-21/ty-article/.premium/israeli-ministers-call-for-sovereignty-over-west-bank-after-palestinian-state-recognition/00000199-6c83-d134-a1ff-fdcfffef0000
+  - https://www.timesofisrael.com/liveblog_entry/smotrich-ben-gvir-demand-netanyahu-make-it-clear-palestinian-state-wont-be-established/
+  - https://www.haaretz.com/opinion/2025-10-15/ty-article-opinion/.premium/yair-golan-must-convince-israelis-that-only-a-two-state-solution-will-save-zionism/00000199-e3ee-da09-a1bb-f3ee8e900000
+
+  **Certitude : élevée.**
+
+### Affirmation « égalité des citoyens arabes » — sourcée, aucune correction
+
+Les six positions héritées tiennent toutes. C'est la première affirmation
+ancienne à passer l'épreuve sans une seule correction.
+
+- **Contre** — Otzma Yehudit est un parti kahaniste ouvertement anti-arabe ; Ben
+  Gvir déclare que son droit de circuler « est plus important que le droit de
+  circulation des Arabes », et s'est dit favorable à ce que les femmes arabes
+  enceintes prêtent « un serment de loyauté à l'État d'Israël », en soutien à
+  l'appel de Smotrich à séparer les maternités — d'où la position du Sionisme
+  religieux. Les Réservistes : voir la citation de Hendel plus haut.
+- **Pour** — Hadash porte l'égalité dans son nom (« Front démocratique pour la
+  paix et l'**égalité** ») ; Ra'am revendique la participation gouvernementale,
+  déjà obtenue en 2021 ; Golan appelle l'opposition à s'associer à Ra'am.
+
+  - https://www.irac.org/ben-gvir-qoutes
+  - https://www.aljazeera.com/news/2023/8/24/ben-gvir-says-israeli-rights-trump-palestinian-freedom-of-movement
+
+  **Certitude : élevée.**
+
 ## Dette de sourçage — inventaire chiffré (2026-08-03)
 
 | | Positions |
 |---|---|
-| **Sourcées** — affirmations créées le 03/08, chacune justifiée ci-dessus | **66** (41 %) |
-| **Héritées** — de la rédaction initiale, jamais vérifiées une par une | **95** (59 %) |
-| Total | 161 |
+| **Sourcées** — justifiées une par une dans ce document | **79** (49 %) |
+| **Héritées** — de la rédaction initiale, jamais vérifiées | **83** (51 %) |
+| Total | 162 |
+
+*Au premier inventaire du jour : 66 sourcées (41 %) contre 95 héritées. Le
+sourçage des affirmations 5 et 7 a déplacé 13 positions et corrigé une de plus
+(Eisenkot sur les deux États).*
 
 Parmi les positions héritées que j'ai effectivement contrôlées ce jour, **trois se
 sont révélées fausses** : Les Réservistes en « contre » Netanyahou, Yashar et

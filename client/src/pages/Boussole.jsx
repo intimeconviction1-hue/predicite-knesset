@@ -73,9 +73,25 @@ const STATEMENTS = [
   //
   // (Historique : le slug fantôme yachad-bennett était le seul porteur ici avant
   // le 2026-08-03 ; ailleurs il faisait doublon avec ensemble-bennett-lapid.)
-  { text: 'Il faut relancer des négociations de paix avec les Palestiniens.',
+  // SOURCÉE le 2026-08-03. L'énoncé a été précisé : « des négociations de paix »
+  // était trop vague pour les sources disponibles, qui portent toutes sur
+  // l'horizon des deux États. La question colle désormais aux preuves.
+  //
+  // Contre — Netanyahou : « aucun État palestinien ne sera établi », promesse
+  // faite après la reconnaissance par le Royaume-Uni, le Canada et l'Australie.
+  // Smotrich exige qu'il le « dise clairement au monde entier », jugeant son
+  // silence « une honte diplomatique ». Ben Gvir réclame « l'application immédiate
+  // de la souveraineté » sur la Cisjordanie. Eisenkot : « je n'ai jamais dit deux
+  // États pour deux peuples ; quiconque parle de paix maintenant et de deux États
+  // ne comprend pas le conflit. »
+  //
+  // Pour — Yair Golan est décrit comme « le seul chef de parti JUIF qui se batte
+  // encore pour maintenir en vie la solution à deux États ». Cette formule est
+  // précieuse en creux : elle confirme qu'aucune autre liste juive ne doit
+  // figurer du côté « pour ».
+  { text: 'Il faut relancer un processus de paix avec les Palestiniens, visant deux États.',
     pour: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'],
-    contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux'] },
+    contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yashar-gadi-eisenkot'] },
   // ⚠️ CORRECTION du 2026-08-03. Yashar figurait ici « contre ». C'est faux :
   // Eisenkot déclarait en juin 2026 « je crois beaucoup à l'implantation en
   // Judée-Samarie », et « je n'ai jamais dit deux États pour deux peuples ».
@@ -110,6 +126,21 @@ const STATEMENTS = [
   // zone. Il ne recevra rien de l'État. Il ne pourra ni voter ni être élu à la
   // Knesset. » (ToI, 20/11/2025). C'est un refus explicite des deux volets de
   // l'affirmation — l'égalité pleine ET la place au gouvernement.
+  // SOURCÉE le 2026-08-03. Les six positions tiennent, aucune correction.
+  //
+  // Contre — Otzma Yehudit est un parti kahaniste ouvertement anti-arabe ; Ben
+  // Gvir déclare que son droit de circuler « est plus important que le droit de
+  // circulation des Arabes », et s'est dit favorable à ce que les femmes arabes
+  // enceintes prêtent « un serment de loyauté à l'État d'Israël », en soutien à
+  // l'appel de Smotrich à séparer les maternités entre juifs et Arabes — d'où la
+  // position du Sionisme religieux. Les Réservistes : « quiconque choisit de ne
+  // pas servir choisit d'être un citoyen de seconde zone… il ne pourra ni voter
+  // ni être élu » (Hendel, 20/11/2025).
+  //
+  // Pour — Hadash porte l'égalité dans son nom même (« Front démocratique pour la
+  // paix et l'ÉGALITÉ ») ; Ra'am revendique la participation au gouvernement, que
+  // Mansour Abbas a déjà obtenue en 2021 ; Yair Golan appelle explicitement
+  // l'opposition à s'associer à Ra'am.
   { text: 'Les citoyens arabes doivent avoir pleine égalité et une place au gouvernement.',
     pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
     contre: ['otzma-yehudit', 'sionisme-religieux', 'les-reservistes-hendel-tropper'] },

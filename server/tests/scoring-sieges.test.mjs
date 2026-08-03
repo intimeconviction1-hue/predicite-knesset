@@ -1,0 +1,308 @@
+/**
+ * Chaîne du soir du scrutin, de bout en bout : dépôt d'une répartition sous
+ * contrainte de somme → saisie manuelle des résultats → scoring → bonus de
+ * bloc → classement.
+ *
+ * C'est le seul chemin qui DOIT fonctionner le 27 octobre 2026. Il tourne ici
+ * sur une base en mémoire (tests/helpers/memory-db.mjs) : aucune connexion
+ * Postgres n'est ouverte, la base de production reste hors d'atteinte.
+ *
+ * Lancer :  npm test
+ */
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { mock } from 'node:test';
+import { createMemoryDb } from './helpers/memory-db.mjs';
+
+// Le mock délègue à `db`, réassigné avant chaque scénario : les modules testés
+// ne sont importés qu'une fois, mais repartent d'une base vierge à chaque fois.
+let db = createMemoryDb();
+
+mock.module('../db/index.js', {
+  exports: {
+    filterEntity: (...a) => db.filterEntity(...a),
+    listEntity: (...a) => db.listEntity(...a),
+    createEntity: (...a) => db.createEntity(...a),
+    updateEntity: (...a) => db.updateEntity(...a),
+  },
+});
+
+const { validerRepartition, MIN_SIEGES_AU_SEUIL, TOTAL_SIEGES } =
+  await import('../functions/repartitionSieges.js');
+const { saveResultatsManuels } = await import('../functions/resultatsManuels.js');
+const { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire } =
+  await import('../functions/prediciteScoringSieges.js');
+
+const LIKOUD = 'l-likoud';
+const YESH = 'l-yesh';
+const PETITE = 'l-petite';
+const ALICE = 'alice@exemple.fr';
+const BOB = 'bob@exemple.fr';
+
+const JUSTIF = 'Sondages stables depuis six semaines, report de voix probable.';
+
+function seed() {
+  db = createMemoryDb({
+    Liste: [
+      // name_fr, comme la colonne réelle de la table listes : un seed qui
+      // invente « name » masquerait une erreur de nom de colonne côté serveur.
+      { id: LIKOUD, name_fr: 'Likoud', bloc: 'coalition', is_active: true },
+      { id: YESH, name_fr: 'Yesh Atid', bloc: 'opposition', is_active: true },
+      { id: PETITE, name_fr: 'Petite Liste', bloc: 'opposition', is_active: true },
+    ],
+    CampaignSettings: [
+      { id: 'global', key: 'global', predictions_deadline_utc: '2099-01-01T00:00:00Z' },
+    ],
+    UserProgress: [
+      { id: 'up-alice', user_email: ALICE, total_points: 0, participation_points: 0 },
+      { id: 'up-bob', user_email: BOB, total_points: 0, participation_points: 0 },
+    ],
+  });
+}
+
+const progressionDe = async (email) =>
+  (await db.filterEntity('UserProgress', { user_email: email }))[0];
+const pointsDe = async (email) => (await progressionDe(email)).total_points;
+
+const resultatsReels = [
+  { liste_id: LIKOUD, seats: 50 },
+  { liste_id: YESH, seats: 40 },
+  { liste_id: PETITE, seats: 30 },
+];
+
+// Alice justifie une liste ; Bob n'en justifie aucune.
+const repartitionAlice = [
+  { liste_id: LIKOUD, predicted_seats: 50, justification: JUSTIF },
+  { liste_id: YESH, predicted_seats: 43 },
+  { liste_id: PETITE, predicted_seats: 27 },
+];
+const repartitionBob = [
+  { liste_id: LIKOUD, predicted_seats: 61 },
+  { liste_id: YESH, predicted_seats: 29 },
+  { liste_id: PETITE, predicted_seats: 30 },
+];
+
+test('contrainte de somme sur les 120 sièges', async (t) => {
+  t.beforeEach(seed);
+
+  await t.test('le seuil de 3,25 % vaut 4 sièges sur 120', () => {
+    assert.equal(TOTAL_SIEGES, 120);
+    assert.equal(MIN_SIEGES_AU_SEUIL, 4);
+  });
+
+  await t.test('refuse une répartition dont le total n’est pas 120', async () => {
+    await assert.rejects(
+      () => submitRepartitionSieges(ALICE, {
+        predictions: [
+          { liste_id: LIKOUD, predicted_seats: 50 },
+          { liste_id: YESH, predicted_seats: 40 },
+          { liste_id: PETITE, predicted_seats: 25 },
+        ],
+      }),
+      /115 sièges au lieu de 120/,
+    );
+    assert.equal(db._rows('PronosticSieges').length, 0, 'rien ne doit être enregistré');
+  });
+
+  await t.test('refuse un pronostic sous le seuil (1 à 3 sièges)', async () => {
+    await assert.rejects(
+      () => submitRepartitionSieges(ALICE, {
+        predictions: [
+          { liste_id: LIKOUD, predicted_seats: 50 },
+          { liste_id: YESH, predicted_seats: 68 },
+          { liste_id: PETITE, predicted_seats: 2 },
+        ],
+      }),
+      /Petite Liste.*au moins 4 sièges/s,
+    );
+  });
+
+  await t.test('refuse une répartition incomplète', async () => {
+    await assert.rejects(
+      () => submitRepartitionSieges(ALICE, {
+        predictions: [
+          { liste_id: LIKOUD, predicted_seats: 60 },
+          { liste_id: YESH, predicted_seats: 60 },
+        ],
+      }),
+      /absente\(s\).*Petite Liste/s,
+    );
+  });
+
+  await t.test('accepte une répartition complète à 120', async () => {
+    const res = await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    assert.equal(res.ok, true);
+    assert.equal(res.total, 120);
+    assert.equal(res.listes, 3);
+    assert.equal(db._rows('PronosticSieges').length, 3);
+  });
+
+  await t.test('refuse après la clôture', async () => {
+    db = createMemoryDb({
+      Liste: [{ id: LIKOUD, name_fr: 'Likoud', bloc: 'coalition', is_active: true }],
+      CampaignSettings: [{ id: 'global', key: 'global', predictions_deadline_utc: '2020-01-01T00:00:00Z' }],
+      UserProgress: [{ id: 'up-alice', user_email: ALICE, total_points: 0 }],
+    });
+    await assert.rejects(
+      () => submitRepartitionSieges(ALICE, { predictions: [{ liste_id: LIKOUD, predicted_seats: 120 }] }),
+      /pronostics clôturés/,
+    );
+  });
+});
+
+test('points de participation', async (t) => {
+  t.beforeEach(seed);
+
+  await t.test('déposer une répartition rapporte des points', async () => {
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    // 120 pour le dépôt + 50 pour l'unique justification d'Alice.
+    assert.equal(await pointsDe(ALICE), 170);
+  });
+
+  await t.test('une répartition sans justification rapporte quand même', async () => {
+    await submitRepartitionSieges(BOB, { predictions: repartitionBob });
+    assert.equal(await pointsDe(BOB), 120);
+  });
+
+  await t.test('corriger sa répartition ne recrédite pas la participation', async () => {
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+
+    assert.equal(await pointsDe(ALICE), 170, 'la participation ne se cumule pas');
+    assert.equal(db._rows('PronosticSieges').length, 3, 'et ne duplique pas les lignes');
+  });
+
+  await t.test('ajouter des justifications augmente la participation, une seule fois', async () => {
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    const enrichie = repartitionAlice.map(p => ({ ...p, justification: JUSTIF }));
+    await submitRepartitionSieges(ALICE, { predictions: enrichie });
+
+    // 120 + 3 × 50 = 270, et non 170 + 270.
+    const up = await progressionDe(ALICE);
+    assert.equal(up.participation_points, 270);
+    assert.equal(up.total_points, 270);
+  });
+});
+
+test('scoring de bout en bout', async (t) => {
+  async function scenario() {
+    seed();
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    await submitRepartitionSieges(BOB, { predictions: repartitionBob });
+    await saveResultatsManuels({ seats_by_liste: resultatsReels });
+  }
+
+  await t.test('crédite exactitude, proximité et seuil', async () => {
+    await scenario();
+    const res = await scoreSiegesAndSync();
+    assert.equal(res.predictions_scored, 6);
+
+    // Alice — précision : 50 exact (150+30) + 43 vs 40 (50+30) + 27 vs 30 (50+30) = 340.
+    // Total = 170 de participation + 340.
+    assert.equal(await pointsDe(ALICE), 510);
+    // Bob — précision : 61 vs 50 (0+30) + 29 vs 40 (0+30) + 30 exact (150+30) = 240.
+    // Total = 120 de participation + 240.
+    assert.equal(await pointsDe(BOB), 360);
+  });
+
+  await t.test('la justification n’est pas repayée au dépouillement', async () => {
+    await scenario();
+    await scoreSiegesAndSync();
+    const justifie = db._rows('PronosticSieges')
+      .find(p => p.user_email === ALICE && p.liste_id === LIKOUD);
+    // 150 d'exactitude + 30 de seuil, sans les 50 de justification déjà versés.
+    assert.equal(justifie.points_earned, 180);
+    assert.equal(justifie.is_correct, true);
+  });
+
+  await t.test('relancer le scoring ne double pas les points', async () => {
+    await scenario();
+    await scoreSiegesAndSync();
+    await scoreSiegesAndSync();
+    await scoreSiegesAndSync();
+    assert.equal(await pointsDe(ALICE), 510);
+    assert.equal(await pointsDe(BOB), 360);
+  });
+
+  await t.test('corriger un résultat corrige le classement, sans cumul', async () => {
+    await scenario();
+    await scoreSiegesAndSync();
+    await saveResultatsManuels({
+      seats_by_liste: [
+        { liste_id: LIKOUD, seats: 41 }, { liste_id: YESH, seats: 49 }, { liste_id: PETITE, seats: 30 },
+      ],
+    });
+    await scoreSiegesAndSync();
+
+    // Alice : 50 vs 41 (0+30) + 43 vs 49 (0+30) + 27 vs 30 (50+30) = 140.
+    assert.equal(await pointsDe(ALICE), 170 + 140);
+  });
+
+  await t.test('bonus de bloc : crédité une seule fois', async () => {
+    await scenario();
+    await scoreSiegesAndSync();
+
+    // Coalition réelle = Likoud seul = 50 sièges, donc pas de majorité.
+    // Alice prédit 50 → juste. Bob prédit 61 → majorité annoncée à tort.
+    const res = await scoreBlocMajoritaire();
+    assert.equal(res.real_coalition_majority, false);
+    assert.equal(res.users_awarded, 1);
+    assert.equal(await pointsDe(ALICE), 560);
+    assert.equal(await pointsDe(BOB), 360);
+
+    await scoreBlocMajoritaire();
+    await scoreBlocMajoritaire();
+    assert.equal(await pointsDe(ALICE), 560, 'le bonus de bloc ne doit pas se cumuler');
+  });
+
+  await t.test('refuse de scorer sans résultat final', async () => {
+    seed();
+    await submitRepartitionSieges(ALICE, { predictions: repartitionAlice });
+    await assert.rejects(() => scoreSiegesAndSync(), /ResultatSieges.*introuvable/);
+  });
+});
+
+test('saisie manuelle des résultats', async (t) => {
+  t.beforeEach(seed);
+
+  await t.test('refuse un doublon et une liste inconnue', async () => {
+    const v = await validerRepartition([
+      { liste_id: LIKOUD, seats: 50 }, { liste_id: LIKOUD, seats: 40 },
+      { liste_id: YESH, seats: 30 }, { liste_id: 'l-fantome', seats: 0 },
+    ]);
+    assert.equal(v.ok, false);
+    assert.match(v.errors.join(' '), /deux fois/);
+    assert.match(v.errors.join(' '), /Liste inconnue/);
+  });
+
+  await t.test('le mode aperçu ne persiste rien', async () => {
+    const res = await saveResultatsManuels({ seats_by_liste: resultatsReels, dry_run: true });
+    assert.equal(res.dry_run, true);
+    assert.equal(db._rows('ResultatSieges').length, 0);
+  });
+
+  await t.test('enregistre une répartition valide comme résultat final', async () => {
+    const res = await saveResultatsManuels({ seats_by_liste: resultatsReels });
+    assert.equal(res.ok, true);
+    assert.equal(res.total, 120);
+
+    const rows = db._rows('ResultatSieges');
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].is_final, true);
+  });
+
+  await t.test('corriger les résultats remplace la ligne au lieu d’en créer une seconde', async () => {
+    await saveResultatsManuels({ seats_by_liste: resultatsReels });
+    const res = await saveResultatsManuels({
+      seats_by_liste: [
+        { liste_id: LIKOUD, seats: 48 }, { liste_id: YESH, seats: 42 }, { liste_id: PETITE, seats: 30 },
+      ],
+    });
+
+    assert.equal(res.remplace, true);
+    const finaux = db._rows('ResultatSieges').filter(r => r.is_final);
+    assert.equal(finaux.length, 1, 'un seul résultat final peut faire foi');
+    assert.equal(finaux[0].seats_by_liste.find(r => r.liste_id === LIKOUD).seats, 48);
+  });
+});

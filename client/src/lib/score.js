@@ -13,15 +13,25 @@
 // La MÊME formule est reproduite en SQL côté serveur pour les ligues
 // (server/functions/ligues.js) — garder les deux synchronisées.
 
-export const LEARNING_CAP = 300;     // ~30 bonnes réponses de quiz
-export const REGULARITY_CAP = 900;   // ~12 bonus de série (7 jours d'affilée)
+export const LEARNING_CAP = 300;        // ~30 bonnes réponses de quiz
+export const REGULARITY_CAP = 900;      // ~12 bonus de série (7 jours d'affilée)
+// Une répartition complète, entièrement justifiée, vaut exactement ce plafond :
+// participer rapporte des points à tout le monde, mais personne ne prend un
+// rang en saisissant plus — seule la justesse départage.
+export const PARTICIPATION_CAP = 720;
 
 export function computeScore(p) {
   if (!p) return 0;
   const learning = p.learning_points || 0;
   const regularity = p.regularity_points || 0;
-  const precision = Math.max(0, (p.total_points || 0) - learning - regularity);
-  return Math.round(precision + Math.min(learning, LEARNING_CAP) + Math.min(regularity, REGULARITY_CAP));
+  const participation = p.participation_points || 0;
+  const precision = Math.max(0, (p.total_points || 0) - learning - regularity - participation);
+  return Math.round(
+    precision
+    + Math.min(learning, LEARNING_CAP)
+    + Math.min(regularity, REGULARITY_CAP)
+    + Math.min(participation, PARTICIPATION_CAP)
+  );
 }
 
 // Paliers de titre par Score (croissants). Cohérents avec l'onboarding/les ligues.

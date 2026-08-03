@@ -150,6 +150,20 @@ CREATE TABLE IF NOT EXISTS user_progress (
   last_active_date TEXT
 );
 
+-- Montant du bonus « bloc majoritaire » DÉJÀ crédité à cet utilisateur. Sans
+-- cette mémoire, relancer le scoring recréditait 50 points à chaque passage :
+-- le soir du scrutin, un double-clic suffisait à fausser le classement. Le
+-- scoring applique désormais la différence, comme il le fait déjà pour les
+-- points de sièges (voir functions/prediciteScoringSieges.js).
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS bloc_bonus_points INTEGER NOT NULL DEFAULT 0;
+
+-- Points de PARTICIPATION (saisie d'une répartition, justifications écrites).
+-- Ils comptent dans total_points — participer rapporte, toujours — mais sont
+-- plafonnés dans le calcul du Score, comme le quiz et la régularité : sinon le
+-- volume de saisie déciderait du rang avant le moindre résultat. Voir
+-- client/src/lib/score.js et functions/ligues.js, à garder synchronisés.
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS participation_points INTEGER NOT NULL DEFAULT 0;
+
 CREATE TABLE IF NOT EXISTS badges (
   id TEXT PRIMARY KEY,
   code TEXT UNIQUE NOT NULL, -- 'analyste_precis' | 'politologue' | 'faiseur_de_rois' | ...

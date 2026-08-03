@@ -4,7 +4,8 @@ import { runSondagesSiegesCollector } from '../functions/sondagesSiegesCollector
 import { getPollTrackerStatus } from '../functions/pollTracker.js';
 import { runKanSheetCollector } from '../functions/kanSheetCollector.js';
 import { runResultatsKnessetCollector } from '../functions/resultatsKnessetCollector.js';
-import { submitPronosticSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from '../functions/prediciteScoringSieges.js';
+import { saveResultatsManuels } from '../functions/resultatsManuels.js';
+import { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire } from '../functions/prediciteScoringSieges.js';
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
 import { ensureUserProgress, updateStreakAndBadges } from '../functions/miscFunctions.js';
 import { submitQuizAnswer } from '../functions/quizScoring.js';
@@ -31,8 +32,16 @@ router.post('/:name', requireAuth, async (req, res) => {
         return res.json(await submitQuizAnswer(req.user.email, body));
 
       case 'prediciteScoringSieges': {
+        if (body.action === 'submitRepartition') {
+          return res.json(await submitRepartitionSieges(req.user.email, body));
+        }
+        // Ancien dépôt liste par liste : incompatible avec la contrainte de
+        // somme à 120. Message explicite plutôt qu'un « action inconnue »,
+        // pour un client resté en cache.
         if (body.action === 'submitPronosticSieges') {
-          return res.json(await submitPronosticSieges(req.user.email, body));
+          return res.status(400).json({
+            error: 'Le pronostic se dépose désormais en une fois, sur la répartition complète des 120 sièges. Recharge la page.',
+          });
         }
         if (body.action === 'scoreSiegesAndSync') {
           if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
@@ -113,12 +122,21 @@ router.post('/:name', requireAuth, async (req, res) => {
         if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
         return res.json(await runResultatsKnessetCollector());
 
+      // Saisie manuelle des résultats — le chemin principal du soir du scrutin,
+      // le collecteur automatique n'étant qu'un confort. body.dry_run valide
+      // sans écrire.
+      case 'resultatsManuels':
+        if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
+        return res.json(await saveResultatsManuels(body));
+
       default:
         return res.status(404).json({ error: `Fonction inconnue : ${name}` });
     }
   } catch (e) {
     const status = e.status || 400;
-    return res.status(status).json({ error: e.message, deadline_utc: e.deadline_utc });
+    // e.validation : liste détaillée des erreurs de saisie (résultats manuels),
+    // pour que l'écran admin les affiche une par une plutôt qu'en un seul bloc.
+    return res.status(status).json({ error: e.message, deadline_utc: e.deadline_utc, validation: e.validation });
   }
 });
 

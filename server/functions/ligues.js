@@ -111,14 +111,16 @@ export async function ligueLeaderboard(user_email, body) {
   if (!membership) { const e = new Error("Tu ne fais pas partie de cette ligue."); e.status = 403; throw e; }
 
   // SCORE unique = même formule que le classement général (client lib/score.js) :
-  // précision (total − quiz − régularité, = pronostics + 25% des gains de paris)
-  // + quiz plafonné à 300 + régularité plafonnée à 900. On classe là-dessus.
+  // précision (total − quiz − régularité − participation, = pronostics + 25 %
+  // des gains de paris) + quiz plafonné à 300 + régularité plafonnée à 900
+  // + participation plafonnée à 720. On classe là-dessus.
   const rows = await queryAll(
     `SELECT lm.user_email,
             COALESCE(up.total_points, 0)        AS total_points,
-            (GREATEST(COALESCE(up.total_points, 0) - COALESCE(up.learning_points, 0) - COALESCE(up.regularity_points, 0), 0)
+            (GREATEST(COALESCE(up.total_points, 0) - COALESCE(up.learning_points, 0) - COALESCE(up.regularity_points, 0) - COALESCE(up.participation_points, 0), 0)
               + LEAST(COALESCE(up.learning_points, 0), 300)
-              + LEAST(COALESCE(up.regularity_points, 0), 900))    AS score,
+              + LEAST(COALESCE(up.regularity_points, 0), 900)
+              + LEAST(COALESCE(up.participation_points, 0), 720))  AS score,
             COALESCE(up.predictions_count, 0)   AS predictions_count,
             COALESCE(up.correct_predictions, 0) AS correct_predictions,
             COALESCE(NULLIF(usr.full_name, ''), 'Joueur ' || substr(md5(lm.user_email), 1, 4)) AS name

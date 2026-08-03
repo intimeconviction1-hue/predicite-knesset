@@ -6,11 +6,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { texteLisible } from '@/lib/couleurs';
 import {
-  ChevronLeft, Users, TrendingUp, CheckCircle, PenLine, Lock, Clock, Trophy, ExternalLink, Landmark
+  ChevronLeft, Users, TrendingUp, CheckCircle, Lock, Clock, Trophy, ExternalLink, Landmark
 } from 'lucide-react';
-import { Slider } from '@/components/ui/slider';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import BallotChip from '@/components/knesset/BallotChip';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
@@ -33,12 +30,6 @@ export default function ListePage() {
   const slug = urlParams.get('slug') || '';
   const queryClient = useQueryClient();
 
-  const [seats, setSeats] = useState([10]);
-  const [justification, setJustification] = useState('');
-  const [showJustification, setShowJustification] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [confirmed, setConfirmed] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [deadlineUtc, setDeadlineUtc] = useState(FALLBACK_DEADLINE_UTC);
   const [deadlineClosed, setDeadlineClosed] = useState(false);
 
@@ -141,29 +132,6 @@ export default function ListePage() {
     },
     enabled: !!liste?.id && !!user?.email,
   });
-
-  const handleSubmit = async () => {
-    if (!user) { base44.auth.redirectToLogin(window.location.href); return; }
-    setIsSubmitting(true);
-    try {
-      // Passe par la fonction serveur (deadline + points d'engagement + UserProgress),
-      // plutôt qu'une écriture directe de l'entité qui contournerait ces règles.
-      await base44.functions.invoke('prediciteScoringSieges', {
-        action: 'submitPronosticSieges',
-        liste_id: liste.id,
-        predicted_seats: seats[0],
-        justification,
-      });
-      await queryClient.invalidateQueries({ queryKey: ['pronostic-sieges', liste.id, user.email] });
-      setConfirmed(true);
-      setEditMode(false);
-    } catch (e) {
-      if (e?.status === 403 || e?.response?.status === 403) setDeadlineClosed(true);
-      console.error('Erreur soumission pronostic sièges:', e);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   if (isLoading || !liste) {
     return (
@@ -405,87 +373,44 @@ export default function ListePage() {
           </div>
 
           <div className="p-6">
-            {existingPred && !editMode ? (
-              confirmed || true ? (
-                <div className="flex items-center justify-between rounded-xl p-4" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
-                    <div>
-                      <p className="text-sm font-semibold" style={{ color: '#16794A' }}>Pronostic : {existingPred.predicted_seats} sièges</p>
-                      <p className="text-xs mt-0.5" style={{ color: '#16794A' }}>Enregistré</p>
-                    </div>
+            {existingPred ? (
+              <div className="flex items-center justify-between rounded-xl p-4" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: '#16794A' }}>Pronostic : {existingPred.predicted_seats} sièges</p>
+                    <p className="text-xs mt-0.5" style={{ color: '#16794A' }}>Enregistré</p>
                   </div>
-                  {!deadlineClosed && (
-                    <button
-                      onClick={() => { setSeats([existingPred.predicted_seats]); setEditMode(true); }}
-                      className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
-                      style={{ color: 'var(--p-blue)', border: '1px solid rgba(74,127,212,0.4)' }}
-                    >
-                      <PenLine className="w-3.5 h-3.5" /> Modifier
-                    </button>
-                  )}
                 </div>
-              ) : null
-            ) : (
-              <div className="space-y-5">
-                <div className="text-center">
-                  <motion.span
-                    key={seats[0]}
-                    initial={{ scale: 1.15, opacity: 0.6 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                    className="text-5xl font-black font-mono inline-block"
-                    style={{ color: liste.color ? texteLisible(liste.color) : 'var(--p-gold-text)' }}
+                {!deadlineClosed && (
+                  <Link
+                    to={createPageUrl('MaRepartition')}
+                    className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors"
+                    style={{ color: 'var(--p-blue)', border: '1px solid rgba(74,127,212,0.4)' }}
                   >
-                    {seats[0]}
-                  </motion.span>
-                  <p className="text-sm mt-2" style={{ color: 'var(--p-text-40)' }}>sièges sur 120</p>
-                </div>
-                <Slider
-                  value={seats}
-                  onValueChange={setSeats}
-                  min={0}
-                  max={maxSeats}
-                  step={1}
-                  aria-label="Nombre de sièges pronostiqués"
-                />
-                <div className="flex justify-between text-[11px]" style={{ color: 'var(--p-text-25)' }}>
-                  <span>0 (sous le seuil)</span>
-                  <span>Seuil ≈ 4 sièges</span>
-                  <span>{maxSeats}</span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowJustification(!showJustification)}
-                  className="flex items-center gap-1.5 text-xs hover:text-[var(--p-text)] transition-colors"
-                  style={{ color: 'var(--p-text-40)' }}
-                >
-                  <PenLine className="w-3.5 h-3.5" />
-                  {showJustification ? "Masquer l'analyse" : 'Ajouter une analyse (facultatif)'}
-                </button>
-                {showJustification && (
-                  <Textarea
-                    value={justification}
-                    onChange={(e) => setJustification(e.target.value)}
-                    placeholder="Pourquoi ce nombre de sièges ? Accords d'excédents, dynamique de campagne…"
-                    className="resize-none text-sm bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-25)]"
-                    rows={3}
-                  />
+                    <Landmark className="w-3.5 h-3.5" /> Ajuster
+                  </Link>
                 )}
-
-                <div className="flex gap-3">
-                  {editMode && (
-                    <Button variant="outline" onClick={() => setEditMode(false)} className="flex-1 border-[var(--p-border-hover)] text-[var(--p-text-60)]">Annuler</Button>
-                  )}
-                  <Button
-                    onClick={handleSubmit}
-                    disabled={isSubmitting || deadlineClosed}
-                    className="flex-1 p-btn-gold-solid"
-                  >
-                    {isSubmitting ? 'Enregistrement...' : '✓ Valider mon pronostic'}
-                  </Button>
-                </div>
+              </div>
+            ) : (
+              // Le pronostic ne se dépose plus liste par liste : les 120 sièges
+              // se répartissent d'un bloc, en donnant à l'une ce qu'on retire à
+              // l'autre (voir server/functions/repartitionSieges.js).
+              <div className="text-center py-2">
+                <p className="text-sm mb-1" style={{ color: 'var(--p-text-60)' }}>
+                  Pas encore de pronostic sur cette liste.
+                </p>
+                <p className="text-xs mb-5 leading-relaxed" style={{ color: 'var(--p-text-40)' }}>
+                  Les 120 sièges se répartissent d'un seul tenant : donner un siège à
+                  une liste, c'est le retirer à une autre.
+                </p>
+                <Link
+                  to={createPageUrl('MaRepartition')}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm text-white transition-opacity hover:opacity-88"
+                  style={{ background: '#1E3A8A' }}
+                >
+                  <Landmark className="w-4 h-4" /> Répartir les 120 sièges
+                </Link>
               </div>
             )}
           </div>

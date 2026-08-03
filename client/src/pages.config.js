@@ -65,6 +65,8 @@ import SensDuVent from './pages/SensDuVent';
 import FormeCoalition from './pages/FormeCoalition';
 import Boussole from './pages/Boussole';
 import VraiOuFake from './pages/VraiOuFake';
+import MaRepartition from './pages/MaRepartition';
+import AdminResultats from './pages/AdminResultats';
 import __Layout from './Layout.jsx';
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
@@ -94,6 +96,10 @@ export const PAGES = {
     "FormeCoalition": FormeCoalition,
     "Boussole": Boussole,
     "VraiOuFake": VraiOuFake,
+    "MaRepartition": MaRepartition,
+    // Écran admin du soir du scrutin — volontairement absent de la navigation,
+    // accessible par /AdminResultats et réservé aux admins côté serveur.
+    "AdminResultats": AdminResultats,
 }
 
 export const pagesConfig = {

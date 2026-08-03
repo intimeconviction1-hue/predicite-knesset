@@ -82,6 +82,20 @@ function getConfig(entityName) {
   return cfg;
 }
 
+// Les VALEURS sont paramétrées ($1, $2...), mais pas les IDENTIFIANTS : noms de
+// colonnes de filtre et colonne de tri viennent de la query string et sont
+// interpolés dans le SQL. Postgres n'a pas de placeholder pour un identifiant,
+// donc on valide strictement la forme. Sans ce garde-fou, un `_sort` du type
+// `(SELECT ...)` reste exploitable en exfiltration, même si le protocole
+// étendu de pg empêche d'empiler plusieurs requêtes.
+const IDENT_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
+function assertIdent(name) {
+  if (typeof name !== 'string' || !IDENT_RE.test(name)) {
+    throw new Error(`Nom de colonne invalide : ${name}`);
+  }
+  return name;
+}
+
 // SQLite renvoyait les booléens comme 0/1 et les JSON comme texte : on garde
 // la désérialisation à la lecture / sérialisation à l'écriture, pour un
 // contrat identique à ce que les pages React attendent déjà (héritage de
@@ -117,7 +131,7 @@ export async function listEntity(entityName, { sort, limit } = {}) {
   let sql = `SELECT * FROM ${cfg.table}`;
   if (sort) {
     const desc = sort.startsWith('-');
-    const col = desc ? sort.slice(1) : sort;
+    const col = assertIdent(desc ? sort.slice(1) : sort);
     sql += ` ORDER BY ${col} ${desc ? 'DESC' : 'ASC'}`;
   }
   if (limit) sql += ` LIMIT ${Number(limit)}`;
@@ -130,7 +144,7 @@ export async function filterEntity(entityName, query = {}) {
   const keys = Object.keys(query).filter(k => query[k] !== undefined && query[k] !== '');
   let sql = `SELECT * FROM ${cfg.table}`;
   if (keys.length > 0) {
-    sql += ' WHERE ' + keys.map(k => `${k} = ?`).join(' AND ');
+    sql += ' WHERE ' + keys.map(k => `${assertIdent(k)} = ?`).join(' AND ');
   }
   const values = keys.map(k => {
     const v = query[k];
@@ -147,7 +161,7 @@ export async function createEntity(entityName, payload) {
   const body = serializeForWrite(cfg, payload);
   if (!body[idColumn]) body[idColumn] = idColumn === 'key' ? (body.key || 'global') : randomUUID();
 
-  const cols = Object.keys(body);
+  const cols = Object.keys(body).map(assertIdent);
   const placeholders = cols.map(() => '?').join(', ');
   const sql = `INSERT INTO ${cfg.table} (${cols.join(', ')}) VALUES (${placeholders})`;
   await run(sql, cols.map(c => body[c]));
@@ -162,7 +176,7 @@ export async function updateEntity(entityName, id, payload) {
   const body = serializeForWrite(cfg, payload);
   if (cfg.hasUpdatedAt) body.updated_at = new Date().toISOString();
 
-  const cols = Object.keys(body);
+  const cols = Object.keys(body).map(assertIdent);
   if (cols.length === 0) {
     const row = await queryOne(`SELECT * FROM ${cfg.table} WHERE ${idColumn} = ?`, [id]);
     return deserializeRow(cfg, row);
@@ -182,10 +196,10 @@ export async function queryEntity(entityName, { where = {}, sort, limit } = {}) 
   const cfg = getConfig(entityName);
   const keys = Object.keys(where).filter(k => where[k] !== undefined && where[k] !== '');
   let sql = `SELECT * FROM ${cfg.table}`;
-  if (keys.length > 0) sql += ' WHERE ' + keys.map(k => `${k} = ?`).join(' AND ');
+  if (keys.length > 0) sql += ' WHERE ' + keys.map(k => `${assertIdent(k)} = ?`).join(' AND ');
   if (sort) {
     const desc = sort.startsWith('-');
-    const col = desc ? sort.slice(1) : sort;
+    const col = assertIdent(desc ? sort.slice(1) : sort);
     sql += ` ORDER BY ${col} ${desc ? 'DESC' : 'ASC'}`;
   }
   if (limit) sql += ` LIMIT ${Number(limit)}`;

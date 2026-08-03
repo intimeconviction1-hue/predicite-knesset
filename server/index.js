@@ -15,11 +15,27 @@ import parisRouter from './routes/paris.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 8788;
 
+// Le secret de session ne doit jamais avoir de valeur par défaut : le dépôt
+// est public, donc un secret en dur dans le code permettrait à quiconque de
+// forger un cookie de session — y compris celui d'un admin. On refuse de
+// démarrer en production plutôt que de retomber silencieusement dessus.
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET && process.env.NODE_ENV === 'production') {
+  console.error('[config] SESSION_SECRET manquant : refus de démarrer en production.');
+  process.exit(1);
+}
+
 const app = express();
+
+// Render (comme tout PaaS) place un proxy devant l'app : sans ceci, req.ip
+// renvoie l'IP du proxy — ce qui fausserait le limiteur de tentatives du login
+// admin — et le cookie "secure" serait refusé.
+if (process.env.NODE_ENV === 'production') app.set('trust proxy', 1);
+
 app.use(express.json());
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'change-moi-avant-toute-mise-en-ligne-publique',
+  secret: SESSION_SECRET || 'secret-de-developpement-local-uniquement',
   resave: false,
   saveUninitialized: false,
   cookie: {

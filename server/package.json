@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node --watch index.js",
     "start": "node index.js",
+    "test": "node --test --experimental-test-module-mocks \"tests/*.test.mjs\"",
     "seed:listes": "node scripts/seed-listes.js",
     "seed:candidats-pm": "node scripts/seed-candidats-pm.js",
     "seed:sondages": "node scripts/seed-sondages.js",

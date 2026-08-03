@@ -59,7 +59,10 @@ export const base44 = {
 
   auth: {
     me: () => request('GET', '/api/auth/me'),
-    login: (email, full_name) => request('POST', '/api/auth/login', { email, full_name }),
+    // admin_key n'est envoyée que par le formulaire de connexion admin ; elle
+    // n'est jamais stockée côté client, seulement transmise à la connexion.
+    login: (email, full_name, admin_key) =>
+      request('POST', '/api/auth/login', { email, full_name, admin_key }),
     logout: () => request('POST', '/api/auth/logout'),
     redirectToLogin: (returnTo) => {
       const target = returnTo || window.location.href;

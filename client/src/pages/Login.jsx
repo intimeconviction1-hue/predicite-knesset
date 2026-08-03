@@ -7,6 +7,8 @@ export default function Login() {
   const returnTo = params.get('return_to') || '/';
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
+  const [adminKey, setAdminKey] = useState('');
+  const [showAdminKey, setShowAdminKey] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -15,7 +17,7 @@ export default function Login() {
     setError('');
     setIsSubmitting(true);
     try {
-      await base44.auth.login(email, fullName);
+      await base44.auth.login(email, fullName, adminKey || undefined);
       window.location.href = returnTo;
     } catch (err) {
       setError(err.message || 'Connexion impossible.');
@@ -65,6 +67,22 @@ export default function Login() {
             />
           </div>
 
+          {showAdminKey && (
+            <div>
+              <label htmlFor="login-admin-key" className="text-xs font-semibold" style={{ color: 'var(--p-text-60)' }}>Clé administrateur</label>
+              <input
+                id="login-admin-key"
+                type="password"
+                autoComplete="off"
+                value={adminKey}
+                onChange={(e) => setAdminKey(e.target.value)}
+                className="w-full mt-1 px-3 py-2.5 rounded-lg bg-transparent border text-[var(--p-text)] text-sm outline-none transition-colors focus:border-[var(--p-gold)]"
+                style={{ borderColor: 'var(--p-border-hover)' }}
+                placeholder="••••••••"
+              />
+            </div>
+          )}
+
           {error && (
             <p role="alert" className="text-xs" style={{ color: 'var(--p-red)' }}>{error}</p>
           )}
@@ -79,10 +97,21 @@ export default function Login() {
           </button>
         </form>
 
+        {!showAdminKey && (
+          <button
+            type="button"
+            onClick={() => setShowAdminKey(true)}
+            className="mt-5 text-[11px] underline underline-offset-2 transition-opacity hover:opacity-70"
+            style={{ color: 'var(--p-text-25)' }}
+          >
+            Connexion administrateur
+          </button>
+        )}
+
         <p className="text-[11px] mt-6 leading-relaxed" style={{ color: 'var(--p-text-25)' }}>
-          Auth minimale par email, adaptée à un usage personnel ou petit cercle.
-          À durcir (mot de passe, lien magique ou OAuth) avant toute ouverture à un
-          public plus large.
+          Connexion joueur par email, sans mot de passe — à durcir (lien magique
+          ou OAuth) avant une ouverture plus large. Le rôle administrateur, lui,
+          exige une clé serveur.
         </p>
       </motion.div>
     </div>

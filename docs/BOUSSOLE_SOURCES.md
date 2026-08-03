@@ -232,6 +232,75 @@ Shas lui a répondu qu'il était « prêt à brader l'identité juive du pays »
 
 **Certitude : élevée** pour Ensemble et Shas, **moyenne** pour les autres.
 
+### 14. « Un gouvernement peut légitimement s'appuyer sur les voix des partis arabes. »
+
+La vraie ligne de fracture du centre en 2026, et à ne pas confondre avec
+l'affirmation 7 : celle-là porte sur les **droits** des citoyens arabes, celle-ci
+sur l'**arithmétique parlementaire**.
+
+- **Contre** : Bennett, en avril 2026, alors même qu'il avait gouverné avec Ra'am
+  en 2021 — « les partis arabes ne sont pas sionistes, et nous ne nous appuierons
+  donc pas sur eux ». Lieberman rejette toute coopération avec les partis arabes
+  « non sionistes ». Hendel veut « un gouvernement d'unité sioniste sans partis
+  arabes ni haredim ». Otzma Yehudit et le Sionisme religieux par cohérence avec
+  leur position déjà documentée à l'affirmation 7.
+- **Pour** : Hadash-Ta'al et Ra'am, qui le revendiquent ; Les Démocrates, dont
+  Yair Golan appelle explicitement l'opposition à s'associer à Ra'am.
+- **Sans position, à dessein** : **Yashar**. Eisenkot n'exclut pas ces partis mais
+  pose trois conditions — reconnaissance d'Israël comme État juif et démocratique,
+  adhésion aux valeurs de la Déclaration d'indépendance, engagement au service
+  militaire ou civil — et il a convoqué les chefs de l'opposition en avril 2026
+  pour une « majorité sioniste » sans y inviter les dirigeants arabes. Cette
+  ambiguïté **est** sa position ; la trancher serait la trahir.
+- **Sans position** : Unité nationale, Likoud, Shas et le JUT, faute de source.
+
+- https://arabcenterdc.org/resource/israels-election-and-eisenkots-arab-coalition-dilemma/
+- https://www.timesofisrael.com/eisenkot-invites-most-opposition-chiefs-to-meet-coordinate-path-to-zionist-majority-victory/
+- https://www.jpost.com/israel-news/politics-and-diplomacy/article-895522
+
+**Certitude : élevée** pour Ensemble, Yisrael Beytenou et Les Réservistes.
+
+---
+
+## ⚠️ Diagnostic du 2026-08-03 : la boussole désigne un BLOC, pas un parti
+
+Mesure faite sur les 78 paires de partis possibles : **20 d'entre elles ne
+s'opposent sur AUCUNE affirmation**. Trois groupes sont entièrement
+indiscernables les uns au sein des autres :
+
+| Groupe | Partis mutuellement indiscernables |
+|---|---|
+| Droite et religieux | Likoud, Otzma Yehudit, Sionisme religieux, Shas, JUT |
+| Centre | Yashar, Yisrael Beytenou, Ensemble, Unité nationale, Les Réservistes |
+| Gauche et partis arabes | Les Démocrates, Hadash-Ta'al, Ra'am |
+
+Conséquence directe, observée en production : un utilisateur obtient quatre partis
+à 100 % simultanément. Ce n'est pas un défaut de calcul — ce sont quatre partis
+que le questionnaire n'oppose jamais. **La page s'intitule « Quel parti te
+ressemble ? » et répond en réalité « quel bloc te ressemble ».**
+
+L'affirmation 14 (appui sur les partis arabes) a été ajoutée pour attaquer ce
+problème sur le centre. Elle influence les scores, mais **elle n'a pas fait
+baisser le compteur** : Ensemble, Yisrael Beytenou et Les Réservistes y sont tous
+du même côté, et Yashar en est absent — or une absence ne crée pas de désaccord.
+
+Pour rendre ces partis réellement discernables, il faut des affirmations où ils
+prennent des positions **opposées**. Pistes à sourcer :
+
+- **Likoud vs Otzma Yehudit / Sionisme religieux** : prière juive sur le mont du
+  Temple (le Likoud défend officiellement le statu quo, Ben Gvir veut le changer).
+- **Shas / JUT vs Otzma / Sionisme religieux** : la conscription des haredim.
+  Les partis nationaux-religieux servent ; Hendel accuse d'ailleurs le Sionisme
+  religieux d'« encourager l'évasion massive du service ». Piste solide.
+- **Shas vs JUT** : le vote sur la peine de mort les a déjà séparés en pratique
+  (Degel HaTorah pour, Agoudat Israël abstenue) ; il faudrait un sujet où Shas,
+  parti social séfarade, s'oppose franchement au JUT ashkénaze.
+- **Ensemble vs Yisrael Beytenou** : Yisrael Beytenou a voté la peine de mort ;
+  documenter la position de Bennett sur ce texte les séparerait aussitôt.
+
+Tant que ce travail n'est pas fait, le titre de la page promet plus que le
+questionnaire ne délivre.
+
 ---
 
 ## Positions antérieures vérifiées

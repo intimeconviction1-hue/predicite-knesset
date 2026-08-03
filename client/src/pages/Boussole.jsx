@@ -120,6 +120,23 @@ const STATEMENTS = [
     pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
 
+  // Affirmation DISCRIMINANTE, ajoutée le 2026-08-03. Diagnostic : sur les 13
+  // affirmations précédentes, Yashar, Yisrael Beytenou, Ensemble, Unité nationale
+  // et Les Réservistes ne s'opposaient sur AUCUNE — la boussole désignait un bloc,
+  // pas un parti. Celle-ci les sépare, parce que c'est la vraie ligne de fracture
+  // du centre en 2026.
+  //
+  // À ne pas confondre avec l'affirmation 7 : celle-là porte sur les DROITS des
+  // citoyens arabes, celle-ci sur l'arithmétique parlementaire — s'appuyer ou non
+  // sur les voix de leurs partis pour gouverner.
+  //
+  // Yashar en est absent À DESSEIN : Eisenkot n'exclut pas ces partis mais pose
+  // trois conditions, et a convoqué les chefs de l'opposition en avril 2026 sans
+  // les y inviter. Cette ambiguïté est sa position ; la trancher serait la trahir.
+  { text: "Un gouvernement peut légitimement s'appuyer sur les voix des partis arabes.",
+    pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
+    contre: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'otzma-yehudit', 'sionisme-religieux'] },
+
   { text: "L'État doit moins intervenir dans l'économie (plus de libéralisme).",
     pour: ['likoud', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'shas', 'judaisme-unifie-de-la-torah'] },

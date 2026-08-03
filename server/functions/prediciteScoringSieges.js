@@ -27,7 +27,11 @@ const SCORE = {
   justifBonus: 50,   // par justification d'au moins JUSTIF_MIN caractères
   exactSeat: 150, within1Seat: 100, within3Seats: 50, thresholdBonus: 30, blocBonus: 50,
 };
-const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
+// Clôture par défaut : l'ouverture des bureaux de vote, le 27 octobre 2026 à
+// 07h00 en Israël. L'heure d'été israélienne se termine le dimanche 25 octobre :
+// le pays est donc à UTC+2 ce jour-là, et non UTC+3 — d'où 05:00Z et pas 04:00Z.
+// Écrasée par CampaignSettings.predictions_deadline_utc si la ligne existe.
+const FALLBACK_DEADLINE_UTC = '2026-10-27T05:00:00Z';
 const MAJORITY_SEATS = 61;
 const JUSTIF_MAX = 500;
 const JUSTIF_MIN = 20;   // en deçà, ce n'est pas une analyse

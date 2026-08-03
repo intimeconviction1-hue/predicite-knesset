@@ -14,7 +14,10 @@ import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 import TrendChart from '@/components/knesset/TrendChart';
 import PlayLearnBar from '@/components/knesset/PlayLearnBar';
 
-const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z'; // veille du scrutin, 07:00 Israël
+// Ouverture des bureaux, le 27 octobre 2026 à 07h00 en Israël. L'heure d'été
+// s'y termine le 25 octobre : UTC+2 ce jour-là, donc 05:00Z. Doit rester
+// identique à server/functions/prediciteScoringSieges.js.
+const FALLBACK_DEADLINE_UTC = '2026-10-27T05:00:00Z';
 
 function formatLocalDeadline(utcString) {
   const d = new Date(utcString);

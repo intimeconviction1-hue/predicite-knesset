@@ -23,7 +23,10 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 
 const TOTAL_SIEGES = 120;
 const MIN_SIEGES_AU_SEUIL = 4;
-const FALLBACK_DEADLINE_UTC = '2026-10-26T04:00:00Z';
+// Ouverture des bureaux, le 27 octobre 2026 à 07h00 en Israël. L'heure d'été
+// s'y termine le 25 octobre : UTC+2 ce jour-là, donc 05:00Z. Doit rester
+// identique à server/functions/prediciteScoringSieges.js.
+const FALLBACK_DEADLINE_UTC = '2026-10-27T05:00:00Z';
 
 function formatLocalDeadline(utcString) {
   const d = new Date(utcString);

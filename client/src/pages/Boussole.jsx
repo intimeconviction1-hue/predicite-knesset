@@ -44,9 +44,19 @@ const STATEMENTS = [
   // clause de dérogation est vue par les deux comme l'outil qui mettrait la loi
   // d'exemption militaire à l'abri du contrôle judiciaire (ToI). Nuance à garder
   // en tête : tous deux ont ensuite servi de force modératrice dans la coalition.
+  // SOURCÉE le 2026-08-03. Eisenkot confirmé « contre » — il s'oppose à la refonte
+  // judiciaire —, avec une nuance conservée ici : il dit vouloir « faire avancer
+  // une réforme du système judiciaire » sans préciser laquelle. S'opposer à CETTE
+  // refonte n'est pas défendre le statu quo.
+  //
+  // LES RÉSERVISTES RETIRÉS : aucune source. Le programme de Hendel porte sur la
+  // conscription, la doctrine sécuritaire, la commission d'enquête et la
+  // composition des coalitions ; il ne dit rien du pouvoir judiciaire. La position
+  // était héritée de la rédaction initiale et reposait sur un alignement supposé
+  // avec le reste de l'opposition.
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'shas', 'judaisme-unifie-de-la-torah'],
-    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },

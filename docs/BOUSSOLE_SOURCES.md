@@ -749,17 +749,61 @@ ancienne à passer l'épreuve sans une seule correction.
 
   **Certitude : élevée.**
 
+## Affirmations 1 et 2 — sourcées
+
+Priorités n°2 et n°3 de l'inventaire.
+
+### « Netanyahou doit rester Premier ministre » — 12 positions, aucune correction
+
+Deuxième affirmation ancienne à passer l'épreuve intacte. Otzma Yehudit et le
+Sionisme religieux sont décrits comme « quasi certains de soutenir Netanyahou
+pour le poste de Premier ministre » s'ils franchissent le seuil ; Ben Gvir
+réclame « un gouvernement de droite, très clair dans son caractère, qui agit
+plutôt que paralysé ». Côté opposition, Eisenkot est *le* candidat
+anti-Netanyahou en tête des sondages, et le « bloc anti-Netanyahou » réunit
+Bennett et lui.
+
+Rappel : Les Réservistes en avaient été retirés plus tôt dans la journée, Hendel
+refusant d'en faire une ligne rouge.
+
+  - https://www.britannica.com/event/2026-Israeli-Elections
+  - https://www.irishtimes.com/world/middle-east/2026/07/21/this-man-wants-to-unseat-binyamin-netanyahu-can-he-succeed/
+
+  **Certitude : élevée.**
+
+### « La réforme judiciaire doit aboutir » — 13 positions, une correction
+
+- **Eisenkot confirmé « contre »** — il s'oppose à la refonte judiciaire. Nuance
+  conservée dans le code : il dit vouloir « faire avancer une réforme du système
+  judiciaire » sans préciser laquelle. S'opposer à *cette* refonte n'est pas
+  défendre le statu quo.
+- **Ensemble confirmé « contre »** — le programme de l'alliance Bennett-Lapid
+  porte sur les contre-pouvoirs et le statut de la magistrature.
+- **Shas et le JUT « pour »** — sourcés plus haut : au premier rang de la poussée
+  réformatrice, la clause de dérogation protégeant l'exemption militaire.
+- **LES RÉSERVISTES RETIRÉS.** Aucune source. Le programme de Hendel porte sur la
+  conscription, la doctrine sécuritaire, la commission d'enquête et la
+  composition des coalitions ; il ne dit **rien** du pouvoir judiciaire. La
+  position était héritée et reposait sur un alignement supposé avec le reste de
+  l'opposition — le même raisonnement qui m'avait fait poser à tort une position
+  sécuritaire au JUT.
+
+  **Certitude : élevée** pour les positions conservées.
+
 ## Dette de sourçage — inventaire chiffré (2026-08-03)
 
 | | Positions |
 |---|---|
-| **Sourcées** — justifiées une par une dans ce document | **79** (49 %) |
-| **Héritées** — de la rédaction initiale, jamais vérifiées | **83** (51 %) |
-| Total | 162 |
+| **Sourcées** — justifiées une par une dans ce document | **103** (64 %) |
+| **Héritées** — de la rédaction initiale, jamais vérifiées | **58** (36 %) |
+| Total | 161 |
 
-*Au premier inventaire du jour : 66 sourcées (41 %) contre 95 héritées. Le
-sourçage des affirmations 5 et 7 a déplacé 13 positions et corrigé une de plus
-(Eisenkot sur les deux États).*
+*Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %).*
+
+**Reste à sourcer**, par ordre d'exposition décroissante : la halakha (11
+positions), l'exemption des yeshivot (9), les implantations (9, dont deux
+corrigées ce jour), l'influence des ultra-orthodoxes (8), l'économie (9 — dont la
+suppression pure et simple reste recommandée).
 
 Parmi les positions héritées que j'ai effectivement contrôlées ce jour, **trois se
 sont révélées fausses** : Les Réservistes en « contre » Netanyahou, Yashar et

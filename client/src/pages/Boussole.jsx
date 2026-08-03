@@ -17,27 +17,32 @@ import TrialWall from '@/components/knesset/TrialWall';
 // donc sortir en tête de la boussole alors qu'elle n'existe plus depuis avril.
 // La garde de cohérence en bas de computeMatches empêche que ça se reproduise.
 //
-// TROUS VOLONTAIRES (2026-08-03) — Shas, le Judaïsme unifié de la Torah et Les
-// Réservistes couvrent 7 affirmations sur 10, contre 10 pour Les Démocrates. Les
-// 3 manquantes de chacun ne sont PAS des oublis : sur les négociations de paix,
-// les implantations et l'égalité des citoyens arabes, ces trois partis n'ont pas
-// de ligne propre et stable. Shas a même historiquement accepté des concessions
-// territoriales sous l'autorité d'Ovadia Yosef. Leur prêter une position pour
-// homogénéiser les dénominateurs reviendrait à fabriquer de la donnée — le
-// pourcentage affiché avec son dénominateur dit déjà l'inégalité de couverture.
+// SOURCES — chaque position ajoutée ou retirée le 2026-08-03 est justifiée dans
+// docs/BOUSSOLE_SOURCES.md, avec sa source et son degré de certitude. Les
+// positions antérieures à cette date n'ont pas encore été sourcées : c'est une
+// dette connue, listée en fin de ce même document.
+//
+// TROUS VOLONTAIRES — ces partis ne couvrent pas les 10 affirmations, et ce ne
+// sont PAS des oublis. Sur les négociations de paix (5) et les implantations (6),
+// ni Shas, ni le JUT, ni Les Réservistes n'ont de ligne propre et stable : l'IDI
+// relève même que Shas « soutient la conclusion d'accords de paix avec les États
+// arabes ». Leur prêter une position pour homogénéiser les dénominateurs
+// reviendrait à fabriquer de la donnée — le pourcentage affiché avec son
+// dénominateur dit déjà l'inégalité de couverture.
 const STATEMENTS = [
   { text: 'Benyamin Netanyahou doit rester Premier ministre.',
     pour: ['likoud', 'shas', 'judaisme-unifie-de-la-torah', 'otzma-yehudit', 'sionisme-religieux'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
-  // Shas et le JUT ont voté la réforme judiciaire de la coalition ; Aryeh Deri y
-  // avait de surcroît un intérêt direct, la Cour suprême l'ayant écarté d'un
-  // poste ministériel en janvier 2023.
+  // Shas et le JUT ont été « au premier rang de la poussée réformatrice » : la
+  // clause de dérogation est vue par les deux comme l'outil qui mettrait la loi
+  // d'exemption militaire à l'abri du contrôle judiciaire (ToI). Nuance à garder
+  // en tête : tous deux ont ensuite servi de force modératrice dans la coalition.
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
-    contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper'] },
+    contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: 'Les étudiants des yeshivot (Haredim) doivent rester exemptés de service militaire.',
     pour: ['shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid', 'unite-nationale'] },
@@ -52,15 +57,24 @@ const STATEMENTS = [
   { text: 'Il faut étendre les implantations, voire annexer une partie de la Cisjordanie.',
     pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale'] },
+  // Les Réservistes : position la MIEUX documentée du lot. Yoaz Hendel veut un
+  // « gouvernement d'unité sioniste sans partis arabes ni haredim » et déclare :
+  // « Quiconque choisit de ne pas servir choisit d'être un citoyen de seconde
+  // zone. Il ne recevra rien de l'État. Il ne pourra ni voter ni être élu à la
+  // Knesset. » (ToI, 20/11/2025). C'est un refus explicite des deux volets de
+  // l'affirmation — l'égalité pleine ET la place au gouvernement.
   { text: 'Les citoyens arabes doivent avoir pleine égalité et une place au gouvernement.',
     pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
-    contre: ['otzma-yehudit', 'sionisme-religieux'] },
-  // Les Réservistes : la sécurité est l'identité même d'une liste née du
-  // mouvement des réservistes. Shas et le JUT votent constamment la ligne
-  // sécuritaire de la coalition, sans doctrine propre — position d'alignement,
-  // moins ferme que les précédentes, mais documentée par leurs votes.
+    contre: ['otzma-yehudit', 'sionisme-religieux', 'les-reservistes-hendel-tropper'] },
+  // Les Réservistes : « une doctrine sécuritaire plus agressive » est un pilier
+  // déclaré du programme (ToI, 20/11/2025). Shas : l'IDI relève qu'« en série de
+  // votes à la Knesset sur les grands dossiers diplomatiques, Shas a adopté une
+  // position faucon ». Le JUT a été RETIRÉ d'ici le 2026-08-03 : l'IDI le décrit
+  // comme « centriste », faisant primer « les considérations religieuses sur les
+  // considérations sécuritaires ou diplomatiques » — il a même voté le
+  // désengagement de Gaza. La position que je lui prêtais n'était pas sourçable.
   { text: 'Face au Hamas et à l\'Iran, la fermeté sécuritaire prime sur tout.',
-    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper', 'shas', 'judaisme-unifie-de-la-torah'],
+    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper', 'shas'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
   // Les Réservistes : l'inégalité devant la conscription est le grief fondateur
   // du mouvement, d'où sa position ici comme sur l'exemption des yeshivot.

@@ -24,6 +24,11 @@ import HeroBackdrop from '@/components/knesset/HeroBackdrop';
 //   >{/* contenu libre optionnel (bandeau live, etc.) */}</CinematicHero>
 
 const SIZES = {
+  // 'full' : hero de pleine hauteur pour l'accueil. 88svh et non 100 — c'est
+  // délibéré : le haut de l'hémicycle doit dépasser sous le pli. Un écran
+  // entièrement rempli ne dit pas qu'il y a une suite ; ce débord-là, si.
+  // svh (et non vh) pour ne pas être coupé par la barre d'adresse mobile.
+  full: { pt: 'pt-16 md:pt-24', pb: 'pb-10', title: 'text-5xl md:text-7xl', min: 'min-h-[88svh]' },
   lg: { pt: 'pt-12 md:pt-16', pb: 'pb-7', title: 'text-4xl md:text-6xl' },
   md: { pt: 'pt-10 md:pt-14', pb: 'pb-6', title: 'text-3xl md:text-5xl' },
   sm: { pt: 'pt-8 md:pt-10', pb: 'pb-5', title: 'text-[26px] md:text-4xl' },
@@ -115,7 +120,7 @@ export default function CinematicHero({
       )}
 
       {/* contenu */}
-      <div className={`relative max-w-3xl mx-auto px-4 ${s.pt} ${s.pb} flex flex-col ${alignCls}`}>
+      <div className={`relative max-w-3xl mx-auto px-4 ${s.pt} ${s.pb} ${s.min || ''} flex flex-col justify-center ${alignCls}`}>
         {badge && (
           <div className="inline-flex items-center gap-2 mb-5 px-3.5 py-1.5 rounded-full"
             style={{ background: 'rgba(255,255,255,0.12)', border: '0.5px solid rgba(255,255,255,0.22)', backdropFilter: 'blur(6px)' }}>
@@ -154,6 +159,21 @@ export default function CinematicHero({
 
         {children}
       </div>
+
+      {/* Invite à défiler — uniquement sur le hero pleine hauteur, où le contenu
+          suivant n'est pas immédiatement visible. Purement décoratif (aria-hidden),
+          et figé sous prefers-reduced-motion via la règle globale de globals.css. */}
+      {s.min && (
+        <div aria-hidden="true" className="absolute inset-x-0 bottom-5 flex flex-col items-center gap-2 pointer-events-none">
+          <span className="text-[9px] font-bold uppercase tracking-[0.24em]" style={{ color: 'rgba(255,255,255,0.55)' }}>défiler</span>
+          <motion.span
+            className="block w-px h-8 rounded"
+            style={{ background: 'linear-gradient(rgba(255,255,255,0.75), transparent)' }}
+            animate={reduced ? {} : { opacity: [0.3, 1, 0.3], scaleY: [0.6, 1, 0.6] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+      )}
     </div>
   );
 }

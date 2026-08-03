@@ -137,7 +137,7 @@ export default function Home() {
       {/* Hero cinématique institutionnel (composant maison CinematicHero) : vraie
           photo Ken Burns + voile bleu + Menorah + parallaxe. « Campagne en direct ». */}
       <CinematicHero
-        size="lg"
+        size="full"
         photos={['/images/knesset-hero.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
         position="center 26%"
         badge={{ text: `La campagne en direct · J-${daysLeft}`, live: true }}
@@ -324,23 +324,100 @@ export default function Home() {
         </div>
       )}
 
-      {/* Compte à rebours — le scrutin approche (beat émotionnel avant le détail) */}
-      <div className="p-glow-gold max-w-3xl mx-auto px-4 py-10">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-10%' }}
-          transition={{ duration: 0.4 }}
-          className="p-card p-6 md:p-10 text-center"
-          style={{ borderRadius: '24px' }}
-        >
-          <p className="text-[10px] font-black uppercase tracking-widest mb-4" style={{ color: 'var(--p-gold-text)' }}>
-            Le scrutin approche
-          </p>
-          <div className="flex justify-center">
+      {/* ── Bento : l'état de la course en un coup d'œil ──
+          Remplace l'ancien bandeau de compte à rebours seul. Même hauteur de page,
+          quatre fois plus d'information : qui mène, combien de temps reste, quel
+          bloc tient la majorité, et ce qui se joue maintenant. Chaque tuile est
+          une porte d'entrée, pas une décoration. */}
+      <div className="p-reveal p-glow-gold max-w-3xl mx-auto px-4 py-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+          {/* Tête de course — la tuile maîtresse */}
+          {rankedListes[0]?._seats > 0 && (
+            <Link
+              to={`${createPageUrl('Liste')}?slug=${rankedListes[0].slug}`}
+              className="p-card col-span-2 md:row-span-2 p-5 flex flex-col justify-between !items-stretch"
+              style={{ minHeight: 150 }}
+            >
+              <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>
+                En tête de la projection
+              </span>
+              <span>
+                <span className="block p-display text-3xl md:text-4xl leading-none"
+                  style={{ color: texteLisible(rankedListes[0].color || '#6B7280') }}>
+                  {rankedListes[0].name_fr}
+                </span>
+                <span className="block mt-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
+                  <span className="font-mono font-black text-xl" style={{ color: 'var(--p-text)' }}>
+                    <CountUp value={rankedListes[0]._seats} />
+                  </span> sièges projetés
+                  {rankedListes[1]?._seats > 0 && (
+                    <> · devant {rankedListes[1].name_fr} ({rankedListes[1]._seats})</>
+                  )}
+                </span>
+              </span>
+            </Link>
+          )}
+
+          {/* Compte à rebours */}
+          <div className="p-card col-span-2 p-5 flex flex-col items-center justify-center gap-3">
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>
+              Le scrutin approche
+            </span>
             <CountdownTimer />
           </div>
-        </motion.div>
+
+          {/* Qui tient la majorité */}
+          <div className="p-card p-4 flex flex-col justify-center">
+            <span className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-text-40)' }}>
+              Majorité (61)
+            </span>
+            {nobodyHasMajority ? (
+              <>
+                <span className="p-display text-xl leading-none" style={{ color: 'var(--p-gold-text)' }}>Personne</span>
+                <span className="text-[11px] mt-1.5" style={{ color: 'var(--p-text-60)' }}>
+                  {Math.max(coalitionSeats, oppositionSeats)} sièges pour le bloc le plus fort
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="p-display text-xl leading-none"
+                  style={{ color: leaderIsCoalition ? 'var(--p-blue)' : 'var(--p-red)' }}>
+                  {leaderIsCoalition ? 'Coalition' : 'Opposition'}
+                </span>
+                <span className="text-[11px] mt-1.5" style={{ color: 'var(--p-text-60)' }}>
+                  {Math.max(coalitionSeats, oppositionSeats)} sièges — la barre est franchie
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Ce qui se joue maintenant */}
+          {topMarket ? (
+            <Link to={createPageUrl('Paris')} className="p-card p-4 flex flex-col justify-center !items-stretch">
+              <span className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-gold-text)' }}>
+                Ça se joue
+              </span>
+              <span className="text-[12px] leading-snug line-clamp-2" style={{ color: 'var(--p-text)' }}>
+                {topMarket.question}
+              </span>
+              {topMarket.issues?.[0]?.cote != null && (
+                <span className="mt-1.5 font-mono font-black text-lg" style={{ color: 'var(--p-gold-text)' }}>
+                  ×{Number(topMarket.issues[0].cote).toFixed(2)}
+                </span>
+              )}
+            </Link>
+          ) : (
+            <Link to={createPageUrl('Listes')} className="p-card p-4 flex flex-col justify-center !items-stretch">
+              <span className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-gold-text)' }}>
+                À toi de jouer
+              </span>
+              <span className="text-[12px] leading-snug" style={{ color: 'var(--p-text)' }}>
+                Dépose ton pronostic sièges avant le 27 octobre.
+              </span>
+            </Link>
+          )}
+        </div>
       </div>
 
       {/* Classement des listes */}

@@ -162,6 +162,22 @@ function solidite(accords, total) {
   return (centre - marge) / (1 + (z * z) / total);
 }
 
+// Les cinq degrés de réponse. La VALEUR sert à la fois de direction (son signe)
+// et de poids (sa valeur absolue) : « tout à fait » compte double de « plutôt ».
+// Changer cette table suffit à changer la granularité du questionnaire.
+const DEGRES = [
+  { v: -1,   label: 'Pas du tout', aria: "Pas du tout d'accord", Icone: ThumbsDown, fort: true,
+    bg: 'var(--p-red-dim)',   bord: 'rgba(200,16,46,0.35)', teinte: 'var(--p-red)',      texte: 'var(--p-red)' },
+  { v: -0.5, label: 'Plutôt non', aria: "Plutôt pas d'accord", Icone: ThumbsDown, fort: false,
+    bg: 'var(--p-red-dim)',   bord: 'rgba(200,16,46,0.18)', teinte: 'var(--p-red)',      texte: 'var(--p-red)' },
+  { v: 0,    label: 'Neutre',      aria: 'Sans opinion',        Icone: Minus,      fort: false,
+    bg: 'var(--p-night-2)',   bord: 'var(--p-border)',      teinte: 'var(--p-text-40)',  texte: 'var(--p-text-60)' },
+  { v: 0.5,  label: 'Plutôt oui', aria: "Plutôt d'accord",     Icone: ThumbsUp,   fort: false,
+    bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.18)', teinte: 'var(--p-green)',    texte: '#16794A' },
+  { v: 1,    label: 'Tout à fait', aria: "Tout à fait d'accord", Icone: ThumbsUp,  fort: true,
+    bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.35)', teinte: 'var(--p-green)',    texte: '#16794A' },
+];
+
 function computeMatches(answers, bySlug) {
   const slugs = new Set();
   STATEMENTS.forEach(s => { s.pour.forEach(x => slugs.add(x)); s.contre.forEach(x => slugs.add(x)); });
@@ -178,19 +194,32 @@ function computeMatches(answers, bySlug) {
   for (const slug of slugs) {
     const liste = bySlug[slug];
     if (!liste) continue;
-    let agree = 0, disagree = 0;
+    // Réponse graduée : l'intensité sert de POIDS, pas de direction. Une
+    // affirmation à laquelle on répond « tout à fait d'accord » (1) pèse deux
+    // fois plus qu'un « plutôt d'accord » (0,5). C'est le seul endroit où
+    // l'intensité intervient — le sens de l'accord reste binaire, parce que les
+    // positions des partis, elles, le sont : on sait qu'un parti a voté pour une
+    // loi, on ne sait pas « à quel point ». Y mettre une intensité côté parti
+    // reviendrait à inventer de la donnée invérifiable.
+    let agree = 0, disagree = 0, compares = 0;
     STATEMENTS.forEach((st, i) => {
       const ua = answers[i];
-      if (!ua) return;
+      if (!ua) return;                                   // neutre ou sans réponse
       const stance = st.pour.includes(slug) ? 1 : st.contre.includes(slug) ? -1 : 0;
       if (!stance) return;
-      if (Math.sign(ua) === Math.sign(stance)) agree++; else disagree++;
+      const poids = Math.abs(ua);
+      if (Math.sign(ua) === stance) agree += poids; else disagree += poids;
+      compares++;
     });
-    const rel = agree + disagree;
+    // Somme des poids : c'est la taille d'échantillon EFFECTIVE, celle qui nourrit
+    // la borne de Wilson. `compares` reste le compte entier d'affirmations, plus
+    // parlant à l'écran que « 4,5 affirmations ».
+    const rel = compares;
+    const poidsTotal = agree + disagree;
     out.push({
       slug, liste, rel,
-      pct: rel ? Math.round((agree / rel) * 100) : 0,   // affiché
-      sol: solidite(agree, rel),                        // classant
+      pct: poidsTotal ? Math.round((agree / poidsTotal) * 100) : 0,   // affiché
+      sol: solidite(agree, poidsTotal),                               // classant
       couverture: COUVERTURE[slug] || 0,
     });
   }
@@ -256,7 +285,7 @@ export default function Boussole() {
             <motion.div key="wall" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><TrialWall plays={gate.plays} /></motion.div>
           ) : (
             <motion.div key="intro" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-card p-6 text-center">
-              <p className="p-body text-sm mb-5">Réponds franchement à chaque affirmation : <b>d'accord</b>, <b>neutre</b> ou <b>pas d'accord</b>. Pas de bonne réponse — juste toi 🧭</p>
+              <p className="p-body text-sm mb-5">Réponds franchement à chaque affirmation, de <b>pas du tout</b> à <b>tout à fait d'accord</b>. Plus tu es catégorique, plus l'affirmation pèse dans ton résultat. Pas de bonne réponse — juste toi 🧭</p>
               <button onClick={start} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-bold text-[15px] transition-transform hover:-translate-y-0.5"
                 style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -12px rgba(212,175,55,0.6)' }}>
                 Commencer <ArrowRight className="w-4 h-4" />
@@ -275,16 +304,21 @@ export default function Boussole() {
               <div className="p-card p-6 text-center min-h-[150px] flex items-center justify-center mb-4">
                 <p className="p-title text-lg leading-snug">{st.text}</p>
               </div>
-              <div className="grid grid-cols-3 gap-2">
-                <button onClick={() => answer(-1)} className="flex flex-col items-center gap-1 py-3.5 rounded-xl transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-red-dim)', border: '0.5px solid rgba(200,16,46,0.3)' }}>
-                  <ThumbsDown className="w-5 h-5" style={{ color: 'var(--p-red)' }} /><span className="text-[11px] font-bold" style={{ color: 'var(--p-red)' }}>Pas d'accord</span>
-                </button>
-                <button onClick={() => answer(0)} className="flex flex-col items-center gap-1 py-3.5 rounded-xl transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)' }}>
-                  <Minus className="w-5 h-5" style={{ color: 'var(--p-text-40)' }} /><span className="text-[11px] font-bold" style={{ color: 'var(--p-text-60)' }}>Neutre</span>
-                </button>
-                <button onClick={() => answer(1)} className="flex flex-col items-center gap-1 py-3.5 rounded-xl transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-green-dim)', border: '0.5px solid rgba(26,140,85,0.3)' }}>
-                  <ThumbsUp className="w-5 h-5" style={{ color: 'var(--p-green)' }} /><span className="text-[11px] font-bold" style={{ color: '#16794A' }}>D'accord</span>
-                </button>
+              {/* Cinq degrés plutôt que trois : l'intensité de l'accord porte de
+                  l'information que le binaire jetait. Cinq et non onze, parce
+                  qu'un curseur 0-10 sur 13 questions ajoute un geste de réglage
+                  PUIS une validation à chaque écran — ici tout se joue en un tap.
+                  Le calcul accepte n'importe quelle granularité : passer au
+                  curseur ne demanderait que de changer les valeurs ci-dessous. */}
+              <div className="grid grid-cols-5 gap-1.5">
+                {DEGRES.map(d => (
+                  <button key={d.v} onClick={() => answer(d.v)} aria-label={d.aria}
+                    className="flex flex-col items-center justify-start gap-1 py-3 px-1 rounded-xl transition-transform hover:-translate-y-0.5"
+                    style={{ background: d.bg, border: `0.5px solid ${d.bord}` }}>
+                    <d.Icone className={d.fort ? 'w-5 h-5' : 'w-4 h-4'} style={{ color: d.teinte }} />
+                    <span className="text-[10px] font-bold leading-tight text-center" style={{ color: d.texte }}>{d.label}</span>
+                  </button>
+                ))}
               </div>
             </motion.div>
           )}
@@ -347,10 +381,11 @@ export default function Boussole() {
               <p className="text-[10px] mt-4 leading-relaxed" style={{ color: 'var(--p-text-25)' }}>
                 Résultat indicatif, basé sur {STATEMENTS.length} affirmations. Ni un conseil de vote, ni une position de PrédiCité.<br />
                 Le pourcentage est calculé sur les seules affirmations où le parti se positionne : c'est le
-                nombre affiché après la barre. Un parti peu couvert peut donc afficher un score élevé sur peu
-                d'affirmations. La première affirmation porte sur Benyamin Netanyahou plutôt que sur une
-                politique : c'est l'axe qui structure la vie politique israélienne, et elle pèse donc plus
-                lourd que les autres dans ton résultat.
+                nombre affiché après la barre. Une réponse catégorique y pèse deux fois plus qu'une réponse
+                nuancée. Le classement, lui, tient compte du nombre d'affirmations comparées — 100 % sur trois
+                réponses est moins solide que 90 % sur dix. La première affirmation porte sur Benyamin
+                Netanyahou plutôt que sur une politique : c'est l'axe qui structure la vie politique
+                israélienne, et elle pèse donc plus lourd que les autres dans ton résultat.
               </p>
             </motion.div>
           )}

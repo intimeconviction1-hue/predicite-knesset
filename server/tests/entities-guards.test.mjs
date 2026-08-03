@@ -56,6 +56,13 @@ test('un visiteur anonyme ne peut pas écrire ni lire les données personnelles'
     assert.equal(await status(base, 'GET', '/PronosticSieges?user_email=autre@exemple.com'), 401);
   });
 
+  await t.test('ne peut pas sonder si une adresse est inscrite', async () => {
+    // Le classement reste public, mais filtrer sur l'e-mail d'autrui ferait de
+    // la route un oracle d'inscription. Refusé avant toute requête SQL.
+    const path = '/UserProgress?user_email=' + encodeURIComponent('autre@exemple.fr');
+    assert.equal(await status(base, 'GET', path), 403);
+  });
+
   await t.test('conserve l’accès en lecture aux données de référence (mode invité)', async () => {
     // Le garde laisse passer ; la requête échoue ensuite faute de vraie base,
     // ce qui suffit à prouver qu'elle n'a pas été bloquée par l'authentification.

@@ -164,6 +164,22 @@ ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS bloc_bonus_points INTEGER NOT
 -- client/src/lib/score.js et functions/ligues.js, à garder synchronisés.
 ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS participation_points INTEGER NOT NULL DEFAULT 0;
 
+-- Nom affiché publiquement dans le classement. GET /api/entities/UserProgress
+-- renvoyait l'adresse e-mail complète à n'importe quel visiteur : associer une
+-- adresse nominative à un pronostic sur ce scrutin est un risque pour
+-- l'utilisateur, pas seulement pour le site. L'e-mail n'est désormais plus
+-- jamais renvoyé pour la ligne de quelqu'un d'autre (voir routes/entities.js).
+ALTER TABLE user_progress ADD COLUMN IF NOT EXISTS display_name TEXT;
+
+-- Rétro-remplissage par un pseudonyme stable dérivé de l'e-mail — même
+-- convention que functions/ligues.js. On n'utilise PAS users.full_name : il
+-- vaut la partie avant l'arobase quand l'utilisateur n'a pas saisi de nom,
+-- ce qui reviendrait à réexposer l'adresse. Idempotent, donc rejouable à
+-- chaque démarrage.
+UPDATE user_progress
+   SET display_name = 'Joueur ' || substr(md5(user_email), 1, 4)
+ WHERE display_name IS NULL OR display_name = '';
+
 CREATE TABLE IF NOT EXISTS badges (
   id TEXT PRIMARY KEY,
   code TEXT UNIQUE NOT NULL, -- 'analyste_precis' | 'politologue' | 'faiseur_de_rois' | ...

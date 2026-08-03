@@ -11,6 +11,11 @@ import ProgressionPalier from '@/components/knesset/ProgressionPalier';
 
 const formatFr = (v) => Math.round(v).toLocaleString('fr-FR');
 
+// Le classement s'affiche sur display_name. Le serveur ne renvoie plus l'e-mail
+// des autres joueurs (voir server/routes/entities.js) : il n'est présent que
+// sur sa propre ligne, ce qui sert uniquement à se reconnaître dans la liste.
+const nomAffiche = (p) => p?.display_name?.trim() || 'Joueur';
+
 export default function Leaderboard() {
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,7 +34,7 @@ export default function Leaderboard() {
   // formule que les ligues, voir lib/score.js).
   const ranked = [...allUsers].sort((a, b) => computeScore(b) - computeScore(a));
   const filteredUsers = ranked.filter(u =>
-    u.user_email?.toLowerCase().includes(searchQuery.toLowerCase())
+    nomAffiche(u).toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const currentUserRank = ranked.findIndex(u => u.user_email === user?.email) + 1;
@@ -150,10 +155,10 @@ export default function Leaderboard() {
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2"
                 style={{ background: 'rgba(176,184,200,0.15)', border: '0.5px solid rgba(176,184,200,0.3)', color: '#B0B8C8', fontFamily: 'var(--font-display)' }}>
-                {topThree[1]?.user_email?.charAt(0).toUpperCase()}
+                {nomAffiche(topThree[1]).charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium truncate max-w-[90px] text-center" style={{ color: 'var(--p-text-60)' }}>
-                {topThree[1]?.user_email?.split('@')[0]}
+                {nomAffiche(topThree[1])}
               </p>
               <p className="p-mono text-sm" style={{ color: '#B0B8C8' }}>
                 <CountUp value={getScore(topThree[1])} duration={900} delay={200} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[1])}</span>
@@ -174,10 +179,10 @@ export default function Leaderboard() {
               <Crown className="w-7 h-7 mb-2" style={{ color: 'var(--p-gold)' }} />
               <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold mb-2"
                 style={{ background: 'var(--p-gold-dim)', border: '2px solid var(--p-gold)', color: 'var(--p-gold)', fontFamily: 'var(--font-display)' }}>
-                {topThree[0]?.user_email?.charAt(0).toUpperCase()}
+                {nomAffiche(topThree[0]).charAt(0).toUpperCase()}
               </div>
               <p className="font-bold truncate max-w-[110px] text-center" style={{ color: 'var(--p-text)', fontFamily: 'var(--font-display)' }}>
-                {topThree[0]?.user_email?.split('@')[0]}
+                {nomAffiche(topThree[0])}
               </p>
               <p className="p-mono text-base" style={{ color: 'var(--p-gold)' }}>
                 <CountUp value={getScore(topThree[0])} duration={900} delay={100} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[0])}</span>
@@ -197,10 +202,10 @@ export default function Leaderboard() {
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2"
                 style={{ background: 'rgba(205,127,50,0.15)', border: '0.5px solid rgba(205,127,50,0.3)', color: '#CD7F32', fontFamily: 'var(--font-display)' }}>
-                {topThree[2]?.user_email?.charAt(0).toUpperCase()}
+                {nomAffiche(topThree[2]).charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium truncate max-w-[90px] text-center" style={{ color: 'var(--p-text-60)' }}>
-                {topThree[2]?.user_email?.split('@')[0]}
+                {nomAffiche(topThree[2])}
               </p>
               <p className="p-mono text-sm" style={{ color: '#CD7F32' }}>
                 <CountUp value={getScore(topThree[2])} duration={900} delay={300} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[2])}</span>
@@ -257,14 +262,17 @@ export default function Leaderboard() {
                 </div>
               ))
             ) : (searchQuery ? filteredUsers : rest).map((player, index) => {
+              // Comparaison par id : l'e-mail est absent des lignes d'autrui,
+              // et deux absences se confondraient. On cherche dans `ranked`,
+              // qui est l'ordre réellement affiché (par Score, pas par points).
               const position = searchQuery
-                ? allUsers.findIndex(u => u.user_email === player.user_email) + 1
+                ? ranked.findIndex(u => u.id === player.id) + 1
                 : index + 4;
               const isCurrentUser = player.user_email === user?.email;
 
               return (
                 <motion.div
-                  key={player.user_email}
+                  key={player.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.04 }}
@@ -289,14 +297,14 @@ export default function Leaderboard() {
                   {/* Avatar */}
                   <div className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold shrink-0"
                     style={{ background: isCurrentUser ? 'var(--p-gold)' : 'var(--p-card)', color: isCurrentUser ? 'var(--p-ink)' : 'var(--p-text-60)', fontFamily: 'var(--font-display)' }}>
-                    {player.user_email?.charAt(0).toUpperCase()}
+                    {nomAffiche(player).charAt(0).toUpperCase()}
                   </div>
 
                   {/* Nom */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <p className="font-medium truncate text-sm" style={{ color: 'var(--p-text)', fontFamily: 'var(--font-body)' }}>
-                        {player.user_email?.split('@')[0]}
+                        {nomAffiche(player)}
                       </p>
                       {isCurrentUser && (
                         <span className="p-badge p-badge-gold text-[9px] px-2 py-0.5">Vous</span>

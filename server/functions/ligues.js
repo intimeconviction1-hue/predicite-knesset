@@ -110,6 +110,11 @@ export async function ligueLeaderboard(user_email, body) {
   const membership = await queryOne('SELECT id FROM ligue_membres WHERE ligue_id = ? AND user_email = ?', [ligue_id, user_email]);
   if (!membership) { const e = new Error("Tu ne fais pas partie de cette ligue."); e.status = 403; throw e; }
 
+  // Le nom vient de user_progress.display_name, seule identité publique. Il
+  // venait de users.full_name, qui vaut la partie avant l'arobase quand le
+  // champ est laissé vide à l'inscription — ce qui réexposait l'adresse.
+  // user_email ne sert qu'au drapeau is_you et n'est jamais renvoyé au client.
+  //
   // SCORE unique = même formule que le classement général (client lib/score.js) :
   // précision (total − quiz − régularité − participation, = pronostics + 25 %
   // des gains de paris) + quiz plafonné à 300 + régularité plafonnée à 900
@@ -123,10 +128,9 @@ export async function ligueLeaderboard(user_email, body) {
               + LEAST(COALESCE(up.participation_points, 0), 720))  AS score,
             COALESCE(up.predictions_count, 0)   AS predictions_count,
             COALESCE(up.correct_predictions, 0) AS correct_predictions,
-            COALESCE(NULLIF(usr.full_name, ''), 'Joueur ' || substr(md5(lm.user_email), 1, 4)) AS name
+            COALESCE(NULLIF(up.display_name, ''), 'Joueur ' || substr(md5(lm.user_email), 1, 4)) AS name
      FROM ligue_membres lm
      LEFT JOIN user_progress up ON up.user_email = lm.user_email
-     LEFT JOIN users usr        ON usr.email     = lm.user_email
      WHERE lm.ligue_id = ?
      ORDER BY score DESC, name ASC`,
     [ligue_id]

@@ -1,5 +1,5 @@
 import express from 'express';
-import { randomUUID, timingSafeEqual } from 'node:crypto';
+import { randomUUID, timingSafeEqual, createHash } from 'node:crypto';
 import { queryOne, run } from '../db/index.js';
 
 /**
@@ -111,10 +111,14 @@ router.post('/login', async (req, res, next) => {
       );
       user = await queryOne('SELECT * FROM users WHERE id = ?', [id]);
 
-      // Initialise la progression utilisateur (équivalent ensureUserProgress)
+      // Initialise la progression utilisateur (équivalent ensureUserProgress).
+      // display_name est le SEUL nom exposé publiquement dans le classement :
+      // on part du nom réellement saisi, jamais de user.full_name, qui vaut la
+      // partie avant l'arobase quand le champ est laissé vide.
+      const display_name = full_name || `Joueur ${createHash('md5').update(email).digest('hex').slice(0, 4)}`;
       await run(
-        'INSERT INTO user_progress (id, user_email) VALUES (?, ?) ON CONFLICT (user_email) DO NOTHING',
-        [randomUUID(), email]
+        'INSERT INTO user_progress (id, user_email, display_name) VALUES (?, ?, ?) ON CONFLICT (user_email) DO NOTHING',
+        [randomUUID(), email, display_name]
       );
     }
 

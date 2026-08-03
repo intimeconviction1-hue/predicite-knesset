@@ -42,6 +42,40 @@ const USER_WRITABLE = new Set(['PronosticPM']);
 // scoring côté serveur.
 const SERVER_OWNED_FIELDS = ['points_earned', 'is_correct', 'created_at'];
 
+/**
+ * Champs jamais renvoyés sur la ligne de quelqu'un d'autre.
+ *
+ * UserProgress doit rester lisible sans compte — c'est le classement, que le
+ * mode invité affiche. Mais l'adresse e-mail de chaque joueur n'a rien à y
+ * faire : associer une adresse nominative à un pronostic sur ce scrutin est un
+ * risque pour l'utilisateur. Le classement s'affiche donc sur display_name.
+ */
+const CHAMPS_PRIVES = { UserProgress: ['user_email'] };
+
+function projeter(req, name, rows) {
+  const champs = CHAMPS_PRIVES[name];
+  if (!champs || req.user?.role === 'admin') return rows;
+  const moi = req.user?.email;
+  return rows.map(row => {
+    if (moi && row.user_email === moi) return row; // sa propre ligne, intacte
+    const out = { ...row };
+    for (const champ of champs) delete out[champ];
+    return out;
+  });
+}
+
+/**
+ * Masquer le champ ne suffit pas : filtrer dessus ferait de la route un oracle
+ * d'inscription — la réponse dirait si telle adresse a un compte. Le filtre
+ * n'est donc autorisé que sur sa propre ligne.
+ */
+function filtreRefuse(req, name, where) {
+  if (!CHAMPS_PRIVES[name] || req.user?.role === 'admin') return null;
+  if (where.user_email === undefined) return null;
+  if (req.user?.email && where.user_email === req.user.email) return null;
+  return 'Filtrer sur user_email est réservé à sa propre ligne.';
+}
+
 function requireKnownEntity(req, res, next) {
   if (!ENTITY_CONFIG[req.params.name]) {
     return res.status(404).json({ error: `Entité inconnue : ${req.params.name}` });
@@ -82,8 +116,11 @@ router.get('/:name', readGuard, async (req, res) => {
     if (OWNER_SCOPED.has(req.params.name) && req.user.role !== 'admin') {
       where.user_email = req.user.email;
     }
+    const refus = filtreRefuse(req, req.params.name, where);
+    if (refus) return res.status(403).json({ error: refus });
+
     const rows = await queryEntity(req.params.name, { where, sort: _sort, limit: _limit });
-    res.json(rows);
+    res.json(projeter(req, req.params.name, rows));
   } catch (e) {
     res.status(400).json({ error: e.message });
   }

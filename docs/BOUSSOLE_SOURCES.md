@@ -287,7 +287,43 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 13 paires (2026-08-03)
+### Avancement : 20 → 12 paires (2026-08-03)
+
+**Résolu — Les Démocrates vs Hadash-Ta'al, dernière paire du foyer
+gauche/arabe.** Nouvelle affirmation : Israël comme État juif plutôt que comme
+« État de tous ses citoyens ».
+
+Hadash est explicitement **non sioniste** — héritier du parti communiste Maki, il
+promeut la coopération judéo-arabe et défend un État de tous ses citoyens. Yair
+Golan revendique à l'inverse « l'âme démocratique **et sioniste** de l'État
+d'Israël », et distingue lui-même son parti des partis arabes en appelant
+l'« opposition sioniste » à travailler avec Ra'am.
+
+**Shas et le JUT en sont absents à dessein.** Les partis haredim sont
+doctrinalement non sionistes : ils participent à l'État sans adhérer au sionisme
+comme idéologie. Les ranger d'un côté ou de l'autre trahirait une position
+théologique que ni « pour » ni « contre » ne rend. **Ra'am aussi**, faute de
+source : il travaille dans le cadre de l'État sans s'en réclamer.
+
+  - https://jewishvirtuallibrary.org/hadash-political-party
+  - https://www.timesofisrael.com/liveblog_entry/the-democrats-golan-tonight-the-fight-begins-for-the-democratic-and-zionist-soul-of-israel/
+
+  **Certitude : élevée.** Effet : Hadash-Ta'al et Les Démocrates sortent tous deux
+  de la liste. Le foyer gauche/arabe est entièrement réglé.
+
+### Inférence refusée — Ben Gvir et la conscription des haredim
+
+Piste explorée puis **écartée**. Ben Gvir déclare, à propos de l'enrôlement des
+haredim : « Je ne pense pas que la contrainte aidera. » C'est une position sur la
+**méthode**, pas sur le maintien de l'exemption. En tirer un « pour » à
+l'affirmation 4 aurait séparé Otzma Yehudit du Sionisme religieux — donc gagné une
+paire — mais au prix exact de l'inférence rejetée pour le JUT sur la sécurité et
+pour Les Réservistes sur la halakha.
+
+Gagner une paire ne justifie pas d'abaisser le standard. Consigné pour que
+personne ne refasse le chemin en croyant à une piste neuve.
+
+  - https://www.timesofisrael.com/liveblog_entry/ben-gvir-on-haredi-draft-i-dont-think-coercion-will-help/
 
 **Résolu — Yisrael Beytenou vs Les Réservistes.** Nouvelle affirmation : accepter
 ou non de gouverner avec Netanyahou. C'est la question centrale du scrutin, et

@@ -128,6 +128,22 @@ const STATEMENTS = [
     pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
 
+  // Affirmation DISCRIMINANTE : elle sépare la gauche sioniste de la gauche arabe,
+  // dernière paire confondue de ce foyer. Hadash est un parti explicitement NON
+  // SIONISTE, héritier du parti communiste, qui défend un « État de tous ses
+  // citoyens » ; Yair Golan revendique à l'inverse « l'âme démocratique et
+  // sioniste de l'État d'Israël ».
+  //
+  // Shas et le JUT en sont absents À DESSEIN, et ce n'est pas un oubli : les
+  // partis haredim sont doctrinalement non sionistes — ils participent à l'État
+  // sans adhérer au sionisme comme idéologie. Les ranger d'un côté ou de l'autre
+  // trahirait une position théologique que ni « pour » ni « contre » ne rend.
+  // Ra'am aussi, faute de source : il travaille dans le cadre de l'État sans
+  // s'en réclamer.
+  { text: "Israël doit rester défini comme un État juif, plutôt que comme « l'État de tous ses citoyens ».",
+    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper', 'les-democrates'],
+    contre: ['hadash-ta-al-liste-commune'] },
+
   // Affirmation DISCRIMINANTE dans le centre, et question centrale du scrutin :
   // accepter de gouverner AVEC Netanyahou, ou en faire une ligne rouge. Gantz a
   // proposé en août 2025 un « gouvernement de rédemption des otages » à mandat de

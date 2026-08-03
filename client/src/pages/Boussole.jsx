@@ -126,7 +126,21 @@ function computeMatches(answers, bySlug) {
     const rel = agree + disagree;
     out.push({ slug, liste, pct: rel ? Math.round((agree / rel) * 100) : 0, rel, couverture: COUVERTURE[slug] || 0 });
   }
-  return out.sort((a, b) => b.pct - a.pct || b.rel - a.rel);
+  // Le tri décide du parti proclamé « le plus proche ». Constaté en production le
+  // 2026-08-03 : Yashar et Ensemble sortaient tous deux à 86 % sur 7 affirmations,
+  // et le titre revenait à l'un des deux selon l'ordre d'itération du Set — un
+  // détail d'implémentation. On départage donc explicitement :
+  //   1. le pourcentage d'accord ;
+  //   2. le nombre d'affirmations réellement comparées (plus il est élevé, plus
+  //      le pourcentage est solide) ;
+  //   3. la couverture totale du parti — à égalité, on préfère celui dont on
+  //      documente le plus de positions plutôt qu'un parti mal renseigné ;
+  //   4. le nom, pour que le résultat soit stable d'une partie à l'autre.
+  return out.sort((a, b) =>
+    b.pct - a.pct ||
+    b.rel - a.rel ||
+    b.couverture - a.couverture ||
+    (a.liste.name_fr || '').localeCompare(b.liste.name_fr || '', 'fr'));
 }
 
 export default function Boussole() {
@@ -216,17 +230,24 @@ export default function Boussole() {
                 {' '}sur <b>{top.rel}</b> affirmation{top.rel > 1 ? 's' : ''} où ce parti se positionne
               </p>
 
-              <div className="space-y-2 mb-5 text-left">
+              {/* Nom sur sa propre ligne, barre en dessous : « Judaïsme unifié de
+                  la Torah » ou « Hadash-Ta'al / Liste commune » ne tiennent pas
+                  dans une colonne fixe. L'ancienne mise en page les tronquait,
+                  d'autant plus depuis que la colonne du pourcentage porte aussi
+                  le dénominateur. */}
+              <div className="space-y-3 mb-5 text-left">
                 {matches.slice(0, 4).map((m, i) => (
-                  <div key={m.slug} className="flex items-center gap-2">
-                    <span className="text-xs w-36 shrink-0 truncate" style={{ color: 'var(--p-text-60)', fontWeight: i === 0 ? 700 : 400 }}>{m.liste.name_fr}</span>
-                    <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
+                  <div key={m.slug}>
+                    <div className="flex items-baseline justify-between gap-3 mb-1">
+                      <span className="text-xs leading-snug" style={{ color: 'var(--p-text-60)', fontWeight: i === 0 ? 700 : 400 }}>{m.liste.name_fr}</span>
+                      <span className="text-xs font-mono font-bold shrink-0" style={{ color: 'var(--p-text)' }}>
+                        {m.pct}%
+                        <span className="font-normal" style={{ color: 'var(--p-text-40)' }}>/{m.rel}</span>
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
                       <div className="h-full rounded-full" style={{ width: `${m.pct}%`, background: m.liste.color || '#6B7280' }} />
                     </div>
-                    <span className="text-xs font-mono font-bold w-16 text-right shrink-0" style={{ color: 'var(--p-text)' }}>
-                      {m.pct}%
-                      <span className="font-normal" style={{ color: 'var(--p-text-40)' }}>/{m.rel}</span>
-                    </span>
                   </div>
                 ))}
               </div>

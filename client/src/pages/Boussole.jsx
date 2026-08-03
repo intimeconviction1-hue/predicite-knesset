@@ -2,29 +2,41 @@ import React, { useState, useMemo } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass, ThumbsUp, ThumbsDown, Minus, RotateCcw, ArrowRight, Share2 } from 'lucide-react';
+import { Compass, ThumbsUp, ThumbsDown, Minus, RotateCcw, ArrowRight } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import { texteLisible } from '@/lib/couleurs';
 import TrialWall from '@/components/knesset/TrialWall';
 
 // ⚠️ CONTENU VALIDÉ AVEC DAVID (2026-08) — positions des partis par affirmation.
 // pour = plutôt d'accord, contre = plutôt contre, le reste = neutre.
+//
+// Les slugs ci-dessous DOIVENT correspondre à une Liste réelle (slug dérivé de
+// name_fr par server/scripts/seed-listes.js). « yachad-bennett » a été retiré le
+// 2026-08-03 : ce nom désignait une liste fantôme héritée de Base44, absente de
+// tout seed, qui coexistait en base avec « ensemble-bennett-lapid » et pouvait
+// donc sortir en tête de la boussole alors qu'elle n'existe plus depuis avril.
+// La garde de cohérence en bas de computeMatches empêche que ça se reproduise.
 const STATEMENTS = [
   { text: 'Benyamin Netanyahou doit rester Premier ministre.',
     pour: ['likoud', 'shas', 'judaisme-unifie-de-la-torah', 'otzma-yehudit', 'sionisme-religieux'],
-    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'yachad-bennett', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux'],
-    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'yachad-bennett', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   { text: 'Les étudiants des yeshivot (Haredim) doivent rester exemptés de service militaire.',
     pour: ['shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid', 'unite-nationale'] },
+  // ⚠️ TROU ASSUMÉ : « Ensemble » n'a pas de position ici. Le slug fantôme
+  // yachad-bennett était son SEUL porteur sur cette affirmation (ailleurs il
+  // faisait doublon avec ensemble-bennett-lapid). Le trancher demande un
+  // arbitrage éditorial — Bennett refuse un État palestinien, Lapid soutient
+  // la négociation — donc on laisse le trou visible plutôt que d'inventer.
   { text: 'Il faut relancer des négociations de paix avec les Palestiniens.',
     pour: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'],
-    contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yachad-bennett'] },
+    contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux'] },
   { text: 'Il faut étendre les implantations, voire annexer une partie de la Cisjordanie.',
     pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale'] },
@@ -32,7 +44,7 @@ const STATEMENTS = [
     pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
     contre: ['otzma-yehudit', 'sionisme-religieux'] },
   { text: 'Face au Hamas et à l\'Iran, la fermeté sécuritaire prime sur tout.',
-    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yachad-bennett', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale'],
+    pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
   { text: 'Les partis ultra-orthodoxes ont trop d\'influence sur la vie quotidienne.',
     pour: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid'],
@@ -42,9 +54,28 @@ const STATEMENTS = [
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
 ];
 
+// Nombre d'affirmations où chaque liste se positionne. C'est le DÉNOMINATEUR
+// du pourcentage d'affinité : un parti qui ne se prononce que sur 4 des 10
+// affirmations peut afficher 100 % là où un parti couvert sur 10 plafonne.
+// On l'expose à l'écran plutôt que de laisser croire à dix critères de poids égal.
+const COUVERTURE = (() => {
+  const n = {};
+  STATEMENTS.forEach(s => [...s.pour, ...s.contre].forEach(x => { n[x] = (n[x] || 0) + 1; }));
+  return n;
+})();
+
 function computeMatches(answers, bySlug) {
   const slugs = new Set();
   STATEMENTS.forEach(s => { s.pour.forEach(x => slugs.add(x)); s.contre.forEach(x => slugs.add(x)); });
+
+  // Garde de cohérence : un slug qui ne correspond à aucune liste active fausse
+  // silencieusement le résultat (c'est ce qui s'est passé avec yachad-bennett).
+  // En dev on le signale bruyamment ; en prod on l'ignore sans casser la page.
+  if (import.meta.env?.DEV && Object.keys(bySlug).length > 0) {
+    const orphelins = [...slugs].filter(s => !bySlug[s]);
+    if (orphelins.length) console.error('[Boussole] slugs sans liste correspondante :', orphelins.join(', '));
+  }
+
   const out = [];
   for (const slug of slugs) {
     const liste = bySlug[slug];
@@ -58,7 +89,7 @@ function computeMatches(answers, bySlug) {
       if (Math.sign(ua) === Math.sign(stance)) agree++; else disagree++;
     });
     const rel = agree + disagree;
-    out.push({ slug, liste, pct: rel ? Math.round((agree / rel) * 100) : 0, rel });
+    out.push({ slug, liste, pct: rel ? Math.round((agree / rel) * 100) : 0, rel, couverture: COUVERTURE[slug] || 0 });
   }
   return out.sort((a, b) => b.pct - a.pct || b.rel - a.rel);
 }
@@ -145,7 +176,10 @@ export default function Boussole() {
                 <span className="w-4 h-4 rounded-full" style={{ background: top.liste.color || '#6B7280' }} />
                 <span className="p-display text-2xl" style={{ color: top.liste.color ? texteLisible(top.liste.color) : 'var(--p-text)' }}>{top.liste.name_fr}</span>
               </div>
-              <p className="p-body text-sm mb-5"><b className="font-mono" style={{ color: 'var(--p-text)' }}>{top.pct}%</b> d'affinité sur tes réponses</p>
+              <p className="p-body text-sm mb-5">
+                <b className="font-mono" style={{ color: 'var(--p-text)' }}>{top.pct}%</b> d'affinité,
+                {' '}sur <b>{top.rel}</b> affirmation{top.rel > 1 ? 's' : ''} où ce parti se positionne
+              </p>
 
               <div className="space-y-2 mb-5 text-left">
                 {matches.slice(0, 4).map((m, i) => (
@@ -154,7 +188,10 @@ export default function Boussole() {
                     <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
                       <div className="h-full rounded-full" style={{ width: `${m.pct}%`, background: m.liste.color || '#6B7280' }} />
                     </div>
-                    <span className="text-xs font-mono font-bold w-10 text-right shrink-0" style={{ color: 'var(--p-text)' }}>{m.pct}%</span>
+                    <span className="text-xs font-mono font-bold w-16 text-right shrink-0" style={{ color: 'var(--p-text)' }}>
+                      {m.pct}%
+                      <span className="font-normal" style={{ color: 'var(--p-text-40)' }}>/{m.rel}</span>
+                    </span>
                   </div>
                 ))}
               </div>
@@ -170,7 +207,14 @@ export default function Boussole() {
                   <RotateCcw className="w-4 h-4" /> Refaire
                 </button>
               </div>
-              <p className="text-[10px] mt-4" style={{ color: 'var(--p-text-25)' }}>Résultat indicatif, basé sur 10 affirmations. Ni un conseil de vote, ni une position de PrédiCité.</p>
+              <p className="text-[10px] mt-4 leading-relaxed" style={{ color: 'var(--p-text-25)' }}>
+                Résultat indicatif, basé sur 10 affirmations. Ni un conseil de vote, ni une position de PrédiCité.<br />
+                Le pourcentage est calculé sur les seules affirmations où le parti se positionne : c'est le
+                nombre affiché après la barre. Un parti peu couvert peut donc afficher un score élevé sur peu
+                d'affirmations. La première affirmation porte sur Benyamin Netanyahou plutôt que sur une
+                politique : c'est l'axe qui structure la vie politique israélienne, et elle pèse donc plus
+                lourd que les autres dans ton résultat.
+              </p>
             </motion.div>
           )}
         </AnimatePresence>

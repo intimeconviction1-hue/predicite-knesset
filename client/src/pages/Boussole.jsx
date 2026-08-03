@@ -22,7 +22,7 @@ import TrialWall from '@/components/knesset/TrialWall';
 // positions antérieures à cette date n'ont pas encore été sourcées : c'est une
 // dette connue, listée en fin de ce même document.
 //
-// TROUS VOLONTAIRES — ces partis ne couvrent pas les 10 affirmations, et ce ne
+// TROUS VOLONTAIRES — ces partis ne couvrent pas toutes les affirmations, et ce ne
 // sont PAS des oublis. Sur les négociations de paix (5) et les implantations (6),
 // ni Shas, ni le JUT, ni Les Réservistes n'ont de ligne propre et stable : l'IDI
 // relève même que Shas « soutient la conclusion d'accords de paix avec les États
@@ -91,6 +91,35 @@ const STATEMENTS = [
   // Shas et le JUT sont des partis SOCIAUX autant que religieux : ils défendent
   // les allocations et le soutien public aux familles nombreuses, donc contre le
   // désengagement de l'État. C'est leur ligne la mieux établie hors du religieux.
+  // ── Ajoutées le 2026-08-03 pour élargir les dénominateurs ────────────────────
+  // Avec 10 affirmations et une couverture partielle, beaucoup de parties se
+  // jouaient sur 4 ou 5 comparaisons — d'où les 100 % en pagaille. Ces trois-là
+  // ont été choisies parce qu'elles CLIVENT et qu'elles se sourcent : la première
+  // repose même sur un appel nominal. Détail dans docs/BOUSSOLE_SOURCES.md.
+
+  // Loi votée le 30/03/2026 par 62 voix contre 48, à l'initiative d'Otzma
+  // Yehudit. Le JUT est absent des deux camps À DESSEIN : ses deux composantes
+  // se sont séparées, Degel HaTorah votant pour et Agoudat Israël s'abstenant.
+  { text: 'Les terroristes condamnés doivent encourir la peine de mort.',
+    pour: ['otzma-yehudit', 'likoud', 'shas', 'sionisme-religieux', 'yisrael-beytenou'],
+    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'unite-nationale'] },
+
+  // La coalition a confirmé qu'aucune commission d'enquête d'État ne serait
+  // créée avant le scrutin ; l'opposition refuse de participer au format
+  // alternatif proposé. C'est un pilier déclaré du programme des Réservistes,
+  // de celui de Bennett, et une position explicite d'Eisenkot.
+  { text: "Il faut une commission d'enquête d'État indépendante sur le 7 octobre.",
+    pour: ['yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'les-reservistes-hendel-tropper', 'les-democrates', 'unite-nationale', 'yisrael-beytenou'],
+    contre: ['likoud', 'shas', 'judaisme-unifie-de-la-torah', 'otzma-yehudit', 'sionisme-religieux'] },
+
+  // Bennett, 25/04/2026 : « les villes doivent pouvoir choisir si elles veulent
+  // des transports publics le shabbat » et « chacun en Israël devrait pouvoir
+  // concrétiser son amour dans ce pays sans partir à l'étranger ». Shas lui a
+  // répondu qu'il était « prêt à brader l'identité juive du pays ».
+  { text: 'Il faut le mariage civil et des transports publics le shabbat.',
+    pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
+    contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
+
   { text: "L'État doit moins intervenir dans l'économie (plus de libéralisme).",
     pour: ['likoud', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'shas', 'judaisme-unifie-de-la-torah'] },
@@ -105,6 +134,33 @@ const COUVERTURE = (() => {
   STATEMENTS.forEach(s => [...s.pour, ...s.contre].forEach(x => { n[x] = (n[x] || 0) + 1; }));
   return n;
 })();
+
+// SOLIDITÉ D'UN SCORE — borne inférieure de l'intervalle de Wilson à 95 %.
+//
+// Le taux d'accord brut traite « 100 % sur 4 affirmations » et « 100 % sur 10 »
+// comme équivalents, alors que le second est bien mieux établi. Constaté en
+// production le 2026-08-03 : quatre partis à 100 %, quatre barres pleines, et un
+// seul proclamé le plus proche — une hiérarchie qui n'existait pas.
+//
+// Plutôt que de bricoler un seuil arbitraire (« au moins 5 affirmations »), on
+// classe sur ce que les données GARANTISSENT : la borne basse de l'intervalle de
+// confiance du taux d'accord. Un petit échantillon est pénalisé automatiquement,
+// proportionnellement à son incertitude.
+//
+//   100 % sur 10 → 0,72     100 % sur 5 → 0,57     100 % sur 4 → 0,51
+//    90 % sur 10 → 0,60      86 % sur 7 → 0,49
+//
+// Un 90 % bien établi passe donc devant un 100 % mince — c'est le jugement voulu.
+// Le pourcentage AFFICHÉ reste le taux brut, qui est ce que l'utilisateur a
+// réellement répondu ; seul le classement utilise cette borne.
+function solidite(accords, total) {
+  if (!total) return 0;
+  const z = 1.96;                       // 95 %
+  const p = accords / total;
+  const centre = p + (z * z) / (2 * total);
+  const marge = z * Math.sqrt((p * (1 - p) + (z * z) / (4 * total)) / total);
+  return (centre - marge) / (1 + (z * z) / total);
+}
 
 function computeMatches(answers, bySlug) {
   const slugs = new Set();
@@ -131,21 +187,21 @@ function computeMatches(answers, bySlug) {
       if (Math.sign(ua) === Math.sign(stance)) agree++; else disagree++;
     });
     const rel = agree + disagree;
-    out.push({ slug, liste, pct: rel ? Math.round((agree / rel) * 100) : 0, rel, couverture: COUVERTURE[slug] || 0 });
+    out.push({
+      slug, liste, rel,
+      pct: rel ? Math.round((agree / rel) * 100) : 0,   // affiché
+      sol: solidite(agree, rel),                        // classant
+      couverture: COUVERTURE[slug] || 0,
+    });
   }
-  // Le tri décide du parti proclamé « le plus proche ». Constaté en production le
-  // 2026-08-03 : Yashar et Ensemble sortaient tous deux à 86 % sur 7 affirmations,
-  // et le titre revenait à l'un des deux selon l'ordre d'itération du Set — un
-  // détail d'implémentation. On départage donc explicitement :
-  //   1. le pourcentage d'accord ;
-  //   2. le nombre d'affirmations réellement comparées (plus il est élevé, plus
-  //      le pourcentage est solide) ;
-  //   3. la couverture totale du parti — à égalité, on préfère celui dont on
-  //      documente le plus de positions plutôt qu'un parti mal renseigné ;
-  //   4. le nom, pour que le résultat soit stable d'une partie à l'autre.
+  // Classement par solidité, pas par taux brut : voir solidite() plus haut. Le
+  // nombre d'affirmations comparées est déjà intégré à la borne, inutile de le
+  // remettre comme critère. Restent deux départages, pour les cas où deux partis
+  // ont exactement les mêmes données : la couverture totale (on préfère celui
+  // dont on documente le plus de positions), puis le nom, pour que le résultat
+  // soit stable d'une partie à l'autre plutôt que livré à l'ordre d'un Set.
   return out.sort((a, b) =>
-    b.pct - a.pct ||
-    b.rel - a.rel ||
+    b.sol - a.sol ||
     b.couverture - a.couverture ||
     (a.liste.name_fr || '').localeCompare(b.liste.name_fr || '', 'fr'));
 }
@@ -171,6 +227,14 @@ export default function Boussole() {
 
   const matches = useMemo(() => (phase === 'done' ? computeMatches(answers, bySlug) : []), [phase, answers, bySlug]);
   const top = matches[0];
+  // Partis dont les données sont STRICTEMENT indiscernables de celles du premier
+  // (même taux, même nombre d'affirmations comparées → même solidité). Les
+  // départager par la couverture ou le nom suffit à obtenir un ordre stable, mais
+  // pas à justifier qu'on en couronne un seul : ici on le dit.
+  const exAequo = useMemo(
+    () => (top ? matches.filter(m => Math.abs(m.sol - top.sol) < 1e-9) : []),
+    [matches, top],
+  );
   const gold = 'var(--p-gold-text)';
   const st = STATEMENTS[idx];
 
@@ -183,7 +247,7 @@ export default function Boussole() {
           <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: gold }}>Jeu · mode découverte</span>
         </div>
         <h1 className="p-display text-3xl md:text-4xl mb-2">Quel parti te ressemble ?</h1>
-        <p className="p-body text-sm max-w-md mx-auto">10 affirmations, tes réponses, et on te dit de quel parti tu es le plus proche. Aucun compte requis pour essayer.</p>
+        <p className="p-body text-sm max-w-md mx-auto">{STATEMENTS.length} affirmations, tes réponses, et on te dit de quel parti tu es le plus proche. Aucun compte requis pour essayer.</p>
       </div>
 
       <div className="max-w-md mx-auto px-4 pb-16">
@@ -227,14 +291,24 @@ export default function Boussole() {
 
           {phase === 'done' && top && (
             <motion.div key="done" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="p-card p-6 text-center">
-              <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: 'var(--p-text-40)' }}>Ton parti le plus proche</p>
-              <div className="inline-flex items-center gap-2.5 mb-1">
-                <span className="w-4 h-4 rounded-full" style={{ background: top.liste.color || '#6B7280' }} />
-                <span className="p-display text-2xl" style={{ color: top.liste.color ? texteLisible(top.liste.color) : 'var(--p-text)' }}>{top.liste.name_fr}</span>
+              <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: 'var(--p-text-40)' }}>
+                {exAequo.length > 1 ? `${exAequo.length} partis à égalité` : 'Ton parti le plus proche'}
+              </p>
+              {/* Données strictement identiques → on nomme tout le monde. Couronner
+                  un seul parti reviendrait à faire dire aux réponses plus qu'elles
+                  ne disent. */}
+              <div className="flex flex-col items-center gap-1 mb-1">
+                {exAequo.map(m => (
+                  <div key={m.slug} className="inline-flex items-center gap-2.5">
+                    <span className="w-4 h-4 rounded-full shrink-0" style={{ background: m.liste.color || '#6B7280' }} />
+                    <span className={`p-display ${exAequo.length > 1 ? 'text-xl' : 'text-2xl'}`}
+                      style={{ color: m.liste.color ? texteLisible(m.liste.color) : 'var(--p-text)' }}>{m.liste.name_fr}</span>
+                  </div>
+                ))}
               </div>
               <p className="p-body text-sm mb-5">
                 <b className="font-mono" style={{ color: 'var(--p-text)' }}>{top.pct}%</b> d'affinité,
-                {' '}sur <b>{top.rel}</b> affirmation{top.rel > 1 ? 's' : ''} où ce parti se positionne
+                {' '}sur <b>{top.rel}</b> affirmation{top.rel > 1 ? 's' : ''} où {exAequo.length > 1 ? 'ces partis se positionnent' : 'ce parti se positionne'}
               </p>
 
               {/* Nom sur sa propre ligne, barre en dessous : « Judaïsme unifié de
@@ -271,7 +345,7 @@ export default function Boussole() {
                 </button>
               </div>
               <p className="text-[10px] mt-4 leading-relaxed" style={{ color: 'var(--p-text-25)' }}>
-                Résultat indicatif, basé sur 10 affirmations. Ni un conseil de vote, ni une position de PrédiCité.<br />
+                Résultat indicatif, basé sur {STATEMENTS.length} affirmations. Ni un conseil de vote, ni une position de PrédiCité.<br />
                 Le pourcentage est calculé sur les seules affirmations où le parti se positionne : c'est le
                 nombre affiché après la barre. Un parti peu couvert peut donc afficher un score élevé sur peu
                 d'affirmations. La première affirmation porte sur Benyamin Netanyahou plutôt que sur une

@@ -158,6 +158,82 @@ religieux. La déduction était illégitime.
 
 ---
 
+## Affirmations ajoutées le 2026-08-03 (10 → 13)
+
+Motif : avec 10 affirmations et une couverture partielle, beaucoup de parties se
+jouaient sur 4 ou 5 comparaisons seulement — d'où des 100 % à répétition et des
+égalités impossibles à départager. Élargir le questionnaire attaque la cause.
+Ces trois sujets ont été retenus parce qu'ils **clivent** et qu'ils se **sourcent**.
+
+Couverture moyenne : 7,2/10 avant → **9,3/13** après. Minimum : 4 → **7**.
+
+### 11. « Les terroristes condamnés doivent encourir la peine de mort. »
+
+La meilleure source possible : un **appel nominal**. Loi adoptée le 30/03/2026 par
+62 voix contre 48, à l'initiative d'Otzma Yehudit.
+
+- **Pour** : Likoud, Shas, Otzma Yehudit, Sionisme religieux, Yisrael Beytenou
+  (parti d'opposition ayant voté avec la coalition).
+- **Contre** : Les Démocrates, Hadash-Ta'al, Ra'am, Unité nationale (Bleu Blanc).
+- **Sans position, à dessein** : le Judaïsme unifié de la Torah, dont les deux
+  composantes se sont séparées — Degel HaTorah a voté pour, Agoudat Israël s'est
+  abstenue, seule exception au sein de la coalition. Un parti divisé n'a pas de
+  position : on n'en invente pas une.
+- **Sans position** : Yashar et Les Réservistes, qui n'existaient pas comme
+  groupes à la Knesset en mars 2026 ; Ensemble, dont seule la composante Yesh Atid
+  a voté (contre) — l'attribuer à une liste que Bennett dirige serait un abus.
+
+- https://en.wikipedia.org/wiki/Death_Penalty_for_Terrorists_Law
+
+**Certitude : élevée** (vote nominal).
+
+### 12. « Il faut une commission d'enquête d'État indépendante sur le 7 octobre. »
+
+Ligne de fracture majeure de la campagne. La coalition a confirmé qu'aucune
+commission d'enquête d'État ne serait créée avant le scrutin, invoquant des
+contraintes de calendrier ; elle propose à la place une commission de six membres
+nommée à la majorité qualifiée. L'opposition refuse d'y participer, y voyant une
+tentative de contrôler l'enquête.
+
+- **Pour** : Eisenkot le soutient explicitement ; c'est un pilier déclaré du
+  programme de Bennett comme de celui des Réservistes. Les Démocrates, Unité
+  nationale et Yisrael Beytenou au titre de l'opposition.
+- **Contre** : Likoud et ses partenaires de coalition, qui l'ont bloquée.
+- **Sans position** : Hadash-Ta'al et Ra'am — appartenir à l'opposition ne suffit
+  pas à documenter une position sur ce format précis.
+
+- https://www.thejc.com/news/israel/no-october-7-inquiry-before-elections-israel-xcgbj2pb
+- https://www.haaretz.com/israel-news/israel-politics/2026-07-22/ty-article/.premium/netanyahu-government-urges-high-court-not-to-intervene-in-october-7-probe/0000019f-8aac-df92-a7ff-aeaea8120000
+
+**Certitude : élevée** pour les partis nommés, **moyenne** pour les trois rattachés
+au bloc d'opposition.
+
+### 13. « Il faut le mariage civil et des transports publics le shabbat. »
+
+Sujet religion-État distinct de l'affirmation 3 (place de la halakha) : il porte
+sur des mesures concrètes, pas sur un principe. Naftali Bennett, le 25/04/2026 :
+
+> « Les villes doivent pouvoir choisir si elles veulent des transports publics le
+> shabbat. »
+>
+> « Chaque personne en Israël devrait pouvoir concrétiser son amour dans ce pays,
+> et ne pas devoir partir à l'étranger. »
+
+Shas lui a répondu qu'il était « prêt à brader l'identité juive du pays ».
+
+- **Pour** : Ensemble (citations directes), Yisrael Beytenou (le mariage civil est
+  le combat historique de Lieberman pour l'électorat russophone), Les Démocrates.
+- **Contre** : Shas (réaction citée), le Judaïsme unifié de la Torah, le Sionisme
+  religieux et Otzma Yehudit.
+- **Sans position** : Hadash-Ta'al et Ra'am, faute de source — et la question
+  divise réellement entre laïcité de Hadash et conservatisme religieux de Ra'am.
+
+- https://www.timesofisrael.com/backing-public-transit-on-shabbat-bennett-steers-campaign-into-jammed-center-lane/
+
+**Certitude : élevée** pour Ensemble et Shas, **moyenne** pour les autres.
+
+---
+
 ## Positions antérieures vérifiées
 
 Début du remboursement de la dette décrite plus bas, en commençant par

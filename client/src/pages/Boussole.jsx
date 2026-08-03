@@ -69,9 +69,16 @@ const STATEMENTS = [
   { text: 'Il faut relancer des négociations de paix avec les Palestiniens.',
     pour: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'],
     contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux'] },
+  // ⚠️ CORRECTION du 2026-08-03. Yashar figurait ici « contre ». C'est faux :
+  // Eisenkot déclarait en juin 2026 « je crois beaucoup à l'implantation en
+  // Judée-Samarie », et « je n'ai jamais dit deux États pour deux peuples ».
+  // Il est déplacé du côté « pour » — avec une réserve consignée dans
+  // docs/BOUSSOLE_SOURCES.md : l'affirmation mêle extension ET annexion, or seule
+  // l'extension est documentée chez lui. C'est la seconde erreur factuelle
+  // trouvée sur ce parti, après son classement en « anti-Netanyahou ».
   { text: 'Il faut étendre les implantations, voire annexer une partie de la Cisjordanie.',
-    pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud'],
-    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale'] },
+    pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud', 'yashar-gadi-eisenkot'],
+    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
   // Les Réservistes : position la MIEUX documentée du lot. Yoaz Hendel veut un
   // « gouvernement d'unité sioniste sans partis arabes ni haredim » et déclare :
   // « Quiconque choisit de ne pas servir choisit d'être un citoyen de seconde

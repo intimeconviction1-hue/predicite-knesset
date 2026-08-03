@@ -287,7 +287,42 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 10 paires (2026-08-03)
+### Avancement : 20 → 8 paires (2026-08-03)
+
+**Résolu par une CORRECTION — Yashar vs Ensemble et Unité nationale.** Aucune
+affirmation ajoutée : Yashar était simplement **du mauvais côté** de l'affirmation
+6, sur l'extension des implantations.
+
+Il y figurait « contre ». Or Gadi Eisenkot déclarait en juin 2026, dans un
+entretien à Haaretz :
+
+> « Je crois beaucoup à l'implantation en Judée-Samarie. »
+>
+> « Je n'ai jamais dit deux États pour deux peuples… quiconque parle de "paix
+> maintenant" et de deux États ne comprend pas le conflit. »
+
+C'est la **seconde erreur factuelle** trouvée sur ce parti, après son classement
+en « contre » le maintien de Netanyahou. Toutes deux allaient dans le même sens :
+elles rangeaient Yashar plus à gauche qu'il ne se situe.
+
+Deux réserves consignées :
+
+1. L'affirmation mêle **extension** et **annexion**. Seule l'extension est
+   documentée chez Eisenkot ; rien ne dit qu'il soutienne l'annexion. Le « pour »
+   est donc juste sur la première moitié de l'énoncé, muet sur la seconde. Si
+   l'affirmation était un jour scindée, il faudrait le revérifier.
+2. Je n'ai **pas** ajouté Yashar à l'affirmation 5 (relancer des négociations de
+   paix), bien que la seconde citation s'en approche. Rejeter le cadre des deux
+   États n'est pas exactement refuser toute négociation. Retenue délibérée.
+
+Source : les deux citations proviennent d'un entretien à Haaretz de juin 2026,
+consultées via l'IMEU, l'original étant derrière un péage. **À reconfirmer sur la
+source primaire** — l'IMEU est une organisation de plaidoyer, même si elle cite
+ici explicitement Haaretz et sa date.
+
+  - https://imeu.org/resources/important-figures/6-things-to-know-about-yashar-party-leader-gadi-eisenkot/497
+
+  **Certitude : moyenne-élevée**, en attente de la source primaire.
 
 **Résolu — Otzma Yehudit vs Shas et le JUT.** Nouvelle affirmation : la montée
 des juifs sur le mont du Temple. C'est la faille qui sépare les partis **haredim**
@@ -598,8 +633,19 @@ Ordre de priorité suggéré, du plus exposé au moins exposé :
 
 1. ~~Affirmation 1 (Netanyahou)~~ — **faite le 2026-08-03**. Elle a livré une
    erreur factuelle (Les Réservistes) sur l'affirmation qui pèse le plus lourd.
-   Taux de correction à ce stade : 3 positions invalidées sur 12 vérifiées. Il
-   faut s'attendre à un taux comparable sur le reste.
+   L'affirmation 6 en a livré une seconde (Yashar), trouvée par un autre chemin.
+
+   **Taux de correction cumulé : 4 positions invalidées.** Deux étaient
+   antérieures à cette session (Les Réservistes en anti-Netanyahou, Yashar contre
+   les implantations), deux étaient les miennes, posées puis retirées le même jour
+   (le JUT sur la sécurité, Les Réservistes sur la halakha).
+
+   Fait notable : **les deux erreurs héritées concernaient les deux partis les
+   plus récents**, et toutes deux les rangeaient plus à gauche qu'ils ne se
+   situent. Ce n'est probablement pas un hasard — une liste neuve est décrite par
+   sa position dans le jeu (« l'opposition à Netanyahou ») avant de l'être par son
+   programme. Il faut relire les autres positions de Yashar et des Réservistes
+   avec ce biais en tête.
 2. Affirmations 5, 6, 7 (paix, implantations, citoyens arabes) — les plus
    sensibles, celles sur lesquelles une erreur se paierait le plus cher.
 3. Les partis les mieux couverts (Les Démocrates 10/10, Sionisme religieux,

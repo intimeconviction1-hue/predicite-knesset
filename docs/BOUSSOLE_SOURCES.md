@@ -312,6 +312,37 @@ tranche.**
   - https://www.timesofisrael.com/bennett-calls-to-dismantle-illegal-settlement-outposts-draws-right-wing-leaders-ire/
   - https://arabcenterdc.org/resource/bennetts-agenda-on-palestine-shrinking-the-conflict/
 
+### Relecture complète des positions d'Ensemble à l'aune de la table
+
+Faite le 2026-08-03, après la troisième erreur. Sur les 19 affirmations, les
+positions d'Ensemble tiennent, à deux exceptions près.
+
+**Affirmation 5 (relancer des négociations de paix) — le trou reste, mais il
+change de statut.** Ce matin il était marqué « arbitrage éditorial en attente ».
+Il est désormais **justifié par règle** : c'est le cas « chef et numéro deux
+documentés en sens opposés ».
+
+Bennett rejette la voie de la négociation — doctrine du « rétrécissement du
+conflit », qui ne vise ni à résoudre ni même à gérer le conflit mais à le réduire
+jusqu'à l'oubli ; « aussi longtemps que j'aurai le pouvoir, je ne céderai pas un
+centimètre de la terre d'Israël, point » ; refus d'un État palestinien maintenu en
+2026 comme chef de liste. Lapid défend de longue date les deux États. Un parti
+dont les deux fondateurs s'opposent frontalement n'a pas de position.
+
+Réserve : la doctrine de Bennett est documentée pour son mandat de Premier
+ministre, sous une autre étiquette, même si sa substance est confirmée en 2026
+(« la zone C fera partie de l'État d'Israël »). Et le maintien de la position de
+Lapid **au sein d'Ensemble** n'est pas documenté — il est notoire, pas sourcé.
+Position à revoir si l'un des deux s'exprime ès qualités pendant la campagne.
+
+  - https://arabcenterdc.org/resource/bennetts-agenda-on-palestine-shrinking-the-conflict/
+
+**Affirmation 10 (moins d'État dans l'économie) — « pour », non sourcé.** Hérité
+de la rédaction initiale. Plausible : Bennett vient de la tech et Lapid a été
+ministre des Finances, tous deux libéraux en économie. Mais aucune source ne
+l'établit, et c'est l'une des positions les plus anciennes du fichier. **À
+vérifier** — elle fait partie de la dette listée plus bas.
+
 ### Précision de méthode : la ligne du chef n'est pas un héritage
 
 La règle **« on n'hérite pas d'une position par fusion »** a été affinée le

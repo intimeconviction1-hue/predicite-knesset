@@ -61,11 +61,18 @@ const STATEMENTS = [
   { text: 'Les étudiants des yeshivot (Haredim) doivent rester exemptés de service militaire.',
     pour: ['shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid', 'unite-nationale', 'sionisme-religieux'] },
-  // ⚠️ TROU ASSUMÉ : « Ensemble » n'a pas de position ici. Le slug fantôme
-  // yachad-bennett était son SEUL porteur sur cette affirmation (ailleurs il
-  // faisait doublon avec ensemble-bennett-lapid). Le trancher demande un
-  // arbitrage éditorial — Bennett refuse un État palestinien, Lapid soutient
-  // la négociation — donc on laisse le trou visible plutôt que d'inventer.
+  // TROU JUSTIFIÉ PAR RÈGLE — « Ensemble » reste sans position ici, et ce n'est
+  // plus un arbitrage en attente : c'est le cas « chef et numéro deux documentés
+  // en sens opposés » de la table de docs/BOUSSOLE_SOURCES.md.
+  //
+  // Bennett rejette la voie de la négociation — doctrine du « rétrécissement du
+  // conflit », « pas un centimètre de la terre d'Israël », refus d'un État
+  // palestinien maintenu en 2026 comme chef de liste. Lapid, lui, défend de
+  // longue date les deux États. Un parti dont les deux fondateurs s'opposent
+  // frontalement sur une question n'a pas de position sur cette question.
+  //
+  // (Historique : le slug fantôme yachad-bennett était le seul porteur ici avant
+  // le 2026-08-03 ; ailleurs il faisait doublon avec ensemble-bennett-lapid.)
   { text: 'Il faut relancer des négociations de paix avec les Palestiniens.',
     pour: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'],
     contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux'] },

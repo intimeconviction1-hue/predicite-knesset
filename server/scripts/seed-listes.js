@@ -61,7 +61,10 @@ async function main() {
       founded_or_merged_note: l.founded_or_merged_note || null,
       histoire: l.histoire || null,
       histoire_source: l.histoire_source || null,
-      is_active: true,
+      // Une liste peut être HISTORIQUE (fusionnée, disparue) : le seed peut alors
+      // poser is_active: false. Elle reste référençable par les sondages anciens
+      // sans polluer l'interface, qui ne liste que les listes actives.
+      is_active: l.is_active !== false,
       current_knesset_seats: l.current_knesset_seats ?? null,
       logo_url: l.logo_url || null,
     });

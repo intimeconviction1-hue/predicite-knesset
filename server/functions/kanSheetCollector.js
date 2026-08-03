@@ -49,6 +49,19 @@ const MAPPED_RULES = [
   [/התורה/, 'judaisme-unifie-de-la-torah'],
   [/ביתנו/, 'yisrael-beytenou'],
   [/חדש|תעל/, 'hadash-ta-al-liste-commune'],
+    // « המשותפת » (la Liste commune) est la CONFIGURATION UNIE des
+    // partis arabes, testée par les instituts en alternative à Hadash-Ta'al.
+    // Mesuré le 2026-08-02 sur les 152 colonnes du sheet : les deux libellés
+    // n'apparaissent JAMAIS ensemble (0 co-occurrence, 12 fois seule) — les mapper
+    // sur la même liste ne double donc aucun siège. Et si Kan changeait de modèle,
+    // la garde d'intégrité le verrait : le total dépasserait 124 et le sondage
+    // serait rejeté plutôt qu'ingéré faux.
+    [/המשותפת/, 'hadash-ta-al-liste-commune'],
+    // Yesh Atid, mesuré séparément de nov. 2025 à avr. 2026 (4 à 10 sièges) avant
+    // sa fusion dans « Ensemble ». Sans cette règle ces sondages plafonnaient à
+    // ~111/120 et étaient TOUS rejetés : 26 sondages réels perdus. Avec elle, les
+    // totaux retombent exactement sur 120 — la preuve que la correspondance est juste.
+    [/עתיד/, 'yesh-atid'],
   [/רעם/, 'ra-am'],
   [/הדתית/, 'sionisme-religieux'],
   [/טרופר|הנדל/, 'les-reservistes-hendel-tropper'],
@@ -58,7 +71,9 @@ const MAPPED_RULES = [
 // Vrais partis pas (encore) dans notre modèle : comptés dans le total déclaré
 // (garde d'intégrité) mais non ingérés. Tout le reste (blocs, % de la fonction
 // de PM, lien) ne matche aucune règle → ignoré.
-const UNMAPPED_RULES = [/עתיד/, /^בלד$/, /המשותפת/];
+  // Ne reste ici que Balad, absent de notre modèle et présent dans 2 colonnes
+  // sur 152 : le mapper ne débloquerait aucun sondage (mesuré).
+  const UNMAPPED_RULES = [/^בלד$/];
 
 function matchParty(label) {
   const n = normHe(label);

@@ -287,7 +287,63 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 14 paires (2026-08-03)
+### Avancement : 20 → 13 paires (2026-08-03)
+
+**Résolu — Yisrael Beytenou vs Les Réservistes.** Nouvelle affirmation : accepter
+ou non de gouverner avec Netanyahou. C'est la question centrale du scrutin, et
+elle ne figurait nulle part.
+
+Gantz a proposé en août 2025 un « gouvernement de rédemption des otages » à mandat
+de six mois incluant Netanyahou, à condition d'en écarter Smotrich et Ben Gvir.
+Lieberman a répondu que c'était « un spectacle pitoyable » et que Gantz
+« rampait dans la coalition ». Hendel, lui, rejoindrait un gouvernement de 70-80
+sièges sionistes même avec Netanyahou dedans — sa ligne rouge est l'idéologie, pas
+la personne.
+
+**Ensemble en est absent** : Lapid a déclaré « je ne siégerai pas dans un
+gouvernement sous Benjamin Netanyahou, point », mais c'est Lapid, et Ensemble est
+dirigé par Bennett. **Yashar aussi** : Eisenkot fait campagne contre Netanyahou
+sans avoir formulé de refus explicite de siéger avec lui.
+
+  - https://www.timesofisrael.com/lapid-liberman-balk-at-gantzs-plan-to-join-hostage-redemption-government-with-pm/
+  - https://www.jpost.com/israel-news/politics-and-diplomacy/article-903510
+
+  **Certitude : élevée.**
+
+### Découverte : Ensemble est divisé sur la peine de mort
+
+En cherchant à documenter la position propre de Bennett, il apparaît qu'il
+**soutient** la peine de mort pour les terroristes — il s'était prononcé pour son
+application égale aux terroristes juifs et arabes. Or Lapid a combattu le texte de
+2026 au plénum, le qualifiant d'« opération de communication dévoyée ».
+
+Les deux fondateurs d'Ensemble sont donc sur des positions opposées. Ce n'est pas
+un trou de sourçage : **c'est exactement la situation du Judaïsme unifié de la
+Torah**, dont les deux composantes se sont séparées au même vote. Un parti divisé
+n'a pas de position, et laisser Ensemble sans position sur ce sujet est le
+traitement juste, pas un pis-aller.
+
+  - http://www.timesofisrael.com/bennett-backs-death-penalty-for-jewish-terrorists/
+  - https://www.timesofisrael.com/knesset-passes-death-penalty-law-for-palestinians-convicted-of-deadly-acts-of-terror/
+
+### Le verrou restant : Yashar et Ensemble
+
+Sur les 13 paires qui subsistent, **8 impliquent l'un de ces deux partis**. Ce
+n'est pas un hasard, et le diagnostic est clair : ce sont les deux formations dont
+les positions PROPRES sont les moins documentées.
+
+- **Yashar** est neuve, et Eisenkot cultive délibérément l'ambiguïté — sur les
+  partis arabes comme sur Netanyahou, il pose des conditions plutôt que des
+  refus. Cette ambiguïté est une stratégie, donc elle durera.
+- **Ensemble** est une fusion dont le chef ne pense pas comme son cofondateur.
+  Chaque fois qu'une source documente « la position de Lapid », elle ne documente
+  pas celle du parti que Bennett dirige.
+
+La règle « on n'hérite pas d'une position par fusion » a un coût mesurable : elle
+est responsable de la moitié des paires restantes. Elle reste juste — l'alternative
+serait d'attribuer à Bennett des positions qu'il ne défend pas — mais il faut
+savoir que le déblocage viendra de **déclarations propres de Bennett et
+d'Eisenkot pendant la campagne**, pas d'un travail d'archive.
 
 **Résolu — Ra'am vs Hadash-Ta'al et Les Démocrates.** Nouvelle affirmation :
 l'égalité des droits des personnes LGBT. C'est la ligne qui divise réellement les

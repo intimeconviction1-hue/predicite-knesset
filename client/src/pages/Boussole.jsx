@@ -128,6 +128,22 @@ const STATEMENTS = [
     pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
 
+  // Affirmation DISCRIMINANTE dans le centre, et question centrale du scrutin :
+  // accepter de gouverner AVEC Netanyahou, ou en faire une ligne rouge. Gantz a
+  // proposé en août 2025 un « gouvernement de rédemption des otages » à mandat de
+  // six mois incluant Netanyahou ; Lieberman a répondu que c'était « un spectacle
+  // pitoyable » et que Gantz « rampait dans la coalition » ; Hendel dit qu'il
+  // rejoindrait un gouvernement de 70-80 sièges sionistes même avec Netanyahou
+  // dedans, sa ligne rouge étant l'idéologie et non la personne.
+  //
+  // Ensemble en est absent : Lapid a dit « je ne siégerai pas dans un gouvernement
+  // sous Benjamin Netanyahou, point », mais c'est Lapid, et Ensemble est dirigé
+  // par Bennett. Yashar aussi : Eisenkot fait campagne contre Netanyahou sans
+  // avoir formulé de refus explicite de siéger avec lui.
+  { text: "Il est acceptable de gouverner avec Benyamin Netanyahou si le programme convient.",
+    pour: ['unite-nationale', 'les-reservistes-hendel-tropper'],
+    contre: ['yisrael-beytenou'] },
+
   // Affirmation DISCRIMINANTE : elle sépare les deux partis arabes, que tout le
   // reste du questionnaire confondait. Ra'am est islamiste et culturellement
   // conservateur, Hadash est communiste et laïque — c'est LA ligne qui les

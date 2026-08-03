@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/client';
 import { createPageUrl } from '@/utils';
+import { joursAvantScrutin } from '@/lib/echeances';
 
 // Hook du « flux en direct » de la campagne : agrège des faits RÉELS (dernier
 // sondage, top listes, mouvements de sièges, cotes/événements, actu, repères) en
@@ -8,7 +9,6 @@ import { createPageUrl } from '@/utils';
 // query que la Home → react-query mutualise le cache (pas de double appel).
 // Réutilisé sur la Home et sur le hub « Le direct » (Paris).
 
-const ELECTION_DAY = new Date('2026-10-27T04:00:00Z');
 const trunc = (s, n = 58) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s);
 
 export function useCampaignFlux() {
@@ -39,7 +39,7 @@ export function useCampaignFlux() {
   const coalitionSeats = listesAvecSieges.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
   const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
   const nobodyHasMajority = coalitionSeats < 61 && oppositionSeats < 61;
-  const daysLeft = Math.max(0, Math.ceil((ELECTION_DAY.getTime() - Date.now()) / 86400000));
+  const daysLeft = joursAvantScrutin();
 
   const items = [];
   items.push({ emoji: '⏳', text: 'Scrutin', value: `J-${daysLeft}`, valueColor: 'var(--p-gold-text)', to: createPageUrl('Learn') });

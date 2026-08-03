@@ -20,9 +20,8 @@ import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import CountdownTimer from '@/components/knesset/CountdownTimer';
+import { joursAvantScrutin } from '@/lib/echeances';
 
-// Jour du scrutin (même convention que CountdownTimer : 07:00 heure d'Israël).
-const ELECTION_DAY = new Date('2026-10-27T04:00:00Z');
 
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
@@ -126,7 +125,7 @@ export default function Home() {
           : <>Aucun bloc n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — la majorité reste à construire.</>)
       : <>Le bloc {leaderIsCoalition ? 'de coalition' : "d'opposition"} franchit la barre des <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b>.</>;
 
-  const daysLeft = Math.max(0, Math.ceil((ELECTION_DAY.getTime() - Date.now()) / 86400000));
+  const daysLeft = joursAvantScrutin();
   const firstName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
 
   // Flux « en direct » de la campagne (faits réels agrégés) — hook partagé Home/Paris.

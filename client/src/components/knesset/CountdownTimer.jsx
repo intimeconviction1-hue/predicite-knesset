@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
-// Jour du scrutin, 07:00 heure d'Israël (même convention que
-// FALLBACK_DEADLINE_UTC dans PremierMinistre.jsx/Liste.jsx, qui fixe déjà la
-// clôture des pronostics à la veille 07:00 Israël — l'ouverture des bureaux
-// de vote suit historiquement le même horaire matinal).
-const ELECTION_DAY_UTC = '2026-10-27T04:00:00Z';
+// Cible par défaut : l'ouverture des bureaux de vote. Le calcul de la date et
+// du fuseau vit dans lib/echeances.js, et nulle part ailleurs.
+import { OUVERTURE_BUREAUX_UTC } from '@/lib/echeances';
 
 function getRemaining(targetUtc) {
   const diff = new Date(targetUtc).getTime() - Date.now();
@@ -26,7 +23,7 @@ const UNITS = [
   { key: 'seconds', label: 'sec' },
 ];
 
-export default function CountdownTimer({ targetUtc = ELECTION_DAY_UTC, className, style }) {
+export default function CountdownTimer({ targetUtc = OUVERTURE_BUREAUX_UTC, className, style }) {
   const [remaining, setRemaining] = useState(() => getRemaining(targetUtc));
 
   useEffect(() => {

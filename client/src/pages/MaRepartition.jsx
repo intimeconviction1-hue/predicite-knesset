@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { AlertTriangle, Check, Clock, Landmark, Lock, PenLine } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
+import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
 
 /**
  * Répartition des 120 sièges — le pronostic principal du jeu.
@@ -23,18 +24,6 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 
 const TOTAL_SIEGES = 120;
 const MIN_SIEGES_AU_SEUIL = 4;
-// Ouverture des bureaux, le 27 octobre 2026 à 07h00 en Israël. L'heure d'été
-// s'y termine le 25 octobre : UTC+2 ce jour-là, donc 05:00Z. Doit rester
-// identique à server/functions/prediciteScoringSieges.js.
-const FALLBACK_DEADLINE_UTC = '2026-10-27T05:00:00Z';
-
-function formatLocalDeadline(utcString) {
-  const d = new Date(utcString);
-  if (Number.isNaN(d.getTime())) return null;
-  const date = d.toLocaleDateString('fr-FR', { timeZone: 'Asia/Jerusalem', day: 'numeric', month: 'long', year: 'numeric' });
-  const time = d.toLocaleTimeString('fr-FR', { timeZone: 'Asia/Jerusalem', hour: '2-digit', minute: '2-digit' });
-  return `${date} — ${time} (heure d'Israël)`;
-}
 
 export default function MaRepartition() {
   const [user, setUser] = useState(undefined);

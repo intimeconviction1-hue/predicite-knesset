@@ -13,19 +13,7 @@ import BallotChip from '@/components/knesset/BallotChip';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 import TrendChart from '@/components/knesset/TrendChart';
 import PlayLearnBar from '@/components/knesset/PlayLearnBar';
-
-// Ouverture des bureaux, le 27 octobre 2026 à 07h00 en Israël. L'heure d'été
-// s'y termine le 25 octobre : UTC+2 ce jour-là, donc 05:00Z. Doit rester
-// identique à server/functions/prediciteScoringSieges.js.
-const FALLBACK_DEADLINE_UTC = '2026-10-27T05:00:00Z';
-
-function formatLocalDeadline(utcString) {
-  const d = new Date(utcString);
-  if (Number.isNaN(d.getTime())) return null;
-  const date = d.toLocaleDateString('fr-FR', { timeZone: 'Asia/Jerusalem', day: 'numeric', month: 'long', year: 'numeric' });
-  const time = d.toLocaleTimeString('fr-FR', { timeZone: 'Asia/Jerusalem', hour: '2-digit', minute: '2-digit' });
-  return `${date} — ${time} (heure d'Israël)`;
-}
+import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
 
 export default function ListePage() {
   const [user, setUser] = useState(null);

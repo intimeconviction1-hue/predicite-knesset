@@ -287,7 +287,34 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 16 paires (2026-08-03)
+### Avancement : 20 → 14 paires (2026-08-03)
+
+**Résolu — Ra'am vs Hadash-Ta'al et Les Démocrates.** Nouvelle affirmation :
+l'égalité des droits des personnes LGBT. C'est la ligne qui divise réellement les
+deux partis arabes, que tout le reste du questionnaire confondait — Ra'am est
+islamiste et culturellement conservateur, Hadash est communiste et laïque.
+
+Adossée à un vote : en juillet 2020, sur le renvoi en commission d'un texte
+interdisant les « thérapies de conversion », les députés de Hadash ont voté pour
+— dont Ayman Odeh, alors chef de la Liste commune — et ceux de Ra'am contre.
+Ra'am a ensuite quitté la Liste commune, après que les autres partis eurent
+refusé deux ultimatums lui demandant de s'engager à voter ensemble contre les
+textes LGBT. Mansour Abbas s'est par ailleurs déclaré favorable aux « thérapies de
+conversion » dans un entretien à Walla.
+
+Les partis religieux juifs — Shas, JUT, Sionisme religieux, Otzma Yehudit — sont
+placés « contre » par cohérence avec leur opposition documentée aux réformes
+religion-État (affirmation 13). **Certitude : moyenne** pour eux, **élevée** pour
+Ra'am, Hadash et Les Démocrates.
+
+Ensemble, Yashar, Les Réservistes et Yisrael Beytenou en sont absents faute de
+source propre : Bennett soutient le mariage civil mais vient du sionisme
+religieux, et rien ne documente sa position ici.
+
+  - https://www.timesofisrael.com/how-islamist-raam-broke-arab-politics-and-may-win-the-keys-to-the-government/
+  - https://ecfr.eu/special/mapping_palestinian_politics/raam/
+
+  Effet : Ra'am n'est plus confondu avec aucun parti.
 
 **Résolu — Sionisme religieux vs Shas et JUT.** Ajouté à l'affirmation 4 du côté
 « contre ». Déclaration officielle du parti le 10/12/2025 : il ne votera « que
@@ -363,12 +390,14 @@ HaTorah pour, Agoudat Israël abstenue), ce qui prive le JUT de position. Cherch
 un sujet social où Shas, parti des classes populaires séfarades, s'oppose au JUT
 ashkénaze — le logement ou les allocations sont des pistes plausibles.
 
-**La gauche et les partis arabes — 3 paires.** Les Démocrates, Hadash-Ta'al,
-Ra'am. Piste solide et bien documentée : Ra'am est un parti islamiste
-socialement conservateur, Hadash est communiste et laïque. Le mariage civil ou les
-droits LGBT les opposeraient franchement — l'affirmation 13 existe déjà mais
-aucun des deux n'y a de position faute de source. C'est probablement le foyer le
-plus facile à débloquer.
+**La gauche et les partis arabes — 1 paire.** Ra'am est réglé. Reste
+**Les Démocrates vs Hadash-Ta'al**, et la ligne qui les sépare est connue : les
+Démocrates sont un parti sioniste, Hadash défend un « État de tous ses citoyens ».
+Une affirmation sur la définition d'Israël comme État juif les opposerait
+frontalement. Attention au piège : la loi État-nation de 2018 ne convient PAS
+comme source, Meretz — l'ancêtre des Démocrates — ayant voté contre elle comme
+Hadash. Il faut une formulation qui porte sur le principe sioniste lui-même, pas
+sur ce texte.
 
 Tant que ce travail n'est pas fait, le titre de la page promet plus que le
 questionnaire ne délivre.

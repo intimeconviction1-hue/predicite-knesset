@@ -128,6 +128,23 @@ const STATEMENTS = [
     pour: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-democrates'],
     contre: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
 
+  // Affirmation DISCRIMINANTE : elle sépare les deux partis arabes, que tout le
+  // reste du questionnaire confondait. Ra'am est islamiste et culturellement
+  // conservateur, Hadash est communiste et laïque — c'est LA ligne qui les
+  // divise, et elle est adossée à un vote : en juillet 2020, sur le renvoi en
+  // commission d'un texte interdisant les « thérapies de conversion », les
+  // députés de Hadash ont voté pour (dont Ayman Odeh) et ceux de Ra'am contre.
+  // Ra'am a ensuite quitté la Liste commune, après le refus des autres partis de
+  // s'engager à voter ensemble contre les textes LGBT.
+  //
+  // Ensemble, Yashar et Les Réservistes en sont absents faute de source : Bennett
+  // soutient le mariage civil (affirmation 13) mais vient du sionisme religieux,
+  // et rien ne documente sa position propre ici. Yisrael Beytenou aussi, malgré
+  // sa laïcité affichée.
+  { text: "L'État doit garantir l'égalité des droits aux personnes LGBT.",
+    pour: ['hadash-ta-al-liste-commune', 'les-democrates'],
+    contre: ['ra-am', 'shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'] },
+
   // Affirmation DISCRIMINANTE : c'est elle qui sépare enfin le Likoud de ses
   // alliés d'extrême droite. Ben Gvir et Smotrich ont annoncé voter CONTRE
   // l'accord et menacé de faire tomber la coalition — « nous n'accepterons pas la

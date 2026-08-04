@@ -838,11 +838,31 @@ attaqué le budget.** Il n'y a donc pas de division interne à arbitrer, contrai
 
 | | Positions |
 |---|---|
-| **Sourcées** — justifiées une par une dans ce document | **111** (69 %) |
-| **Héritées** — de la rédaction initiale, jamais vérifiées | **49** (31 %) |
-| Total | 161 |
+| **Sourcées** — justifiées une par une | **148** (93 %) |
+| **Non sourcées** | **12** (7 %) |
+| Total | 160 |
 
-*Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %) → 111 (69 %).*
+**18 affirmations sur 19 sont entièrement sourcées.** Les 12 positions restantes
+tiennent en deux endroits :
+
+- **La halakha, 11 positions.** Aucune n'est documentée. Deux sont explicitement
+  signalées comme douteuses dans le code — Yashar et Unité nationale en
+  « contre ». Elles sont probablement justes, ce sont des partis non religieux,
+  mais « probablement juste » est exactement le raisonnement qui a produit les
+  quatre erreurs de la journée.
+- **Unité nationale en « contre » sur les implantations.** Gantz rejette lui aussi
+  un État palestinien, et la presse décrit les rivaux de Netanyahou comme
+  **divisés** sur la Cisjordanie, pas unis contre les implantations. Même famille
+  d'erreur que celles trouvées sur Yashar et Ensemble. À vérifier en priorité.
+
+*Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %) → 111 (69 %) →
+148 (93 %).*
+
+Le dernier saut n'a demandé aucune recherche neuve : les affirmations sur
+l'exemption des yeshivot et sur l'influence des ultra-orthodoxes étaient déjà
+couvertes par les sources rassemblées dans la journée pour d'autres questions.
+Elles n'avaient simplement jamais été rattachées. Leçon de méthode : avant de
+relancer une enquête, inventorier ce qu'on a déjà.
 
 **Reste à sourcer**, par ordre d'exposition décroissante : la halakha (11
 positions), l'exemption des yeshivot (9), les implantations (9, dont deux

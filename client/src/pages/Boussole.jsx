@@ -57,9 +57,26 @@ const STATEMENTS = [
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+  // ⚠️ DEUX POSITIONS DOUTEUSES, non sourcées, signalées le 2026-08-03 :
+  // Yashar et Unité nationale en « contre ». Le programme d'Eisenkot parle d'un
+  // « État juif et démocratique » fidèle à la Déclaration d'indépendance, sans se
+  // prononcer sur la place de la halakha ; rien n'est documenté pour Gantz. Les
+  // deux sont probablement justes — ce sont des partis non religieux — mais
+  // « probablement juste » est exactement le raisonnement qui a produit les
+  // quatre erreurs de la journée. À sourcer ou à retirer.
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
+  // SOURCÉE le 2026-08-03, les 9 positions. Shas a menacé de bloquer le budget
+  // 2026 faute de loi d'exemption ; le JUT a déposé un texte pour la sanctuariser
+  // et Gafni a appelé le gouvernement à ignorer les arrêts de la Cour suprême.
+  // En face : Eisenkot porte une « loi de service national universel » ; Hendel a
+  // fondé Les Réservistes précisément pour faire passer une conscription
+  // universelle ; Bennett défend un service militaire ou civil universel ; Golan
+  // réclame « une loi de conscription égalitaire » ; Lieberman dénonce un budget
+  // « qui encourage l'évasion du service » ; le plan de Gantz incluait de « faire
+  // avancer la législation sur l'enrôlement des ultra-orthodoxes ».
+  //
   // Le Sionisme religieux a été ajouté du côté « contre » le 2026-08-03 : c'est la
   // faille qui sépare enfin les nationaux-religieux des haredim, alors qu'ils
   // siègent dans la même coalition. Déclaration officielle du 10/12/2025 — le
@@ -109,6 +126,17 @@ const STATEMENTS = [
   // docs/BOUSSOLE_SOURCES.md : l'affirmation mêle extension ET annexion, or seule
   // l'extension est documentée chez lui. C'est la seconde erreur factuelle
   // trouvée sur ce parti, après son classement en « anti-Netanyahou ».
+  // Positions « pour » sourcées le 2026-08-03 : Netanyahou a promis d'étendre les
+  // implantations après la reconnaissance d'un État palestinien par Londres,
+  // Ottawa et Canberra ; Ben Gvir réclame « l'application immédiate de la
+  // souveraineté » ; Smotrich mène de longue date la bataille de l'annexion.
+  //
+  // ⚠️ UNE POSITION DOUTEUSE : Unité nationale en « contre », non sourcée. Gantz
+  // rejette lui aussi un État palestinien, et la presse décrit les rivaux de
+  // Netanyahou comme divisés sur la Cisjordanie, pas unis contre les
+  // implantations. À vérifier en priorité — c'est la même famille d'erreur que
+  // celles trouvées sur Yashar et Ensemble ci-dessous.
+  //
   // ⚠️ DEUX CORRECTIONS du 2026-08-03, même erreur sur les deux listes récentes.
   //
   // Yashar y figurait « contre ». Eisenkot, juin 2026 : « je crois beaucoup à
@@ -164,6 +192,18 @@ const STATEMENTS = [
   { text: 'Face au Hamas et à l\'Iran, la fermeté sécuritaire prime sur tout.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper', 'shas'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
+  // SOURCÉE le 2026-08-03, les 8 positions. Pour : Lieberman a bâti sa carrière
+  // contre les partis haredim et dénonce un budget « sectaire » ; Golan vise les
+  // écoles « qui refusent d'enseigner le tronc commun » ; Eisenkot rejette
+  // ouvertement l'étreinte politique haredi, ses plans de conscription excluant de
+  // fait une coalition avec eux ; Bennett soutient le mariage civil et les
+  // transports le shabbat, ce qui lui a valu d'être accusé par Shas de « brader
+  // l'identité juive du pays » ; Hendel refuse de siéger avec ces partis.
+  // Contre : Shas et le JUT défendent cette influence, qui est leur raison d'être
+  // politique ; le Sionisme religieux est lui-même un parti religieux qui veut
+  // PLUS de religion dans la vie publique — sa querelle avec les haredim porte
+  // sur la conscription (affirmation 4), pas sur la place du religieux.
+  //
   // Les Réservistes : l'inégalité devant la conscription est le grief fondateur
   // du mouvement, d'où sa position ici comme sur l'exemption des yeshivot.
   { text: 'Les partis ultra-orthodoxes ont trop d\'influence sur la vie quotidienne.',

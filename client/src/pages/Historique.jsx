@@ -231,7 +231,7 @@ export default function Historique() {
         )}
 
         <div className="mt-12 p-reveal">
-          <QuizWidget category="historique" title="Testez vos connaissances" />
+          <QuizWidget theme="histoire" title="Testez vos connaissances" />
         </div>
 
         <div className="flex items-center justify-center gap-2 mt-12 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>

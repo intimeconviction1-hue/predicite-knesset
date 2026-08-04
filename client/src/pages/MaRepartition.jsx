@@ -133,7 +133,7 @@ export default function MaRepartition() {
         <button
           onClick={() => base44.auth.redirectToLogin(window.location.href)}
           className="px-4 py-2.5 rounded-lg font-bold text-sm text-white"
-          style={{ background: '#1E3A8A' }}
+          style={{ background: 'var(--p-blue-deep)' }}
         >
           Se connecter
         </button>
@@ -297,7 +297,7 @@ export default function MaRepartition() {
         onClick={soumettre}
         disabled={!peutValider || isSubmitting}
         className="w-full mt-6 py-3 rounded-lg font-bold text-sm text-white transition-opacity hover:opacity-88 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center justify-center gap-2"
-        style={{ background: '#1E3A8A' }}
+        style={{ background: 'var(--p-blue-deep)' }}
       >
         <Landmark className="w-4 h-4" />
         {isSubmitting

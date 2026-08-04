@@ -130,7 +130,7 @@ export default function Actu() {
         )}
 
         <div className="mt-12 p-reveal">
-          <QuizWidget category="actualite" title="Quiz — l'actu de la campagne" />
+          <QuizWidget theme="actu" title="Quiz — l'actu de la campagne" />
         </div>
 
         <div className="flex items-center justify-center gap-2 mt-12 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>

@@ -73,10 +73,29 @@
     --p-blue:         #2B5CE6;
     --p-blue-dim:     rgba(43, 92, 230, 0.15);
     --p-blue-border:  rgba(43, 92, 230, 0.3);
+    /* Bleu institutionnel profond. Existait déjà en dur (#1E3A8A, 15 usages :
+       Layout, Login, Liste, MaRepartition, AdminResultats) sans jamais être un
+       token — il concurrençait --p-blue sur le MÊME rôle de CTA primaire, avec
+       10.4:1 de contraste contre 5.6:1. Nommé ici pour que le double emploi soit
+       visible : --p-blue = action, --p-blue-deep = surface/marque. */
+    --p-blue-deep:    #1E3A8A;
     --p-red:          #C8102E;
     --p-red-dim:      rgba(200, 16, 46, 0.15);
     --p-green:        #1A8C55;
     --p-green-dim:    rgba(26, 140, 85, 0.15);
+    /* Même logique que --p-gold / --p-gold-text : --p-green en TEXTE ne fait que
+       4.26:1 (échoue AA). La variante foncée fait 5.43:1 — elle traînait déjà en
+       dur dans 22 fichiers, elle a maintenant un nom. */
+    --p-green-text:   #16794A;
+    /* Médailles du podium et alertes orange : les valeurs décoratives d'origine
+       échouent toutes en texte (argent 1.99:1, bronze 3.14:1, orange 2.80:1).
+       Chaque famille a donc une valeur de remplissage et une valeur de texte. */
+    --p-silver:       #B0B8C8;
+    --p-silver-text:  #64748B;   /* 4.76:1 */
+    --p-bronze:       #CD7F32;
+    --p-bronze-text:  #A96326;   /* 4.67:1 */
+    --p-orange:       #F97316;
+    --p-orange-text:  #C2410C;   /* 5.18:1 */
     --p-paper:        #E8EEF8;
     --p-ink:          #14203D;
     --p-text:         #14203D;
@@ -98,35 +117,10 @@
     --p-tricolor-blue:  #0038B8;
   }
 
-  .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 84.2% 65%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
+  /* Le bloc `.dark` de shadcn a été retiré le 2026-08-04. Le thème sombre a été
+     explicitement rejeté (« ça faisait lourd ») lors du passage en clair du
+     2026-07-25 ; ses 29 lignes de tokens ne servaient plus rien et invitaient à
+     rallumer un thème abandonné. Rien dans le client ne pose la classe `dark`. */
 }
 
 @layer base {
@@ -182,8 +176,16 @@
   .p-marquee-dup { display: none !important; }
 }
 
-button, [role="button"], a { min-height: 44px; display: inline-flex; align-items: center; }
-span[role="button"] { min-height: auto; }
+/* Plancher tactile de 44px. La version d'origine visait TOUS les <a>, y compris
+   ceux en pleine phrase : un lien dans un paragraphe devenait une boîte
+   inline-flex atomique de 44px de haut, qui dilatait l'interligne et empêchait le
+   texte du lien de passer à la ligne. Home.jsx devait écrire `!items-stretch` à
+   trois endroits pour combattre ce CSS.
+   On exclut donc les liens qui vivent DANS du texte (p, li, span, .p-prose) —
+   ceux-là reprennent le flux normal. Les liens autonomes (nav, cartes, CTA)
+   gardent leur cible de 44px. `.p-inline` est l'échappatoire manuelle. */
+button, [role="button"],
+a:not(p a, li a, span a, .p-prose a, .p-inline) { min-height: 44px; display: inline-flex; align-items: center; }
 :focus-visible { outline: 2px solid var(--p-blue); outline-offset: 2px; border-radius: 4px; }
 
 .skip-to-content { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; z-index:-999; }
@@ -192,7 +194,12 @@ span[role="button"] { min-height: auto; }
 .p-display { font-family:var(--font-display); font-weight:800; line-height:1.05; letter-spacing:-0.02em; color:var(--p-text); }
 .p-title   { font-family:var(--font-display); font-weight:700; line-height:1.15; letter-spacing:-0.01em; color:var(--p-text); }
 .p-body    { font-family:var(--font-body); font-weight:400; line-height:1.65; color:var(--p-text-60); }
-.p-mono    { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; color:var(--p-gold-text); }
+/* .p-mono ne porte PLUS de couleur. Elle en imposait une (or foncé), ce qui
+   obligeait presque chaque site d'appel à la réécrire en inline juste après —
+   la classe créait le travail qu'elle devait éviter. Elle hérite désormais, et
+   .p-mono-gold reste disponible quand l'or est vraiment voulu. */
+.p-mono      { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; }
+.p-mono-gold { font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-weight:600; color:var(--p-gold-text); }
 
 /* Carte « marbre » : le liseré clair en haut (inset blanc) imite la lumière qui
    frappe une arête polie — c'est ce qui donne l'épaisseur. L'élévation au survol
@@ -217,10 +224,18 @@ span[role="button"] { min-height: auto; }
    pas de pseudo-élément — pour rester utilisable sur n'importe quel fond. */
 .p-btn-primary { background:linear-gradient(180deg, var(--p-blue-lift), var(--p-blue)); color:#fff; border:none; padding:11px 21px; border-radius:10px;
   font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
-  box-shadow:0 1px 2px rgba(20,32,61,.18), 0 10px 22px -12px rgba(43,92,230,.7);
+  box-shadow:var(--p-shadow-blue);
   transition:transform .25s var(--p-ease), box-shadow .3s var(--p-ease), filter .2s; }
 .p-btn-primary:hover { transform:translateY(-2px); filter:brightness(1.06); box-shadow:0 2px 4px rgba(20,32,61,.2), 0 18px 34px -14px rgba(43,92,230,.85); }
 .p-btn-primary:active { transform:translateY(0) scale(.985); }
+/* Variante institutionnelle du bouton primaire (bleu profond). Existait
+   uniquement en style inline, 8 fois, sans classe. */
+.p-btn-deep { background:linear-gradient(180deg, #2B4FA8, var(--p-blue-deep)); color:#fff; border:none; padding:11px 21px; border-radius:10px;
+  font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
+  box-shadow:0 1px 2px rgba(20,32,61,.18), 0 10px 22px -12px rgba(30,58,138,.7);
+  transition:transform .25s var(--p-ease), box-shadow .3s var(--p-ease), filter .2s; }
+.p-btn-deep:hover { transform:translateY(-2px); filter:brightness(1.1); box-shadow:0 2px 4px rgba(20,32,61,.2), 0 18px 34px -14px rgba(30,58,138,.85); }
+.p-btn-deep:active { transform:translateY(0) scale(.985); }
 .p-btn-gold { background:transparent; color:var(--p-gold-text); border:0.5px solid var(--p-gold-border); padding:11px 21px; border-radius:10px;
   font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
   transition:background .25s var(--p-ease), transform .25s var(--p-ease), box-shadow .3s var(--p-ease); }
@@ -229,7 +244,7 @@ span[role="button"] { min-height: auto; }
 /* Bouton or plein — le CTA le plus fort du site (« Prédis », « Parie »). */
 .p-btn-gold-solid { background:linear-gradient(180deg,#ffe08a,#D4AF37); color:#14203D; border:none; padding:11px 21px; border-radius:10px;
   font-family:var(--font-body); font-size:13px; font-weight:700; cursor:pointer;
-  box-shadow:0 1px 2px rgba(20,32,61,.2), 0 12px 28px -12px rgba(212,175,55,.8);
+  box-shadow:var(--p-shadow-gold);
   transition:transform .25s var(--p-ease), box-shadow .3s var(--p-ease), filter .2s; }
 .p-btn-gold-solid:hover { transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 2px 5px rgba(20,32,61,.22), 0 20px 40px -14px rgba(212,175,55,.95); }
 .p-btn-gold-solid:active { transform:translateY(0) scale(.985); }
@@ -244,8 +259,9 @@ span[role="button"] { min-height: auto; }
 .p-tricolor > div:nth-child(2) { flex:1; background:rgba(255,255,255,0.9); }
 .p-tricolor > div:nth-child(3) { flex:1; background:var(--p-tricolor-blue); }
 
-.source-badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:9999px; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; background:var(--p-blue-dim); color:var(--p-blue); border:0.5px solid var(--p-blue-border); cursor:pointer; text-decoration:none; transition:background 0.15s, color 0.15s; min-height:auto; }
-.source-badge:hover { background:var(--p-blue); color:white; }
+/* `.source-badge` retiré le 2026-08-04 : zéro usage dans tout le JSX (vérifié),
+   et sa hauteur de ~22px passait sous le minimum WCAG 2.5.8 pour un élément
+   annoncé cliquable. Les badges de source utilisent `.p-badge-blue`. */
 
 /* ═══════════════════════════════════════════════════════════════════════════
    COUCHE PREMIUM — 2026-08-02
@@ -268,7 +284,16 @@ span[role="button"] { min-height: auto; }
   --p-elev-2: 0 2px 5px rgba(20,32,61,.07), 0 18px 40px -18px rgba(20,32,61,.30);
   --p-elev-3: 0 4px 10px rgba(20,32,61,.09), 0 34px 70px -26px rgba(20,32,61,.40);
 
-  --p-blue-lift:  #4a76ee;   /* haut du dégradé des boutons bleus */
+  /* Haut du dégradé des boutons bleus. Était #4a76ee : du blanc 13px dessus ne
+     faisait que 4.10:1, donc la MOITIÉ HAUTE de chaque bouton primaire échouait
+     AA pendant que la moitié basse passait à 5.56:1. Assombri jusqu'à 4.69:1 —
+     le relief reste lisible, le texte passe sur toute la hauteur. */
+  --p-blue-lift:  #3F6CE4;
+
+  /* Ombres colorées des boutons. Elles étaient recopiées à la main 11 fois pour
+     le bleu et 3 fois pour l'or, sans jamais exister comme valeur nommée. */
+  --p-shadow-blue: 0 1px 2px rgba(20,32,61,.18), 0 10px 22px -12px rgba(43,92,230,.7);
+  --p-shadow-gold: 0 1px 2px rgba(20,32,61,.20), 0 12px 28px -12px rgba(212,175,55,.8);
 
   /* Surfaces de marque */
   --p-grad-gold:   linear-gradient(135deg, #ffe08a 0%, #D4AF37 55%, #a97e22 100%);

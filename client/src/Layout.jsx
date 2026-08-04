@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home, MapPin, Trophy, BookOpen,
   HelpCircle, Menu, X, Vote, ChevronDown,
-  LogOut, BarChart2, Landmark, Newspaper, Flame, Coins, Users, UserCheck, Zap, Wind, Compass, ShieldCheck
+  LogOut, BarChart2, Landmark, Newspaper, Flame, Coins, Users, UserCheck, Zap, Wind, Compass, ShieldCheck, PieChart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
@@ -74,8 +74,13 @@ export default function Layout({ children, currentPageName }) {
   // Nav en GROUPES (forme + fond) avec un « pont » explicite vers l'autre axe —
   // « jouer en apprenant, apprendre en jouant ». « Comment ça marche » (les
   // règles) est SORTI des menus pour une place centrale (lien de nav dédié + Home).
+  // ⚠️ MaRepartition est le geste FONDATEUR du produit (répartir les 120 sièges).
+  // Il n'était référencé nulle part dans la nav jusqu'au 2026-08-04 — seulement
+  // au bas de la fiche d'une liste. Pendant ce temps cinq CTA promettaient « faire
+  // mon pronostic » et menaient à la grille des listes. Il ouvre donc le menu.
   const jouerGroups = [
-    { group: 'Parier', items: [
+    { group: 'Pronostiquer', items: [
+      { name: 'MaRepartition', label: 'Mon pronostic', icon: PieChart, hint: 'Répartis les 120 sièges' },
       { name: 'Paris', label: 'Le direct', icon: Zap, hint: 'Mise tes jetons sur les sondages' },
     ] },
     { group: 'Mini-jeux', items: [
@@ -310,8 +315,8 @@ export default function Layout({ children, currentPageName }) {
                 <div className="relative" ref={jouerRef}>
                   <button
                     onClick={() => setIsJouerOpen(!isJouerOpen)}
-                    className={`${navLinkDark(isJouerActive)} border border-[#1E3A8A]/25 bg-[#1E3A8A]/8`}
-                    style={{ color: isJouerActive ? '#1E3A8A' : 'rgba(30,58,138,0.75)' }}
+                    className={`${navLinkDark(isJouerActive)} border border-[rgba(30,58,138,0.25)] bg-[rgba(30,58,138,0.08)]`}
+                    style={{ color: isJouerActive ? 'var(--p-blue-deep)' : 'rgba(30,58,138,0.75)' }}
                     aria-haspopup="menu"
                     aria-expanded={isJouerOpen}
                   >
@@ -329,7 +334,7 @@ export default function Layout({ children, currentPageName }) {
                         className="absolute top-full left-0 mt-1 w-64 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
                         style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
                       >
-                        {renderGroups(jouerGroups, jouerBridge, '#1E3A8A')}
+                        {renderGroups(jouerGroups, jouerBridge, 'var(--p-blue-deep)')}
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -375,7 +380,7 @@ export default function Layout({ children, currentPageName }) {
                       aria-haspopup="menu"
                       aria-expanded={isUserMenuOpen}
                     >
-                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#1E3A8A' }}>
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: 'var(--p-blue-deep)' }}>
                         {user.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                       </div>
                       <span className="text-sm font-medium" style={{ color: 'var(--p-text-60)' }}>
@@ -409,7 +414,7 @@ export default function Layout({ children, currentPageName }) {
                     onClick={() => base44.auth.redirectToLogin()}
                     size="sm"
                     className="text-white font-semibold"
-                    style={{ background: '#1E3A8A' }}
+                    style={{ background: 'var(--p-blue-deep)' }}
                   >
                     Connexion
                   </Button>
@@ -443,7 +448,7 @@ export default function Layout({ children, currentPageName }) {
             </Link>
             <div className="flex items-center gap-2">
               {user && (
-                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: '#1E3A8A' }}>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: 'var(--p-blue-deep)' }}>
                   {user.full_name?.charAt(0) || user.email?.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -502,7 +507,7 @@ export default function Layout({ children, currentPageName }) {
                         key={item.name}
                         to={createPageUrl(item.name)}
                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                          isActive(item.name) ? 'bg-[rgba(20,32,61,0.08)] text-[#1E3A8A]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
+                          isActive(item.name) ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-blue-deep)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -528,7 +533,7 @@ export default function Layout({ children, currentPageName }) {
                     );
                   })}
                   {!user ? (
-                    <Button onClick={() => base44.auth.redirectToLogin()} className="w-full mt-3 text-white" size="sm" style={{ background: '#1E3A8A' }}>
+                    <Button onClick={() => base44.auth.redirectToLogin()} className="w-full mt-3 text-white" size="sm" style={{ background: 'var(--p-blue-deep)' }}>
                       Connexion
                     </Button>
                   ) : (

@@ -254,7 +254,7 @@ function Bouton({ onClick, busy, disabled, variante, children }) {
       className="px-4 py-2.5 rounded-lg font-bold text-sm transition-opacity hover:opacity-88 disabled:opacity-40 disabled:cursor-not-allowed inline-flex items-center gap-2"
       style={secondaire
         ? { border: '1px solid var(--p-border-hover)', color: 'var(--p-text)' }
-        : { background: '#1E3A8A', color: '#fff' }}
+        : { background: 'var(--p-blue-deep)', color: '#fff' }}
     >
       {busy && <Loader2 size={14} className="animate-spin" />}
       {children}

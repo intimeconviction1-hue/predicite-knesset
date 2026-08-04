@@ -58,7 +58,10 @@ export default function Learn() {
                 <p className="text-2xl md:text-3xl font-black font-mono leading-none" style={{ color: n.color }}>
                   <CountUp value={n.value} decimals={n.decimals} suffix={n.suffix} delay={i * 150} />
                 </p>
-                <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'rgba(245,240,232,0.35)' }}>{n.label}</p>
+                {/* 0.35 d'alpha plafonnait ce label à 2.78:1 — même sur du noir
+                    pur, aucune photo ne pouvait le rendre lisible. Reliquat du
+                    thème sombre d'origine. Remonté à 0.82 (≈9:1 sur le voile). */}
+                <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'rgba(245,240,232,0.82)' }}>{n.label}</p>
               </div>
             ))}
           </div>
@@ -161,10 +164,10 @@ export default function Learn() {
         >
           <p className="text-sm mb-4" style={{ color: 'var(--p-text-40)' }}>Prêt à mettre ça en pratique ?</p>
           <Link
-            to={createPageUrl('Listes')}
+            to={createPageUrl('MaRepartition')}
             className="p-btn-gold-solid group inline-flex items-center justify-center gap-2"
           >
-            Voir les listes et pronostiquer
+            Composer ma Knesset
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </motion.div>

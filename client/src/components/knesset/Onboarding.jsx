@@ -86,7 +86,7 @@ export default function Onboarding() {
               <button onClick={close} className="text-sm hover:opacity-80 transition-opacity" style={{ color: 'var(--p-text-40)' }}>Passer</button>
               <div className="flex-1" />
               {last ? (
-                <Link onClick={close} to={createPageUrl('Listes')} className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-blue)', boxShadow: '0 10px 24px -8px rgba(43,92,230,0.6)' }}>
+                <Link onClick={close} to={createPageUrl('MaRepartition')} className="p-btn-primary inline-flex items-center gap-2">
                   Faire mon premier pronostic <ArrowRight className="w-4 h-4" />
                 </Link>
               ) : (

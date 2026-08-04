@@ -45,8 +45,8 @@ export default function Leaderboard() {
 
   const getMedalColor = (position) => {
     if (position === 1) return 'var(--p-gold)';
-    if (position === 2) return '#B0B8C8';
-    if (position === 3) return '#CD7F32';
+    if (position === 2) return 'var(--p-silver-text)';
+    if (position === 3) return 'var(--p-bronze-text)';
     return 'var(--p-text-25)';
   };
 
@@ -76,7 +76,7 @@ export default function Leaderboard() {
               {[
                 { icon: Target,   label: 'Pronostics + paris',     color: 'var(--p-red)' },
                 { icon: BookOpen, label: 'Quiz (plafonné)',        color: 'var(--p-gold)' },
-                { icon: Flame,    label: 'Régularité (plafonnée)', color: '#F97316' },
+                { icon: Flame,    label: 'Régularité (plafonnée)', color: 'var(--p-orange-text)' },
               ].map(({ icon: Icon, label, color }) => (
                 <div key={label} className="flex items-center gap-1.5 text-sm" style={{ color: 'var(--p-text-60)' }}>
                   <Icon className="w-4 h-4" style={{ color }} />
@@ -104,7 +104,7 @@ export default function Leaderboard() {
                 </div>
                 <div>
                   <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>Votre classement</p>
-                  <p className="text-xl font-bold p-mono">
+                  <p className="text-xl font-bold p-mono-gold">
                     #{currentUserRank}
                     <span className="text-sm font-normal ml-1" style={{ color: 'var(--p-text-40)' }}>
                       sur {allUsers.length}
@@ -125,7 +125,7 @@ export default function Leaderboard() {
                   { label: 'Précision', value: getPrecision(currentUserProgress), color: 'var(--p-green)' },
                   // La colonne s'appelle current_streak (voir schema.sql) : `daily_streak`
                   // n'a jamais existé, donc cette statistique affichait « 0j » en permanence.
-                  { label: 'Série', value: `${currentUserProgress.current_streak || 0}j`, color: '#F97316' },
+                  { label: 'Série', value: `${currentUserProgress.current_streak || 0}j`, color: 'var(--p-orange-text)' },
                 ].map(({ label, value, count, color }) => (
                   <div key={label}>
                     <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>{label}</p>
@@ -164,18 +164,18 @@ export default function Leaderboard() {
               className="flex flex-col items-center"
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2"
-                style={{ background: 'rgba(176,184,200,0.15)', border: '0.5px solid rgba(176,184,200,0.3)', color: '#B0B8C8', fontFamily: 'var(--font-display)' }}>
+                style={{ background: 'rgba(176,184,200,0.15)', border: '0.5px solid rgba(176,184,200,0.3)', color: 'var(--p-silver-text)', fontFamily: 'var(--font-display)' }}>
                 {nomAffiche(topThree[1]).charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium truncate max-w-[90px] text-center" style={{ color: 'var(--p-text-60)' }}>
                 {nomAffiche(topThree[1])}
               </p>
-              <p className="p-mono text-sm" style={{ color: '#B0B8C8' }}>
+              <p className="p-mono text-sm" style={{ color: 'var(--p-silver-text)' }}>
                 <CountUp value={getScore(topThree[1])} duration={900} delay={200} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[1])}</span>
               </p>
               <div className="w-20 h-16 rounded-t-lg mt-2 flex items-center justify-center"
                 style={{ background: 'rgba(176,184,200,0.08)', border: '0.5px solid rgba(176,184,200,0.15)' }}>
-                <Medal className="w-6 h-6" style={{ color: '#B0B8C8' }} />
+                <Medal className="w-6 h-6" style={{ color: 'var(--p-silver-text)' }} />
               </div>
             </motion.div>
 
@@ -188,13 +188,13 @@ export default function Leaderboard() {
             >
               <Crown className="w-7 h-7 mb-2" style={{ color: 'var(--p-gold)' }} />
               <div className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold mb-2"
-                style={{ background: 'var(--p-gold-dim)', border: '2px solid var(--p-gold)', color: 'var(--p-gold)', fontFamily: 'var(--font-display)' }}>
+                style={{ background: 'var(--p-gold-dim)', border: '2px solid var(--p-gold)', color: 'var(--p-gold-text)', fontFamily: 'var(--font-display)' }}>
                 {nomAffiche(topThree[0]).charAt(0).toUpperCase()}
               </div>
               <p className="font-bold truncate max-w-[110px] text-center" style={{ color: 'var(--p-text)', fontFamily: 'var(--font-display)' }}>
                 {nomAffiche(topThree[0])}
               </p>
-              <p className="p-mono text-base" style={{ color: 'var(--p-gold)' }}>
+              <p className="p-mono text-base" style={{ color: 'var(--p-gold-text)' }}>
                 <CountUp value={getScore(topThree[0])} duration={900} delay={100} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[0])}</span>
               </p>
               <div className="w-24 h-24 rounded-t-lg mt-2 flex items-center justify-center"
@@ -211,18 +211,18 @@ export default function Leaderboard() {
               className="flex flex-col items-center"
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2"
-                style={{ background: 'rgba(205,127,50,0.15)', border: '0.5px solid rgba(205,127,50,0.3)', color: '#CD7F32', fontFamily: 'var(--font-display)' }}>
+                style={{ background: 'rgba(205,127,50,0.15)', border: '0.5px solid rgba(205,127,50,0.3)', color: 'var(--p-bronze-text)', fontFamily: 'var(--font-display)' }}>
                 {nomAffiche(topThree[2]).charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium truncate max-w-[90px] text-center" style={{ color: 'var(--p-text-60)' }}>
                 {nomAffiche(topThree[2])}
               </p>
-              <p className="p-mono text-sm" style={{ color: '#CD7F32' }}>
+              <p className="p-mono text-sm" style={{ color: 'var(--p-bronze-text)' }}>
                 <CountUp value={getScore(topThree[2])} duration={900} delay={300} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[2])}</span>
               </p>
               <div className="w-20 h-12 rounded-t-lg mt-2 flex items-center justify-center"
                 style={{ background: 'rgba(205,127,50,0.08)', border: '0.5px solid rgba(205,127,50,0.15)' }}>
-                <Medal className="w-6 h-6" style={{ color: '#CD7F32' }} />
+                <Medal className="w-6 h-6" style={{ color: 'var(--p-bronze-text)' }} />
               </div>
             </motion.div>
           </div>
@@ -323,8 +323,8 @@ export default function Leaderboard() {
                     <div className="flex items-center gap-2 text-xs md:hidden mt-0.5" style={{ color: 'var(--p-text-40)' }}>
                       <Target className="w-3 h-3" />
                       <span>{player.predictions_count || 0}</span>
-                      <Flame className="w-3 h-3" style={{ color: '#F97316' }} />
-                      <span>{player.daily_streak || 0}j</span>
+                      <Flame className="w-3 h-3" style={{ color: 'var(--p-orange-text)' }} />
+                      <span>{player.current_streak || 0}j</span>
                     </div>
                   </div>
 
@@ -334,14 +334,14 @@ export default function Leaderboard() {
                       {getPrecision(player)}
                     </p>
                     <div className="flex items-center gap-1" style={{ color: 'var(--p-text-60)' }}>
-                      <Flame className="w-4 h-4" style={{ color: '#F97316' }} />
-                      <span className="text-sm" style={{ fontFamily: 'var(--font-mono)' }}>{player.daily_streak || 0}j</span>
+                      <Flame className="w-4 h-4" style={{ color: 'var(--p-orange-text)' }} />
+                      <span className="text-sm" style={{ fontFamily: 'var(--font-mono)' }}>{player.current_streak || 0}j</span>
                     </div>
                   </div>
 
                   {/* Score */}
                   <div className="text-right shrink-0">
-                    <p className="font-bold p-mono" style={{ color: isCurrentUser ? 'var(--p-gold)' : 'var(--p-text)' }}>
+                    <p className="font-bold p-mono" style={{ color: isCurrentUser ? 'var(--p-gold-text)' : 'var(--p-text)' }}>
                       <CountUp value={getScore(player)} duration={700} delay={index * 20} formatter={formatFr} />
                     </p>
                     <p className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(player)}</p>
@@ -355,7 +355,7 @@ export default function Leaderboard() {
                 <Users className="w-12 h-12 mx-auto mb-4" style={{ color: 'var(--p-text-25)' }} />
                 <p className="font-semibold mb-1" style={{ color: 'var(--p-text-60)' }}>Le classement est encore vide</p>
                 <p className="text-sm mb-4" style={{ color: 'var(--p-text-40)' }}>Sois le premier à marquer des points.</p>
-                <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
+                <Link to={createPageUrl('MaRepartition')} className="p-btn-primary inline-flex items-center gap-2">
                   Faire mon pronostic
                 </Link>
               </div>

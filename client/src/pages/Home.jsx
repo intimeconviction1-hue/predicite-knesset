@@ -141,13 +141,15 @@ export default function Home() {
         photos={['/images/knesset-hero.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
         position="center 26%"
         badge={{ text: `La campagne en direct · J-${daysLeft}`, live: true }}
-        kicker="Élections à la Knesset · 25ᵉ législature · 27 octobre 2026"
+        kicker="Élections à la Knesset · 26ᵉ législature · 27 octobre 2026"
         title={<>Le scrutin est à <HeroGold>toi</HeroGold>.</>}
         subtitle="L'observatoire-jeu de la campagne israélienne. Prédis les sièges, parie tes jetons, trouve ton parti, apprends le scrutin — en français, gratuit et neutre."
         actions={<>
-          <Link to={createPageUrl('Listes')}
+          {/* « Prédis » menait à la grille des listes — il mène au geste qu'il
+              promet : la répartition des 120 sièges. */}
+          <Link to={createPageUrl('MaRepartition')}
             className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-bold text-sm transition-transform hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 12px 30px -12px rgba(212,175,55,0.6), 0 2px 8px rgba(0,0,0,0.28)' }}>
+            style={{ background: 'var(--p-grad-gold)', color: 'var(--p-ink)', boxShadow: '0 12px 30px -12px rgba(212,175,55,0.6), 0 2px 8px rgba(0,0,0,0.28)' }}>
             <Vote className="w-4 h-4" /> Prédis
           </Link>
           <Link to={createPageUrl('Paris')}

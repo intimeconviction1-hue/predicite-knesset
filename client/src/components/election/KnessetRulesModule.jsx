@@ -158,7 +158,7 @@ export default function KnessetRulesModule({ compact = false }) {
   return (
     <div className={compact ? '' : 'rounded-2xl border overflow-hidden'} style={compact ? {} : { borderColor: 'var(--p-border)', background: 'var(--p-card)' }}>
       {!compact && (
-        <div className="px-6 py-5 flex items-center gap-3" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
+        <div className="px-6 py-5 flex items-center gap-3" style={{ background: 'linear-gradient(135deg,var(--p-blue-deep),var(--p-blue))' }}>
           <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center">
             <Scale className="w-5 h-5 text-white" />
           </div>

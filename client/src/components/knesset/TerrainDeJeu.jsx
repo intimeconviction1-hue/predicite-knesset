@@ -85,7 +85,7 @@ export default function TerrainDeJeu({ marches = [], jetons = null, streak = 0 }
             style={{ background: 'linear-gradient(135deg,#ffd77a,#D4AF37)', color: '#2b2110', boxShadow: '0 12px 30px -10px rgba(212,175,55,0.7)' }}>
             <Zap className="w-4 h-4" /> Place ta mise
           </Link>
-          <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-white transition-transform hover:-translate-y-0.5"
+          <Link to={createPageUrl('MaRepartition')} className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-white transition-transform hover:-translate-y-0.5"
             style={{ background: 'rgba(255,255,255,0.12)', border: '0.5px solid rgba(255,255,255,0.25)' }}>
             <Target className="w-4 h-4" /> Mon pronostic
           </Link>

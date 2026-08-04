@@ -350,7 +350,7 @@ export default function ListePage() {
           className="p-elev-2 rounded-2xl border overflow-hidden mb-6"
           style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
         >
-          <div className="px-6 py-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg,#1E3A8A,#2B5CE6)' }}>
+          <div className="px-6 py-4 flex items-center justify-between" style={{ background: 'linear-gradient(135deg,var(--p-blue-deep),var(--p-blue))' }}>
             <div className="flex items-center gap-2">
               <Trophy className="w-4 h-4 text-white" />
               <h2 className="font-bold text-white text-sm">Mon pronostic sièges</h2>
@@ -398,7 +398,7 @@ export default function ListePage() {
                 <Link
                   to={createPageUrl('MaRepartition')}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg font-bold text-sm text-white transition-opacity hover:opacity-88"
-                  style={{ background: '#1E3A8A' }}
+                  style={{ background: 'var(--p-blue-deep)' }}
                 >
                   <Landmark className="w-4 h-4" /> Répartir les 120 sièges
                 </Link>

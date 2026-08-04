@@ -91,7 +91,7 @@ export default function Login() {
             type="submit"
             disabled={isSubmitting}
             className="w-full py-2.5 rounded-lg font-bold text-sm text-white transition-opacity hover:opacity-88 disabled:opacity-50"
-            style={{ background: '#1E3A8A' }}
+            style={{ background: 'var(--p-blue-deep)' }}
           >
             {isSubmitting ? 'Connexion...' : 'Se connecter'}
           </button>

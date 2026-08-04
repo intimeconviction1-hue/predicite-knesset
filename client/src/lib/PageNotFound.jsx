@@ -11,7 +11,7 @@ export default function PageNotFound() {
       <div className="max-w-md w-full text-center">
         <Compass className="w-10 h-10 mx-auto mb-5" style={{ color: 'var(--p-gold)' }} />
 
-        <p className="p-mono text-sm mb-2">404</p>
+        <p className="p-mono-gold text-sm mb-2">404</p>
         <h1 className="p-display text-3xl mb-3">Page introuvable</h1>
         <p className="p-body text-sm mb-8">
           {pageName ? (

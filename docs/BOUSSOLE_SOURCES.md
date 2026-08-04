@@ -838,17 +838,42 @@ attaqué le budget.** Il n'y a donc pas de division interne à arbitrer, contrai
 
 | | Positions |
 |---|---|
-| **Sourcées** — justifiées une par une | **148** (93 %) |
-| **Non sourcées** | **11** (7 %) |
+| **Sourcées** — justifiées une par une | **159** (100 %) |
+| **Non sourcées** | **0** |
 | Total | 159 |
 
-**18 affirmations sur 19 sont entièrement sourcées.** Le seul trou restant est
-**l'affirmation sur la halakha, 11 positions, dont aucune n'est documentée.**
+**Les 19 affirmations sont sourcées.** Une seule position reste en certitude
+**moyenne** : Yashar sur la halakha, dont plus bas.
 
-Deux d'entre elles sont explicitement signalées comme douteuses dans le code —
-Yashar et Unité nationale en « contre ». Elles sont probablement justes, ce sont
-des partis non religieux, mais « probablement juste » est exactement le
-raisonnement qui a produit les cinq erreurs de la journée.
+### La halakha — dernière affirmation sourcée
+
+- **Pour** — Smotrich : « nous voudrions tous que l'État agisse selon la Torah et
+  la halakha » ; il a réclamé le ministère de la Justice pour que le droit
+  israélien suive la loi juive, « comme aux jours du roi David », et son
+  conseiller spirituel assume vouloir un État halakhique. Comme ministre des
+  Transports, il a fait cesser les travaux du shabbat. Ben Gvir a exigé la fin de
+  la reconnaissance des conversions réformées pour la citoyenneté, et fait saisir
+  les haut-parleurs des mosquées. Le JUT « œuvre à préserver le caractère
+  religieux de l'État d'Israël » (IDI) ; Shas de même.
+- **Contre** — Lieberman a répliqué publiquement à Smotrich sur la Torah comme loi
+  de l'État. Bennett soutient le mariage civil et les transports du shabbat.
+  **Gantz confirmé** : il a lancé une initiative pour le mariage civil et s'est
+  entendu avec Lieberman sur un ensemble de réformes — conversion assouplie,
+  section égalitaire au Mur, mariage civil hors du rabbinat, transports du shabbat
+  laissés aux communes. Les Démocrates, Hadash et Ra'am suivent.
+
+  - https://www.timesofisrael.com/smotrich-says-israel-should-follow-torah-law-again-drawing-ire-of-liberman/
+  - https://www.timesofisrael.com/spiritual-adviser-to-smotrich-theres-no-problem-with-having-a-halachic-state/
+  - https://www.timesofisrael.com/ben-gvir-calls-for-revoking-state-recognition-of-reform-conversions/
+  - https://www.timesofisrael.com/gantz-and-liberman-said-to-agree-on-civil-marriage-other-religion-reforms/
+
+**Le doute sur Unité nationale est levé** : c'était l'une des deux positions
+signalées douteuses, elle se révèle solidement fondée. L'autre, **Yashar**, reste
+la position la plus faible du fichier — certitude **moyenne**. Elle repose sur le
+programme d'Eisenkot (« un État juif et démocratique » fidèle à la Déclaration
+d'indépendance, des droits égaux « quelles que soient la religion, la
+nationalité, la race et le genre ») et non sur une déclaration portant sur la
+halakha elle-même. Conservée, mais c'est la première à revérifier.
 
 ### Cinquième erreur : Unité nationale et les implantations
 
@@ -889,7 +914,7 @@ c'est la question sur laquelle « anti-Netanyahou » et « de gauche » divergen
 plus en Israël, et donc celle où l'amalgame se paie le plus cher.
 
 *Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %) → 111 (69 %) →
-148 (93 %).*
+148 (93 %) → **159 (100 %)**.*
 
 Le dernier saut n'a demandé aucune recherche neuve : les affirmations sur
 l'exemption des yeshivot et sur l'influence des ultra-orthodoxes étaient déjà

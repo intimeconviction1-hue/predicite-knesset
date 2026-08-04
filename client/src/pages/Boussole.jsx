@@ -57,13 +57,28 @@ const STATEMENTS = [
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
-  // ⚠️ DEUX POSITIONS DOUTEUSES, non sourcées, signalées le 2026-08-03 :
-  // Yashar et Unité nationale en « contre ». Le programme d'Eisenkot parle d'un
-  // « État juif et démocratique » fidèle à la Déclaration d'indépendance, sans se
-  // prononcer sur la place de la halakha ; rien n'est documenté pour Gantz. Les
-  // deux sont probablement justes — ce sont des partis non religieux — mais
-  // « probablement juste » est exactement le raisonnement qui a produit les
-  // quatre erreurs de la journée. À sourcer ou à retirer.
+  // SOURCÉE le 2026-08-03, dernière affirmation du fichier à l'être.
+  //
+  // Pour — Smotrich : « nous voudrions tous que l'État agisse selon la Torah et la
+  // halakha » ; il veut le ministère de la Justice pour que le droit israélien
+  // suive la loi juive, « comme aux jours du roi David », et son conseiller
+  // spirituel assume vouloir un État halakhique. Ben Gvir a exigé la fin de la
+  // reconnaissance des conversions réformées et fait saisir les haut-parleurs des
+  // mosquées. Le JUT « œuvre à préserver le caractère religieux de l'État
+  // d'Israël » (IDI) ; Shas de même.
+  //
+  // Contre — Lieberman a répliqué publiquement à Smotrich sur la Torah comme loi
+  // de l'État. Bennett soutient le mariage civil et les transports le shabbat.
+  // GANTZ CONFIRMÉ, ce qui lève l'un de mes deux doutes : il a lancé une
+  // initiative pour le mariage civil et s'est entendu avec Lieberman sur un
+  // ensemble de réformes — conversion assouplie, section égalitaire au Mur,
+  // mariage civil hors du rabbinat, transports du shabbat laissés aux communes.
+  //
+  // ⚠️ YASHAR reste la position la plus faible du fichier : certitude MOYENNE.
+  // Elle repose sur le programme d'Eisenkot — « un État juif et démocratique »
+  // fidèle à la Déclaration d'indépendance, des droits égaux « quelles que soient
+  // la religion, la nationalité, la race et le genre » — et non sur une
+  // déclaration portant sur la halakha elle-même.
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },

@@ -306,9 +306,35 @@ const STATEMENTS = [
     pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
     contre: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'otzma-yehudit', 'sionisme-religieux'] },
 
-  { text: "L'État doit moins intervenir dans l'économie (plus de libéralisme).",
-    pour: ['likoud', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'ensemble-bennett-lapid'],
-    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'shas', 'judaisme-unifie-de-la-torah'] },
+  // REMPLACE, le 2026-08-03, « L'État doit moins intervenir dans l'économie ».
+  // L'ancienne affirmation avait zéro position sourcée sur neuf, ne départageait
+  // aucun parti que d'autres ne séparaient déjà, et surtout elle mentait par
+  // construction : elle rangeait Shas et le JUT « contre le libéralisme » alors
+  // que ces partis ne défendent pas une doctrine sociale mais des subventions
+  // sectorielles à leur propre communauté, tout en soutenant un gouvernement
+  // libéral par ailleurs. Dire cela à un lecteur francophone était faux.
+  //
+  // Celle-ci porte sur le même terrain — l'argent public — mais s'adosse à une
+  // ligne budgétaire votée et à des citations nommées. Budget 2026, le plus
+  // important de l'histoire du pays : le financement des institutions éducatives
+  // haredim passe de 4,1 à 5,17 milliards de shekels, dont 1,56 milliard pour les
+  // yeshivot et kollels. Adopté 62-55.
+  //
+  // Pour : Shas et le JUT l'ont voté, conditionnant leur soutien à la
+  // réintroduction de la loi d'exemption ; Smotrich, ministre des Finances, en est
+  // l'auteur ; le Likoud et Otzma l'ont voté.
+  // Contre : Lapid, « le plus grand vol de l'histoire de l'État… une aubaine pour
+  // les corrompus et les réfractaires » ; Bennett, budget « le plus irresponsable
+  // et antisioniste » de l'histoire d'Israël, gouvernement qui « pille les caisses
+  // publiques » ; Golan, « un plan de travail pour démanteler l'État d'Israël »,
+  // visant les écoles « qui refusent d'enseigner le tronc commun » ; Lieberman,
+  // « budget sectaire et trompeur, qui encourage l'évasion du service ».
+  //
+  // Ensemble y figure sans réserve, cas rare : ses DEUX fondateurs l'ont attaqué,
+  // il n'y a donc pas de division interne à arbitrer.
+  { text: "L'État doit continuer à financer largement les yeshivot et les institutions haredim.",
+    pour: ['shas', 'judaisme-unifie-de-la-torah', 'likoud', 'otzma-yehudit', 'sionisme-religieux'],
+    contre: ['ensemble-bennett-lapid', 'les-democrates', 'yisrael-beytenou'] },
 ];
 
 // Nombre d'affirmations où chaque liste se positionne. C'est le DÉNOMINATEUR

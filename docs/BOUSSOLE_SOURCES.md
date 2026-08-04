@@ -790,20 +790,64 @@ refusant d'en faire une ligne rouge.
 
   **Certitude : élevée** pour les positions conservées.
 
+## L'affirmation économique remplacée, pas supprimée
+
+Le diagnostic était : zéro position sourcée sur neuf, aucun pouvoir de
+discrimination (8 paires avec ou sans elle), et surtout **un énoncé faux par
+construction**. Il rangeait Shas et le JUT « contre le libéralisme économique »
+alors que ces partis ne défendent pas une doctrine sociale mais des subventions
+sectorielles à leur propre communauté, tout en soutenant un gouvernement libéral
+par ailleurs. Dire cela à un lecteur francophone était trompeur.
+
+Plutôt que de perdre le thème de l'argent public, l'affirmation a été
+**remplacée** par une question du même terrain, mais adossée à une ligne
+budgétaire votée et à des citations nommées.
+
+### « L'État doit continuer à financer largement les yeshivot et les institutions haredim »
+
+Budget 2026, le plus important de l'histoire du pays (699 milliards de shekels) :
+le financement des institutions éducatives haredim passe de 4,1 à **5,17 milliards
+de shekels**, dont 1,56 milliard pour les yeshivot et kollels. Adopté par 62 voix
+contre 55. La procureure générale a jugé le transfert illégal et demandé son
+arrêt.
+
+- **Pour** — Shas et le JUT l'ont voté, en conditionnant leur soutien à la
+  réintroduction de la loi d'exemption militaire ; Smotrich, ministre des
+  Finances, en est l'auteur ; le Likoud et Otzma Yehudit l'ont voté.
+- **Contre** — Lapid : « le plus grand vol de l'histoire de l'État », « une
+  aubaine pour les corrompus et les réfractaires ». Bennett : budget « le plus
+  irresponsable et antisioniste » de l'histoire d'Israël, gouvernement qui
+  « pille les caisses publiques ». Golan : « un plan de travail pour démanteler
+  l'État d'Israël », visant les écoles « qui refusent d'enseigner le tronc
+  commun ». Lieberman : « budget sectaire et trompeur, qui encourage l'évasion du
+  service ».
+- **Sans position** — Yashar, Unité nationale, Les Réservistes, Hadash-Ta'al et
+  Ra'am, faute de déclaration nommée.
+
+**Ensemble y figure sans réserve, cas rare et précieux : ses DEUX fondateurs ont
+attaqué le budget.** Il n'y a donc pas de division interne à arbitrer, contrairement
+à la peine de mort, à l'accord otages ou au processus de paix.
+
+  - https://www.timesofisrael.com/knesset-approves-2026-budget-israels-largest-ever-sending-billions-to-haredi-institutions/
+  - https://www.timesofisrael.com/opposition-mks-voted-to-allocate-nis-800-million-for-haredi-schools-how-did-it-happen/
+
+  **Certitude : élevée.** Huit positions, toutes adossées à un vote ou à une
+  citation nommée.
+
 ## Dette de sourçage — inventaire chiffré (2026-08-03)
 
 | | Positions |
 |---|---|
-| **Sourcées** — justifiées une par une dans ce document | **103** (64 %) |
-| **Héritées** — de la rédaction initiale, jamais vérifiées | **58** (36 %) |
+| **Sourcées** — justifiées une par une dans ce document | **111** (69 %) |
+| **Héritées** — de la rédaction initiale, jamais vérifiées | **49** (31 %) |
 | Total | 161 |
 
-*Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %).*
+*Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %) → 111 (69 %).*
 
 **Reste à sourcer**, par ordre d'exposition décroissante : la halakha (11
 positions), l'exemption des yeshivot (9), les implantations (9, dont deux
-corrigées ce jour), l'influence des ultra-orthodoxes (8), l'économie (9 — dont la
-suppression pure et simple reste recommandée).
+corrigées ce jour), l'influence des ultra-orthodoxes (8). L'affirmation
+économique, elle, n'y figure plus : elle a été remplacée, voir plus haut.
 
 Parmi les positions héritées que j'ai effectivement contrôlées ce jour, **trois se
 sont révélées fausses** : Les Réservistes en « contre » Netanyahou, Yashar et

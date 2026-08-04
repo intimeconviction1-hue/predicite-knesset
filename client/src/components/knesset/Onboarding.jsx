@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Vote, TrendingUp, Trophy, ArrowRight, X } from 'lucide-react';
+import { Vote, TrendingUp, Trophy, ArrowRight } from 'lucide-react';
+import Modale from '@/components/knesset/Modale';
 
 // Onboarding « premier pronostic en 30 secondes » : modale 3 étapes au tout
 // premier passage (drapeau localStorage), pour transformer le curieux en joueur
@@ -43,26 +44,11 @@ export default function Onboarding() {
   const s = STEPS[step];
   const last = step === STEPS.length - 1;
 
+  // Pas d'AnimatePresence ici : c'est Modale qui la porte, en interne, autour de
+  // son propre motion.div (voir le commentaire dans Modale.jsx).
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[90] flex items-end sm:items-center justify-center p-3 sm:p-4"
-          style={{ background: 'rgba(5,10,24,0.5)', backdropFilter: 'blur(2px)' }}
-          onClick={close}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 24, scale: 0.98 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 26 }}
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md rounded-2xl overflow-hidden"
-            style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)', boxShadow: '0 30px 70px -30px rgba(20,32,61,0.5)' }}
-          >
+        <Modale ouverte={visible} onClose={close} titre={s.title} labelFermer="Passer l'introduction">
             <div className="p-tricolor"><div /><div /><div /></div>
-            <button onClick={close} aria-label="Passer" className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center hover:bg-[rgba(20,32,61,0.06)]" style={{ color: 'var(--p-text-40)' }}>
-              <X className="w-4 h-4" />
-            </button>
 
             <div className="px-6 pt-8 pb-6 text-center">
               <div className="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center" style={{ background: `color-mix(in srgb, ${s.color} 14%, transparent)`, border: `1px solid color-mix(in srgb, ${s.color} 35%, transparent)` }}>
@@ -95,9 +81,6 @@ export default function Onboarding() {
                 </button>
               )}
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        </Modale>
   );
 }

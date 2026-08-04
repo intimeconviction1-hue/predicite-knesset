@@ -76,8 +76,35 @@ export default function Hemicycle({ seatsByListe = [], listes = [], height = 240
   const lineX2 = 250 + 210 * Math.cos(majorityRad);
   const lineY2 = 220 - 210 * Math.sin(majorityRad);
 
+  // L'hémicycle était un <svg> sans nom accessible contenant 120 <circle> :
+  // selon le lecteur d'écran, on entendait soit rien, soit cent vingt éléments.
+  // Il devient une image unique, décrite par le seul texte qui compte —
+  // qui siège, combien, et si quelqu'un atteint la majorité.
+  const resume = useMemo(() => {
+    const parListe = new Map();
+    for (const s of seatAssignments) {
+      if (!s.name) continue;
+      parListe.set(s.name, (parListe.get(s.name) || 0) + 1);
+    }
+    const places = [...parListe.entries()].sort((a, b) => b[1] - a[1]);
+    if (!places.length) return `Hémicycle de ${TOTAL_SEATS} sièges, encore vide. Majorité à ${MAJORITY}.`;
+    const detail = places.map(([nom, n]) => `${nom} ${n}`).join(', ');
+    const max = places[0][1];
+    const verdict = max >= MAJORITY
+      ? `${places[0][0]} atteint seul la majorité de ${MAJORITY}.`
+      : `Aucune liste n'atteint seule la majorité de ${MAJORITY}.`;
+    return `Répartition des ${TOTAL_SEATS} sièges : ${detail}. ${verdict}`;
+  }, [seatAssignments]);
+
   return (
-    <svg viewBox="0 0 500 240" width="100%" height={height} style={{ overflow: 'visible' }}>
+    <svg
+      viewBox="0 0 500 240"
+      width="100%"
+      height={height}
+      style={{ overflow: 'visible' }}
+      role="img"
+      aria-label={resume}
+    >
       {showMajorityLine && (
         <motion.g
           opacity="0"

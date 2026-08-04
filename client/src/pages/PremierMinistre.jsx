@@ -4,7 +4,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info, X } from 'lucide-react';
+import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info } from 'lucide-react';
+import Modale from '@/components/knesset/Modale';
 import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import PlayLearnBar from '@/components/knesset/PlayLearnBar';
@@ -171,44 +172,67 @@ export default function PremierMinistre() {
           ) : (
             <div className="space-y-4">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {/* La carte portait tout le vocabulaire de la sélection (badge
+                    « Choisi », bordure or, fond doré) mais son clic ouvrait la
+                    biographie : l'affordance disait « sélectionne-moi », le
+                    comportement disait « lis-moi ». L'utilisateur cliquait,
+                    lisait, fermait, et croyait avoir choisi — pendant que le
+                    bouton de validation restait grisé sans explication.
+                    La carte sélectionne. La bio a son propre bouton, posé en
+                    FRÈRE et non en enfant : un <button> dans un <button> est du
+                    HTML invalide. */}
                 {candidats.map(c => (
-                  <motion.button
-                    key={c.id}
-                    onClick={() => setBioCandidat(c)}
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="relative rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
-                    style={{
-                      background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
-                      borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
-                    }}
-                    aria-label={`Fiche de ${c.name_fr}`}
-                  >
-                    {selected === c.id && (
-                      <span className="absolute top-1.5 right-1.5 text-[9px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{ background: 'var(--p-gold-dim)', color: 'var(--p-gold-text)' }}>
-                        Choisi
-                      </span>
-                    )}
-                    {c.photo_url ? (
-                      <img
-                        src={c.photo_url}
-                        alt=""
-                        className="w-16 h-16 rounded-full object-cover"
-                        style={{ border: selected === c.id ? '2px solid var(--p-gold)' : '1px solid var(--p-border-hover)' }}
-                      />
-                    ) : (
-                      <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>
-                        <Crown className="w-6 h-6" style={{ color: 'var(--p-text-25)' }} />
-                      </div>
-                    )}
-                    <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{c.name_fr}</p>
-                    {listeById.get(c.liste_id) && (
-                      <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: 'var(--p-text-40)' }}>
-                        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: listeById.get(c.liste_id).color || '#6B7280' }} />
-                        {listeById.get(c.liste_id).name_fr}
-                      </span>
-                    )}
-                  </motion.button>
+                  <div key={c.id} className="relative">
+                    <motion.button
+                      onClick={() => setSelected(c.id)}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                      aria-pressed={selected === c.id}
+                      className="w-full relative rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
+                      style={{
+                        background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
+                        borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
+                      }}
+                      aria-label={`Choisir ${c.name_fr} comme Premier ministre`}
+                    >
+                      {selected === c.id && (
+                        <span className="absolute top-1.5 right-1.5 text-[9px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{ background: 'var(--p-gold-dim)', color: 'var(--p-gold-text)' }}>
+                          Choisi
+                        </span>
+                      )}
+                      {c.photo_url ? (
+                        <img
+                          src={c.photo_url}
+                          alt=""
+                          width="64"
+                          height="64"
+                          loading="lazy"
+                          className="w-16 h-16 rounded-full object-cover"
+                          style={{ border: selected === c.id ? '2px solid var(--p-gold)' : '1px solid var(--p-border-hover)' }}
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>
+                          <Crown className="w-6 h-6" style={{ color: 'var(--p-text-25)' }} />
+                        </div>
+                      )}
+                      <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{c.name_fr}</p>
+                      {listeById.get(c.liste_id) && (
+                        <span className="inline-flex items-center gap-1 text-[11px]" style={{ color: 'var(--p-text-40)' }}>
+                          <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: listeById.get(c.liste_id).color || 'var(--p-text-25)' }} />
+                          {listeById.get(c.liste_id).name_fr}
+                        </span>
+                      )}
+                    </motion.button>
+                    <button
+                      type="button"
+                      onClick={() => setBioCandidat(c)}
+                      aria-label={`Biographie de ${c.name_fr}`}
+                      className="absolute bottom-1 left-1 w-11 h-11 rounded-full justify-center transition-colors hover:bg-[rgba(20,32,61,0.06)]"
+                      style={{ color: 'var(--p-text-40)' }}
+                    >
+                      <Info className="w-4 h-4" />
+                    </button>
+                  </div>
                 ))}
                 <motion.button
                   onClick={() => setSelected('autre')}
@@ -246,41 +270,23 @@ export default function PremierMinistre() {
         <CoalitionRulesModule />
       </div>
 
-      <AnimatePresence>
-        {bioCandidat && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[70] flex items-center justify-center p-4"
-            style={{ background: 'rgba(5,10,24,0.6)' }}
-            onClick={() => setBioCandidat(null)}
+      {bioCandidat && (
+          <Modale
+            ouverte={!!bioCandidat}
+            onClose={() => setBioCandidat(null)}
+            titre={`Biographie de ${bioCandidat.name_fr}`}
+            largeur="max-w-sm"
           >
-            <motion.div
-              initial={{ opacity: 0, y: 12, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 12, scale: 0.97 }}
-              transition={{ duration: 0.18 }}
-              onClick={(e) => e.stopPropagation()}
-              className="p-glow-gold p-elev-3 w-full max-w-sm rounded-2xl p-6 relative"
-              style={{ background: 'var(--p-card)', border: '1px solid var(--p-border)' }}
-            >
-              <button
-                onClick={() => setBioCandidat(null)}
-                className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center hover:bg-[rgba(20,32,61,0.06)]"
-                aria-label="Fermer"
-              >
-                <X className="w-4 h-4" style={{ color: 'var(--p-text-40)' }} />
-              </button>
+            <div className="p-glow-gold p-6">
               <div className="flex flex-col items-center text-center">
                 {bioCandidat.photo_url ? (
-                  <img src={bioCandidat.photo_url} alt="" className="w-20 h-20 rounded-full object-cover mb-3" style={{ border: '2px solid var(--p-gold)' }} />
+                  <img src={bioCandidat.photo_url} alt="" width="80" height="80" className="w-20 h-20 rounded-full object-cover mb-3" style={{ border: '2px solid var(--p-gold)' }} />
                 ) : (
                   <div className="w-20 h-20 rounded-full flex items-center justify-center mb-3" style={{ background: 'var(--p-night-2)' }}>
                     <Crown className="w-7 h-7" style={{ color: 'var(--p-text-25)' }} />
                   </div>
                 )}
-                <h3 className="font-bold text-lg mb-3" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{bioCandidat.name_fr}</h3>
+                <h3 className="p-title text-lg mb-3">{bioCandidat.name_fr}</h3>
                 <p className="text-sm leading-relaxed text-left" style={{ color: 'var(--p-text-60)' }}>{bioCandidat.bio}</p>
                 {bioCandidat.bio_source && (
                   <a href={bioCandidat.bio_source} target="_blank" rel="noopener noreferrer" className="text-xs mt-3 inline-block hover:opacity-80 transition-opacity" style={{ color: 'var(--p-blue)' }}>
@@ -293,10 +299,13 @@ export default function PremierMinistre() {
                     className="flex items-center justify-center gap-2 mt-4 pt-4 border-t text-sm font-semibold hover:opacity-80 transition-opacity"
                     style={{ borderColor: 'var(--p-border)', color: 'var(--p-blue)' }}
                   >
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: listeById.get(bioCandidat.liste_id).color || '#6B7280' }} />
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: listeById.get(bioCandidat.liste_id).color || 'var(--p-text-25)' }} />
                     Voir la liste {listeById.get(bioCandidat.liste_id).name_fr} →
                   </Link>
                 )}
+                {/* Raccourci conservé : la carte sélectionne déjà, mais on ne
+                    force pas l'utilisateur à refermer pour agir sur ce qu'il
+                    vient de lire. */}
                 {!deadlineClosed && (
                   <button
                     onClick={() => { setSelected(bioCandidat.id); setBioCandidat(null); }}
@@ -307,10 +316,9 @@ export default function PremierMinistre() {
                   </button>
                 )}
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          </Modale>
+      )}
     </div>
   );
 }

@@ -146,6 +146,21 @@ const STATEMENTS = [
   // Ottawa et Canberra ; Ben Gvir réclame « l'application immédiate de la
   // souveraineté » ; Smotrich mène de longue date la bataille de l'annexion.
   //
+  // YISRAEL BEYTENOU AJOUTÉ : il en était absent, alors que Lieberman est
+  // l'AUTEUR d'un projet d'annexion — appliquer la souveraineté à Ma'ale Adumim,
+  // adopté en lecture préliminaire par 32 voix contre 9 en octobre 2025 — et qu'il
+  // cite Ariel, Gush Etzion et la vallée du Jourdain comme cibles suivantes. Sa
+  // méthode diffère (annexion par étapes, contre l'annexion en bloc), pas son
+  // objectif. Comme ministre de la Défense, il avait convoqué le Conseil supérieur
+  // de planification pour accélérer la construction.
+  //
+  // ⚠️ CHIFFRE À RETENIR, qui éclaire les quatre corrections de cette affirmation :
+  // la Knesset a voté une motion non contraignante appelant à annexer la
+  // Cisjordanie par 71 voix contre 13. Classer les partis du centre « contre les
+  // implantations » n'était pas une erreur ponctuelle mais un contresens sur la
+  // structure du débat israélien : l'opposition à Netanyahou n'y implique en rien
+  // l'opposition aux implantations.
+  //
   // ⚠️ UNITÉ NATIONALE RETIRÉE le 2026-08-03 — quatrième erreur de la même
   // famille. Le parti figurait « contre ». Or Gantz, ministre de la Défense, a
   // cherché à approuver la construction d'environ 5 000 logements dans les
@@ -176,7 +191,7 @@ const STATEMENTS = [
   // position sur la peine de mort — Bennett s'y est dit favorable en 2015, sous
   // une autre étiquette, pas comme chef d'Ensemble.
   { text: 'Il faut étendre les implantations, voire annexer une partie de la Cisjordanie.',
-    pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid'],
+    pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'yisrael-beytenou'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
   // Les Réservistes : position la MIEUX documentée du lot. Yoaz Hendel veut un
   // « gouvernement d'unité sioniste sans partis arabes ni haredim » et déclare :

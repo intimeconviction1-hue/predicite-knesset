@@ -838,9 +838,9 @@ attaqué le budget.** Il n'y a donc pas de division interne à arbitrer, contrai
 
 | | Positions |
 |---|---|
-| **Sourcées** — justifiées une par une | **159** (100 %) |
+| **Sourcées** — justifiées une par une | **160** (100 %) |
 | **Non sourcées** | **0** |
-| Total | 159 |
+| Total | 160 |
 
 **Les 19 affirmations sont sourcées.** Une seule position reste en certitude
 **moyenne** : Yashar sur la halakha, dont plus bas.
@@ -894,6 +894,30 @@ haut, tranché de la même façon : une position fausse qui « discrimine » ne 
 rien.
 
   - https://www.timesofisrael.com/gantz-signals-support-for-unilateral-annexation-if-palestinians-say-no-forever/
+
+### Yisrael Beytenou ajouté aux implantations — et le chiffre qui explique tout
+
+Le parti était **absent** de l'affirmation sur les implantations. Or Lieberman en
+est l'un des acteurs les plus actifs : il est l'**auteur** d'un projet d'annexion
+appliquant la souveraineté à Ma'ale Adumim, adopté en lecture préliminaire par
+**32 voix contre 9** en octobre 2025, et il cite Ariel, Gush Etzion et la vallée
+du Jourdain comme cibles suivantes. Sa méthode diffère de celle de Smotrich —
+annexion par étapes plutôt qu'en bloc — mais pas son objectif. Comme ministre de
+la Défense, il avait convoqué le Conseil supérieur de planification pour
+accélérer la construction.
+
+**Le chiffre décisif : la Knesset a voté une motion non contraignante appelant à
+annexer la Cisjordanie par 71 voix contre 13.**
+
+Il éclaire rétrospectivement les cinq corrections de la journée. Classer les
+partis du centre « contre les implantations » n'était pas une série d'erreurs
+ponctuelles mais **un contresens unique sur la structure du débat israélien** :
+l'opposition à Netanyahou n'y implique en rien l'opposition aux implantations. Sur
+120 sièges, 71 ont voté pour l'annexion — il était arithmétiquement impossible que
+tous les partis du centre soient « contre ».
+
+  - https://www.timesofisrael.com/liveblog_entry/rebelling-against-pm-mks-pass-preliminary-reading-of-west-bank-annexation-bill/
+  - https://www.timesofisrael.com/knesset-votes-71-13-for-non-binding-motion-calling-to-annex-west-bank/
 
 ### Bilan des erreurs de la journée
 

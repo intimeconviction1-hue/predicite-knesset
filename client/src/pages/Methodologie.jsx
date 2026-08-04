@@ -19,7 +19,7 @@ const SOURCES = [
   {
     title: 'Résultats officiels',
     icon: ShieldCheck,
-    color: '#16794A',
+    color: 'var(--p-green-text)',
     items: [
       "Commission électorale centrale d'Israël — le résultat définitif national, sièges par liste, provient de son site officiel (votes26.bechirot.gov.il) ou du jeu de données ouvert data.gov.il.",
       'Tant que la structure de données de la 26ᵉ Knesset n\'est pas confirmée, aucun résultat n\'est publié sur PrédiCité par extrapolation ou approximation — voir la note de transparence ci-dessous.',

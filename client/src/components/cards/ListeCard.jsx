@@ -72,7 +72,7 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
               )}
             </div>
             {delta != null && delta !== 0 && (
-              <div className="flex items-center gap-1 text-xs font-bold" style={{ color: delta > 0 ? '#16794A' : 'var(--p-red)' }}>
+              <div className="flex items-center gap-1 text-xs font-bold" style={{ color: delta > 0 ? 'var(--p-green-text)' : 'var(--p-red)' }}>
                 {delta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
                 {delta > 0 ? '+' : ''}{delta}
               </div>

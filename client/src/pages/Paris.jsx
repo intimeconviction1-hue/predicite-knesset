@@ -88,7 +88,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
         <div className="flex items-center justify-between mt-3 gap-3 flex-wrap">
           <div>
             <div className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Gain potentiel</div>
-            <div className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-green)' }}>{gain}</div>
+            <div className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-green-text)' }}>{gain}</div>
           </div>
           {loggedIn ? (
             <button

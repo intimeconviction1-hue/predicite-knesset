@@ -12,7 +12,7 @@ const VOTER_STEPS = [
   { icon: UserCheck,    color: '#2B5CE6', kicker: 'Qui',        stat: '18+',        title: 'Qui peut voter',      text: "Tout citoyen israélien de 18 ans ou plus, inscrit automatiquement sur les listes électorales." },
   { icon: CalendarDays, color: '#0EA5E9', kicker: 'Quand',      stat: 'jour férié', title: 'Le jour du scrutin',  text: "Le jour de l'élection est un jour férié ; les bureaux de vote sont ouverts toute la journée." },
   { icon: MapPin,       color: '#7A5F1A', kicker: 'Où',         stat: 'ton bureau', title: 'Où voter',            text: "Dans le bureau de vote qui t'est assigné, sur présentation d'une pièce d'identité." },
-  { icon: FileText,     color: '#16794A', kicker: 'Le bulletin', stat: 'une liste',  title: 'Un vote par lettres', text: "Dans l'isoloir, tu prends la fiche portant les lettres hébraïques de ta liste et tu la glisses dans une enveloppe." },
+  { icon: FileText,     color: 'var(--p-green-text)', kicker: 'Le bulletin', stat: 'une liste',  title: 'Un vote par lettres', text: "Dans l'isoloir, tu prends la fiche portant les lettres hébraïques de ta liste et tu la glisses dans une enveloppe." },
   { icon: Landmark,     color: '#D4AF37', kicker: "L'urne",     stat: '✓',          title: "Dans l'urne",         text: "Tu déposes l'enveloppe dans l'urne. C'est un vote papier, pour une liste entière — pas pour un nom." },
 ];
 

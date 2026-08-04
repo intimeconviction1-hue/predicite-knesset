@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, TrendingDown, Wind, RotateCcw, ArrowRight, Trophy, Flame } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
+import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
 
 const ROUNDS = 5;
 const fr = (d) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
@@ -99,24 +100,13 @@ export default function SensDuVent() {
     } else { setIdx(i => i + 1); setReveal(null); }
   };
 
-  const gold = 'var(--p-gold-text)';
 
   return (
-    <div className="min-h-screen" style={{ background: 'transparent' }}>
-      {/* Liseré tricolore + en-tête compact « jeu » (registre ambré) */}
-      <div className="p-tricolor"><div /><div /><div /></div>
-      <div className="max-w-xl mx-auto px-4 pt-8 pb-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-          <Wind className="w-3.5 h-3.5" style={{ color: gold }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: gold }}>Jeu · mode découverte</span>
-        </div>
-        <h1 className="p-display text-3xl md:text-4xl mb-2">Le sens du vent</h1>
-        <p className="p-body text-sm max-w-md mx-auto">
-          Entre deux sondages du même institut, un parti a‑t‑il <b style={{ color: 'var(--p-green)' }}>monté</b> ou <b style={{ color: 'var(--p-red)' }}>baissé</b> ? Fais ta série. Aucun compte requis pour essayer.
-        </p>
-      </div>
-
-      <div className="max-w-md mx-auto px-4 pb-16">
+    <MiniJeuShell
+      icon={Wind}
+      titre="Le sens du vent"
+      chapo={<>Entre deux sondages du même institut, un parti a‑t‑il <b style={{ color: 'var(--p-green-text)' }}>monté</b> ou <b style={{ color: 'var(--p-red)' }}>baissé</b> ? Fais ta série. Aucun compte requis pour essayer.</>}
+    >
         <AnimatePresence mode="wait">
           {/* ── INTRO (ou mur d'inscription si l'invité a épuisé sa découverte) ── */}
           {phase === 'intro' && (gate.blocked ? (
@@ -147,7 +137,7 @@ export default function SensDuVent() {
                 <div className="flex-1 h-1.5 rounded-full overflow-hidden mr-3" style={{ background: 'var(--p-text-10)' }}>
                   <div className="h-full rounded-full transition-all" style={{ width: `${((idx) / ROUNDS) * 100}%`, background: 'var(--p-gold)' }} />
                 </div>
-                <span className="inline-flex items-center gap-1 text-sm font-mono font-bold" style={{ color: streak > 0 ? '#C2410C' : 'var(--p-text-40)' }}>
+                <span className="inline-flex items-center gap-1 text-sm font-mono font-bold" style={{ color: streak > 0 ? 'var(--p-orange-text)' : 'var(--p-text-40)' }}>
                   <Flame className="w-4 h-4" /> {streak}
                 </span>
               </div>
@@ -166,8 +156,8 @@ export default function SensDuVent() {
                   <div className="grid grid-cols-2 gap-3">
                     <button onClick={() => answer(true)} className="flex flex-col items-center gap-1 py-4 rounded-xl transition-transform hover:-translate-y-0.5"
                       style={{ background: 'var(--p-green-dim)', border: '0.5px solid rgba(26,140,85,0.3)' }}>
-                      <TrendingUp className="w-6 h-6" style={{ color: 'var(--p-green)' }} />
-                      <span className="font-bold text-sm" style={{ color: '#16794A' }}>Monté</span>
+                      <TrendingUp className="w-6 h-6" style={{ color: 'var(--p-green-text)' }} />
+                      <span className="font-bold text-sm" style={{ color: 'var(--p-green-text)' }}>Monté</span>
                     </button>
                     <button onClick={() => answer(false)} className="flex flex-col items-center gap-1 py-4 rounded-xl transition-transform hover:-translate-y-0.5"
                       style={{ background: 'var(--p-red-dim)', border: '0.5px solid rgba(200,16,46,0.3)' }}>
@@ -178,11 +168,11 @@ export default function SensDuVent() {
                 ) : (
                   <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
                     <div className="rounded-xl py-4 px-3 mb-4" style={{ background: reveal.correct ? 'var(--p-green-dim)' : 'var(--p-red-dim)', border: `0.5px solid ${reveal.correct ? 'rgba(26,140,85,0.3)' : 'rgba(200,16,46,0.3)'}` }}>
-                      <p className="font-bold text-sm mb-1" style={{ color: reveal.correct ? '#16794A' : 'var(--p-red)' }}>
+                      <p className="font-bold text-sm mb-1" style={{ color: reveal.correct ? 'var(--p-green-text)' : 'var(--p-red)' }}>
                         {reveal.correct ? 'Bien vu !' : 'Raté !'}
                       </p>
                       <p className="p-body text-sm">
-                        {q.liste.name_fr} est {q.up ? <span style={{ color: 'var(--p-green)', fontWeight: 700 }}>monté</span> : <span style={{ color: 'var(--p-red)', fontWeight: 700 }}>baissé</span>}
+                        {q.liste.name_fr} est {q.up ? <span style={{ color: 'var(--p-green-text)', fontWeight: 700 }}>monté</span> : <span style={{ color: 'var(--p-red)', fontWeight: 700 }}>baissé</span>}
                         {' '}: <span className="font-mono" style={{ color: 'var(--p-text)' }}>{q.prev} → {q.cur}</span> <span className="font-mono" style={{ color: q.up ? 'var(--p-green)' : 'var(--p-red)' }}>({q.cur > q.prev ? '+' : ''}{q.cur - q.prev})</span>
                       </p>
                     </div>
@@ -199,10 +189,10 @@ export default function SensDuVent() {
           {/* ── DONE ── */}
           {phase === 'done' && (
             <motion.div key="done" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="p-card p-6 text-center">
-              <Trophy className="w-8 h-8 mx-auto mb-2" style={{ color: gold }} />
+              <Trophy className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--p-gold-text)' }} />
               <p className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-text-40)' }}>Ton résultat</p>
               <p className="p-display text-4xl mb-1">{score}<span className="text-2xl" style={{ color: 'var(--p-text-40)' }}> / {ROUNDS}</span></p>
-              <p className="p-body text-sm mb-5">Meilleure série : <b className="font-mono" style={{ color: '#C2410C' }}>{best} 🔥</b></p>
+              <p className="p-body text-sm mb-5">Meilleure série : <b className="font-mono" style={{ color: 'var(--p-orange-text)' }}>{best} 🔥</b></p>
 
               {/* Mur d'inscription (accroche) — le vrai gating arrivera avec le mode essai */}
               <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
@@ -228,7 +218,6 @@ export default function SensDuVent() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </div>
+    </MiniJeuShell>
   );
 }

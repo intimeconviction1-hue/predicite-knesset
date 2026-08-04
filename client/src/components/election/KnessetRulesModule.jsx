@@ -36,7 +36,7 @@ const RULES = [
     id: 'repartition',
     icon: BarChart3,
     title: 'La répartition des 120 sièges',
-    color: '#16794A',
+    color: 'var(--p-green-text)',
     accent: 'border-emerald-400/30 bg-emerald-400/8',
     content: [
       { type: 'text', value: "Les 120 sièges sont répartis à la proportionnelle entre toutes les listes ayant franchi le seuil, selon la méthode Bader-Ofer (une variante de la méthode d'Hondt). Plus une liste a de voix, plus le rendement en sièges par voix est favorable — un effet qui avantage légèrement les grandes listes par rapport aux petites." },

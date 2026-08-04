@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Landmark, Check, RotateCcw, Trophy, Gauge } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
+import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
 
 const MAJORITE = 61;
 
@@ -90,24 +91,14 @@ export default function FormeCoalition() {
   const reset = () => { setSelected([]); setResult(null); };
   const check = () => { gate.record(); setResult({ majority: total >= MAJORITE, total, score }); };
 
-  const gold = 'var(--p-gold-text)';
   const majPct = (MAJORITE / 120) * 100;
 
   return (
-    <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="p-tricolor"><div /><div /><div /></div>
-      <div className="max-w-xl mx-auto px-4 pt-8 pb-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-          <Landmark className="w-3.5 h-3.5" style={{ color: gold }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: gold }}>Jeu · mode découverte</span>
-        </div>
-        <h1 className="p-display text-3xl md:text-4xl mb-2">Forme ta coalition</h1>
-        <p className="p-body text-sm max-w-md mx-auto">
-          Assemble <b style={{ color: 'var(--p-text)' }}>61 sièges</b>. En Israël <b>tout est possible</b> — mais avec quelle plausibilité ? À toi de le découvrir.
-        </p>
-      </div>
-
-      <div className="max-w-md mx-auto px-4 pb-16">
+    <MiniJeuShell
+      icon={Landmark}
+      titre="Forme ta coalition"
+      chapo={<>Assemble <b style={{ color: 'var(--p-text)' }}>61 sièges</b>. En Israël <b>tout est possible</b> — mais avec quelle plausibilité ? À toi de le découvrir.</>}
+    >
         {gate.blocked ? (
           <TrialWall plays={gate.plays} />
         ) : parties.length === 0 ? (
@@ -123,7 +114,7 @@ export default function FormeCoalition() {
             </div>
             <div className="relative h-2.5 rounded-full overflow-hidden mb-4" style={{ background: 'var(--p-text-10)' }}>
               <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (total / 120) * 100)}%`, background: total >= MAJORITE ? 'var(--p-green)' : 'var(--p-blue)' }} />
-              <div className="absolute top-0 bottom-0" style={{ left: `${majPct}%`, width: 2, background: gold }} title="Majorité 61" />
+              <div className="absolute top-0 bottom-0" style={{ left: `${majPct}%`, width: 2, background: 'var(--p-gold)' }} title="Majorité 61" />
             </div>
 
             {/* plausibilité */}
@@ -180,7 +171,7 @@ export default function FormeCoalition() {
                       </p>
                     </>
                   ) : (
-                    <p className="font-bold text-sm" style={{ color: gold }}>Il manque {MAJORITE - result.total} sièges pour la majorité.</p>
+                    <p className="font-bold text-sm" style={{ color: 'var(--p-gold-text)' }}>Il manque {MAJORITE - result.total} sièges pour la majorité.</p>
                   )}
                 </motion.div>
               )}
@@ -199,7 +190,6 @@ export default function FormeCoalition() {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </MiniJeuShell>
   );
 }

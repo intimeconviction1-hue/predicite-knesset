@@ -122,7 +122,7 @@ export default function Leaderboard() {
                 {[
                   { label: 'Score', count: getScore(currentUserProgress) },
                   { label: 'Prédictions', count: currentUserProgress.predictions_count || 0 },
-                  { label: 'Précision', value: getPrecision(currentUserProgress), color: 'var(--p-green)' },
+                  { label: 'Précision', value: getPrecision(currentUserProgress), color: 'var(--p-green-text)' },
                   // La colonne s'appelle current_streak (voir schema.sql) : `daily_streak`
                   // n'a jamais existé, donc cette statistique affichait « 0j » en permanence.
                   { label: 'Série', value: `${currentUserProgress.current_streak || 0}j`, color: 'var(--p-orange-text)' },
@@ -330,7 +330,7 @@ export default function Leaderboard() {
 
                   {/* Stats desktop */}
                   <div className="hidden md:flex items-center gap-8">
-                    <p className="text-sm font-bold" style={{ color: 'var(--p-green)', fontFamily: 'var(--font-mono)' }}>
+                    <p className="text-sm font-bold" style={{ color: 'var(--p-green-text)', fontFamily: 'var(--font-mono)' }}>
                       {getPrecision(player)}
                     </p>
                     <div className="flex items-center gap-1" style={{ color: 'var(--p-text-60)' }}>

@@ -81,7 +81,7 @@ function DefiSerieCard() {
       {actif ? (
         <div>
           <p className="text-sm mb-3" style={{ color: 'var(--p-text-60)' }}>
-            Enchaîne <b style={{ color: 'var(--p-text)' }}>{defi.objectif}</b> bonnes réponses pour remporter <b style={{ color: 'var(--p-green)' }}>{defi.gain_pot} jetons</b>. Une erreur et ta mise ({defi.mise}) est perdue.
+            Enchaîne <b style={{ color: 'var(--p-text)' }}>{defi.objectif}</b> bonnes réponses pour remporter <b style={{ color: 'var(--p-green-text)' }}>{defi.gain_pot} jetons</b>. Une erreur et ta mise ({defi.mise}) est perdue.
           </p>
           <div className="h-2.5 rounded-full overflow-hidden mb-2" style={{ background: 'var(--p-text-10)' }}>
             <div className="h-full rounded-full transition-all" style={{ width: `${(defi.progres / defi.objectif) * 100}%`, background: 'var(--p-gold)' }} />

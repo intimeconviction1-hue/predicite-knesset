@@ -367,10 +367,10 @@ export default function ListePage() {
             {existingPred ? (
               <div className="flex items-center justify-between rounded-xl p-4" style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.25)' }}>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--p-green-text)' }} />
                   <div>
-                    <p className="text-sm font-semibold" style={{ color: '#16794A' }}>Pronostic : {existingPred.predicted_seats} sièges</p>
-                    <p className="text-xs mt-0.5" style={{ color: '#16794A' }}>Enregistré</p>
+                    <p className="text-sm font-semibold" style={{ color: 'var(--p-green-text)' }}>Pronostic : {existingPred.predicted_seats} sièges</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'var(--p-green-text)' }}>Enregistré</p>
                   </div>
                 </div>
                 {!deadlineClosed && (

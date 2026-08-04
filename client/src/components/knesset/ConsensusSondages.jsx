@@ -38,7 +38,7 @@ export default function ConsensusSondages({ sondages = [], listes = [], max = 6 
         {agree ? (
           <div className="flex items-center gap-2.5">
             <span className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: 'var(--p-green-dim)' }}>
-              <Check className="w-3.5 h-3.5" style={{ color: 'var(--p-green)' }} />
+              <Check className="w-3.5 h-3.5" style={{ color: 'var(--p-green-text)' }} />
             </span>
             <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>
               Ils s'accordent : <b style={{ color: recents[0].leader.color ? texteLisible(recents[0].leader.color) : 'var(--p-text)' }}>{recents[0].leader.name_fr}</b> arrive en tête dans les {recents.length} derniers sondages.

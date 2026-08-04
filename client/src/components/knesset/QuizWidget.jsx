@@ -7,7 +7,7 @@ import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 
 // Niveaux : mêmes points que le barème serveur (quizScoring.js).
 const NIVEAUX = [
-  { key: 'decouverte', label: 'Découverte', pts: 10, color: '#16794A' },
+  { key: 'decouverte', label: 'Découverte', pts: 10, color: 'var(--p-green-text)' },
   { key: 'connaisseur', label: 'Connaisseur', pts: 25, color: 'var(--p-blue)' },
   { key: 'expert', label: 'Expert', pts: 50, color: 'var(--p-gold-text)' },
 ];
@@ -136,7 +136,7 @@ export default function QuizWidget({ theme, title }) {
                   }}
                 >
                   <span>{choice}</span>
-                  {isCorrectChoice && <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--p-green)' }} />}
+                  {isCorrectChoice && <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--p-green-text)' }} />}
                   {isWrongSelected && <XCircle className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--p-red)' }} />}
                 </button>
               );

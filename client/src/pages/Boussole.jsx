@@ -6,6 +6,7 @@ import { Compass, ThumbsUp, ThumbsDown, Minus, RotateCcw, ArrowRight } from 'luc
 import { useGuestGate } from '@/lib/useGuestGate';
 import { texteLisible } from '@/lib/couleurs';
 import TrialWall from '@/components/knesset/TrialWall';
+import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
 
 // ⚠️ CONTENU VALIDÉ AVEC DAVID (2026-08) — positions des partis par affirmation.
 // pour = plutôt d'accord, contre = plutôt contre, le reste = neutre.
@@ -463,9 +464,9 @@ const DEGRES = [
   { v: 0,    label: 'Neutre',      aria: 'Sans opinion',        Icone: Minus,      fort: false,
     bg: 'var(--p-night-2)',   bord: 'var(--p-border)',      teinte: 'var(--p-text-40)',  texte: 'var(--p-text-60)' },
   { v: 0.5,  label: 'Plutôt oui', aria: "Plutôt d'accord",     Icone: ThumbsUp,   fort: false,
-    bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.18)', teinte: 'var(--p-green)',    texte: '#16794A' },
+    bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.18)', teinte: 'var(--p-green)',    texte: 'var(--p-green-text)' },
   { v: 1,    label: 'Tout à fait', aria: "Tout à fait d'accord", Icone: ThumbsUp,  fort: true,
-    bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.35)', teinte: 'var(--p-green)',    texte: '#16794A' },
+    bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.35)', teinte: 'var(--p-green)',    texte: 'var(--p-green-text)' },
 ];
 
 function computeMatches(answers, bySlug) {
@@ -554,22 +555,14 @@ export default function Boussole() {
     () => (top ? matches.filter(m => Math.abs(m.sol - top.sol) < 1e-9) : []),
     [matches, top],
   );
-  const gold = 'var(--p-gold-text)';
   const st = STATEMENTS[idx];
 
   return (
-    <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="p-tricolor"><div /><div /><div /></div>
-      <div className="max-w-xl mx-auto px-4 pt-8 pb-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-          <Compass className="w-3.5 h-3.5" style={{ color: gold }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: gold }}>Jeu · mode découverte</span>
-        </div>
-        <h1 className="p-display text-3xl md:text-4xl mb-2">Quel parti te ressemble ?</h1>
-        <p className="p-body text-sm max-w-md mx-auto">{STATEMENTS.length} affirmations, tes réponses, et on te dit de quel parti tu es le plus proche. Aucun compte requis pour essayer.</p>
-      </div>
-
-      <div className="max-w-md mx-auto px-4 pb-16">
+    <MiniJeuShell
+      icon={Compass}
+      titre="Quel parti te ressemble ?"
+      chapo="{STATEMENTS.length} affirmations, tes réponses, et on te dit de quel parti tu es le plus proche. Aucun compte requis pour essayer."
+    >
         <AnimatePresence mode="wait">
           {phase === 'intro' && (gate.blocked ? (
             <motion.div key="wall" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><TrialWall plays={gate.plays} /></motion.div>
@@ -680,7 +673,6 @@ export default function Boussole() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </div>
+    </MiniJeuShell>
   );
 }

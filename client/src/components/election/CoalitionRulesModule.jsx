@@ -29,7 +29,7 @@ const RULES = [
     id: 'coalition',
     icon: Users2,
     title: 'Pourquoi il faut toujours une coalition',
-    color: '#16794A',
+    color: 'var(--p-green-text)',
     accent: 'border-emerald-400/30 bg-emerald-400/8',
     content: [
       { type: 'text', value: "Aucune liste n'a jamais obtenu seule 61 sièges. Le futur Premier ministre doit donc assembler plusieurs listes autour d'un accord de coalition — répartition des ministères, lignes politiques communes, parfois rotation du poste de Premier ministre entre deux chefs de liste." },

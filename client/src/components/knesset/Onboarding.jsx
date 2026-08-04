@@ -21,7 +21,7 @@ const STEPS = [
     body: "Chaque sondage, chaque primaire, chaque rebondissement se joue. Pronostique les 120 sièges, parie tes jetons sur les événements — plus c'est audacieux, plus ça paie.",
   },
   {
-    icon: Trophy, color: '#16794A',
+    icon: Trophy, color: 'var(--p-green-text)',
     title: 'Grimpe jusqu’à Oracle',
     body: "Bons pronostics, quiz, séries : tu gagnes des points et tu montes au classement. Défie la communauté francophone et vise le titre d’Oracle.",
   },

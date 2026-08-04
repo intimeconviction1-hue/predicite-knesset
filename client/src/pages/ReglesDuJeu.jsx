@@ -58,8 +58,8 @@ const BADGES = [
   { icon: Target, color: '#2B5CE6', label: 'Analyste Précis', desc: 'Première liste pronostiquée à ±1 siège près.' },
   { icon: Landmark, color: '#7A5F1A', label: 'Politologue', desc: 'Quiz système électoral et formation de coalition réussis.' },
   { icon: Crown, color: '#6D28D9', label: 'Faiseur de rois', desc: 'Pronostic Premier ministre correct.' },
-  { icon: PieChart, color: '#16794A', label: 'Data Citoyen', desc: '5 quiz complétés avec succès.' },
-  { icon: Flame, color: '#C2410C', label: 'Série enflammée', desc: '7 jours d\'activité consécutifs.' },
+  { icon: PieChart, color: 'var(--p-green-text)', label: 'Data Citoyen', desc: '5 quiz complétés avec succès.' },
+  { icon: Flame, color: 'var(--p-orange-text)', label: 'Série enflammée', desc: '7 jours d\'activité consécutifs.' },
 ];
 
 const STEPS = [
@@ -86,7 +86,7 @@ const STEPS = [
     link: createPageUrl('PremierMinistre'), linkLabel: 'Pronostic Premier ministre →',
   },
   {
-    id: 'comparer', icon: Trophy, num: '03', label: 'COMPARER', color: '#16794A',
+    id: 'comparer', icon: Trophy, num: '03', label: 'COMPARER', color: 'var(--p-green-text)',
     title: 'Monter au classement',
     description: 'Ton score, c\'est le total de tes points : engagement pendant la campagne, puis précision au dépouillement. Après les résultats officiels, tes pronostics sièges sont re-scorés automatiquement selon leur justesse, et ton rang se fige.',
     tips: [
@@ -149,7 +149,7 @@ export default function ReglesDuJeu() {
             {[
               { n: '1', t: 'Prédis', c: '#2B5CE6', Icon: Target, d: 'Compose la Knesset du 27 octobre : à ton avis, qui gouverne ?' },
               { n: '2', t: 'Joue', c: '#7A5F1A', Icon: Zap, d: 'Paris en jetons gratuits + mini-jeux. On ne mise jamais d\'argent.' },
-              { n: '3', t: 'Apprends', c: '#16794A', Icon: BarChart3, d: 'Le scrutin, les partis, l\'actu — sourcé et neutre.' },
+              { n: '3', t: 'Apprends', c: 'var(--p-green-text)', Icon: BarChart3, d: 'Le scrutin, les partis, l\'actu — sourcé et neutre.' },
             ].map(({ n, t, c, Icon, d }) => (
               <div key={n} className="p-card p-5 text-center">
                 <div className="w-11 h-11 rounded-full flex items-center justify-center mx-auto mb-2" style={{ background: c + '1f' }}>
@@ -233,7 +233,7 @@ export default function ReglesDuJeu() {
             {[
               { icon: TrendingUp, color: 'var(--p-blue)', t: 'Sur les sondages', d: 'Qui sera en tête au prochain sondage ? Résolu à chaque nouvelle vague.' },
               { icon: Zap, color: 'var(--p-gold-text)', t: 'Sur les événements', d: 'Fusions, primaires, défections, incidents — tout ce qui bouge la campagne.' },
-              { icon: Coins, color: '#16794A', t: 'Jetons gratuits', d: 'Dotation chaque semaine. Impossible de « faire faillite », jamais d\'argent.' },
+              { icon: Coins, color: 'var(--p-green-text)', t: 'Jetons gratuits', d: 'Dotation chaque semaine. Impossible de « faire faillite », jamais d\'argent.' },
               { icon: Trophy, color: '#6D28D9', t: 'Cotes vivantes', d: 'Ouvertes sur la proba des sondages, elles bougent selon les mises. Verrouillées à la mise.' },
             ].map(({ icon: Icon, color, t, d }) => (
               <div key={t} className="p-card p-4" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
@@ -246,7 +246,7 @@ export default function ReglesDuJeu() {
           <div className="rounded-2xl border p-5 p-elev-1" style={{ background: 'var(--p-blue-dim)', borderColor: 'var(--p-blue-border)' }}>
             <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: 'var(--p-blue)' }}>Exemple</p>
             <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--p-text-60)' }}>
-              Tu mises <b style={{ color: 'var(--p-text)' }}>50 jetons</b> sur « Likoud en tête » à une cote de <b style={{ color: 'var(--p-gold-text)' }}>2,35</b> → si ça passe, <b style={{ color: 'var(--p-green)' }}>118 jetons</b>. Plus tu paries tôt et à contre-courant, plus la cote — donc le gain — grimpe.
+              Tu mises <b style={{ color: 'var(--p-text)' }}>50 jetons</b> sur « Likoud en tête » à une cote de <b style={{ color: 'var(--p-gold-text)' }}>2,35</b> → si ça passe, <b style={{ color: 'var(--p-green-text)' }}>118 jetons</b>. Plus tu paries tôt et à contre-courant, plus la cote — donc le gain — grimpe.
             </p>
             <Link to={createPageUrl('Paris')} className="p-btn-primary inline-flex items-center gap-2">
               Voir les paris ouverts <ArrowRight className="w-4 h-4" />

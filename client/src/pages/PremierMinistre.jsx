@@ -143,13 +143,13 @@ export default function PremierMinistre() {
                 {selectedCandidat?.photo_url ? (
                   <img src={selectedCandidat.photo_url} alt="" className="w-10 h-10 rounded-full object-cover flex-shrink-0" style={{ border: '1px solid rgba(34,197,94,0.4)' }} />
                 ) : (
-                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#16794A' }} />
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: 'var(--p-green-text)' }} />
                 )}
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: '#16794A' }}>
+                  <p className="text-sm font-semibold" style={{ color: 'var(--p-green-text)' }}>
                     Pronostic : {selectedCandidat?.name_fr || 'Autre'}
                   </p>
-                  <p className="text-xs mt-0.5" style={{ color: '#16794A' }}>
+                  <p className="text-xs mt-0.5" style={{ color: 'var(--p-green-text)' }}>
                     {existingPred.resolved_at ? 'Résolu' : 'En attente de l\'investiture'}
                   </p>
                 </div>
@@ -301,7 +301,7 @@ export default function PremierMinistre() {
                   <button
                     onClick={() => { setSelected(bioCandidat.id); setBioCandidat(null); }}
                     className="w-full justify-center mt-4 py-3 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5"
-                    style={{ background: selected === bioCandidat.id ? '#16794A' : 'var(--p-blue)' }}
+                    style={{ background: selected === bioCandidat.id ? 'var(--p-green-text)' : 'var(--p-blue)' }}
                   >
                     {selected === bioCandidat.id ? '✓ Choisi pour ton pronostic' : 'Choisir ce candidat'}
                   </button>

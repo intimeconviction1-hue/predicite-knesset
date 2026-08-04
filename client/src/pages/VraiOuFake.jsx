@@ -4,6 +4,7 @@ import { ShieldCheck, Check, X, RotateCcw, ArrowRight, Trophy, Flame } from 'luc
 import { base44 } from '@/api/client';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
+import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
 
 const ROUNDS = 7;
 
@@ -41,7 +42,6 @@ export default function VraiOuFake() {
   const [phase, setPhase] = useState('intro');
 
   const q = rounds[idx];
-  const gold = 'var(--p-gold-text)';
 
   const start = () => {
     if (gate.blocked) { setPhase('intro'); return; }
@@ -60,26 +60,18 @@ export default function VraiOuFake() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="p-tricolor"><div /><div /><div /></div>
-      <div className="max-w-xl mx-auto px-4 pt-8 pb-4 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full mb-3" style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
-          <ShieldCheck className="w-3.5 h-3.5" style={{ color: gold }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: gold }}>Jeu · mode découverte</span>
-        </div>
-        <h1 className="p-display text-3xl md:text-4xl mb-2">Vrai ou Fake ?</h1>
-        <p className="p-body text-sm max-w-md mx-auto">Le système électoral israélien recèle des surprises. Sépare le vrai du faux — et apprends en jouant.</p>
-      </div>
-
-      <div className="max-w-md mx-auto px-4 pb-16">
+    <MiniJeuShell
+      icon={ShieldCheck}
+      titre="Vrai ou Fake ?"
+      chapo="Le système électoral israélien recèle des surprises. Sépare le vrai du faux — et apprends en jouant."
+    >
         <AnimatePresence mode="wait">
           {phase === 'intro' && (gate.blocked ? (
             <motion.div key="wall" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><TrialWall plays={gate.plays} /></motion.div>
           ) : (
             <motion.div key="intro" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-card p-6 text-center">
-              <p className="p-body text-sm mb-5">{ROUNDS} affirmations. Pour chacune, dis si c'est <b style={{ color: 'var(--p-green)' }}>vrai</b> ou <b style={{ color: 'var(--p-red)' }}>faux</b>. Explication à chaque fois 📚</p>
-              <button onClick={start} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-bold text-[15px] transition-transform hover:-translate-y-0.5"
-                style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -12px rgba(212,175,55,0.6)' }}>
+              <p className="p-body text-sm mb-5">{ROUNDS} affirmations. Pour chacune, dis si c'est <b style={{ color: 'var(--p-green-text)' }}>vrai</b> ou <b style={{ color: 'var(--p-red)' }}>faux</b>. Explication à chaque fois.</p>
+              <button onClick={start} className="p-btn-gold-solid gap-2 text-[15px]">
                 Jouer <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>
@@ -87,11 +79,12 @@ export default function VraiOuFake() {
 
           {phase === 'play' && q && (
             <motion.div key={`q-${idx}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex-1 h-1.5 rounded-full overflow-hidden mr-3" style={{ background: 'var(--p-text-10)' }}>
-                  <div className="h-full rounded-full transition-all" style={{ width: `${(idx / ROUNDS) * 100}%`, background: 'var(--p-gold)' }} />
-                </div>
-                <span className="inline-flex items-center gap-1 text-sm font-mono font-bold" style={{ color: streak > 0 ? '#C2410C' : 'var(--p-text-40)' }}><Flame className="w-4 h-4" /> {streak}</span>
+              <div className="flex items-center justify-between gap-3 mb-3">
+                <JaugeManche valeur={idx} total={ROUNDS} label="Affirmations traitées" />
+                <span className="inline-flex items-center gap-1 text-sm p-mono" style={{ color: streak > 0 ? 'var(--p-orange-text)' : 'var(--p-text-40)' }}>
+                  <Flame className="w-4 h-4" /> {streak}
+                  <span className="sr-only">série en cours</span>
+                </span>
               </div>
 
               <div className="p-card p-6 text-center min-h-[140px] flex items-center justify-center mb-4">
@@ -100,8 +93,8 @@ export default function VraiOuFake() {
 
               {!reveal ? (
                 <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => answer(true)} className="flex flex-col items-center gap-1 py-4 rounded-xl transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-green-dim)', border: '0.5px solid rgba(26,140,85,0.3)' }}>
-                    <Check className="w-6 h-6" style={{ color: 'var(--p-green)' }} /><span className="font-bold text-sm" style={{ color: '#16794A' }}>Vrai</span>
+                  <button onClick={() => answer(true)} className="flex flex-col items-center gap-1 py-4 rounded-xl transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-green-dim)', border: '0.5px solid var(--p-green-dim)', borderColor: 'rgba(26,140,85,0.3)' }}>
+                    <Check className="w-6 h-6" style={{ color: 'var(--p-green-text)' }} /><span className="font-bold text-sm" style={{ color: 'var(--p-green-text)' }}>Vrai</span>
                   </button>
                   <button onClick={() => answer(false)} className="flex flex-col items-center gap-1 py-4 rounded-xl transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-red-dim)', border: '0.5px solid rgba(200,16,46,0.3)' }}>
                     <X className="w-6 h-6" style={{ color: 'var(--p-red)' }} /><span className="font-bold text-sm" style={{ color: 'var(--p-red)' }}>Fake</span>
@@ -110,12 +103,12 @@ export default function VraiOuFake() {
               ) : (
                 <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}>
                   <div className="rounded-xl py-4 px-4 mb-4" style={{ background: reveal.correct ? 'var(--p-green-dim)' : 'var(--p-red-dim)', border: `0.5px solid ${reveal.correct ? 'rgba(26,140,85,0.3)' : 'rgba(200,16,46,0.3)'}` }}>
-                    <p className="font-bold text-sm mb-1" style={{ color: reveal.correct ? '#16794A' : 'var(--p-red)' }}>
+                    <p className="font-bold text-sm mb-1" style={{ color: reveal.correct ? 'var(--p-green-text)' : 'var(--p-red)' }}>
                       {reveal.correct ? 'Correct !' : 'Raté !'} C'est <b>{q.answer ? 'VRAI' : 'FAUX'}</b>.
                     </p>
                     <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>{q.explain}</p>
                   </div>
-                  <button onClick={next} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm text-white" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
+                  <button onClick={next} className="p-btn-primary gap-2">
                     {idx + 1 >= rounds.length ? 'Voir mon score' : 'Suivant'} <ArrowRight className="w-4 h-4" />
                   </button>
                 </motion.div>
@@ -125,25 +118,24 @@ export default function VraiOuFake() {
 
           {phase === 'done' && (
             <motion.div key="done" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="p-card p-6 text-center">
-              <Trophy className="w-8 h-8 mx-auto mb-2" style={{ color: gold }} />
+              <Trophy className="w-8 h-8 mx-auto mb-2" style={{ color: 'var(--p-gold-text)' }} />
               <p className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-text-40)' }}>Ton résultat</p>
               <p className="p-display text-4xl mb-1">{score}<span className="text-2xl" style={{ color: 'var(--p-text-40)' }}> / {ROUNDS}</span></p>
-              <p className="p-body text-sm mb-5">Meilleure série : <b className="font-mono" style={{ color: '#C2410C' }}>{best} 🔥</b></p>
+              <p className="p-body text-sm mb-5">Meilleure série : <b className="font-mono" style={{ color: 'var(--p-orange-text)' }}>{best} 🔥</b></p>
               <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
                 <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>Crée ton compte (gratuit) pour <b>sauver ton score</b> et grimper au classement.</p>
               </div>
               <div className="flex items-center justify-center gap-3 flex-wrap">
-                <button onClick={() => base44.auth.redirectToLogin()} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-bold text-sm text-white" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
+                <button onClick={() => base44.auth.redirectToLogin()} className="p-btn-primary gap-2">
                   Créer mon compte <ArrowRight className="w-4 h-4" />
                 </button>
-                <button onClick={start} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm" style={{ background: 'transparent', border: '0.5px solid var(--p-border-hover)', color: 'var(--p-text-60)' }}>
+                <button onClick={start} className="p-btn-ghost gap-2">
                   <RotateCcw className="w-4 h-4" /> Rejouer
                 </button>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </div>
+    </MiniJeuShell>
   );
 }

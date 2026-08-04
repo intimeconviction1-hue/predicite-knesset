@@ -204,7 +204,7 @@ export default function Home() {
               <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-25)' }}>120 sièges</p>
               <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--p-gold-text)' }}>majorité 61</p>
               {arabSeats > 0 && (
-                <p className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'var(--p-green)' }}>+ {arabSeats} listes arabes</p>
+                <p className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'var(--p-green-text)' }}>+ {arabSeats} listes arabes</p>
               )}
             </div>
             <div className="text-right">

@@ -1,11 +1,12 @@
 /**
  * Intégrité des données de la Boussole.
  *
- * Pourquoi ce test existe : le 2026-08-03, la Boussole a été trouvée citant un
+ * Pourquoi ce test existe : le 2026-08-04, la Boussole a été trouvée citant un
  * slug — « yachad-bennett » — qui ne correspondait à aucune liste du seed. Il
- * désignait une liste fantôme héritée de Base44, bien présente en base, si bien
- * qu'à l'exécution rien n'échouait : une liste disparue depuis avril pouvait
- * sortir en tête du résultat.
+ * désignait une ligne héritée de Base44, bien présente en base, si bien qu'à
+ * l'exécution rien n'échouait. « Yachad » (ביחד) étant le nom hébreu de la liste
+ * Bennett-Lapid, c'était en réalité un DOUBLON du même parti sous son autre nom :
+ * deux entités pour une seule liste, dont l'une captait 146 des 156 sondages.
  *
  * Une garde existe côté client (console.error en dev), mais elle suppose qu'un
  * développeur ouvre la console au bon moment. Ce test-ci échoue en CI.

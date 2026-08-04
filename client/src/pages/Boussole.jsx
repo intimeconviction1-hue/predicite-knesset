@@ -12,12 +12,15 @@ import TrialWall from '@/components/knesset/TrialWall';
 //
 // Les slugs ci-dessous DOIVENT correspondre à une Liste réelle (slug dérivé de
 // name_fr par server/scripts/seed-listes.js). « yachad-bennett » a été retiré le
-// 2026-08-03 : ce nom désignait une liste fantôme héritée de Base44, absente de
+// 2026-08-04 : ce nom désignait une liste fantôme héritée de Base44, absente de
 // tout seed, qui coexistait en base avec « ensemble-bennett-lapid » et pouvait
-// donc sortir en tête de la boussole alors qu'elle n'existe plus depuis avril.
+// donc sortir en tête de la boussole. Précision apportée le 2026-08-04 : « Yachad »
+// (ביחד, Beyachad) est le NOM HÉBREU de la liste Bennett-Lapid — ce n'était donc
+// pas un parti disparu mais un DOUBLON du même parti sous son autre nom, ce qui
+// rend la fusion d'autant plus justifiée.
 // La garde de cohérence en bas de computeMatches empêche que ça se reproduise.
 //
-// SOURCES — chaque position ajoutée ou retirée le 2026-08-03 est justifiée dans
+// SOURCES — chaque position ajoutée ou retirée le 2026-08-04 est justifiée dans
 // docs/BOUSSOLE_SOURCES.md, avec sa source et son degré de certitude. Les
 // positions antérieures à cette date n'ont pas encore été sourcées : c'est une
 // dette connue, listée en fin de ce même document.
@@ -32,7 +35,7 @@ import TrialWall from '@/components/knesset/TrialWall';
 const STATEMENTS = [
   // ⚠️ AFFIRMATION STRUCTURANTE — elle pèse plus lourd que les autres dans le
   // résultat, une erreur ici se propage partout. Les Réservistes en ont été
-  // RETIRÉS le 2026-08-03 : ils y figuraient « contre », alors que Yoaz Hendel
+  // RETIRÉS le 2026-08-04 : ils y figuraient « contre », alors que Yoaz Hendel
   // refuse explicitement de faire de Netanyahou l'axe du scrutin (« s'il y a
   // demain un gouvernement de 70-80 sièges sionistes et que Netanyahou en fait
   // partie, bien sûr que je le rejoindrais », JPost 23/07/2026). Absence de
@@ -44,7 +47,7 @@ const STATEMENTS = [
   // clause de dérogation est vue par les deux comme l'outil qui mettrait la loi
   // d'exemption militaire à l'abri du contrôle judiciaire (ToI). Nuance à garder
   // en tête : tous deux ont ensuite servi de force modératrice dans la coalition.
-  // SOURCÉE le 2026-08-03. Eisenkot confirmé « contre » — il s'oppose à la refonte
+  // SOURCÉE le 2026-08-04. Eisenkot confirmé « contre » — il s'oppose à la refonte
   // judiciaire —, avec une nuance conservée ici : il dit vouloir « faire avancer
   // une réforme du système judiciaire » sans préciser laquelle. S'opposer à CETTE
   // refonte n'est pas défendre le statu quo.
@@ -57,7 +60,7 @@ const STATEMENTS = [
   { text: 'La réforme judiciaire (affaiblir la Cour suprême) doit aboutir.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'shas', 'judaisme-unifie-de-la-torah'],
     contre: ['yashar-gadi-eisenkot', 'les-democrates', 'yisrael-beytenou', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
-  // SOURCÉE le 2026-08-03, dernière affirmation du fichier à l'être.
+  // SOURCÉE le 2026-08-04, dernière affirmation du fichier à l'être.
   //
   // Pour — Smotrich : « nous voudrions tous que l'État agisse selon la Torah et la
   // halakha » ; il veut le ministère de la Justice pour que le droit israélien
@@ -82,7 +85,7 @@ const STATEMENTS = [
   { text: "L'État doit s'appuyer davantage sur la loi religieuse juive (halakha).",
     pour: ['shas', 'judaisme-unifie-de-la-torah', 'sionisme-religieux', 'otzma-yehudit'],
     contre: ['yisrael-beytenou', 'les-democrates', 'yashar-gadi-eisenkot', 'hadash-ta-al-liste-commune', 'ra-am', 'ensemble-bennett-lapid', 'unite-nationale'] },
-  // SOURCÉE le 2026-08-03, les 9 positions. Shas a menacé de bloquer le budget
+  // SOURCÉE le 2026-08-04, les 9 positions. Shas a menacé de bloquer le budget
   // 2026 faute de loi d'exemption ; le JUT a déposé un texte pour la sanctuariser
   // et Gafni a appelé le gouvernement à ignorer les arrêts de la Cour suprême.
   // En face : Eisenkot porte une « loi de service national universel » ; Hendel a
@@ -92,7 +95,7 @@ const STATEMENTS = [
   // « qui encourage l'évasion du service » ; le plan de Gantz incluait de « faire
   // avancer la législation sur l'enrôlement des ultra-orthodoxes ».
   //
-  // Le Sionisme religieux a été ajouté du côté « contre » le 2026-08-03 : c'est la
+  // Le Sionisme religieux a été ajouté du côté « contre » le 2026-08-04 : c'est la
   // faille qui sépare enfin les nationaux-religieux des haredim, alors qu'ils
   // siègent dans la même coalition. Déclaration officielle du 10/12/2025 — le
   // parti ne votera « que pour une loi qui amènera un enrôlement RÉEL ET RAPIDE
@@ -114,8 +117,8 @@ const STATEMENTS = [
   // frontalement sur une question n'a pas de position sur cette question.
   //
   // (Historique : le slug fantôme yachad-bennett était le seul porteur ici avant
-  // le 2026-08-03 ; ailleurs il faisait doublon avec ensemble-bennett-lapid.)
-  // SOURCÉE le 2026-08-03. L'énoncé a été précisé : « des négociations de paix »
+  // le 2026-08-04 ; ailleurs il faisait doublon avec ensemble-bennett-lapid.)
+  // SOURCÉE le 2026-08-04. L'énoncé a été précisé : « des négociations de paix »
   // était trop vague pour les sources disponibles, qui portent toutes sur
   // l'horizon des deux États. La question colle désormais aux preuves.
   //
@@ -134,14 +137,14 @@ const STATEMENTS = [
   { text: 'Il faut relancer un processus de paix avec les Palestiniens, visant deux États.',
     pour: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'],
     contre: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yashar-gadi-eisenkot'] },
-  // ⚠️ CORRECTION du 2026-08-03. Yashar figurait ici « contre ». C'est faux :
+  // ⚠️ CORRECTION du 2026-08-04. Yashar figurait ici « contre ». C'est faux :
   // Eisenkot déclarait en juin 2026 « je crois beaucoup à l'implantation en
   // Judée-Samarie », et « je n'ai jamais dit deux États pour deux peuples ».
   // Il est déplacé du côté « pour » — avec une réserve consignée dans
   // docs/BOUSSOLE_SOURCES.md : l'affirmation mêle extension ET annexion, or seule
   // l'extension est documentée chez lui. C'est la seconde erreur factuelle
   // trouvée sur ce parti, après son classement en « anti-Netanyahou ».
-  // Positions « pour » sourcées le 2026-08-03 : Netanyahou a promis d'étendre les
+  // Positions « pour » sourcées le 2026-08-04 : Netanyahou a promis d'étendre les
   // implantations après la reconnaissance d'un État palestinien par Londres,
   // Ottawa et Canberra ; Ben Gvir réclame « l'application immédiate de la
   // souveraineté » ; Smotrich mène de longue date la bataille de l'annexion.
@@ -161,7 +164,7 @@ const STATEMENTS = [
   // structure du débat israélien : l'opposition à Netanyahou n'y implique en rien
   // l'opposition aux implantations.
   //
-  // ⚠️ UNITÉ NATIONALE RETIRÉE le 2026-08-03 — quatrième erreur de la même
+  // ⚠️ UNITÉ NATIONALE RETIRÉE le 2026-08-04 — quatrième erreur de la même
   // famille. Le parti figurait « contre ». Or Gantz, ministre de la Défense, a
   // cherché à approuver la construction d'environ 5 000 logements dans les
   // implantations après six mois de gel, et s'est dit prêt à soutenir une
@@ -172,7 +175,7 @@ const STATEMENTS = [
   // sous une autre étiquette et dans un gouvernement d'union. Sans position, donc
   // — l'inverse de « contre », qui n'était soutenu par rien.
   //
-  // ⚠️ DEUX CORRECTIONS du 2026-08-03, même erreur sur les deux listes récentes.
+  // ⚠️ DEUX CORRECTIONS du 2026-08-04, même erreur sur les deux listes récentes.
   //
   // Yashar y figurait « contre ». Eisenkot, juin 2026 : « je crois beaucoup à
   // l'implantation en Judée-Samarie », « je n'ai jamais dit deux États pour deux
@@ -199,7 +202,7 @@ const STATEMENTS = [
   // zone. Il ne recevra rien de l'État. Il ne pourra ni voter ni être élu à la
   // Knesset. » (ToI, 20/11/2025). C'est un refus explicite des deux volets de
   // l'affirmation — l'égalité pleine ET la place au gouvernement.
-  // SOURCÉE le 2026-08-03. Les six positions tiennent, aucune correction.
+  // SOURCÉE le 2026-08-04. Les six positions tiennent, aucune correction.
   //
   // Contre — Otzma Yehudit est un parti kahaniste ouvertement anti-arabe ; Ben
   // Gvir déclare que son droit de circuler « est plus important que le droit de
@@ -220,14 +223,14 @@ const STATEMENTS = [
   // Les Réservistes : « une doctrine sécuritaire plus agressive » est un pilier
   // déclaré du programme (ToI, 20/11/2025). Shas : l'IDI relève qu'« en série de
   // votes à la Knesset sur les grands dossiers diplomatiques, Shas a adopté une
-  // position faucon ». Le JUT a été RETIRÉ d'ici le 2026-08-03 : l'IDI le décrit
+  // position faucon ». Le JUT a été RETIRÉ d'ici le 2026-08-04 : l'IDI le décrit
   // comme « centriste », faisant primer « les considérations religieuses sur les
   // considérations sécuritaires ou diplomatiques » — il a même voté le
   // désengagement de Gaza. La position que je lui prêtais n'était pas sourçable.
   { text: 'Face au Hamas et à l\'Iran, la fermeté sécuritaire prime sur tout.',
     pour: ['likoud', 'otzma-yehudit', 'sionisme-religieux', 'yisrael-beytenou', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid', 'unite-nationale', 'les-reservistes-hendel-tropper', 'shas'],
     contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
-  // SOURCÉE le 2026-08-03, les 8 positions. Pour : Lieberman a bâti sa carrière
+  // SOURCÉE le 2026-08-04, les 8 positions. Pour : Lieberman a bâti sa carrière
   // contre les partis haredim et dénonce un budget « sectaire » ; Golan vise les
   // écoles « qui refusent d'enseigner le tronc commun » ; Eisenkot rejette
   // ouvertement l'étreinte politique haredi, ses plans de conscription excluant de
@@ -247,7 +250,7 @@ const STATEMENTS = [
   // Shas et le JUT sont des partis SOCIAUX autant que religieux : ils défendent
   // les allocations et le soutien public aux familles nombreuses, donc contre le
   // désengagement de l'État. C'est leur ligne la mieux établie hors du religieux.
-  // ── Ajoutées le 2026-08-03 pour élargir les dénominateurs ────────────────────
+  // ── Ajoutées le 2026-08-04 pour élargir les dénominateurs ────────────────────
   // Avec 10 affirmations et une couverture partielle, beaucoup de parties se
   // jouaient sur 4 ou 5 comparaisons — d'où les 100 % en pagaille. Ces trois-là
   // ont été choisies parce qu'elles CLIVENT et qu'elles se sourcent : la première
@@ -364,7 +367,7 @@ const STATEMENTS = [
     pour: ['likoud', 'unite-nationale', 'yisrael-beytenou', 'yashar-gadi-eisenkot'],
     contre: ['otzma-yehudit', 'sionisme-religieux'] },
 
-  // Affirmation DISCRIMINANTE, ajoutée le 2026-08-03. Diagnostic : sur les 13
+  // Affirmation DISCRIMINANTE, ajoutée le 2026-08-04. Diagnostic : sur les 13
   // affirmations précédentes, Yashar, Yisrael Beytenou, Ensemble, Unité nationale
   // et Les Réservistes ne s'opposaient sur AUCUNE — la boussole désignait un bloc,
   // pas un parti. Celle-ci les sépare, parce que c'est la vraie ligne de fracture
@@ -381,7 +384,7 @@ const STATEMENTS = [
     pour: ['hadash-ta-al-liste-commune', 'ra-am', 'les-democrates'],
     contre: ['ensemble-bennett-lapid', 'yisrael-beytenou', 'les-reservistes-hendel-tropper', 'otzma-yehudit', 'sionisme-religieux'] },
 
-  // REMPLACE, le 2026-08-03, « L'État doit moins intervenir dans l'économie ».
+  // REMPLACE, le 2026-08-04, « L'État doit moins intervenir dans l'économie ».
   // L'ancienne affirmation avait zéro position sourcée sur neuf, ne départageait
   // aucun parti que d'autres ne séparaient déjà, et surtout elle mentait par
   // construction : elle rangeait Shas et le JUT « contre le libéralisme » alors
@@ -426,7 +429,7 @@ const COUVERTURE = (() => {
 //
 // Le taux d'accord brut traite « 100 % sur 4 affirmations » et « 100 % sur 10 »
 // comme équivalents, alors que le second est bien mieux établi. Constaté en
-// production le 2026-08-03 : quatre partis à 100 %, quatre barres pleines, et un
+// production le 2026-08-04 : quatre partis à 100 %, quatre barres pleines, et un
 // seul proclamé le plus proche — une hiérarchie qui n'existait pas.
 //
 // Plutôt que de bricoler un seuil arbitraire (« au moins 5 affirmations »), on

@@ -18,7 +18,7 @@ const FRICTIONS = [
   // ⚠️ POIDS À REVOIR (David) : cette paire absorbe une seconde friction qui
   // existait en double. Une ligne ['likoud','yachad-bennett',16,'Bennett :
   // histoire compliquée avec Bibi'] visait le slug fantôme hérité de Base44,
-  // désactivé le 2026-08-03 — elle ne s'appliquait donc JAMAIS. Les deux
+  // désactivé le 2026-08-04 — elle ne s'appliquait donc JAMAIS. Les deux
   // fondateurs d'Ensemble n'ont pas le même passif avec Netanyahou : Lapid
   // pesait 32, Bennett 16. On garde 32, mais c'est le chiffre de Lapid pour une
   // liste que Bennett dirige : à trancher.

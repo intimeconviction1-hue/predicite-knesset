@@ -1,7 +1,7 @@
 # Boussole — sources des positions
 
 Ce document justifie chaque position de `client/src/pages/Boussole.jsx` **ajoutée
-ou retirée à partir du 2026-08-03**. Il applique à la Boussole la discipline déjà
+ou retirée à partir du 2026-08-04**. Il applique à la Boussole la discipline déjà
 tenue ailleurs sur le site : `histoire_source` sur chaque liste, `margin_error_pct`
 omis quand la source ne le publie pas, `current_knesset_seats` jamais déduit d'un
 sondage.
@@ -116,7 +116,7 @@ pleine et la place au gouvernement.
 
 ### Les Réservistes — 1. Netanyahou doit rester Premier ministre (était : contre)
 
-**Retirée le 2026-08-03. Erreur factuelle, et sur l'affirmation la plus lourde du
+**Retirée le 2026-08-04. Erreur factuelle, et sur l'affirmation la plus lourde du
 questionnaire.** Le parti était classé « contre ». Or Yoaz Hendel refuse
 explicitement de faire de Netanyahou l'axe du scrutin :
 
@@ -139,7 +139,7 @@ rejette. Absence de position = position documentée, pas oubli.
 
 ### Judaïsme unifié de la Torah — 8. Fermeté sécuritaire (était : pour)
 
-**Retirée le 2026-08-03, faute de source — et contredite par la meilleure
+**Retirée le 2026-08-04, faute de source — et contredite par la meilleure
 disponible.** L'IDI décrit le JUT comme « centriste » en matière de sécurité et de
 diplomatie, faisant primer « les considérations religieuses sur les considérations
 sécuritaires ou diplomatiques ». Le parti a voté le désengagement de Gaza alors
@@ -151,14 +151,14 @@ Je l'avais posée par alignement de coalition. L'alignement n'est pas une positi
 
 ### Les Réservistes — 3. Loi religieuse juive (était : contre)
 
-**Retirée le 2026-08-03, faute de source.** Je l'avais déduite de l'hostilité du
+**Retirée le 2026-08-04, faute de source.** Je l'avais déduite de l'hostilité du
 parti aux partis haredim. Or ce conflit porte sur la **conscription**, pas sur la
 place de la halakha dans l'État — et Yoaz Hendel est lui-même issu du sionisme
 religieux. La déduction était illégitime.
 
 ---
 
-## Affirmations ajoutées le 2026-08-03 (10 → 13)
+## Affirmations ajoutées le 2026-08-04 (10 → 13)
 
 Motif : avec 10 affirmations et une couverture partielle, beaucoup de parties se
 jouaient sur 4 ou 5 comparaisons seulement — d'où des 100 % à répétition et des
@@ -262,7 +262,7 @@ sur l'**arithmétique parlementaire**.
 
 ---
 
-## ⚠️ Diagnostic du 2026-08-03 : la boussole désigne un BLOC, pas un parti
+## ⚠️ Diagnostic du 2026-08-04 : la boussole désigne un BLOC, pas un parti
 
 Mesure faite sur les 78 paires de partis possibles : **20 d'entre elles ne
 s'opposent sur AUCUNE affirmation**. Trois groupes sont entièrement
@@ -287,7 +287,7 @@ du même côté, et Yashar en est absent — or une absence ne crée pas de dés
 Pour rendre ces partis réellement discernables, il faut des affirmations où ils
 prennent des positions **opposées**.
 
-### Avancement : 20 → 8 paires (2026-08-03)
+### Avancement : 20 → 8 paires (2026-08-04)
 
 **Correction sans gain — Ensemble n'est pas contre les implantations.** Troisième
 erreur factuelle héritée, et le même motif : une liste récente rangée trop à
@@ -314,7 +314,7 @@ tranche.**
 
 ### Relecture complète des positions d'Ensemble à l'aune de la table
 
-Faite le 2026-08-03, après la troisième erreur. Sur les 19 affirmations, les
+Faite le 2026-08-04, après la troisième erreur. Sur les 19 affirmations, les
 positions d'Ensemble tiennent, à deux exceptions près.
 
 **Affirmation 5 (relancer des négociations de paix) — le trou reste, mais il
@@ -346,7 +346,7 @@ vérifier** — elle fait partie de la dette listée plus bas.
 ### Précision de méthode : la ligne du chef n'est pas un héritage
 
 La règle **« on n'hérite pas d'une position par fusion »** a été affinée le
-2026-08-03. Elle visait à ne pas prêter à Ensemble les positions de **Lapid**, son
+2026-08-04. Elle visait à ne pas prêter à Ensemble les positions de **Lapid**, son
 numéro deux — c'est ce qui justifie de laisser la liste sans position sur la peine
 de mort et sur l'accord otages, où seul Lapid s'est exprimé.
 
@@ -700,7 +700,7 @@ La tension est réelle mais elle porte sur le prix du soutien, pas sur son princ
 
 ## Les deux affirmations les plus sensibles, soldées
 
-Priorité n°1 de l'inventaire, traitée le 2026-08-03.
+Priorité n°1 de l'inventaire, traitée le 2026-08-04.
 
 ### Affirmation « processus de paix visant deux États » — sourcée, et reformulée
 
@@ -834,7 +834,7 @@ attaqué le budget.** Il n'y a donc pas de division interne à arbitrer, contrai
   **Certitude : élevée.** Huit positions, toutes adossées à un vote ou à une
   citation nommée.
 
-## Dette de sourçage — inventaire chiffré (2026-08-03)
+## Dette de sourçage — inventaire chiffré (2026-08-04)
 
 | | Positions |
 |---|---|
@@ -877,7 +877,7 @@ halakha elle-même. Conservée, mais c'est la première à revérifier.
 
 ### Cinquième erreur : Unité nationale et les implantations
 
-Suspicion confirmée le 2026-08-03. Le parti figurait « contre » l'extension des
+Suspicion confirmée le 2026-08-04. Le parti figurait « contre » l'extension des
 implantations. Or Gantz, comme ministre de la Défense, a cherché à approuver la
 construction d'environ **5 000 logements** dans les implantations après six mois
 de gel, et s'est dit prêt à soutenir une **annexion unilatérale** « si les
@@ -990,7 +990,7 @@ ce qu'on vous reprochera le plus cher.
 
 ## Dette de sourçage
 
-Les positions **antérieures au 2026-08-03** — l'essentiel du tableau — n'ont pas
+Les positions **antérieures au 2026-08-04** — l'essentiel du tableau — n'ont pas
 encore été vérifiées une par une. Elles proviennent de la rédaction initiale et
 sont plausibles, mais elles ne portent pas de source.
 
@@ -999,7 +999,7 @@ avant comme une référence sourcée au même titre que l'historique des 25 Knes
 
 Ordre de priorité suggéré, du plus exposé au moins exposé :
 
-1. ~~Affirmation 1 (Netanyahou)~~ — **faite le 2026-08-03**. Elle a livré une
+1. ~~Affirmation 1 (Netanyahou)~~ — **faite le 2026-08-04**. Elle a livré une
    erreur factuelle (Les Réservistes) sur l'affirmation qui pèse le plus lourd.
    L'affirmation 6 en a livré une seconde (Yashar), trouvée par un autre chemin.
 

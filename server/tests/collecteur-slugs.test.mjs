@@ -1,7 +1,7 @@
 /**
  * Le collecteur Kan ne doit viser que des listes du SEED.
  *
- * Pourquoi ce test existe : jusqu'au 2026-08-03, la règle « ביחד|בנט » pointait
+ * Pourquoi ce test existe : jusqu'au 2026-08-04, la règle « ביחד|בנט » pointait
  * vers le slug 'yachad-bennett'. Ce slug ne figure dans aucun seed du dépôt,
  * mais une liste du même nom survivait en base de production (reliquat Base44).
  * Il RÉSOLVAIT donc à l'exécution : aucune erreur, aucune garde déclenchée, et

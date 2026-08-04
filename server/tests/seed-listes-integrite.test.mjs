@@ -6,7 +6,7 @@
  * référentiel lui-même, lui, n'était contrôlé par rien : sa somme valait 119
  * depuis l'origine, parce que Noam (Avi Maoz, 1 siège) — troisième faction issue
  * de la liste commune de 2022 avec Otzma Yehudit et le Sionisme religieux —
- * n'y figurait pas. Ajouté le 2026-08-03, en même temps que ce test.
+ * n'y figurait pas. Ajouté le 2026-08-04, en même temps que ce test.
  *
  * Ne touche aucune base : lecture du seed versionné uniquement.
  *

@@ -131,11 +131,16 @@ const STATEMENTS = [
   // Ottawa et Canberra ; Ben Gvir réclame « l'application immédiate de la
   // souveraineté » ; Smotrich mène de longue date la bataille de l'annexion.
   //
-  // ⚠️ UNE POSITION DOUTEUSE : Unité nationale en « contre », non sourcée. Gantz
-  // rejette lui aussi un État palestinien, et la presse décrit les rivaux de
-  // Netanyahou comme divisés sur la Cisjordanie, pas unis contre les
-  // implantations. À vérifier en priorité — c'est la même famille d'erreur que
-  // celles trouvées sur Yashar et Ensemble ci-dessous.
+  // ⚠️ UNITÉ NATIONALE RETIRÉE le 2026-08-03 — quatrième erreur de la même
+  // famille. Le parti figurait « contre ». Or Gantz, ministre de la Défense, a
+  // cherché à approuver la construction d'environ 5 000 logements dans les
+  // implantations après six mois de gel, et s'est dit prêt à soutenir une
+  // annexion unilatérale « si les Palestiniens disent non pour toujours »,
+  // à condition qu'elle ne compromette pas les accords de paix existants.
+  //
+  // Il n'est pas déplacé en « pour » pour autant : ces éléments datent de 2020,
+  // sous une autre étiquette et dans un gouvernement d'union. Sans position, donc
+  // — l'inverse de « contre », qui n'était soutenu par rien.
   //
   // ⚠️ DEUX CORRECTIONS du 2026-08-03, même erreur sur les deux listes récentes.
   //
@@ -157,7 +162,7 @@ const STATEMENTS = [
   // une autre étiquette, pas comme chef d'Ensemble.
   { text: 'Il faut étendre les implantations, voire annexer une partie de la Cisjordanie.',
     pour: ['sionisme-religieux', 'otzma-yehudit', 'likoud', 'yashar-gadi-eisenkot', 'ensemble-bennett-lapid'],
-    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am', 'unite-nationale'] },
+    contre: ['les-democrates', 'hadash-ta-al-liste-commune', 'ra-am'] },
   // Les Réservistes : position la MIEUX documentée du lot. Yoaz Hendel veut un
   // « gouvernement d'unité sioniste sans partis arabes ni haredim » et déclare :
   // « Quiconque choisit de ne pas servir choisit d'être un citoyen de seconde

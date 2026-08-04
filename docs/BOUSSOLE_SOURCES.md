@@ -839,21 +839,54 @@ attaqué le budget.** Il n'y a donc pas de division interne à arbitrer, contrai
 | | Positions |
 |---|---|
 | **Sourcées** — justifiées une par une | **148** (93 %) |
-| **Non sourcées** | **12** (7 %) |
-| Total | 160 |
+| **Non sourcées** | **11** (7 %) |
+| Total | 159 |
 
-**18 affirmations sur 19 sont entièrement sourcées.** Les 12 positions restantes
-tiennent en deux endroits :
+**18 affirmations sur 19 sont entièrement sourcées.** Le seul trou restant est
+**l'affirmation sur la halakha, 11 positions, dont aucune n'est documentée.**
 
-- **La halakha, 11 positions.** Aucune n'est documentée. Deux sont explicitement
-  signalées comme douteuses dans le code — Yashar et Unité nationale en
-  « contre ». Elles sont probablement justes, ce sont des partis non religieux,
-  mais « probablement juste » est exactement le raisonnement qui a produit les
-  quatre erreurs de la journée.
-- **Unité nationale en « contre » sur les implantations.** Gantz rejette lui aussi
-  un État palestinien, et la presse décrit les rivaux de Netanyahou comme
-  **divisés** sur la Cisjordanie, pas unis contre les implantations. Même famille
-  d'erreur que celles trouvées sur Yashar et Ensemble. À vérifier en priorité.
+Deux d'entre elles sont explicitement signalées comme douteuses dans le code —
+Yashar et Unité nationale en « contre ». Elles sont probablement justes, ce sont
+des partis non religieux, mais « probablement juste » est exactement le
+raisonnement qui a produit les cinq erreurs de la journée.
+
+### Cinquième erreur : Unité nationale et les implantations
+
+Suspicion confirmée le 2026-08-03. Le parti figurait « contre » l'extension des
+implantations. Or Gantz, comme ministre de la Défense, a cherché à approuver la
+construction d'environ **5 000 logements** dans les implantations après six mois
+de gel, et s'est dit prêt à soutenir une **annexion unilatérale** « si les
+Palestiniens disent non pour toujours », à condition qu'elle ne compromette pas
+les accords de paix existants.
+
+Il n'est pas déplacé en « pour » pour autant : ces éléments datent de 2020, sous
+une autre étiquette et dans un gouvernement d'union. **Sans position** — ce qui
+reste l'inverse de « contre », lequel n'était soutenu par rien.
+
+**Coût : le compteur de paires remonte de 8 à 10**, Unité nationale redevenant
+indiscernable de Yashar et d'Ensemble. Même arbitrage que pour Ensemble plus
+haut, tranché de la même façon : une position fausse qui « discrimine » ne vaut
+rien.
+
+  - https://www.timesofisrael.com/gantz-signals-support-for-unilateral-annexation-if-palestinians-say-no-forever/
+
+### Bilan des erreurs de la journée
+
+Cinq positions héritées invalidées, et **les cinq relèvent du même motif** : un
+parti de droite ou de centre-droit rangé à gauche parce qu'il s'oppose à
+Netanyahou.
+
+| Parti | Affirmation | Était | Devient |
+|---|---|---|---|
+| Les Réservistes | Netanyahou doit rester PM | contre | sans position |
+| Les Réservistes | Réforme judiciaire | contre | sans position |
+| Yashar | Implantations | contre | **pour** |
+| Ensemble | Implantations | contre | **pour** |
+| Unité nationale | Implantations | contre | sans position |
+
+L'affirmation sur les implantations concentre trois des cinq. C'est cohérent :
+c'est la question sur laquelle « anti-Netanyahou » et « de gauche » divergent le
+plus en Israël, et donc celle où l'amalgame se paie le plus cher.
 
 *Progression de la journée : 66 (41 %) → 79 (49 %) → 103 (64 %) → 111 (69 %) →
 148 (93 %).*

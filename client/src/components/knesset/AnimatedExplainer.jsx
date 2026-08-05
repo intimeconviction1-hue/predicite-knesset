@@ -21,14 +21,14 @@ export const ELECTION_STEPS = [
   { icon: Vote,          color: '#2B5CE6', kicker: 'Le vote',     stat: '1 liste',       title: 'Des millions de voix',      text: 'Chaque électeur vote pour UNE liste (pas un nom) — au scrutin proportionnel national.', dots: { n: 24, lit: 24 } },
   { icon: AlertTriangle, color: '#C8102E', kicker: 'Le filtre',   stat: '3,25 %',        title: "Le seuil d'entrée",         text: "Une liste sous 3,25 % des voix n'obtient aucun siège. Souvent, tout se joue là.", bar: 3.25 },
   { icon: Scale,         color: '#7A5F1A', kicker: 'Le calcul',   stat: 'proportionnel', title: 'La répartition des sièges', text: 'Les 120 sièges se répartissent à la proportionnelle (méthode Bader-Ofer), avec accords d’excédents.', dots: { n: 18, lit: 18 } },
-  { icon: Landmark,      color: '#0EA5E9', kicker: "L'assemblée", stat: '120',           title: 'Les sièges de la Knesset',  text: 'La Knesset compte 120 sièges à pourvoir.', dots: { n: 30, lit: 30 } },
+  { icon: Landmark,      color: 'var(--p-teal-text)', kicker: "L'assemblée", stat: '120',           title: 'Les sièges de la Knesset',  text: 'La Knesset compte 120 sièges à pourvoir.', dots: { n: 30, lit: 30 } },
   { icon: Crown,         color: '#D4AF37', kicker: 'Gouverner',   stat: '61',            title: 'La majorité',               text: 'Il faut réunir 61 sièges — une coalition — pour former un gouvernement.', dots: { n: 30, lit: 16 } },
 ];
 
 // Preset « comment jouer » (NOS règles à nous — pédagogie du jeu).
 export const GAME_STEPS = [
   { icon: Target,     color: '#2B5CE6', kicker: 'Anticipe', stat: '120',   title: 'Pronostique les sièges', text: 'Pour chaque liste, prédis un nombre de sièges. Au dépouillement, plus tu es juste, plus tu marques (jusqu’à +150 par liste).' },
-  { icon: TrendingUp, color: '#0EA5E9', kicker: 'Parie',    stat: 'cotes', title: 'Parie sur la campagne',  text: 'Sondages et événements, 100 % en jetons gratuits. Bien parier fait monter ton Score — pas seulement tes jetons.' },
+  { icon: TrendingUp, color: 'var(--p-teal-text)', kicker: 'Parie',    stat: 'cotes', title: 'Parie sur la campagne',  text: 'Sondages et événements, 100 % en jetons gratuits. Bien parier fait monter ton Score — pas seulement tes jetons.' },
   { icon: HelpCircle, color: '#7A5F1A', kicker: 'Apprends', stat: 'quiz',  title: 'Teste-toi, apprends',    text: 'Chaque bonne réponse rapporte (plafonné). Tente un défi série pour miser tes jetons sur une série.' },
   { icon: Trophy,     color: '#D4AF37', kicker: 'Grimpe',   stat: 'Oracle', title: 'Monte au classement',   text: 'Un seul Score décide de ton rang, de Citoyen à Oracle — ici comme dans tes ligues privées.' },
 ];

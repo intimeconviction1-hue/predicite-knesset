@@ -10,7 +10,10 @@ import Hemicycle from '@/components/knesset/Hemicycle';
 import CinematicHero from '@/components/knesset/CinematicHero';
 
 // Palette pour colorer l'hémicycle d'une Knesset passée (par ordre de sièges).
-const HISTO_PALETTE = ['#2B5CE6', '#C8102E', '#F59E0B', '#0D9488', '#8B5CF6', '#06B6D4', '#84CC16', '#EC4899', '#F97316', '#64748B', '#14B8A6', '#7C3AED', '#0EA5E9', '#78716C'];
+// Palette des series. Six valeurs echouaient le seuil de 3:1 (WCAG 1.4.11,
+// objet graphique porteur d'information) : ambre 2.15, cyan 2.43, lime 1.98,
+// orange 2.80, turquoise 2.49, azur 2.45. Meme teinte, assombrie.
+const HISTO_PALETTE = ['#2B5CE6', '#C8102E', '#B45309', '#0D9488', '#8B5CF6', '#0E7490', '#4D7C0F', '#EC4899', '#C2410C', '#64748B', '#0F766E', '#7C3AED', '#0369A1', '#78716C'];
 
 // Durée lisible entre deux dates (ex. « 3 ans 4 mois »).
 function dureeLisible(from, to) {
@@ -41,7 +44,7 @@ function EvolutionChart({ elections }) {
   const majorityY = y(61);
 
   return (
-    <div className="p-card p-reveal p-5 mb-6" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}>
+    <div className="p-card p-reveal p-5 mb-6">
       <p className="p-title text-base mb-1" style={{ color: 'var(--p-text)' }}>Évolution : 1er et 2e parti, élection par élection</p>
       <p className="p-body text-xs mb-4 max-w-prose" style={{ color: 'var(--p-text-40)' }}>De la domination Mapaï/Alignement à la fragmentation actuelle — chaque point est un vrai résultat, pas une estimation.</p>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" style={{ overflow: 'visible' }}>
@@ -84,8 +87,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-10%' }}
       transition={{ duration: 0.35, delay: Math.min(index * 0.04, 0.3) }}
-      className="p-card overflow-hidden transition-colors duration-300 hover:border-[var(--p-border-hover)]"
-      style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
+      className="p-card overflow-hidden transition-colors duration-300"
     >
       <button onClick={() => setOpen(o => !o)} className="w-full text-left px-5 py-4 flex items-center gap-4">
         <div

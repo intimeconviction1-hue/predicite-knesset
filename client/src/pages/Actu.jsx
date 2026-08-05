@@ -90,8 +90,12 @@ export default function Actu() {
                 viewport={{ once: true, margin: '-5%' }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.3) }}
                 whileHover={{ y: -1 }}
-                className="block p-card p-4 transition-colors duration-200"
-                style={{ background: 'var(--p-card)', border: '1px solid var(--p-gold-border)', borderLeft: '3px solid var(--p-gold)' }}
+                // Le liseré or de 3px à gauche redisait ce que la pastille
+                // « Résumé PrédiCité » annonce déjà en toutes lettres. Une
+                // bordure teintée et un halo suffisent à distinguer la carte
+                // sans lui coller une barre de couleur.
+                className="block p-card p-glow-gold p-4 transition-colors duration-200"
+                style={{ borderColor: 'var(--p-gold-border)' }}
               >
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <span className="p-badge p-badge-gold">Résumé PrédiCité</span>
@@ -112,8 +116,7 @@ export default function Actu() {
                 viewport={{ once: true, margin: '-5%' }}
                 transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.3) }}
                 whileHover={{ y: -1 }}
-                className="flex items-start gap-3 p-card p-4 transition-colors duration-200 hover:border-[var(--p-border-hover)]"
-                style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
+                className="flex items-start gap-3 p-card p-4 transition-colors duration-200"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--p-text)' }}>{cleanTitle(item.title, item.source)}</p>

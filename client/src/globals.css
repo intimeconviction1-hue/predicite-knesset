@@ -96,6 +96,9 @@
     --p-bronze-text:  #A96326;   /* 4.67:1 */
     --p-orange:       #F97316;
     --p-orange-text:  #C2410C;   /* 5.18:1 */
+    /* Le cyan des explicatifs (#0EA5E9) ne faisait que 2.77:1 : illisible en
+       texte, sous le seuil même pour une icône. */
+    --p-teal-text:    #0E7490;   /* 5.36:1 */
     --p-paper:        #E8EEF8;
     --p-ink:          #14203D;
     --p-text:         #14203D;

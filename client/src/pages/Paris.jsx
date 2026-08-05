@@ -17,14 +17,21 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState(null);
   const [celebrate, setCelebrate] = useState(0);
+  // Une mise est IRRÉVERSIBLE et partait au premier clic, sans récapitulatif :
+  // ni prévention d'erreur, ni contrôle, sur le second geste à enjeu du produit.
+  // Un palier de confirmation s'intercale, qui rappelle les trois chiffres qui
+  // comptent — combien, sur quoi, à quelle cote.
+  const [aConfirmer, setAConfirmer] = useState(false);
 
   const issue = market.issues.find(i => i.id === selected);
   const cote = issue?.cote || 0;
   const gain = Math.round(mise * cote);
   const canBet = issue && mise <= (jetons ?? 0) && mise >= MISE_MIN;
+  const plafond = Math.max(MISE_MIN, Math.min(MISE_MAX, jetons ?? MISE_MAX));
 
   async function place() {
     if (!canBet || busy) return;
+    setAConfirmer(false);
     setBusy(true); setMsg(null);
     try {
       const res = await base44.functions.invoke('parisSondages', { action: 'placerMise', issue_id: selected, mise });
@@ -39,7 +46,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
   }
 
   return (
-    <div className="rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
+    <div className="p-card p-5 md:p-6" style={{ borderColor: 'var(--p-gold-border)' }}>
       <ConfettiBurst trigger={celebrate} />
       <div className="flex items-center gap-2 mb-3 flex-wrap">
         {market.type === 'evenement'
@@ -49,7 +56,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
           {market.type === 'evenement' ? 'résolu quand l\'événement a lieu' : 'résolu au prochain sondage'}
         </span>
       </div>
-      <h3 className="text-lg font-bold mb-4" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{market.question}</h3>
+      <h3 className="p-title text-lg mb-4">{market.question}</h3>
 
       {/* issues avec cotes */}
       <div className="grid gap-2.5" style={{ gridTemplateColumns: `repeat(${Math.min(market.issues.length, 2)}, minmax(0,1fr))` }}>
@@ -80,36 +87,107 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
           <span>Ta mise</span>
           <span className="font-mono" style={{ color: 'var(--p-text)' }}>{mise} jetons</span>
         </div>
+        {/* Le curseur seul offrait 49 crans sur ~288px de piste, soit 5,9 px
+            par cran : impossible à viser au pouce. Trois montants rapides et
+            une saisie chiffrée le doublent. */}
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          {[25, 50, 100].filter(m => m <= plafond).map(m => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => { setMise(m); setAConfirmer(false); }}
+              aria-pressed={mise === m}
+              className="px-3 h-11 rounded-lg text-sm font-semibold transition-colors"
+              style={{
+                background: mise === m ? 'var(--p-blue-dim)' : 'transparent',
+                border: `0.5px solid ${mise === m ? 'var(--p-blue)' : 'var(--p-border-hover)'}`,
+                color: mise === m ? 'var(--p-blue)' : 'var(--p-text-60)',
+              }}
+            >
+              {m}
+            </button>
+          ))}
+          <input
+            type="number"
+            min={MISE_MIN} max={plafond} step={MISE_STEP}
+            inputMode="numeric"
+            aria-label="Montant de ta mise, en jetons"
+            value={mise}
+            onChange={e => { setMise(Number(e.target.value)); setAConfirmer(false); }}
+            className="w-20 h-11 px-2 rounded-lg bg-transparent border text-center text-sm outline-none focus:border-[var(--p-blue)]"
+            style={{ borderColor: 'var(--p-border-hover)', color: 'var(--p-text)', fontFamily: 'var(--font-mono)', fontWeight: 600 }}
+          />
+        </div>
         <input
-          type="range" min={MISE_MIN} max={Math.max(MISE_MIN, Math.min(MISE_MAX, jetons ?? MISE_MAX))} step={MISE_STEP}
-          value={mise} onChange={e => setMise(Number(e.target.value))}
+          type="range" min={MISE_MIN} max={plafond} step={MISE_STEP}
+          aria-label="Ajuster la mise au curseur"
+          value={mise} onChange={e => { setMise(Number(e.target.value)); setAConfirmer(false); }}
           className="w-full" style={{ accentColor: 'var(--p-blue)' }}
         />
         <div className="flex items-center justify-between mt-3 gap-3 flex-wrap">
           <div>
             <div className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Gain potentiel</div>
-            <div className="font-mono font-bold text-2xl leading-none" style={{ color: 'var(--p-green-text)' }}>{gain}</div>
+            <div className="p-mono text-2xl leading-none" style={{ color: 'var(--p-green-text)' }}>{gain}</div>
           </div>
           {loggedIn ? (
-            <button
-              onClick={place} disabled={!canBet || busy}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform"
-              style={{ background: canBet ? 'var(--p-blue)' : 'var(--p-text-25)', boxShadow: canBet ? '0 8px 20px -8px rgba(43,92,230,0.6)' : 'none', cursor: canBet ? 'pointer' : 'not-allowed' }}
-            >
-              {busy ? 'Envoi…' : 'Placer ma mise'} <ArrowRight className="w-4 h-4" />
-            </button>
+            !aConfirmer ? (
+              <button
+                onClick={() => setAConfirmer(true)} disabled={!canBet || busy}
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform"
+                style={{ background: canBet ? 'var(--p-blue)' : 'var(--p-text-25)', boxShadow: canBet ? 'var(--p-shadow-blue)' : 'none', cursor: canBet ? 'pointer' : 'not-allowed' }}
+              >
+                Placer ma mise <ArrowRight className="w-4 h-4" />
+              </button>
+            ) : null
           ) : (
             <button
               onClick={() => base44.auth.redirectToLogin()}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-semibold text-[15px] text-white transition-transform hover:-translate-y-0.5"
-              style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}
+              className="p-btn-primary gap-2 text-[15px]"
             >
               Se connecter pour parier <ArrowRight className="w-4 h-4" />
             </button>
           )}
         </div>
-        {mise > (jetons ?? 0) && <p className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>Pas assez de jetons pour cette mise.</p>}
-        {msg && <p className="text-xs mt-2" style={{ color: msg.ok ? 'var(--p-green)' : 'var(--p-red)' }}>{msg.text}</p>}
+
+        {/* Récapitulatif : les trois chiffres qu'on regrette de ne pas avoir vus
+            après coup — combien, sur quoi, à quelle cote. */}
+        {aConfirmer && (
+          <div className="mt-3 rounded-xl px-4 py-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text)' }}>
+              Tu mises <b className="p-mono">{mise}</b> jetons sur «&nbsp;{issue?.label}&nbsp;»
+              à la cote <b className="p-mono">{cote.toFixed(2)}</b> → gain potentiel <b className="p-mono" style={{ color: 'var(--p-green-text)' }}>{gain}</b>.
+            </p>
+            <p className="text-[11px] mt-1" style={{ color: 'var(--p-text-40)' }}>
+              La cote est verrouillée à cet instant. Une mise ne s'annule pas.
+            </p>
+            <div className="flex items-center gap-2 mt-3">
+              <button onClick={place} disabled={busy} className="p-btn-primary gap-2">
+                {busy ? 'Envoi…' : 'Confirmer la mise'}
+              </button>
+              <button onClick={() => setAConfirmer(false)} disabled={busy} className="p-btn-ghost">
+                Annuler
+              </button>
+            </div>
+          </div>
+        )}
+
+        {mise > (jetons ?? 0) && <p role="alert" className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>Pas assez de jetons pour cette mise.</p>}
+        {/* Le retour d'une mise était un <p> de 12px sous le bouton pendant que
+            les confettis occupaient tout l'écran : la célébration criait,
+            l'information chuchotait. */}
+        {msg && (
+          <div
+            role="status"
+            className="mt-3 rounded-xl px-4 py-2.5 text-sm font-semibold"
+            style={{
+              background: msg.ok ? 'var(--p-green-dim)' : 'var(--p-red-dim)',
+              border: `0.5px solid ${msg.ok ? 'rgba(26,140,85,0.3)' : 'rgba(200,16,46,0.3)'}`,
+              color: msg.ok ? 'var(--p-green-text)' : 'var(--p-red)',
+            }}
+          >
+            {msg.text}
+          </div>
+        )}
       </div>
 
       {/* Se renseigner : fiches des listes en jeu (marchés « rang ») */}
@@ -120,7 +198,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
             const l = listeById.get(iss.match_value);
             return l ? (
               <Link key={iss.id} to={`${createPageUrl('Liste')}?slug=${l.slug}`} className="text-[11px] font-semibold hover:underline inline-flex items-center gap-1" style={{ color: 'var(--p-blue)' }}>
-                <span className="w-1.5 h-1.5 rounded-full" style={{ background: l.color || '#6B7280' }} />{l.name_fr}
+                <span className="w-1.5 h-1.5 rounded-full" style={{ background: l.color || 'var(--p-text-25)' }} />{l.name_fr}
               </Link>
             ) : null;
           })}

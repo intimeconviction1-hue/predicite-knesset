@@ -28,10 +28,16 @@ export default function RectoVersoCard({
         role="button"
         tabIndex={0}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFlipped((f) => !f); } }}
-        aria-label="Retourner la carte"
+        aria-label={flipped ? 'Revenir au fait' : 'Retourner la carte — ce fait se joue'}
       >
-        {/* FACE MARBRE */}
-        <div className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] flex flex-col"
+        {/* FACE MARBRE.
+            `backface-visibility` est PUREMENT visuel : la face cachée restait
+            dans l'arbre d'accessibilité avec ses deux <Link>. Un lecteur d'écran
+            annonçait donc le fait ET le pari en même temps, et la tabulation
+            traversait des liens invisibles. `aria-hidden` + `inert` retirent la
+            face non affichée de l'arbre ET du parcours clavier. */}
+        <div aria-hidden={flipped} inert={flipped ? '' : undefined}
+          className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] flex flex-col"
           style={{ background: 'linear-gradient(160deg,#00259a,#0038B8)', border: '0.5px solid rgba(255,255,255,0.14)', boxShadow: '0 24px 50px -26px rgba(0,32,120,0.7)' }}>
           <div className="p-tricolor"><div /><div /><div /></div>
           {/* Menorah filigrane */}
@@ -65,7 +71,8 @@ export default function RectoVersoCard({
         </div>
 
         {/* FACE JEU */}
-        <div className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col"
+        <div aria-hidden={!flipped} inert={!flipped ? '' : undefined}
+          className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col"
           style={{ background: 'var(--p-card)', border: '1px solid var(--p-gold)', boxShadow: '0 24px 50px -26px rgba(212,175,55,0.5)' }}>
           <div className="p-5 flex flex-col h-full gap-3">
             <div className="flex items-center justify-between">

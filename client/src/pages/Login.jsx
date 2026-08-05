@@ -90,10 +90,9 @@ export default function Login() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-2.5 rounded-lg font-bold text-sm text-white transition-opacity hover:opacity-88 disabled:opacity-50"
-            style={{ background: 'var(--p-blue-deep)' }}
+            className="p-btn-deep w-full justify-center"
           >
-            {isSubmitting ? 'Connexion...' : 'Se connecter'}
+            {isSubmitting ? 'Connexion…' : 'Se connecter'}
           </button>
         </form>
 
@@ -102,16 +101,21 @@ export default function Login() {
             type="button"
             onClick={() => setShowAdminKey(true)}
             className="mt-5 text-[11px] underline underline-offset-2 transition-opacity hover:opacity-70"
-            style={{ color: 'var(--p-text-25)' }}
+            style={{ color: 'var(--p-text-40)' }}
           >
             Connexion administrateur
           </button>
         )}
 
-        <p className="text-[11px] mt-6 leading-relaxed" style={{ color: 'var(--p-text-25)' }}>
-          Connexion joueur par email, sans mot de passe — à durcir (lien magique
-          ou OAuth) avant une ouverture plus large. Le rôle administrateur, lui,
-          exige une clé serveur.
+        {/* Le texte précédent était une note de développeur affichée au public
+            (« à durcir — lien magique ou OAuth — avant une ouverture plus
+            large »), juste sous le champ email, au moment précis où l'on
+            demande une donnée personnelle. C'est de l'anti-réassurance. La
+            limite technique reste vraie et reste documentée dans le README et
+            le CLAUDE.md ; ici on dit à l'utilisateur ce qui LE concerne. */}
+        <p className="text-[11px] mt-6 leading-relaxed" style={{ color: 'var(--p-text-40)' }}>
+          Ton email sert uniquement à retrouver ton score et tes pronostics.
+          Pas de mot de passe à retenir, pas de publicité, aucune revente.
         </p>
       </motion.div>
     </div>

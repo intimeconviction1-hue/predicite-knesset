@@ -68,6 +68,26 @@ export default function Layout({ children, currentPageName }) {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  // Échap referme le menu ouvert et rend le focus à son déclencheur. Le handler
+  // ci-dessus n'écoutait que `mousedown` : un utilisateur au clavier ouvrait un
+  // menu et n'avait aucun moyen de le refermer — il tabulait « à travers » sans
+  // savoir qu'il était ouvert.
+  useEffect(() => {
+    const surEchap = (e) => {
+      if (e.key !== 'Escape') return;
+      const ouvert = isJouerOpen || isApprendreOpen || isUserMenuOpen || isMobileMenuOpen;
+      if (!ouvert) return;
+      const conteneur = isJouerOpen ? jouerRef : isApprendreOpen ? apprendreRef : userMenuRef;
+      setIsJouerOpen(false);
+      setIsApprendreOpen(false);
+      setIsUserMenuOpen(false);
+      setIsMobileMenuOpen(false);
+      conteneur?.current?.querySelector('button')?.focus();
+    };
+    document.addEventListener('keydown', surEchap);
+    return () => document.removeEventListener('keydown', surEchap);
+  }, [isJouerOpen, isApprendreOpen, isUserMenuOpen, isMobileMenuOpen]);
+
   // Nav organisée autour de l'axe « jouer en apprenant, apprendre en s'amusant » :
   // Jouer = la mécanique du jeu (règles, classement, quiz) ; Apprendre = le
   // contenu de l'élection elle-même (listes, PM, historique, actu).
@@ -129,12 +149,14 @@ export default function Layout({ children, currentPageName }) {
       <>
         {groups.map((g, gi) => (
           <div key={g.group} style={gi > 0 ? { borderTop: '0.5px solid rgba(20,32,61,0.07)', marginTop: 4, paddingTop: 4 } : undefined}>
-            <p className="px-4 pt-1.5 pb-1 text-[9px] font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--p-text-25)' }}>{g.group}</p>
+            <p className="px-4 pt-1.5 pb-1 text-[10px] font-bold uppercase tracking-[0.14em]" style={{ color: 'var(--p-text-40)' }} role="presentation">{g.group}</p>
             {g.items.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.name);
               return (
                 <Link key={item.name} to={createPageUrl(item.name)}
+                  role="menuitem"
+                  aria-current={active ? 'page' : undefined}
                   className="flex items-start gap-2.5 px-4 py-2 text-sm transition-colors hover:bg-[rgba(20,32,61,0.05)]"
                   style={{ color: active ? activeColor : 'var(--p-text-60)', background: active ? 'rgba(20,32,61,0.06)' : 'transparent' }}>
                   <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--p-text-25)' }} />
@@ -146,6 +168,7 @@ export default function Layout({ children, currentPageName }) {
         ))}
         {bridge ? (
           <Link to={createPageUrl(bridge.name)}
+            role="menuitem"
             className="flex items-center gap-2 px-4 py-2.5 mt-1 text-xs font-semibold transition-colors hover:bg-[var(--p-blue-dim)]"
             style={{ color: 'var(--p-blue)', borderTop: '0.5px solid rgba(20,32,61,0.08)' }}>
             <BIcon className="w-3.5 h-3.5" /> {bridge.label}
@@ -331,8 +354,9 @@ export default function Layout({ children, currentPageName }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.15 }}
+                        role="menu"
                         className="absolute top-full left-0 mt-1 w-64 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
-                        style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
+                        style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: 'var(--p-elev-2)' }}
                       >
                         {renderGroups(jouerGroups, jouerBridge, 'var(--p-blue-deep)')}
                       </motion.div>
@@ -359,8 +383,9 @@ export default function Layout({ children, currentPageName }) {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 6 }}
                         transition={{ duration: 0.15 }}
+                        role="menu"
                         className="absolute top-full right-0 mt-1 w-64 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
-                        style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
+                        style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: 'var(--p-elev-2)' }}
                       >
                         {renderGroups(apprendreGroups, apprendreBridge, 'var(--p-gold-text)')}
                       </motion.div>
@@ -395,10 +420,12 @@ export default function Layout({ children, currentPageName }) {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 6 }}
                           transition={{ duration: 0.15 }}
+                          role="menu"
                           className="absolute top-full right-0 mt-1 w-44 rounded-xl border border-[rgba(20,32,61,0.1)] py-1 z-50"
-                          style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: '0 8px 24px rgba(20,32,61,0.12)' }}
+                          style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(12px)', boxShadow: 'var(--p-elev-2)' }}
                         >
                           <button
+                            role="menuitem"
                             onClick={() => base44.auth.logout()}
                             className="flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 w-full text-left"
                           >
@@ -456,6 +483,7 @@ export default function Layout({ children, currentPageName }) {
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-2.5 rounded-lg hover:bg-[rgba(20,32,61,0.05)] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
                 aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X className="w-5 h-5" style={{ color: 'var(--p-text-60)' }} /> : <Menu className="w-5 h-5" style={{ color: 'var(--p-text-60)' }} />}
               </button>

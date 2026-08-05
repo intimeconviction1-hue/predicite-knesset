@@ -9,11 +9,11 @@ import AnimatedExplainer from '@/components/knesset/AnimatedExplainer';
 // 3ᵉ axe « Voter » : pédagogie PRATIQUE du vote pour les électeurs — comment on
 // vote concrètement en Israël. Faits stables et généraux (pas de détail daté).
 const VOTER_STEPS = [
-  { icon: UserCheck,    color: '#2B5CE6', kicker: 'Qui',        stat: '18+',        title: 'Qui peut voter',      text: "Tout citoyen israélien de 18 ans ou plus, inscrit automatiquement sur les listes électorales." },
-  { icon: CalendarDays, color: '#0EA5E9', kicker: 'Quand',      stat: 'jour férié', title: 'Le jour du scrutin',  text: "Le jour de l'élection est un jour férié ; les bureaux de vote sont ouverts toute la journée." },
-  { icon: MapPin,       color: '#7A5F1A', kicker: 'Où',         stat: 'ton bureau', title: 'Où voter',            text: "Dans le bureau de vote qui t'est assigné, sur présentation d'une pièce d'identité." },
+  { icon: UserCheck,    color: 'var(--p-blue)', kicker: 'Qui',        stat: '18+',        title: 'Qui peut voter',      text: "Tout citoyen israélien de 18 ans ou plus, inscrit automatiquement sur les listes électorales." },
+  { icon: CalendarDays, color: 'var(--p-teal-text)', kicker: 'Quand',      stat: 'jour férié', title: 'Le jour du scrutin',  text: "Le jour de l'élection est un jour férié ; les bureaux de vote sont ouverts toute la journée." },
+  { icon: MapPin,       color: 'var(--p-gold-text)', kicker: 'Où',         stat: 'ton bureau', title: 'Où voter',            text: "Dans le bureau de vote qui t'est assigné, sur présentation d'une pièce d'identité." },
   { icon: FileText,     color: 'var(--p-green-text)', kicker: 'Le bulletin', stat: 'une liste',  title: 'Un vote par lettres', text: "Dans l'isoloir, tu prends la fiche portant les lettres hébraïques de ta liste et tu la glisses dans une enveloppe." },
-  { icon: Landmark,     color: '#D4AF37', kicker: "L'urne",     stat: '✓',          title: "Dans l'urne",         text: "Tu déposes l'enveloppe dans l'urne. C'est un vote papier, pour une liste entière — pas pour un nom." },
+  { icon: Landmark,     color: 'var(--p-gold-text)', kicker: "L'urne",     stat: '✓',          title: "Dans l'urne",         text: "Tu déposes l'enveloppe dans l'urne. C'est un vote papier, pour une liste entière — pas pour un nom." },
 ];
 
 const NOTES = [
@@ -43,7 +43,7 @@ export default function Voter() {
               key={title}
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-10%' }} transition={{ duration: 0.4 }}
-              className="rounded-2xl border p-5" style={{ background: 'var(--p-card)', borderColor: 'var(--p-border)' }}
+              className="p-card p-5"
             >
               <Icon className="w-5 h-5 mb-2" style={{ color: 'var(--p-gold-text)' }} />
               <p className="text-sm font-bold mb-1" style={{ color: 'var(--p-text)' }}>{title}</p>
@@ -58,12 +58,12 @@ export default function Voter() {
         </div>
 
         {/* Vase communicant : voir les lettres des listes */}
-        <div className="rounded-2xl p-5 flex items-center justify-between gap-3 flex-wrap" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)' }}>
+        <div className="p-card p-reveal p-5 flex items-center justify-between gap-3 flex-wrap" style={{ borderColor: 'var(--p-gold-border)' }}>
           <div>
-            <p className="text-sm font-bold" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Repère les lettres de ta liste</p>
+            <p className="p-title text-sm">Repère les lettres de ta liste</p>
             <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>Chaque liste et son code de lettres, sur sa fiche.</p>
           </div>
-          <Link to={createPageUrl('Listes')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm text-white transition-transform hover:-translate-y-0.5 flex-shrink-0" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
+          <Link to={createPageUrl('Listes')} className="p-btn-primary gap-2 flex-shrink-0">
             Les listes <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

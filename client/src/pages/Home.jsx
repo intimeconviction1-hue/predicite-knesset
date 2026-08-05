@@ -19,7 +19,6 @@ import { computeScore } from '@/lib/score';
 import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
-import CountdownTimer from '@/components/knesset/CountdownTimer';
 import { joursAvantScrutin } from '@/lib/echeances';
 
 
@@ -85,12 +84,6 @@ export default function Home() {
     select: d => d[0],
   });
 
-  const { data: actuData } = useQuery({
-    queryKey: ['home-actu'],
-    queryFn: () => base44.actu.list(),
-    staleTime: 10 * 60 * 1000,
-  });
-  const actuItems = (actuData?.items || []).slice(0, 6);
 
   // Cotes en direct (marchés publics) pour le teaser d'accueil.
   const { data: parisData } = useQuery({
@@ -186,11 +179,10 @@ export default function Home() {
       {/* Flux « en direct » de la campagne — défile juste sous le héros */}
       <LiveTicker items={tickerItems} />
 
-      {/* Orientation : comprendre la plateforme en un coup d'œil + les deux portes.
-          Placé HAUT (avant l'hémicycle) pour capter le sens dès l'arrivée. */}
-      <HomeIntro />
-
-      {/* Bloc hémicycle — sur fond clair, juste sous le hero */}
+      {/* Bloc hémicycle — sur fond clair, juste sous le hero. La Home empilait
+          16 blocs (un sommaire déroulé, pas une composition) : l'hémicycle est
+          LA pièce maîtresse, il passe donc en premier, et HomeIntro descend
+          l'expliquer ensuite au lieu de retarder la donnée. */}
       <div className="relative overflow-hidden pt-2">
 
         {/* Hémicycle — pièce maîtresse, avec les totaux de blocs et la ligne 61 */}
@@ -239,8 +231,14 @@ export default function Home() {
               ? `Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
               : 'En attente du premier sondage sièges'}
           </p>
+          {/* Le moment exact où l'envie naît : on vient de lire l'assemblée
+              projetée — « et toi, tu la vois comment ? ». Le geste central du
+              produit se propose ICI, pas au fond d'un menu. */}
           {latestPoll && (
-            <div className="flex justify-center mt-3">
+            <div className="flex justify-center items-center gap-3 mt-4 flex-wrap">
+              <Link to={createPageUrl('MaRepartition')} className="p-btn-gold-solid gap-2">
+                Compose la tienne — 120 sièges <ArrowRight className="w-4 h-4" />
+              </Link>
               <ShareProjection
                 seatsByListe={rankedListes.filter(l => l._seats > 0).map(l => ({ seats: l._seats, color: l.color, name: l.name_fr }))}
                 coalition={coalitionSeats}
@@ -253,6 +251,9 @@ export default function Home() {
         </div>
 
       </div>
+
+      {/* Orientation : comprendre la plateforme — APRÈS la donnée, pas avant. */}
+      <HomeIntro />
 
       {/* Courbe de tendance — juste sous l'hémicycle : la photo du jour, puis l'évolution */}
       <SondagesTrend />
@@ -299,128 +300,6 @@ export default function Home() {
           />
         </div>
       )}
-
-      {/* Teaser Actu — la campagne en direct, visible dès l'accueil */}
-      {actuItems.length > 0 && (
-        <div className="p-reveal max-w-3xl mx-auto px-4 pb-4">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>Actu de la campagne</h2>
-            <Link to={createPageUrl('Actu')} className="text-xs flex items-center gap-1 hover:text-[var(--p-text)] transition-colors" style={{ color: 'var(--p-text-40)' }}>
-              Toute l'actu <ChevronRight className="w-3 h-3" />
-            </Link>
-          </div>
-          <div className="space-y-2">
-            {actuItems.map((item, i) => (
-              <a key={item.link + i} href={item.link} target="_blank" rel="noopener noreferrer"
-                className="p-card block p-3"
-                style={item.curated ? { borderColor: 'var(--p-gold-border)' } : undefined}>
-                <p className="text-sm font-semibold leading-snug" style={{ color: 'var(--p-text)' }}>{item.title}</p>
-                <div className="mt-1 text-xs">
-                  {item.curated
-                    ? <span className="p-badge p-badge-gold">Résumé PrédiCité</span>
-                    : item.source && <span className="font-semibold" style={{ color: 'var(--p-gold-text)' }}>{item.source}</span>}
-                </div>
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── Bento : l'état de la course en un coup d'œil ──
-          Remplace l'ancien bandeau de compte à rebours seul. Même hauteur de page,
-          quatre fois plus d'information : qui mène, combien de temps reste, quel
-          bloc tient la majorité, et ce qui se joue maintenant. Chaque tuile est
-          une porte d'entrée, pas une décoration. */}
-      <div className="p-reveal p-glow-gold max-w-3xl mx-auto px-4 py-10">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-
-          {/* Tête de course — la tuile maîtresse */}
-          {rankedListes[0]?._seats > 0 && (
-            <Link
-              to={`${createPageUrl('Liste')}?slug=${rankedListes[0].slug}`}
-              className="p-card col-span-2 md:row-span-2 p-5 flex flex-col justify-between !items-stretch"
-              style={{ minHeight: 150 }}
-            >
-              <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>
-                En tête de la projection
-              </span>
-              <span>
-                <span className="block p-display text-3xl md:text-4xl leading-none"
-                  style={{ color: texteLisible(rankedListes[0].color || '#6B7280') }}>
-                  {rankedListes[0].name_fr}
-                </span>
-                <span className="block mt-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
-                  <span className="font-mono font-black text-xl" style={{ color: 'var(--p-text)' }}>
-                    <CountUp value={rankedListes[0]._seats} />
-                  </span> sièges projetés
-                  {rankedListes[1]?._seats > 0 && (
-                    <> · devant {rankedListes[1].name_fr} ({rankedListes[1]._seats})</>
-                  )}
-                </span>
-              </span>
-            </Link>
-          )}
-
-          {/* Compte à rebours */}
-          <div className="p-card col-span-2 p-5 flex flex-col items-center justify-center gap-3">
-            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>
-              Le scrutin approche
-            </span>
-            <CountdownTimer />
-          </div>
-
-          {/* Qui tient la majorité */}
-          <div className="p-card p-4 flex flex-col justify-center">
-            <span className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-text-40)' }}>
-              Majorité (61)
-            </span>
-            {nobodyHasMajority ? (
-              <>
-                <span className="p-display text-xl leading-none" style={{ color: 'var(--p-gold-text)' }}>Personne</span>
-                <span className="text-[11px] mt-1.5" style={{ color: 'var(--p-text-60)' }}>
-                  {Math.max(coalitionSeats, oppositionSeats)} sièges pour le bloc le plus fort
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="p-display text-xl leading-none"
-                  style={{ color: leaderIsCoalition ? 'var(--p-blue)' : 'var(--p-red)' }}>
-                  {leaderIsCoalition ? 'Coalition' : 'Opposition'}
-                </span>
-                <span className="text-[11px] mt-1.5" style={{ color: 'var(--p-text-60)' }}>
-                  {Math.max(coalitionSeats, oppositionSeats)} sièges — la barre est franchie
-                </span>
-              </>
-            )}
-          </div>
-
-          {/* Ce qui se joue maintenant */}
-          {topMarket ? (
-            <Link to={createPageUrl('Paris')} className="p-card p-4 flex flex-col justify-center !items-stretch">
-              <span className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-gold-text)' }}>
-                Ça se joue
-              </span>
-              <span className="text-[12px] leading-snug line-clamp-2" style={{ color: 'var(--p-text)' }}>
-                {topMarket.question}
-              </span>
-              {topMarket.issues?.[0]?.cote != null && (
-                <span className="mt-1.5 font-mono font-black text-lg" style={{ color: 'var(--p-gold-text)' }}>
-                  ×{Number(topMarket.issues[0].cote).toFixed(2)}
-                </span>
-              )}
-            </Link>
-          ) : (
-            <Link to={createPageUrl('Listes')} className="p-card p-4 flex flex-col justify-center !items-stretch">
-              <span className="text-[10px] font-black uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-gold-text)' }}>
-                À toi de jouer
-              </span>
-              <span className="text-[12px] leading-snug" style={{ color: 'var(--p-text)' }}>
-                Dépose ton pronostic sièges avant le 27 octobre.
-              </span>
-            </Link>
-          )}
-        </div>
-      </div>
 
       {/* Classement des listes */}
       <div className="p-reveal max-w-3xl mx-auto px-4 pb-16">

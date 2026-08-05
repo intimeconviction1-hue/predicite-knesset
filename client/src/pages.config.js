@@ -1,9 +1,9 @@
 /**
  * pages.config.js - Page routing configuration
- * 
- * This file is AUTO-GENERATED. Do not add imports or modify PAGES manually.
- * Pages are auto-registered when you create files in the ./pages/ folder.
- * 
+ *
+ * (Ex-fichier généré par Base44 — plus rien ne le régénère, il s'édite
+ * normalement. Les pages sont en React.lazy, voir le commentaire plus bas.)
+ *
  * THE ONLY EDITABLE VALUE: mainPage
  * This controls which page is the landing page (shown when users visit the app).
  * 
@@ -47,27 +47,36 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Listes from './pages/Listes';
-import Liste from './pages/Liste';
-import PremierMinistre from './pages/PremierMinistre';
-import Paris from './pages/Paris';
+import { lazy } from 'react';
 import Home from './pages/Home';
-import Leaderboard from './pages/Leaderboard';
-import Learn from './pages/Learn';
-import Methodologie from './pages/Methodologie';
-import ReglesDuJeu from './pages/ReglesDuJeu';
-import Historique from './pages/Historique';
-import Actu from './pages/Actu';
-import Quiz from './pages/Quiz';
-import Ligues from './pages/Ligues';
-import Voter from './pages/Voter';
-import SensDuVent from './pages/SensDuVent';
-import FormeCoalition from './pages/FormeCoalition';
-import Boussole from './pages/Boussole';
-import VraiOuFake from './pages/VraiOuFake';
-import MaRepartition from './pages/MaRepartition';
-import AdminResultats from './pages/AdminResultats';
 import __Layout from './Layout.jsx';
+
+// 2026-08-04 — chargement paresseux. Les 21 pages étaient importées
+// statiquement : ~560 Ko de source (écran admin compris) chargés au premier
+// octet pour tout visiteur, sans un seul React.lazy dans le client. Ce fichier
+// se disait « AUTO-GENERATED » mais plus rien ne le régénère depuis la sortie
+// de Base44 — il est éditable comme le reste du repo.
+// Home reste STATIQUE : c'est la page d'atterrissage, elle ne doit pas attendre
+// un chunk. Le Layout aussi : il enveloppe toutes les pages.
+const Listes = lazy(() => import('./pages/Listes'));
+const Liste = lazy(() => import('./pages/Liste'));
+const PremierMinistre = lazy(() => import('./pages/PremierMinistre'));
+const Paris = lazy(() => import('./pages/Paris'));
+const Leaderboard = lazy(() => import('./pages/Leaderboard'));
+const Learn = lazy(() => import('./pages/Learn'));
+const Methodologie = lazy(() => import('./pages/Methodologie'));
+const ReglesDuJeu = lazy(() => import('./pages/ReglesDuJeu'));
+const Historique = lazy(() => import('./pages/Historique'));
+const Actu = lazy(() => import('./pages/Actu'));
+const Quiz = lazy(() => import('./pages/Quiz'));
+const Ligues = lazy(() => import('./pages/Ligues'));
+const Voter = lazy(() => import('./pages/Voter'));
+const SensDuVent = lazy(() => import('./pages/SensDuVent'));
+const FormeCoalition = lazy(() => import('./pages/FormeCoalition'));
+const Boussole = lazy(() => import('./pages/Boussole'));
+const VraiOuFake = lazy(() => import('./pages/VraiOuFake'));
+const MaRepartition = lazy(() => import('./pages/MaRepartition'));
+const AdminResultats = lazy(() => import('./pages/AdminResultats'));
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
 // Profile, Quiz, Surveys, Voter, Cities, City, ScrutinMunicipal, ScrutinPLM

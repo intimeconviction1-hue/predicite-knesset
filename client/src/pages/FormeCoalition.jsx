@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Landmark, Check, RotateCcw, Trophy, Gauge } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
-import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
+import MiniJeuShell from '@/components/knesset/MiniJeuShell';
 
 const MAJORITE = 61;
 
@@ -44,9 +44,14 @@ const FRICTIONS = [
 // rien ne le signale. C'est ce qui a laissé vivre ici la paire 'yachad-bennett'
 // après la désactivation de la liste fantôme. En dev on le dit ; en prod on
 // ignore sans casser la page.
-function verifierFrictions(bySlug) {
-  if (!import.meta.env?.DEV || Object.keys(bySlug).length === 0) return;
-  const orphelins = [...new Set(FRICTIONS.flatMap(([a, b]) => [a, b]))].filter(s => !bySlug[s]);
+// ⚠️ Valider contre les listes ACTIVES, jamais contre le plateau du jeu : le
+// plateau ne retient que les listes créditées de sièges par le DERNIER sondage,
+// et une liste sous le seuil ce jour-là n'est pas un slug fantôme — sa friction
+// doit survivre pour le sondage suivant. C'est ce qui a fait crier la garde sur
+// 'unite-nationale' (Gantz, bien active au seed et à la Boussole) en août 2026.
+function verifierFrictions(slugsActifs) {
+  if (!import.meta.env?.DEV || Object.keys(slugsActifs).length === 0) return;
+  const orphelins = [...new Set(FRICTIONS.flatMap(([a, b]) => [a, b]))].filter(s => !slugsActifs[s]);
   if (orphelins.length) console.error('[FormeCoalition] frictions sans liste correspondante :', orphelins.join(', '));
 }
 
@@ -74,11 +79,9 @@ export default function FormeCoalition() {
     return listes.map(l => ({ id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280', seats: seatsById.get(l.id) || 0 }))
       .filter(p => p.seats > 0).sort((a, b) => b.seats - a.seats);
   }, [listes, latest]);
-  const bySlug = useMemo(() => {
-    const map = Object.fromEntries(parties.map(p => [p.slug, p]));
-    verifierFrictions(map);
-    return map;
-  }, [parties]);
+  const bySlug = useMemo(() => Object.fromEntries(parties.map(p => [p.slug, p])), [parties]);
+  // La garde reçoit les listes actives, pas `parties` : voir verifierFrictions.
+  useEffect(() => { verifierFrictions(Object.fromEntries(listes.map(l => [l.slug, l]))); }, [listes]);
 
   const [selected, setSelected] = useState([]);
   const [result, setResult] = useState(null);

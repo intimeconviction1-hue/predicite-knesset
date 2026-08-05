@@ -602,7 +602,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Découvrir</h4>
+              <p className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Découvrir</p>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Listes')} className="hover:text-[var(--p-text)] transition-colors">Listes</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Premier ministre</Link></li>
@@ -611,10 +611,10 @@ export default function Layout({ children, currentPageName }) {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Apprendre</h4>
+              <p className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Apprendre</p>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Learn')} className="hover:text-[var(--p-text)] transition-colors">Les législatives israéliennes</Link></li>
-                <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-[var(--p-text)] transition-colors">Comment on vote à la Knesset</Link></li>
+                <li><Link to={createPageUrl('Voter')} className="hover:text-[var(--p-text)] transition-colors">Comment on vote à la Knesset</Link></li>
                 <li><Link to={createPageUrl('PremierMinistre')} className="hover:text-[var(--p-text)] transition-colors">Formation du gouvernement</Link></li>
                 <li><Link to={createPageUrl('Historique')} className="hover:text-[var(--p-text)] transition-colors">Historique des Knesset</Link></li>
                 <li><Link to={createPageUrl('Actu')} className="hover:text-[var(--p-text)] transition-colors">Actu de la campagne</Link></li>
@@ -623,7 +623,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Transparence</h4>
+              <p className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Transparence</p>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Methodologie')} className="hover:text-[var(--p-text)] transition-colors">Sources & Méthodologie</Link></li>
                 <li><Link to={createPageUrl('Leaderboard')} className="hover:text-[var(--p-text)] transition-colors">Classement</Link></li>

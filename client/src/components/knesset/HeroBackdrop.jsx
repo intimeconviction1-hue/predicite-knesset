@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Fond de hero « pro » : enchaîne plusieurs photos institutionnelles en fondu
 // croisé, avec un léger effet Ken Burns (zoom/pan lent) sur l'image active.
@@ -16,19 +16,20 @@ export default function HeroBackdrop({
   position = 'center 26%',
 }) {
   const [active, setActive] = useState(0);
-  const reduced = useRef(false);
+  // Lue de façon synchrone A L'INITIALISATION : dans un useEffect, le premier
+  // rendu appliquait le Ken Burns avant de connaître la préférence — exactement
+  // la frame que l'utilisateur sensible au mouvement ne devait pas voir.
+  const [reduced] = useState(() => typeof window !== 'undefined'
+    && window.matchMedia
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   useEffect(() => {
-    reduced.current = typeof window !== 'undefined'
-      && window.matchMedia
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduced.current || images.length <= 1) return;
+    if (reduced || images.length <= 1) return;
     const id = setInterval(() => {
       setActive((i) => (i + 1) % images.length);
     }, interval);
     return () => clearInterval(id);
-  }, [images.length, interval]);
+  }, [images.length, interval, reduced]);
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -47,7 +48,7 @@ export default function HeroBackdrop({
               transition: `opacity ${fade}ms ease-in-out`,
               // Ken Burns : l'image active dérive/zoome lentement ; les autres
               // reviennent à l'échelle neutre pendant qu'elles sont invisibles.
-              transform: isActive && !reduced.current ? 'scale(1.08)' : 'scale(1)',
+              transform: isActive && !reduced ? 'scale(1.08)' : 'scale(1)',
               transitionProperty: 'opacity, transform',
               transitionDuration: `${fade}ms, ${interval + fade}ms`,
               transitionTimingFunction: 'ease-in-out, ease-out',

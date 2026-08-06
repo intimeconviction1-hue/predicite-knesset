@@ -117,17 +117,33 @@ function plLabel(s) {
   return { t: 'Scénario surprise', c: 'var(--p-red)', bg: 'var(--p-red-dim)', fill: 'var(--p-red)' };
 }
 
+// Nombre de sondages moyennés pour composer le plateau. Le dernier sondage
+// seul faisait clignoter les listes en zone de seuil : Unité nationale (Gantz)
+// présente une semaine, disparue la suivante — injouable, et ses frictions ne
+// se déclenchaient jamais. La moyenne lisse l'effet de seuil.
+const NB_SONDAGES_PLATEAU = 5;
+
 export default function FormeCoalition() {
   const gate = useGuestGate();
-  const { data: sondages = [] } = useQuery({ queryKey: ['coal-sondage'], queryFn: () => base44.entities.SondageSieges.list('-poll_date', 1) });
+  const { data: sondages = [] } = useQuery({ queryKey: ['coal-sondages', NB_SONDAGES_PLATEAU], queryFn: () => base44.entities.SondageSieges.list('-poll_date', NB_SONDAGES_PLATEAU) });
   const { data: listes = [] } = useQuery({ queryKey: ['coal-listes'], queryFn: () => base44.entities.Liste.filter({ is_active: true }) });
 
-  const latest = sondages[0];
+  // Plateau = moyenne des derniers sondages, arrondie au plus fort reste pour
+  // retomber exactement sur 120 — comme chaque sondage source (garde
+  // d'intégrité du collecteur). Un parti absent d'un sondage y compte 0 : dans
+  // un sondage sièges israélien, ne pas être crédité, c'est être sous le seuil.
   const parties = useMemo(() => {
-    const seatsById = new Map((latest?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
-    return listes.map(l => ({ id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280', seats: seatsById.get(l.id) || 0 }))
-      .filter(p => p.seats > 0).sort((a, b) => b.seats - a.seats);
-  }, [listes, latest]);
+    if (!sondages.length || !listes.length) return [];
+    const somme = new Map();
+    for (const s of sondages) for (const x of s.seats_by_liste || []) somme.set(x.liste_id, (somme.get(x.liste_id) || 0) + x.seats);
+    const exacts = listes
+      .map(l => ({ id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280', exact: (somme.get(l.id) || 0) / sondages.length }))
+      .filter(p => p.exact > 0)
+      .map(p => ({ ...p, seats: Math.floor(p.exact), reste: p.exact - Math.floor(p.exact) }));
+    let manque = 120 - exacts.reduce((n, p) => n + p.seats, 0);
+    for (const p of [...exacts].sort((a, b) => b.reste - a.reste)) { if (manque <= 0) break; p.seats += 1; manque -= 1; }
+    return exacts.filter(p => p.seats > 0).sort((a, b) => b.seats - a.seats);
+  }, [listes, sondages]);
   const bySlug = useMemo(() => Object.fromEntries(parties.map(p => [p.slug, p])), [parties]);
   // La garde reçoit les listes actives, pas `parties` : voir verifierFrictions.
   useEffect(() => { verifierFrictions(Object.fromEntries(listes.map(l => [l.slug, l]))); }, [listes]);
@@ -138,12 +154,23 @@ export default function FormeCoalition() {
   const total = selected.reduce((s, slug) => s + (bySlug[slug]?.seats || 0), 0);
   const { score, active } = plausibility(selected);
   const label = plLabel(score);
+  // La plausibilité ne se montre qu'après « Vérifier » : le chapô promet une
+  // découverte (« À toi de le découvrir »), et une jauge en direct vidait le
+  // clic de son enjeu — le verdict n'apprenait rien. Toucher un parti après
+  // coup remet le suspense (toggle → setResult(null)).
+  const revele = result !== null;
 
   const toggle = (slug) => { setResult(null); setSelected(sel => sel.includes(slug) ? sel.filter(s => s !== slug) : [...sel, slug]); };
   const reset = () => { setSelected([]); setResult(null); };
   const check = () => { gate.record(); setResult({ majority: total >= MAJORITE, total, score }); };
 
   const majPct = (MAJORITE / 120) * 100;
+
+  // Provenance du plateau, affichée sous les cartouches : un chiffre de sièges
+  // sans sa source est exactement ce que ce site s'interdit ailleurs.
+  const provenance = sondages.length
+    ? `Sièges : moyenne des ${sondages.length} derniers sondages${sondages.length > 1 ? ` (${new Date(sondages[sondages.length - 1].poll_date).toLocaleDateString('fr-FR')} — ${new Date(sondages[0].poll_date).toLocaleDateString('fr-FR')})` : ` (${sondages[0].institute}, ${new Date(sondages[0].poll_date).toLocaleDateString('fr-FR')})`}, arrondie à 120.`
+    : null;
 
   return (
     <MiniJeuShell
@@ -164,7 +191,8 @@ export default function FormeCoalition() {
                 {total}<span className="text-sm" style={{ color: 'var(--p-text-40)' }}> / {MAJORITE}</span>
               </span>
             </div>
-            <div className="relative h-2.5 rounded-full overflow-hidden mb-4" style={{ background: 'var(--p-text-10)' }}>
+            <div className="relative h-2.5 rounded-full overflow-hidden mb-4" style={{ background: 'var(--p-text-10)' }}
+              role="progressbar" aria-label="Sièges de la coalition" aria-valuemin={0} aria-valuemax={120} aria-valuenow={total}>
               <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (total / 120) * 100)}%`, background: total >= MAJORITE ? 'var(--p-green)' : 'var(--p-blue)' }} />
               <div className="absolute top-0 bottom-0" style={{ left: `${majPct}%`, width: 2, background: 'var(--p-gold)' }} title="Majorité 61" />
             </div>
@@ -174,10 +202,13 @@ export default function FormeCoalition() {
               <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>
                 <Gauge className="w-3.5 h-3.5" /> Plausibilité
               </span>
-              <span className="text-sm font-black" style={{ color: label.c }}>{selected.length ? `${score}% · ${label.t}` : '—'}</span>
+              <span className="text-sm font-black" style={{ color: revele ? label.c : 'var(--p-text-40)' }}>
+                {revele ? `${score}% · ${label.t}` : selected.length ? '?' : '—'}
+              </span>
             </div>
-            <div className="h-2.5 rounded-full overflow-hidden mb-3" style={{ background: 'var(--p-text-10)' }}>
-              <div className="h-full rounded-full transition-all" style={{ width: `${selected.length ? score : 0}%`, background: label.fill }} />
+            <div className="h-2.5 rounded-full overflow-hidden mb-3" style={{ background: 'var(--p-text-10)' }}
+              role="progressbar" aria-label="Plausibilité de la coalition" aria-valuemin={0} aria-valuemax={100} aria-valuenow={revele ? score : 0}>
+              <div className="h-full rounded-full transition-all" style={{ width: `${revele ? score : 0}%`, background: label.fill }} />
             </div>
 
             {/* partis */}
@@ -196,9 +227,12 @@ export default function FormeCoalition() {
                 );
               })}
             </div>
+            {provenance && <p className="text-[10px] mb-3" style={{ color: 'var(--p-text-40)' }}>{provenance}</p>}
 
-            {/* ce qui plombe la plausibilité */}
-            {active.length > 0 && (
+            {/* ce qui plombe la plausibilité — après révélation seulement : la
+                liste des frictions EST la réponse, l'afficher pendant la
+                sélection revenait à donner le résultat avant le clic. */}
+            {revele && active.length > 0 && (
               <div className="rounded-xl p-3 mb-4" style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)' }}>
                 <p className="text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-text-40)' }}>Ce qui rend cette coalition moins probable</p>
                 {active.slice(0, 4).map((f, i) => (
@@ -231,17 +265,19 @@ export default function FormeCoalition() {
                       </p>
                     </>
                   ) : (
-                    <p className="font-bold text-sm" style={{ color: 'var(--p-gold-text)' }}>Il manque {MAJORITE - result.total} sièges pour la majorité.</p>
+                    <p className="font-bold text-sm" style={{ color: 'var(--p-gold-text)' }}>
+                      Il manque {MAJORITE - result.total} sièges pour la majorité — et telle quelle, cette coalition serait <b style={{ color: plLabel(result.score).c }}>{plLabel(result.score).t.toLowerCase()}</b> ({result.score}%).
+                    </p>
                   )}
                 </motion.div>
               )}
             </AnimatePresence>
 
             <div className="flex items-center gap-3">
-              <button onClick={check} disabled={selected.length === 0}
+              <button onClick={check} disabled={selected.length === 0 || revele}
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-bold text-sm flex-1 justify-center"
-                style={{ background: selected.length ? 'linear-gradient(180deg,#ffe08a,#D4AF37)' : 'var(--p-text-10)', color: selected.length ? '#14203D' : 'var(--p-text-40)' }}>
-                Vérifier ma coalition
+                style={{ background: selected.length && !revele ? 'linear-gradient(180deg,#ffe08a,#D4AF37)' : 'var(--p-text-10)', color: selected.length && !revele ? '#14203D' : 'var(--p-text-40)' }}>
+                {revele ? 'Change une liste pour rejouer' : 'Vérifier ma coalition'}
               </button>
               <button onClick={reset} aria-label="Recommencer" title="Recommencer" className="inline-flex items-center px-4 py-3 rounded-[10px] font-semibold text-sm"
                 style={{ background: 'transparent', border: '0.5px solid var(--p-border-hover)', color: 'var(--p-text-60)' }}>

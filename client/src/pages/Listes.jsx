@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Vote, Filter, ChevronRight } from 'lucide-react';
+import { Search, Vote, Filter, ChevronRight, ChevronDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { BLOC_LABEL } from '@/lib/blocs';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -12,12 +12,18 @@ import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import { useProjection } from '@/lib/projection';
 
+// Les libellés viennent de BLOC_LABEL. Ils étaient écrits en dur ici, et ce
+// filtre proposait donc encore « Coalition sortante » / « Opposition » /
+// « Listes arabes » — les intitulés retirés le 2026-08-04 parce qu'ils décrivent
+// la 25ᵉ Knesset et se lisent comme un positionnement gauche-droite. Troisième
+// endroit que ce renommage n'avait pas atteint, après la Home et l'image
+// partagée. À chaque fois, la cause est la même : une valeur recopiée.
 const BLOC_OPTIONS = [
   { value: 'all', label: 'Tous les blocs' },
-  { value: 'coalition', label: 'Coalition sortante' },
-  { value: 'opposition', label: 'Opposition' },
-  { value: 'liste_arabe', label: 'Listes arabes' },
-  { value: 'non_alignee', label: 'Non alignées' },
+  { value: 'coalition', label: BLOC_LABEL.coalition },
+  { value: 'opposition', label: BLOC_LABEL.opposition },
+  { value: 'liste_arabe', label: BLOC_LABEL.liste_arabe },
+  { value: 'non_alignee', label: BLOC_LABEL.non_alignee },
 ];
 
 export default function Listes() {
@@ -77,20 +83,35 @@ export default function Listes() {
                 placeholder="Rechercher une liste ou une tête de liste..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-25)]"
+                /* h-11 : la règle de cible tactile de globals.css ne vise que
+                   les boutons et les liens, pas les champs de formulaire. Ces
+                   deux-là restaient à 40 px. */
+                className="h-11 pl-10 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-25)]"
               />
             </div>
-            <Select value={blocFilter} onValueChange={setBlocFilter}>
-              <SelectTrigger className="w-full md:w-56 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)]">
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder="Bloc" />
-              </SelectTrigger>
-              <SelectContent>
+            {/* <select> natif plutôt que le Select de Radix. Cette page en était
+                le SEUL utilisateur de tout le client, et le composant pesait
+                l'essentiel des 82 Ko de son chunk — pour un filtre à cinq
+                options. Le natif est aussi meilleur ici : sur mobile il ouvre le
+                sélecteur du système, il est navigable au clavier sans qu'on ait
+                rien à écrire, et il ne peut pas se désynchroniser d'un lecteur
+                d'écran. La flèche est peinte en fond, `appearance-none` retirant
+                celle du navigateur. */}
+            <div className="relative w-full md:w-56">
+              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'var(--p-text-40)' }} />
+              <select
+                value={blocFilter}
+                onChange={(e) => setBlocFilter(e.target.value)}
+                aria-label="Filtrer par bloc"
+                className="appearance-none w-full h-11 pl-10 pr-9 rounded-md text-sm bg-transparent"
+                style={{ border: '1px solid var(--p-border-hover)', color: 'var(--p-text)' }}
+              >
                 {BLOC_OPTIONS.map(opt => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
                 ))}
-              </SelectContent>
-            </Select>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: 'var(--p-text-40)' }} />
+            </div>
           </div>
         </div>
       </div>

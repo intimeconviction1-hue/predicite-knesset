@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { initDb } from './db/index.js';
+import { creerInjecteurMeta } from './lib/meta-html.js';
 import { startPollTracker } from './functions/pollTracker.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
@@ -59,10 +60,29 @@ app.get('/api/health', (req, res) => res.json({ ok: true, now: new Date().toISOS
 // voir client/vite.config.js.
 if (process.env.NODE_ENV === 'production') {
   const clientDist = path.join(__dirname, '..', 'client', 'dist');
-  app.use(express.static(clientDist));
+  app.use(express.static(clientDist, { index: false }));
+
+  // index.html n'est plus renvoyé tel quel : on y injecte le titre, la
+  // description et les balises Open Graph de la page demandée. Un aperçu de lien
+  // (WhatsApp, X, Slack…) n'exécute aucun JavaScript — sans cela, les vingt-et-une
+  // pages partagent le même aperçu. Voir lib/meta-html.js.
+  // `index: false` sur express.static est indispensable : sinon la statique sert
+  // elle-même index.html sur « / » et l'injection ne s'appliquerait jamais à la
+  // page d'accueil, c'est-à-dire à l'URL la plus partagée du site.
+  let htmlPour;
+  try {
+    htmlPour = creerInjecteurMeta(clientDist);
+  } catch (e) {
+    // Un build absent ou un gabarit inattendu ne doit pas empêcher le serveur de
+    // démarrer : on sert le fichier brut, avec l'aperçu générique d'avant.
+    console.error('[meta] injection désactivée :', e.message);
+  }
+
   app.get('*', (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
-    res.sendFile(path.join(clientDist, 'index.html'));
+    if (!htmlPour) return res.sendFile(path.join(clientDist, 'index.html'));
+    const origine = `${req.protocol}://${req.get('host')}`;
+    res.type('html').send(htmlPour(req.path, origine));
   });
 }
 

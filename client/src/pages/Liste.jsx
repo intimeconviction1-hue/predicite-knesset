@@ -358,7 +358,7 @@ export default function ListePage() {
           </div>
 
           <div className={`flex items-center gap-2 px-6 py-2.5 text-xs ${deadlineClosed ? '' : ''}`}
-            style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>
+            style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'var(--p-gold-faint)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>
             {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
             {deadlineClosed ? 'Pronostics clôturés' : <span>Clôture : <strong>{formatLocalDeadline(deadlineUtc)}</strong></span>}
           </div>

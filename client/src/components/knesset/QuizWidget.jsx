@@ -167,7 +167,7 @@ export default function QuizWidget({ theme, title }) {
                   </motion.div>
                   {result.defi && (
                     <div className="rounded-lg px-3 py-2 font-semibold flex items-center gap-2" style={{
-                      background: result.defi.defi === 'gagne' ? 'rgba(212,175,55,0.15)' : result.defi.defi === 'perdu' ? 'rgba(217,43,43,0.08)' : 'var(--p-blue-dim)',
+                      background: result.defi.defi === 'gagne' ? 'var(--p-gold-dim)' : result.defi.defi === 'perdu' ? 'rgba(217,43,43,0.08)' : 'var(--p-blue-dim)',
                       color: result.defi.defi === 'gagne' ? 'var(--p-gold-text)' : result.defi.defi === 'perdu' ? 'var(--p-red)' : 'var(--p-blue)',
                     }}>
                       {result.defi.defi === 'gagne' && `🔥 Défi série réussi ! +${result.defi.gain} jetons`}

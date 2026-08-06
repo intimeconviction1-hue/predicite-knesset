@@ -92,7 +92,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
       <button onClick={() => setOpen(o => !o)} className="w-full text-left px-5 py-4 flex items-center gap-4">
         <div
           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 font-black text-sm"
-          style={{ background: 'rgba(212,175,55,0.1)', color: 'var(--p-gold-text)', fontFamily: "'JetBrains Mono',monospace" }}
+          style={{ background: 'var(--p-gold-faint)', color: 'var(--p-gold-text)', fontFamily: "'JetBrains Mono',monospace" }}
         >
           {election.knesset_number === 1 ? '1re' : `${election.knesset_number}e`}
         </div>
@@ -165,7 +165,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
               </div>
 
               {election.notes && (
-                <div className="flex items-start gap-2 text-xs rounded-lg p-3" style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)' }}>
+                <div className="flex items-start gap-2 text-xs rounded-lg p-3" style={{ background: 'var(--p-gold-faint)', border: '1px solid var(--p-gold-border)' }}>
                   <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-gold-text)' }} />
                   <p style={{ color: 'var(--p-text-60)' }}>{election.notes}</p>
                 </div>

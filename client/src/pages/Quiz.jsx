@@ -65,7 +65,7 @@ function DefiSerieCard() {
   }
 
   return (
-    <div className="p-reveal rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px rgba(212,175,55,0.5)' }}>
+    <div className="p-reveal rounded-2xl p-5 md:p-6" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-gold-border)', boxShadow: '0 14px 34px -24px var(--p-gold-glow)' }}>
       <div className="flex items-center justify-between gap-2 mb-1 flex-wrap">
         <div className="flex items-center gap-2">
           <Flame className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />

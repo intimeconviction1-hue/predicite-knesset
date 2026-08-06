@@ -19,8 +19,8 @@ export default function TerrainDeJeu({ marches = [], jetons = null, streak = 0 }
   return (
     <div className="relative rounded-3xl overflow-hidden" style={{
       background: 'linear-gradient(150deg, #1a1408 0%, #2b2110 45%, #14203D 100%)',
-      border: '1px solid rgba(212,175,55,0.45)',
-      boxShadow: '0 30px 70px -34px rgba(212,175,55,0.5)',
+      border: '1px solid var(--p-gold-strong)',
+      boxShadow: '0 30px 70px -34px var(--p-gold-glow)',
     }}>
       {/* halos or animés — l'énergie du registre Jeu */}
       <motion.div className="absolute pointer-events-none" aria-hidden="true"
@@ -46,7 +46,7 @@ export default function TerrainDeJeu({ marches = [], jetons = null, streak = 0 }
               </span>
             )}
             {jetons != null && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold font-mono" style={{ background: 'rgba(212,175,55,0.18)', color: '#ffd77a', border: '0.5px solid rgba(212,175,55,0.4)' }}>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold font-mono" style={{ background: 'var(--p-gold-dim)', color: '#ffd77a', border: '0.5px solid var(--p-gold-strong)' }}>
                 <Coins className="w-3.5 h-3.5" /> {jetons.toLocaleString('fr-FR')}
               </span>
             )}
@@ -82,7 +82,7 @@ export default function TerrainDeJeu({ marches = [], jetons = null, streak = 0 }
         {/* actions — jouer en 1 clic */}
         <div className="flex flex-wrap gap-2.5">
           <Link to={createPageUrl('Paris')} className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-transform hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg,#ffd77a,#D4AF37)', color: '#2b2110', boxShadow: '0 12px 30px -10px rgba(212,175,55,0.7)' }}>
+            style={{ background: 'linear-gradient(135deg,#ffd77a,#D4AF37)', color: '#2b2110', boxShadow: '0 12px 30px -10px var(--p-gold-glow)' }}>
             <Zap className="w-4 h-4" /> Place ta mise
           </Link>
           <Link to={createPageUrl('MaRepartition')} className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm text-white transition-transform hover:-translate-y-0.5"

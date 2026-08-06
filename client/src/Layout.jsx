@@ -221,7 +221,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
     );
     if (points > 0) chips.push(
-      <div key="p" className={`rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5 ${pad}`} style={{ background: 'rgba(212,175,55,0.1)' }} title="Ton score total (permanent)">
+      <div key="p" className={`rounded-full border border-[var(--p-gold)]/30 flex items-center gap-1.5 ${pad}`} style={{ background: 'var(--p-gold-faint)' }} title="Ton score total (permanent)">
         <span className="text-sm font-bold" style={{ ...mono, color: 'var(--p-gold-text)' }}>{points.toLocaleString('fr-FR')} pts</span>
       </div>
     );

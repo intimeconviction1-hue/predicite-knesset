@@ -269,7 +269,7 @@ export default function Home() {
               promet : la répartition des 120 sièges. */}
           <Link to={createPageUrl('MaRepartition')}
             className="inline-flex items-center gap-2 px-5 py-3 rounded-[10px] font-bold text-sm transition-transform hover:-translate-y-0.5"
-            style={{ background: 'var(--p-grad-gold)', color: 'var(--p-ink)', boxShadow: '0 12px 30px -12px rgba(212,175,55,0.6), 0 2px 8px rgba(0,0,0,0.28)' }}>
+            style={{ background: 'var(--p-grad-gold)', color: 'var(--p-ink)', boxShadow: '0 12px 30px -12px var(--p-gold-glow), 0 2px 8px rgba(0,0,0,0.28)' }}>
             <Vote className="w-4 h-4" /> Prédis
           </Link>
           <Link to={createPageUrl('Paris')}

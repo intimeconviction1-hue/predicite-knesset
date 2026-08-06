@@ -262,7 +262,7 @@ export default function MaRepartition() {
           backdropFilter: 'blur(14px) saturate(1.1)',
           WebkitBackdropFilter: 'blur(14px) saturate(1.1)',
           borderColor: restants === 0 ? 'var(--p-gold)' : 'var(--p-border-hover)',
-          boxShadow: restants === 0 ? '0 10px 26px -14px rgba(212,175,55,.75)' : 'var(--p-elev-1)',
+          boxShadow: restants === 0 ? '0 10px 26px -14px var(--p-gold-glow)' : 'var(--p-elev-1)',
         }}
       >
         <span className="text-sm font-semibold" style={{ color: 'var(--p-text-60)' }}>

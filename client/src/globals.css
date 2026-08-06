@@ -62,8 +62,18 @@
     --p-learn-text:   #050A18;
     --p-learn-muted:  rgba(5, 10, 24, 0.5);
     --p-gold:         #D4AF37;
-    --p-gold-dim:     rgba(212, 175, 55, 0.15);
-    --p-gold-border:  rgba(212, 175, 55, 0.3);
+    /* Échelle de l'or transparent. Elle n'existait qu'à moitié : `dim` et
+       `border` étaient définis, mais l'or teinté était RÉÉCRIT à la main dans
+       une quinzaine de fichiers, avec des alphas tirés au jugé — 0.05, 0.08,
+       0.1, 0.12, 0.15, 0.18, 0.2, 0.45, 0.5, 0.6, 0.7, 0.75. Pas une échelle :
+       une collection. Deux fonds censés être identiques ne l'étaient pas, et
+       changer la teinte de marque aurait demandé de rouvrir quinze fichiers.
+       Quatre valeurs suffisent, et chacune a un emploi. */
+    --p-gold-faint:   rgba(212, 175, 55, 0.08);  /* fond à peine teinté, encadrés d'aide */
+    --p-gold-dim:     rgba(212, 175, 55, 0.15);  /* fond teinté assumé, badges, états actifs */
+    --p-gold-border:  rgba(212, 175, 55, 0.3);   /* filet sur fond clair */
+    --p-gold-strong:  rgba(212, 175, 55, 0.45);  /* filet sur fond sombre, où 0.3 s'efface */
+    --p-gold-glow:    rgba(212, 175, 55, 0.6);   /* couleur d'ombre portée dorée */
     /* --p-gold en TEXTE direct sur le fond clair --p-night ne fait que
        1.95:1 de contraste (calculé) — trop bas pour du texte lisible.
        --p-gold-text est une version foncée (5.6:1) à utiliser partout où
@@ -242,14 +252,14 @@ a:not(p a, li a, span a, .p-prose a, .p-inline) { min-height: 44px; display: inl
 .p-btn-gold { background:transparent; color:var(--p-gold-text); border:0.5px solid var(--p-gold-border); padding:11px 21px; border-radius:10px;
   font-family:var(--font-body); font-size:13px; font-weight:600; cursor:pointer;
   transition:background .25s var(--p-ease), transform .25s var(--p-ease), box-shadow .3s var(--p-ease); }
-.p-btn-gold:hover { background:var(--p-gold-dim); transform:translateY(-2px); box-shadow:0 12px 26px -14px rgba(212,175,55,.75); }
+.p-btn-gold:hover { background:var(--p-gold-dim); transform:translateY(-2px); box-shadow:0 12px 26px -14px var(--p-gold-glow); }
 .p-btn-gold:active { transform:translateY(0) scale(.985); }
 /* Bouton or plein — le CTA le plus fort du site (« Prédis », « Parie »). */
 .p-btn-gold-solid { background:linear-gradient(180deg,#ffe08a,#D4AF37); color:#14203D; border:none; padding:11px 21px; border-radius:10px;
   font-family:var(--font-body); font-size:13px; font-weight:700; cursor:pointer;
   box-shadow:var(--p-shadow-gold);
   transition:transform .25s var(--p-ease), box-shadow .3s var(--p-ease), filter .2s; }
-.p-btn-gold-solid:hover { transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 2px 5px rgba(20,32,61,.22), 0 20px 40px -14px rgba(212,175,55,.95); }
+.p-btn-gold-solid:hover { transform:translateY(-2px); filter:brightness(1.05); box-shadow:0 2px 5px rgba(20,32,61,.22), 0 20px 40px -14px var(--p-gold-glow); }
 .p-btn-gold-solid:active { transform:translateY(0) scale(.985); }
 .p-btn-ghost { background:transparent; color:var(--p-text-60); border:0.5px solid var(--p-border-hover); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; cursor:pointer; transition:color 0.15s, border-color 0.15s; }
 .p-btn-ghost:hover { color:var(--p-text); border-color:var(--p-text-40); }
@@ -296,7 +306,7 @@ a:not(p a, li a, span a, .p-prose a, .p-inline) { min-height: 44px; display: inl
   /* Ombres colorées des boutons. Elles étaient recopiées à la main 11 fois pour
      le bleu et 3 fois pour l'or, sans jamais exister comme valeur nommée. */
   --p-shadow-blue: 0 1px 2px rgba(20,32,61,.18), 0 10px 22px -12px rgba(43,92,230,.7);
-  --p-shadow-gold: 0 1px 2px rgba(20,32,61,.20), 0 12px 28px -12px rgba(212,175,55,.8);
+  --p-shadow-gold: 0 1px 2px rgba(20,32,61,.20), 0 12px 28px -12px var(--p-gold-glow);
 
   /* Surfaces de marque */
   --p-grad-gold:   linear-gradient(135deg, #ffe08a 0%, #D4AF37 55%, #a97e22 100%);

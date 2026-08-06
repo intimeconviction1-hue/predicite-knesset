@@ -129,7 +129,7 @@ export default function PremierMinistre() {
         />
 
         <div className="flex items-center gap-2 px-4 py-2.5 text-xs rounded-xl mb-6"
-          style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'rgba(212,175,55,0.08)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>
+          style={{ background: deadlineClosed ? 'rgba(217,43,43,0.1)' : 'var(--p-gold-faint)', color: deadlineClosed ? 'var(--p-red)' : 'var(--p-gold-text)' }}>
           {deadlineClosed ? <Lock className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
           {deadlineClosed
             ? 'Pronostics clôturés'
@@ -190,8 +190,8 @@ export default function PremierMinistre() {
                       aria-pressed={selected === c.id}
                       className="w-full relative rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
                       style={{
-                        background: selected === c.id ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
-                        borderColor: selected === c.id ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
+                        background: selected === c.id ? 'var(--p-gold-dim)' : 'var(--p-card)',
+                        borderColor: selected === c.id ? 'var(--p-gold-strong)' : 'var(--p-border)',
                       }}
                       aria-label={`Choisir ${c.name_fr} comme Premier ministre`}
                     >
@@ -240,8 +240,8 @@ export default function PremierMinistre() {
                   whileTap={{ scale: 0.97 }}
                   className="rounded-xl p-4 text-center transition-colors border flex flex-col items-center gap-2"
                   style={{
-                    background: selected === 'autre' ? 'rgba(212,175,55,0.12)' : 'var(--p-card)',
-                    borderColor: selected === 'autre' ? 'rgba(212,175,55,0.5)' : 'var(--p-border)',
+                    background: selected === 'autre' ? 'var(--p-gold-dim)' : 'var(--p-card)',
+                    borderColor: selected === 'autre' ? 'var(--p-gold-strong)' : 'var(--p-border)',
                   }}
                 >
                   <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>

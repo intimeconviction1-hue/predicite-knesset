@@ -61,7 +61,7 @@ const RULES = [
 function RuleBlock({ item }) {
   if (item.type === 'highlight') {
     return (
-      <div className="rounded-lg p-3" style={{ background: 'rgba(212,175,55,0.08)', border: '1px solid rgba(212,175,55,0.2)' }}>
+      <div className="rounded-lg p-3" style={{ background: 'var(--p-gold-faint)', border: '1px solid var(--p-gold-border)' }}>
         <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-gold-text)' }}>{item.label}</p>
         <p className="text-xs leading-relaxed" style={{ color: 'var(--p-text-60)' }}>{item.value}</p>
       </div>

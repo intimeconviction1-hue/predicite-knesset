@@ -153,7 +153,7 @@ export default function Boussole() {
             <motion.div key="intro" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="p-card p-6 text-center">
               <p className="p-body text-sm mb-5">Réponds franchement à chaque affirmation, de <b>pas du tout</b> à <b>tout à fait d'accord</b>. Plus tu es catégorique, plus l'affirmation pèse dans ton résultat. Pas de bonne réponse — juste toi 🧭</p>
               <button onClick={start} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-bold text-[15px] transition-transform hover:-translate-y-0.5"
-                style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -12px rgba(212,175,55,0.6)' }}>
+                style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -12px var(--p-gold-glow)' }}>
                 Commencer <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>

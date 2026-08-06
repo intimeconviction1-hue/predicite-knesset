@@ -172,7 +172,7 @@ export default function AdminResultats() {
           backdropFilter: 'blur(14px) saturate(1.1)',
           WebkitBackdropFilter: 'blur(14px) saturate(1.1)',
           borderColor: ecart === 0 ? 'var(--p-gold)' : 'var(--p-border-hover)',
-          boxShadow: ecart === 0 ? '0 10px 26px -14px rgba(212,175,55,.75)' : 'var(--p-elev-1)',
+          boxShadow: ecart === 0 ? '0 10px 26px -14px var(--p-gold-glow)' : 'var(--p-elev-1)',
         }}
       >
         <span className="text-sm font-semibold" style={{ color: 'var(--p-text-60)' }}>Total</span>

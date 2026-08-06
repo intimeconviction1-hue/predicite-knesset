@@ -79,7 +79,7 @@ export default function Methodologie() {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: SOURCES.length * 0.08 }}
           className="rounded-2xl border p-6 md:p-8 p-elev-1"
-          style={{ borderColor: 'var(--p-gold-border)', background: 'rgba(212,175,55,0.05)' }}
+          style={{ borderColor: 'var(--p-gold-border)', background: 'var(--p-gold-faint)' }}
         >
           <div className="flex items-center gap-3 mb-3">
             <FileWarning className="w-5 h-5" style={{ color: 'var(--p-gold-text)' }} />

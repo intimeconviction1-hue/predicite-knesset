@@ -121,7 +121,7 @@ export default function SensDuVent() {
                 <>
                   <p className="p-body text-sm mb-5">{ROUNDS} manches. À chaque fois, devine le sens du mouvement. Enchaîne les bonnes réponses pour faire grimper ta série 🔥</p>
                   <button onClick={start} className="inline-flex items-center gap-2 px-6 py-3.5 rounded-[10px] font-bold text-[15px] transition-transform hover:-translate-y-0.5"
-                    style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -12px rgba(212,175,55,0.6)' }}>
+                    style={{ background: 'linear-gradient(180deg,#ffe08a,#D4AF37)', color: '#14203D', boxShadow: '0 14px 34px -12px var(--p-gold-glow)' }}>
                     Jouer <ArrowRight className="w-4 h-4" />
                   </button>
                 </>

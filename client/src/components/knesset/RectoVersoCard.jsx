@@ -73,7 +73,7 @@ export default function RectoVersoCard({
         {/* FACE JEU */}
         <div aria-hidden={!flipped} inert={!flipped ? '' : undefined}
           className="absolute inset-0 rounded-2xl overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col"
-          style={{ background: 'var(--p-card)', border: '1px solid var(--p-gold)', boxShadow: '0 24px 50px -26px rgba(212,175,55,0.5)' }}>
+          style={{ background: 'var(--p-card)', border: '1px solid var(--p-gold)', boxShadow: '0 24px 50px -26px var(--p-gold-glow)' }}>
           <div className="p-5 flex flex-col h-full gap-3">
             <div className="flex items-center justify-between">
               <span className="text-[9.5px] font-mono uppercase tracking-widest" style={{ color: 'var(--p-gold-text)' }}>◆ Ce fait se joue</span>

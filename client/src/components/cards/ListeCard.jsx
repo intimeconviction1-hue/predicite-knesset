@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Users, TrendingUp, TrendingDown, ChevronRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, ChevronRight, ArrowRight } from 'lucide-react';
 import Tooltip from '@/components/shared/Tooltip';
 import BallotChip from '@/components/knesset/BallotChip';
 import CountUp from '@/components/knesset/CountUp';
@@ -58,33 +58,53 @@ export default function ListeCard({ liste, latestPoll, index = 0 }) {
             </Tooltip>
           </div>
 
-          {/* Projection sièges */}
-          <div className="flex items-end justify-between py-3 border-t border-b" style={{ borderColor: 'var(--p-border)' }}>
-            <div>
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>Projection sièges</p>
-              {belowThreshold ? (
-                <p className="text-sm font-bold mt-0.5" style={{ color: 'var(--p-red)' }}>Sous le seuil (3,25%)</p>
-              ) : (
-                <p className="text-2xl font-black mt-0.5" style={{ fontFamily: 'monospace', color: texteLisible(liste.color || blocColor) }}>
-                  {projectedSeats != null ? <CountUp value={projectedSeats} duration={800} /> : '—'}
-                  <span className="text-xs font-normal" style={{ color: 'var(--p-text-25)' }}> / 120</span>
-                </p>
+          {/* Aujourd'hui → projeté.
+              Les deux chiffres étaient là, mais pas à la même échelle : la
+              projection en 24 px gras coloré, le sortant relégué en pied de
+              carte, 11 px à l'opacité la plus faible du système, derrière une
+              icône. On lisait donc un chiffre isolé et une note de bas de page,
+              alors que l'information EST la comparaison — « 22 » ne dit rien
+              sans « 32 » à côté. Les deux passent dans la même ligne, à la même
+              échelle, séparés par une flèche : le mouvement se lit avant les
+              chiffres. Le sortant reste plus discret que la projection (c'est
+              le passé), mais lisible — plus une trace grise. */}
+          <div className="py-3 border-t border-b" style={{ borderColor: 'var(--p-border)' }}>
+            <div className="flex items-center justify-between mb-1.5">
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-40)' }}>
+                Sortants → projection
+              </p>
+              {delta != null && delta !== 0 && (
+                <span className="flex items-center gap-1 text-xs font-bold" style={{ color: delta > 0 ? 'var(--p-green-text)' : 'var(--p-red)' }}>
+                  {delta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                  {delta > 0 ? '+' : ''}{delta}
+                </span>
+              )}
+              {liste.current_knesset_seats == null && (
+                <span className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded"
+                  style={{ background: 'var(--p-gold-dim)', color: 'var(--p-gold-text)' }}>
+                  Nouvelle liste
+                </span>
               )}
             </div>
-            {delta != null && delta !== 0 && (
-              <div className="flex items-center gap-1 text-xs font-bold" style={{ color: delta > 0 ? 'var(--p-green-text)' : 'var(--p-red)' }}>
-                {delta > 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-                {delta > 0 ? '+' : ''}{delta}
-              </div>
-            )}
+
+            <div className="flex items-baseline gap-2">
+              <span className="text-xl font-black" style={{ fontFamily: 'monospace', color: 'var(--p-text-40)' }}>
+                {liste.current_knesset_seats != null ? liste.current_knesset_seats : '—'}
+              </span>
+              <ArrowRight className="w-3.5 h-3.5 self-center shrink-0" style={{ color: 'var(--p-text-25)' }} />
+              {belowThreshold ? (
+                <span className="text-sm font-bold" style={{ color: 'var(--p-red)' }}>Sous le seuil (3,25 %)</span>
+              ) : (
+                <span className="text-2xl font-black" style={{ fontFamily: 'monospace', color: texteLisible(liste.color || blocColor) }}>
+                  {projectedSeats != null ? <CountUp value={projectedSeats} duration={800} /> : '—'}
+                  <span className="text-xs font-normal" style={{ color: 'var(--p-text-25)' }}> / 120</span>
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-3">
-            <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--p-text-25)' }}>
-              <Users className="w-3 h-3" />
-              {liste.current_knesset_seats != null ? `${liste.current_knesset_seats} sièges sortants` : 'Nouvelle liste'}
-            </div>
+          <div className="flex items-center justify-end pt-3">
             <div className="flex items-center gap-1 text-xs font-semibold group-hover:gap-1.5 transition-all" style={{ color: 'var(--p-blue)' }}>
               Pronostiquer <ChevronRight className="w-3 h-3" />
             </div>

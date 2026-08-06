@@ -23,30 +23,79 @@ import { joursAvantScrutin } from '@/lib/echeances';
 import { BLOC_LABEL } from '@/lib/blocs';
 
 
+/**
+ * Une liste : ce qu'elle a aujourd'hui, ce que le sondage lui donne, l'écart.
+ *
+ * Avant, cette ligne n'affichait que la projection — et la page ne montrait
+ * NULLE PART la Knesset actuelle. Or une projection ne veut rien dire seule :
+ * « Likoud 22 » n'est une information que si l'on sait qu'il en a 32. Tout
+ * l'intérêt est dans le mouvement, et c'est justement lui qu'on ne voyait pas.
+ *
+ * Le sortant est un repère SUR la barre (trait vertical), pas une colonne de
+ * plus : on lit la longueur actuelle et la longueur projetée d'un seul coup
+ * d'œil, et l'écart devient visible avant même d'avoir lu le chiffre. Une liste
+ * nouvelle n'a pas de repère — elle part de rien, et cette absence se voit.
+ */
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
+  const sortant = liste.current_knesset_seats;
+  const nouvelle = sortant == null;
+  const delta = nouvelle ? null : seats - sortant;
+  const couleur = liste.color || '#6B7280';
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.04, duration: 0.3 }}
     >
+      {/* `w-full` n'est pas décoratif. La règle de cible tactile de globals.css
+          impose `display: inline-flex` à tout lien autonome : la classe `flex`
+          écrite ici ne gagne pas, et un inline-flex se réduit à son contenu. La
+          barre en `flex-1` n'avait donc AUCUNE largeur à prendre — mesurée à
+          0 px, depuis toujours (le défaut est antérieur à ce bloc). Les barres
+          comparatives de la page d'accueil n'ont jamais été visibles. */}
       <Link
         to={`${createPageUrl('Liste')}?slug=${liste.slug}`}
-        className="flex items-center gap-3 py-2 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-night-2)]"
+        className="flex w-full items-center gap-2.5 py-2 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-night-2)]"
       >
-        <span className="text-xs w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
-        <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
+        <span className="text-xs w-24 sm:w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
+
+        <div className="relative flex-1 min-w-0 h-2.5 rounded-full" style={{ background: 'var(--p-text-10)' }}>
           <motion.div
-            className="h-full rounded-full"
-            style={{ backgroundColor: liste.color || '#6B7280', opacity: belowThreshold ? 0.3 : 1 }}
+            className="absolute inset-y-0 left-0 rounded-full"
+            style={{ backgroundColor: couleur, opacity: belowThreshold ? 0.3 : 1 }}
             initial={{ width: 0 }}
             animate={{ width: `${Math.max(2, ((seats || 0) / maxSeats) * 100)}%` }}
             transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
           />
+          {/* Repère du sortant. Le halo blanc le garde lisible aussi bien sur la
+              barre colorée que sur la piste vide — il doit se voir des deux
+              côtés du mouvement, c'est tout son intérêt. */}
+          {!nouvelle && sortant > 0 && (
+            <span
+              className="absolute top-[-3px] bottom-[-3px] w-[2px] rounded-full"
+              style={{
+                left: `calc(${Math.min(100, (sortant / maxSeats) * 100)}% - 1px)`,
+                background: 'var(--p-text)',
+                boxShadow: '0 0 0 1.5px var(--p-card)',
+              }}
+              aria-hidden="true"
+            />
+          )}
         </div>
-        <span className="text-xs font-bold font-mono w-14 text-right shrink-0" style={{ color: belowThreshold ? 'var(--p-text-25)' : (liste.color ? texteLisible(liste.color) : 'var(--p-gold-text)') }}>
-          {belowThreshold ? 'seuil' : `${seats} sièges`}
+
+        <span className="text-xs font-bold font-mono w-7 text-right shrink-0"
+          style={{ color: belowThreshold ? 'var(--p-text-25)' : texteLisible(couleur) }}>
+          {seats}
+        </span>
+
+        {/* Colonne d'écart resserrée sur mobile : à 375 px, les trois colonnes
+            fixes ne laissaient que 79 px à la barre, qui est justement ce qu'on
+            vient là pour lire. */}
+        <span className="text-[11px] font-bold font-mono w-10 sm:w-[52px] text-right shrink-0"
+          style={{ color: nouvelle ? 'var(--p-gold-text)' : delta > 0 ? 'var(--p-green-text)' : delta < 0 ? 'var(--p-red)' : 'var(--p-text-25)' }}>
+          {nouvelle ? 'nouv.' : delta === 0 ? '=' : `${delta > 0 ? '+' : ''}${delta}`}
         </span>
       </Link>
     </motion.div>
@@ -102,7 +151,15 @@ export default function Home() {
   // plutôt que d'être silencieusement absente du total.
   const listesAvecSieges = listes.map(l => ({ ...l, _seats: seatsByListe.get(l.id) ?? 0 }));
   const rankedListes = [...listesAvecSieges].sort((a, b) => b._seats - a._seats).slice(0, 10);
-  const maxSeats = Math.max(20, ...rankedListes.map(l => l._seats));
+
+  // Le tableau « ce qui change » prend TOUTES les listes en lice, pas le top 10 :
+  // une liste projetée à zéro est justement l'information la plus forte de la
+  // page (Unité nationale passe de 12 sièges à rien). La tronquer au classement
+  // reviendrait à ne montrer que ceux qui vont bien.
+  const listesQuiChangent = [...listesAvecSieges].sort((a, b) => b._seats - a._seats);
+  // L'échelle des barres doit couvrir le sortant AUSSI, sinon le repère du
+  // Likoud (32 sortants pour 23 au plus haut projeté) sortirait de la piste.
+  const maxSeats = Math.max(20, ...listesAvecSieges.map(l => Math.max(l._seats, l.current_knesset_seats ?? 0)));
 
   const coalitionSeats = listesAvecSieges.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
   const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
@@ -265,10 +322,11 @@ export default function Home() {
 
       </div>
 
-      {/* Orientation : comprendre la plateforme — APRÈS la donnée, pas avant. */}
-      <HomeIntro />
-
-      {/* Courbe de tendance — juste sous l'hémicycle : la photo du jour, puis l'évolution */}
+      {/* Courbe de tendance — juste sous l'hémicycle : la photo du jour, puis
+          l'évolution. HomeIntro s'intercalait ici, en se justifiant d'arriver
+          « APRÈS la donnée » — sauf qu'il en restait deux blocs derrière lui.
+          Il coupait la séquence en deux au lieu de la suivre ; il descend donc
+          après le consensus, une fois la démonstration faite. */}
       <SondagesTrend />
 
       {/* Consensus des sondages — l'hémicycle montre UN sondage ; ici on dit si
@@ -294,16 +352,15 @@ export default function Home() {
         </div>
       )}
 
-      {/* Ta progression vers le palier suivant (joueur connecté) — la montée
-          en grade rendue désirable, et célébrée quand elle arrive. */}
-      {user && progress && (
-        <div className="max-w-3xl mx-auto px-4 pt-2">
-          <ProgressionPalier progress={progress} />
-        </div>
-      )}
-
-      {/* Le terrain de jeu — le registre JEU (or, énergie) : ce qui se joue
-          maintenant, jouable en un clic. Contrepoids du registre Marbre. */}
+      {/* Le terrain de jeu — le registre JEU (or, énergie). Il arrivait en
+          neuvième position : le héros promet « parie tes jetons », et il fallait
+          traverser quatre blocs de Marbre avant le premier élément jouable. Qui
+          ne descendait pas aux deux tiers de la page ne voyait jamais que
+          PrédiCité est un jeu. Il remonte juste derrière la carte recto/verso,
+          qui est précisément la bascule d'un registre à l'autre : le fait se
+          retourne sur son pari, et le terrain de jeu prend le relais. L'or au
+          milieu du bleu n'est pas une faute de rythme, c'est l'énoncé même des
+          vases communicants — on joue et on apprend dans le même mouvement. */}
       {(parisData?.marches?.length > 0) && (
         <div className="p-reveal max-w-3xl mx-auto px-4 pt-2 pb-5">
           <TerrainDeJeu
@@ -314,11 +371,31 @@ export default function Home() {
         </div>
       )}
 
-      {/* Classement des listes */}
-      <div className="p-reveal max-w-3xl mx-auto px-4 pb-16">
-        <div className="flex items-center justify-between mb-6">
+      {/* Ta progression vers le palier suivant (joueur connecté) — juste après
+          le terrain de jeu : on vient de voir ce qui se joue, voici où tu en es. */}
+      {user && progress && (
+        <div className="max-w-3xl mx-auto px-4 pt-2 pb-2">
+          <ProgressionPalier progress={progress} />
+        </div>
+      )}
+
+      {/* Orientation : « comprendre en 30 secondes ». Arrive une fois la
+          démonstration faite — la donnée, puis le jeu, puis seulement
+          l'explication de ce qu'est cette plateforme. */}
+      <HomeIntro />
+
+      {/* Ce qui change — le bloc s'appelait « Dernière projection sièges » et
+          réaffichait, une hauteur d'écran plus bas, exactement le tableau que la
+          légende de l'hémicycle venait de donner : mêmes listes, mêmes sièges,
+          même source. Il compare désormais la Knesset SORTANTE à la projection,
+          ce qui règle deux choses d'un coup — la redite disparaît, et la
+          composition actuelle, qui n'apparaissait nulle part sur la page,
+          devient le point de comparaison. Une projection seule ne dit rien :
+          « Likoud 22 » n'informe que si l'on sait qu'il en a 32. */}
+      <div className="p-reveal max-w-3xl mx-auto px-4 pb-10">
+        <div className="flex items-end justify-between mb-1">
           <h2 className="font-bold text-base" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>
-            Dernière projection <span className="p-gradient-gold">sièges</span>
+            Ce qui <span className="p-gradient-gold">change</span>
           </h2>
           <Link to={createPageUrl('Listes')}
             className="text-xs flex items-center gap-1 hover:text-[var(--p-text)] transition-colors"
@@ -326,23 +403,45 @@ export default function Home() {
             Toutes les listes <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
+        <p className="text-xs mb-5" style={{ color: 'var(--p-text-40)' }}>
+          La Knesset sortante face à la projection du jour. Le trait sur la barre marque les sièges d'aujourd'hui.
+        </p>
 
-        {rankedListes.length === 0 ? (
+        {listesQuiChangent.length === 0 ? (
           <div className="rounded-2xl p-8 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
             <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Sondages à venir…</p>
           </div>
         ) : (
           <div className="p-card p-5" style={{ borderRadius: '18px' }}>
-            {rankedListes.map((l, i) => (
+            {listesQuiChangent.map((l, i) => (
               <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
             ))}
             {latestPoll && (
               <p className="text-[10px] mt-3 pt-3 border-t font-mono" style={{ color: 'var(--p-text-25)', borderColor: 'var(--p-border)' }}>
-                {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
+                Sortants : 25ᵉ Knesset · Projection : {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
               </p>
             )}
           </div>
         )}
+
+        {/* Appel final. La page se terminait sur ce tableau puis quatre liens
+            gris : après tout ce défilement, le geste central du produit n'était
+            proposé nulle part. C'est pourtant ici qu'on vient de voir ce qui
+            bouge — le moment où l'on a un avis. */}
+        <div className="mt-10 rounded-2xl px-6 py-8 text-center relative overflow-hidden"
+          style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-gold-border)' }}>
+          <div className="p-tricolor absolute inset-x-0 top-0"><div /><div /><div /></div>
+          <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: 'var(--p-gold-text)' }}>À toi</p>
+          <h3 className="text-xl md:text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}>
+            Tu la vois comment, cette Knesset ?
+          </h3>
+          <p className="text-sm mb-5 max-w-md mx-auto" style={{ color: 'var(--p-text-60)' }}>
+            Répartis les 120 sièges à ta façon. Ton score se calcule le soir du 27 octobre, au dépouillement.
+          </p>
+          <Link to={createPageUrl('MaRepartition')} className="p-btn-gold-solid gap-2">
+            Compose ta Knesset <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
 
         {/* Liens secondaires */}
         <hr className="p-hairline-gold mt-12" />

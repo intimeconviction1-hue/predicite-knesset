@@ -6,110 +6,9 @@ import { Landmark, Check, RotateCcw, Trophy, Gauge } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
+import { MAJORITE, TOTAL_SIEGES, MIN_SIEGES_AU_SEUIL, repartirSieges } from '@/lib/knesset';
+import { verifierFrictions, plausibility } from '@/lib/frictions';
 
-const MAJORITE = 61;
-
-// ⚠️ FRICTIONS À VALIDER (David) — en Israël TOUT est possible : on ne bloque
-// jamais, on mesure la PLAUSIBILITÉ. Chaque paire présente retire des points
-// (poids = force de la friction). Chaque paire s'adosse à une position déjà
-// sourcée du site (boussole-data.js, seed) — le détail, l'échelle des poids et
-// les paires ÉCARTÉES faute de source vivent dans docs/FRICTIONS_SOURCES.md.
-// Une paire absente est un trou à dessein, pas un oubli.
-const FRICTIONS = [
-  // ── Le « mur » anti-Netanyahou (la friction la plus structurante) ──────────
-  ['likoud', 'les-democrates', 42, 'La gauche exclut Netanyahou'],
-  ['likoud', 'yashar-gadi-eisenkot', 35, 'Eisenkot fait campagne contre Netanyahou'],
-  // ⚠️ POIDS À REVOIR (David) : cette paire absorbe une seconde friction qui
-  // existait en double. Une ligne ['likoud','yachad-bennett',16,'Bennett :
-  // histoire compliquée avec Bibi'] visait le slug fantôme hérité de Base44,
-  // désactivé le 2026-08-04 — elle ne s'appliquait donc JAMAIS. Les deux
-  // fondateurs d'Ensemble n'ont pas le même passif avec Netanyahou : Lapid
-  // pesait 32, Bennett 16. On garde 32, mais c'est le chiffre de Lapid pour une
-  // liste que Bennett dirige : à trancher.
-  ['likoud', 'ensemble-bennett-lapid', 32, 'Bloc du changement : Bennett et Lapid hors coalition Netanyahou'],
-  ['likoud', 'yisrael-beytenou', 30, 'Lieberman, ennemi juré de Netanyahou'],
-  ['likoud', 'unite-nationale', 22, 'Passif anti-Netanyahou'],
-  // (Pas de paire likoud/les-reservistes : Hendel assume de gouverner avec
-  // Netanyahou si le programme convient — trou à dessein.)
-
-  // ── Piliers du gouvernement sortant ⊥ bloc du changement (2026-08-05) ──────
-  // Sans cet axe, Otzma + Les Démocrates + Ensemble sortait « très plausible »
-  // à 100 %. Adossé à l'affirmation structurante de la Boussole (Netanyahou PM :
-  // Otzma et le Sionisme religieux pour, les cinq listes d'en face contre) et à
-  // la commission d'enquête du 7 octobre. Unité nationale ferme l'axe avec les
-  // poids les plus bas : Gantz assume de gouverner avec Netanyahou.
-  ['otzma-yehudit', 'les-democrates', 40, 'Kahanisme vs gauche sioniste : exclusion réciproque'],
-  ['otzma-yehudit', 'yashar-gadi-eisenkot', 30, 'Ben Gvir, pilier du gouvernement que combat Eisenkot'],
-  ['otzma-yehudit', 'ensemble-bennett-lapid', 30, 'Ben Gvir vs bloc du changement'],
-  ['otzma-yehudit', 'yisrael-beytenou', 26, 'Lieberman vs Ben Gvir : deux droites irréconciliables'],
-  ['otzma-yehudit', 'unite-nationale', 20, 'Gantz vs Ben Gvir — mais Gantz n\'exclut pas la droite'],
-  ['sionisme-religieux', 'les-democrates', 34, 'Smotrich vs gauche laïque'],
-  ['sionisme-religieux', 'yashar-gadi-eisenkot', 26, 'Smotrich, pilier du gouvernement que combat Eisenkot'],
-  ['sionisme-religieux', 'ensemble-bennett-lapid', 26, 'Smotrich vs bloc du changement'],
-  ['sionisme-religieux', 'yisrael-beytenou', 22, 'Lieberman vs Smotrich'],
-  ['sionisme-religieux', 'unite-nationale', 16, 'Gantz vs Smotrich — la friction la plus faible de l\'axe'],
-
-  // ── Haredim ⊥ centre laïque ────────────────────────────────────────────────
-  // Lieberman existait déjà ; les autres refus (2026-08-05) sont sourcés dans
-  // boussole-data : exemption militaire, influence religieuse, budget des
-  // yeshivot. Pas de paire avec Unité nationale : Gantz est absent des
-  // affirmations religieuses sourcées et a siégé avec les haredim en 2020.
-  ['yisrael-beytenou', 'shas', 30, 'Lieberman contre les partis ultra-orthodoxes'],
-  ['yisrael-beytenou', 'judaisme-unifie-de-la-torah', 30, 'Lieberman contre les Haredim'],
-  ['shas', 'les-reservistes-hendel-tropper', 32, 'Hendel refuse de siéger avec les partis haredim'],
-  ['judaisme-unifie-de-la-torah', 'les-reservistes-hendel-tropper', 32, 'Hendel refuse de siéger avec les partis haredim'],
-  ['shas', 'yashar-gadi-eisenkot', 28, 'Eisenkot rejette « l\'étreinte politique haredi »'],
-  ['judaisme-unifie-de-la-torah', 'yashar-gadi-eisenkot', 28, 'La conscription universelle d\'Eisenkot exclut les Haredim'],
-  ['shas', 'les-democrates', 26, 'Golan vs subventions haredim : tronc commun, conscription'],
-  ['judaisme-unifie-de-la-torah', 'les-democrates', 26, 'Golan vs subventions haredim : tronc commun, conscription'],
-  ['shas', 'ensemble-bennett-lapid', 24, 'Shas accuse Bennett de « brader l\'identité juive »'],
-  ['judaisme-unifie-de-la-torah', 'ensemble-bennett-lapid', 24, 'Bennett et Lapid ont attaqué le budget des yeshivot'],
-
-  // ── Extrême droite ⊥ partis arabes ─────────────────────────────────────────
-  ['otzma-yehudit', 'hadash-ta-al-liste-commune', 45, 'Kahanisme vs partis arabes'],
-  ['otzma-yehudit', 'ra-am', 42, 'Ben Gvir vs partis arabes'],
-  ['sionisme-religieux', 'hadash-ta-al-liste-commune', 38, 'Sionisme religieux vs partis arabes'],
-  ['sionisme-religieux', 'ra-am', 34, 'Sionisme religieux vs Ra\'am'],
-
-  // ── Partis arabes dans les autres coalitions ───────────────────────────────
-  // Asymétrie Hadash/Ra'am partout : Ra'am a siégé au gouvernement en 2021
-  // (improbable, pas inédit), Hadash jamais. Ensemble, Lieberman et Les
-  // Réservistes refusent l'appui des partis arabes (Boussole, 2026-08-05) —
-  // mais Bennett, Lapid et Lieberman ont gouverné avec Ra'am, d'où les poids
-  // réduits. Les Démocrates : zéro friction à dessein, Golan appelle à
-  // s'associer à Ra'am.
-  ['likoud', 'hadash-ta-al-liste-commune', 40, 'Hadash-Ta\'al hors gouvernement Likoud'],
-  ['likoud', 'ra-am', 24, 'Ra\'am au gouvernement Likoud : improbable, pas inédit'],
-  ['ensemble-bennett-lapid', 'hadash-ta-al-liste-commune', 26, 'Ensemble refuse l\'appui des partis arabes'],
-  ['ensemble-bennett-lapid', 'ra-am', 14, 'Refus déclaré — mais Ra\'am gouvernait avec eux en 2021'],
-  ['yisrael-beytenou', 'hadash-ta-al-liste-commune', 26, 'Lieberman refuse l\'appui des partis arabes'],
-  ['yisrael-beytenou', 'ra-am', 14, 'Refus déclaré — mais Ra\'am gouvernait avec Lieberman en 2021'],
-  ['les-reservistes-hendel-tropper', 'hadash-ta-al-liste-commune', 26, 'Doctrine sécuritaire des Réservistes vs partis arabes'],
-  ['les-reservistes-hendel-tropper', 'ra-am', 20, 'Doctrine sécuritaire des Réservistes vs Ra\'am'],
-];
-
-// Garde de cohérence, même principe que celle de Boussole.jsx : une friction dont
-// un slug ne correspond à aucune liste active ne se déclenche JAMAIS, sans que
-// rien ne le signale. C'est ce qui a laissé vivre ici la paire 'yachad-bennett'
-// après la désactivation de la liste fantôme. En dev on le dit ; en prod on
-// ignore sans casser la page.
-// ⚠️ Valider contre les listes ACTIVES, jamais contre le plateau du jeu : le
-// plateau ne retient que les listes créditées de sièges par le DERNIER sondage,
-// et une liste sous le seuil ce jour-là n'est pas un slug fantôme — sa friction
-// doit survivre pour le sondage suivant. C'est ce qui a fait crier la garde sur
-// 'unite-nationale' (Gantz, bien active au seed et à la Boussole) en août 2026.
-function verifierFrictions(slugsActifs) {
-  if (!import.meta.env?.DEV || Object.keys(slugsActifs).length === 0) return;
-  const orphelins = [...new Set(FRICTIONS.flatMap(([a, b]) => [a, b]))].filter(s => !slugsActifs[s]);
-  if (orphelins.length) console.error('[FormeCoalition] frictions sans liste correspondante :', orphelins.join(', '));
-}
-
-function plausibility(slugs) {
-  const set = new Set(slugs);
-  let penalty = 0; const active = [];
-  for (const [a, b, w, reason] of FRICTIONS) if (set.has(a) && set.has(b)) { penalty += w; active.push({ a, b, w, reason }); }
-  return { score: Math.max(3, 100 - penalty), active: active.sort((x, y) => y.w - x.w) };
-}
 function plLabel(s) {
   if (s >= 75) return { t: 'Très plausible', c: 'var(--p-green)', bg: 'var(--p-green-dim)', fill: 'var(--p-green)' };
   if (s >= 45) return { t: 'Plausible', c: 'var(--p-blue)', bg: 'var(--p-blue-dim)', fill: 'var(--p-blue)' };
@@ -117,10 +16,18 @@ function plLabel(s) {
   return { t: 'Scénario surprise', c: 'var(--p-red)', bg: 'var(--p-red-dim)', fill: 'var(--p-red)' };
 }
 
-// Nombre de sondages moyennés pour composer le plateau. Le dernier sondage
-// seul faisait clignoter les listes en zone de seuil : Unité nationale (Gantz)
-// présente une semaine, disparue la suivante — injouable, et ses frictions ne
-// se déclenchaient jamais. La moyenne lisse l'effet de seuil.
+// Nombre de sondages moyennés pour composer le plateau. Le dernier sondage seul
+// faisait bouger le plateau d'un jour à l'autre : les Réservistes passaient de 4
+// à 6 sièges selon l'institut publié la veille, ce qui suffit à faire basculer
+// une coalition sans que le joueur ait rien changé. La moyenne rend le plateau
+// stable le temps qu'on y joue.
+//
+// Ce qu'elle ne fait PAS, contrairement à ce qu'on a d'abord cru : ramener
+// Unité nationale (Gantz). Vérifié sur les 20 derniers sondages de prod le
+// 2026-08-06 — Gantz est crédité une fois sur vingt. Il est réellement sous le
+// seuil, ce n'est pas un artefact d'échantillonnage. Son absence du plateau est
+// juste, et la friction likoud/unite-nationale doit rester en sommeil : elle
+// attend un sursaut réel, pas un lissage.
 const NB_SONDAGES_PLATEAU = 5;
 
 export default function FormeCoalition() {
@@ -128,21 +35,18 @@ export default function FormeCoalition() {
   const { data: sondages = [] } = useQuery({ queryKey: ['coal-sondages', NB_SONDAGES_PLATEAU], queryFn: () => base44.entities.SondageSieges.list('-poll_date', NB_SONDAGES_PLATEAU) });
   const { data: listes = [] } = useQuery({ queryKey: ['coal-listes'], queryFn: () => base44.entities.Liste.filter({ is_active: true }) });
 
-  // Plateau = moyenne des derniers sondages, arrondie au plus fort reste pour
-  // retomber exactement sur 120 — comme chaque sondage source (garde
-  // d'intégrité du collecteur). Un parti absent d'un sondage y compte 0 : dans
-  // un sondage sièges israélien, ne pas être crédité, c'est être sous le seuil.
+  // Plateau = moyenne des derniers sondages, passée par la règle du scrutin
+  // (seuil, puis total ramené à 120) plutôt que par un simple arrondi. Un parti
+  // absent d'un sondage y compte 0 : dans un sondage sièges israélien, ne pas
+  // être crédité, c'est être sous le seuil — pas une donnée manquante.
   const parties = useMemo(() => {
     if (!sondages.length || !listes.length) return [];
     const somme = new Map();
     for (const s of sondages) for (const x of s.seats_by_liste || []) somme.set(x.liste_id, (somme.get(x.liste_id) || 0) + x.seats);
-    const exacts = listes
-      .map(l => ({ id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280', exact: (somme.get(l.id) || 0) / sondages.length }))
-      .filter(p => p.exact > 0)
-      .map(p => ({ ...p, seats: Math.floor(p.exact), reste: p.exact - Math.floor(p.exact) }));
-    let manque = 120 - exacts.reduce((n, p) => n + p.seats, 0);
-    for (const p of [...exacts].sort((a, b) => b.reste - a.reste)) { if (manque <= 0) break; p.seats += 1; manque -= 1; }
-    return exacts.filter(p => p.seats > 0).sort((a, b) => b.seats - a.seats);
+    return repartirSieges(listes.map(l => ({
+      id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280',
+      exact: (somme.get(l.id) || 0) / sondages.length,
+    })));
   }, [listes, sondages]);
   const bySlug = useMemo(() => Object.fromEntries(parties.map(p => [p.slug, p])), [parties]);
   // La garde reçoit les listes actives, pas `parties` : voir verifierFrictions.
@@ -164,13 +68,20 @@ export default function FormeCoalition() {
   const reset = () => { setSelected([]); setResult(null); };
   const check = () => { gate.record(); setResult({ majority: total >= MAJORITE, total, score }); };
 
-  const majPct = (MAJORITE / 120) * 100;
+  const majPct = (MAJORITE / TOTAL_SIEGES) * 100;
 
   // Provenance du plateau, affichée sous les cartouches : un chiffre de sièges
-  // sans sa source est exactement ce que ce site s'interdit ailleurs.
-  const provenance = sondages.length
-    ? `Sièges : moyenne des ${sondages.length} derniers sondages${sondages.length > 1 ? ` (${new Date(sondages[sondages.length - 1].poll_date).toLocaleDateString('fr-FR')} — ${new Date(sondages[0].poll_date).toLocaleDateString('fr-FR')})` : ` (${sondages[0].institute}, ${new Date(sondages[0].poll_date).toLocaleDateString('fr-FR')})`}, arrondie à 120.`
-    : null;
+  // sans sa source est exactement ce que ce site s'interdit ailleurs. Le
+  // traitement est annoncé autant que la source — ces sièges sont calculés, pas
+  // relevés, et le joueur doit pouvoir le savoir sans lire le code.
+  const provenance = useMemo(() => {
+    if (!sondages.length) return null;
+    const jour = (d) => new Date(d).toLocaleDateString('fr-FR');
+    const source = sondages.length > 1
+      ? `moyenne des ${sondages.length} derniers sondages (${jour(sondages[sondages.length - 1].poll_date)} — ${jour(sondages[0].poll_date)})`
+      : `sondage ${sondages[0].institute} du ${jour(sondages[0].poll_date)}`;
+    return `Sièges : ${source}, seuil de 3,25 % appliqué (moins de ${MIN_SIEGES_AU_SEUIL} sièges = 0), total ramené à ${TOTAL_SIEGES} au prorata.`;
+  }, [sondages]);
 
   return (
     <MiniJeuShell
@@ -192,8 +103,8 @@ export default function FormeCoalition() {
               </span>
             </div>
             <div className="relative h-2.5 rounded-full overflow-hidden mb-4" style={{ background: 'var(--p-text-10)' }}
-              role="progressbar" aria-label="Sièges de la coalition" aria-valuemin={0} aria-valuemax={120} aria-valuenow={total}>
-              <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (total / 120) * 100)}%`, background: total >= MAJORITE ? 'var(--p-green)' : 'var(--p-blue)' }} />
+              role="progressbar" aria-label="Sièges de la coalition" aria-valuemin={0} aria-valuemax={TOTAL_SIEGES} aria-valuenow={total}>
+              <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, (total / TOTAL_SIEGES) * 100)}%`, background: total >= MAJORITE ? 'var(--p-green)' : 'var(--p-blue)' }} />
               <div className="absolute top-0 bottom-0" style={{ left: `${majPct}%`, width: 2, background: 'var(--p-gold)' }} title="Majorité 61" />
             </div>
 

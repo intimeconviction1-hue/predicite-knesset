@@ -4,11 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { AlertTriangle, Check, Clock, Landmark, Lock, PenLine, Minus, Plus, Wand2, Trophy } from 'lucide-react';
+import { AlertTriangle, Clock, Landmark, Lock, PenLine, Minus, Plus, Wand2, Trophy } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
+import { TOTAL_SIEGES, MIN_SIEGES_AU_SEUIL } from '@/lib/knesset';
 
 /**
  * Répartition des 120 sièges — le pronostic principal du jeu.
@@ -36,8 +37,6 @@ import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
  * produit, est devenue le moment fort qu'elle aurait toujours dû être.
  */
 
-const TOTAL_SIEGES = 120;
-const MIN_SIEGES_AU_SEUIL = 4;
 
 export default function MaRepartition() {
   const [user, setUser] = useState(undefined);

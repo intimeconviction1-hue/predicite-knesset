@@ -7,7 +7,7 @@ import { useGuestGate } from '@/lib/useGuestGate';
 import { STATEMENTS, COUVERTURE } from '@/lib/boussole-data';
 import { texteLisible } from '@/lib/couleurs';
 import TrialWall from '@/components/knesset/TrialWall';
-import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
+import MiniJeuShell from '@/components/knesset/MiniJeuShell';
 
 // SOLIDITÉ D'UN SCORE — borne inférieure de l'intervalle de Wilson à 95 %.
 //

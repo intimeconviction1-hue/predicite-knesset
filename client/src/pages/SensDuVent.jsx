@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, TrendingDown, Wind, RotateCcw, ArrowRight, Trophy, Flame } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
-import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
+import MiniJeuShell from '@/components/knesset/MiniJeuShell';
 
 const ROUNDS = 5;
 const fr = (d) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });

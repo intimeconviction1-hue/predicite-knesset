@@ -20,6 +20,7 @@ import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import { joursAvantScrutin } from '@/lib/echeances';
+import { BLOC_LABEL } from '@/lib/blocs';
 
 
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
@@ -114,9 +115,9 @@ export default function Home() {
     ? null
     : nobodyHasMajority
       ? (arabSeats > 0
-          ? <>Aucun bloc n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — les {arabSeats} sièges arabes tiennent la balance.</>
-          : <>Aucun bloc n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — la majorité reste à construire.</>)
-      : <>Le bloc {leaderIsCoalition ? 'de coalition' : "d'opposition"} franchit la barre des <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b>.</>;
+          ? <>Aucun camp n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — les {arabSeats} sièges des partis arabes tiennent la balance.</>
+          : <>Aucun camp n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — la majorité reste à construire.</>)
+      : <>Le bloc {leaderIsCoalition ? BLOC_LABEL.coalition.toLowerCase() : BLOC_LABEL.opposition.toLowerCase()} franchit la barre des <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b>.</>;
 
   const daysLeft = joursAvantScrutin();
   const firstName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
@@ -188,19 +189,31 @@ export default function Home() {
         {/* Hémicycle — pièce maîtresse, avec les totaux de blocs et la ligne 61 */}
         <div className="relative max-w-2xl mx-auto px-4 pb-4">
           <div className="flex items-end justify-between mb-1 px-1">
+            {/* Trois blocs, pas deux et une note. Les partis arabes tenaient dans
+                un 10 px vert entre deux chiffres de 36 px : personne ne les
+                voyait, et on lisait « 51 » et « 58 » comme un total qui ne fait
+                pas 120. Or ce sont eux le PIVOT — ni l'un ni l'autre camp
+                n'atteint 61 sans eux, c'est le fait le plus important de la page
+                et il était le moins lisible. Ils restent plus petits que les deux
+                camps, parce qu'ils le sont ; mais dans la même famille, avec le
+                même traitement, pour que la somme se fasse à l'œil. */}
             <div className="text-left">
-              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-blue)' }}>Bloc coalition</p>
+              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-blue)' }}>{BLOC_LABEL.coalition}</p>
               <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-blue)' }}><CountUp value={coalitionSeats} /></p>
             </div>
-            <div className="text-center pb-1.5">
-              <p className="text-[10px] uppercase tracking-wide" style={{ color: 'var(--p-text-25)' }}>120 sièges</p>
-              <p className="text-[10px] uppercase tracking-wide font-semibold" style={{ color: 'var(--p-gold-text)' }}>majorité 61</p>
+            <div className="text-center pb-0.5">
               {arabSeats > 0 && (
-                <p className="text-[10px] uppercase tracking-wide mt-1" style={{ color: 'var(--p-green-text)' }}>+ {arabSeats} listes arabes</p>
+                <>
+                  <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-green-text)' }}>{BLOC_LABEL.liste_arabe}</p>
+                  <p className="text-2xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-green-text)' }}><CountUp value={arabSeats} delay={400} /></p>
+                </>
               )}
+              <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'var(--p-text-25)' }}>
+                120 sièges · <span className="font-semibold" style={{ color: 'var(--p-gold-text)' }}>majorité 61</span>
+              </p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-red)' }}>Bloc opposition</p>
+              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-red)' }}>{BLOC_LABEL.opposition}</p>
               <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-red)' }}><CountUp value={oppositionSeats} delay={200} /></p>
             </div>
           </div>

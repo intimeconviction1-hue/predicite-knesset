@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Share2, Check, Download } from 'lucide-react';
+import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 
 // Partage « mon hémicycle » : génère une VRAIE image (canvas, 1200×630, format
 // carte sociale) de la projection en sièges, aux couleurs de la marque, puis
@@ -79,19 +80,31 @@ function buildImage({ seatsByListe, coalition, opposition, arab, source }) {
     ctx.fillText('MAJORITÉ 61', cx, cy - rOuter - 14);
   }
 
-  // Totaux blocs
+  // Totaux des trois blocs. Les libellés viennent de lib/blocs.js : ils étaient
+  // écrits en dur ici, si bien que le renommage du 2026-08-04 (« Bloc coalition »
+  // / « Bloc opposition » décrivaient la 25e Knesset et se lisaient comme un
+  // positionnement gauche-droite) n'avait pas atteint l'image qu'on partage —
+  // l'endroit qui sort du site et qu'on ne peut plus corriger une fois envoyé.
+  // Les partis arabes passent au même traitement que les deux camps, en plus
+  // petit : ce sont eux le pivot, et ils étaient réduits à une mention.
   ctx.font = '800 40px system-ui, sans-serif';
   ctx.textAlign = 'left';
   ctx.fillStyle = '#2B5CE6'; ctx.fillText(`${coalition}`, 150, 470);
   ctx.textAlign = 'right';
   ctx.fillStyle = '#C8102E'; ctx.fillText(`${opposition}`, W - 150, 470);
   ctx.font = '600 18px system-ui, sans-serif';
-  ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(20,32,61,0.7)'; ctx.fillText('BLOC COALITION', 150, 495);
-  ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(20,32,61,0.7)'; ctx.fillText('BLOC OPPOSITION', W - 150, 495);
+  ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(20,32,61,0.7)';
+  ctx.fillText(BLOC_LABEL.coalition.toUpperCase(), 150, 495);
+  ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(20,32,61,0.7)';
+  ctx.fillText(BLOC_LABEL.opposition.toUpperCase(), W - 150, 495);
   if (arab > 0) {
-    ctx.textAlign = 'center'; ctx.fillStyle = '#1A8C55';
-    ctx.font = '700 18px system-ui, sans-serif';
-    ctx.fillText(`+ ${arab} listes arabes`, cx, 470);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = BLOC_COLOR.liste_arabe;
+    ctx.font = '800 28px system-ui, sans-serif';
+    ctx.fillText(`${arab}`, cx, 470);
+    ctx.font = '600 15px system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(20,32,61,0.7)';
+    ctx.fillText(BLOC_LABEL.liste_arabe.toUpperCase(), cx, 493);
   }
 
   // Pied : source + site

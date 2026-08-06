@@ -3,7 +3,10 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
-import { motion } from 'framer-motion';
+// useReducedMotion explicitement : MotionConfig reducedMotion="user" ne coupe
+// que les animations de transform et de layout. Une largeur animée n'en est pas
+// une — elle continuerait de bouger pour quelqu'un qui a demandé l'arrêt.
+import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronRight, Trophy, ArrowRight, Vote, Gamepad2, BookOpen } from 'lucide-react';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
@@ -42,6 +45,24 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const nouvelle = sortant == null;
   const delta = nouvelle ? null : seats - sortant;
   const couleur = liste.color || '#6B7280';
+  const reduit = useReducedMotion();
+
+  // La barre part de la position ACTUELLE et se déplace vers la projection :
+  // c'est le mouvement qui informe, pas la longueur finale. Un remplissage
+  // depuis zéro raconterait une apparition ; ici on montre une perte ou un gain.
+  // Une liste nouvelle part bien de zéro — elle, elle apparaît vraiment.
+  const pct = (n) => Math.max(2, Math.min(100, (n / maxSeats) * 100));
+  const depart = nouvelle ? 0 : pct(sortant);
+  const arrivee = pct(seats || 0);
+
+  // Le segment d'écart reste visible sous la barre une fois le mouvement fini :
+  // on continue de voir d'où l'on vient. Vert si la liste gagne, rouge si elle
+  // perd — la même convention que le chiffre d'écart à droite.
+  const ecart = nouvelle || delta === 0 ? null : {
+    gauche: `${Math.min(depart, arrivee)}%`,
+    largeur: `${Math.abs(arrivee - depart)}%`,
+    couleur: delta > 0 ? 'var(--p-green)' : 'var(--p-red)',
+  };
 
   return (
     <motion.div
@@ -62,16 +83,43 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
         <span className="text-xs w-24 sm:w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
 
         <div className="relative flex-1 min-w-0 h-2.5 rounded-full" style={{ background: 'var(--p-text-10)' }}>
-          <motion.div
-            className="absolute inset-y-0 left-0 rounded-full"
-            style={{ backgroundColor: couleur, opacity: belowThreshold ? 0.3 : 1 }}
-            initial={{ width: 0 }}
-            animate={{ width: `${Math.max(2, ((seats || 0) / maxSeats) * 100)}%` }}
-            transition={{ duration: 0.6, delay: 0.15 + index * 0.04 }}
-          />
-          {/* Repère du sortant. Le halo blanc le garde lisible aussi bien sur la
-              barre colorée que sur la piste vide — il doit se voir des deux
-              côtés du mouvement, c'est tout son intérêt. */}
+          {/* Segment d'écart — la trace du chemin parcouru, posée sous la barre.
+              Sous « mouvement réduit », tout est peint directement : pas de
+              whileInView du tout. Le piège évité est net — avec `initial={false}`
+              et une largeur portée uniquement par l'animation, une barre pas
+              encore entrée dans le champ n'aurait EU aucune largeur, et serait
+              restée vide si l'observateur ne se déclenchait jamais. */}
+          {ecart && (
+            reduit ? (
+              <span className="absolute inset-y-0 rounded-full" aria-hidden="true"
+                style={{ left: ecart.gauche, width: ecart.largeur, background: ecart.couleur, opacity: 0.22 }} />
+            ) : (
+              <motion.span
+                className="absolute inset-y-0 rounded-full" aria-hidden="true"
+                style={{ left: ecart.gauche, width: ecart.largeur, background: ecart.couleur }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 0.22 }}
+                viewport={{ once: true, margin: '-12%' }}
+                transition={{ duration: 0.4, delay: 0.5 + index * 0.05 }}
+              />
+            )
+          )}
+          {reduit ? (
+            <div className="absolute inset-y-0 left-0 rounded-full"
+              style={{ width: `${arrivee}%`, backgroundColor: couleur, opacity: belowThreshold ? 0.3 : 1 }} />
+          ) : (
+            <motion.div
+              className="absolute inset-y-0 left-0 rounded-full"
+              style={{ backgroundColor: couleur, opacity: belowThreshold ? 0.3 : 1 }}
+              initial={{ width: `${depart}%` }}
+              whileInView={{ width: `${arrivee}%` }}
+              viewport={{ once: true, margin: '-12%' }}
+              transition={{ duration: 0.9, delay: 0.2 + index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+            />
+          )}
+          {/* Repère du sortant. Le halo le garde lisible aussi bien sur la barre
+              colorée que sur la piste vide — il doit se voir des deux côtés du
+              mouvement, c'est tout son intérêt. */}
           {!nouvelle && sortant > 0 && (
             <span
               className="absolute top-[-3px] bottom-[-3px] w-[2px] rounded-full"
@@ -85,6 +133,14 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
           )}
         </div>
 
+        {/* Le chiffre ne s'anime PAS, et c'est délibéré. J'avais d'abord fait
+            descendre le Likoud de 32 à 22 en même temps que sa barre : joli, et
+            dangereux. Un compteur animé affiche son point de DÉPART tant que
+            l'animation n'a pas démarré — mesuré ici, la ligne annonçait « 32 »
+            comme si c'était la projection. Un chiffre faux mais plausible est
+            précisément ce que ce site s'interdit ; une barre encore immobile
+            n'est qu'une imprécision visuelle. L'état au repos doit dire le vrai,
+            le mouvement n'est qu'un commentaire par-dessus. */}
         <span className="text-xs font-bold font-mono w-7 text-right shrink-0"
           style={{ color: belowThreshold ? 'var(--p-text-25)' : texteLisible(couleur) }}>
           {seats}

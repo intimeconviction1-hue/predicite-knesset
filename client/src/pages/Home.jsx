@@ -23,7 +23,7 @@ import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import { joursAvantScrutin } from '@/lib/echeances';
-import { BLOC_LABEL } from '@/lib/blocs';
+import { BLOC_LABEL, verdictMajorite } from '@/lib/blocs';
 
 
 /**
@@ -222,21 +222,20 @@ export default function Home() {
   const arabSeats = listesAvecSieges.filter(l => l.bloc === 'liste_arabe').reduce((s, l) => s + l._seats, 0);
 
   // Accroche dynamique — toujours vraie, quel que soit le sondage du jour.
-  const nobodyHasMajority = coalitionSeats < 61 && oppositionSeats < 61;
-  const leaderIsCoalition = coalitionSeats >= oppositionSeats;
-  const verdict = !latestPoll
-    ? null
-    : nobodyHasMajority
-      ? (arabSeats > 0
-          ? <>Aucun camp n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — les {arabSeats} sièges des partis arabes tiennent la balance.</>
-          : <>Aucun camp n'atteint <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b> — la majorité reste à construire.</>)
-      : <>Le bloc {leaderIsCoalition ? BLOC_LABEL.coalition.toLowerCase() : BLOC_LABEL.opposition.toLowerCase()} franchit la barre des <b style={{ color: 'var(--p-text)', fontWeight: 600 }}>61</b>.</>;
+  // La phrase vient de lib/blocs.js : elle était recopiée ici, dans le bandeau
+  // en direct et dans la carte du fait du jour, et les trois avaient divergé.
+  const verdict = latestPoll
+    ? verdictMajorite({ coalition: coalitionSeats, opposition: oppositionSeats, arabes: arabSeats })
+    : null;
 
   const daysLeft = joursAvantScrutin();
   const firstName = user?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
 
   // Flux « en direct » de la campagne (faits réels agrégés) — hook partagé Home/Paris.
-  const tickerItems = useCampaignFlux();
+  // `sansProjection` : l'hémicycle est deux cents pixels plus bas, inutile que le
+  // bandeau récite d'abord les mêmes quatre listes, le même institut et le même
+  // verdict. Il garde ce que l'hémicycle ne montre pas — mouvements, cotes, actu.
+  const tickerItems = useCampaignFlux({ sansProjection: true });
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
@@ -397,7 +396,7 @@ export default function Home() {
           <RectoVersoCard
             badge="Sondage · fait vérifié"
             title={`${latestPoll.institute} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`}
-            fact={nobodyHasMajority ? "Aucun bloc n'atteint la majorité de 61 sièges." : 'Un bloc franchit la barre des 61 sièges.'}
+            fact={verdict}
             nums={rankedListes.filter(l => l._seats > 0).slice(0, 2).map(l => ({ n: l._seats, label: l.name_fr }))}
             source={`Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''}`}
             betQuestion={topMarket?.question}

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/client';
 import { createPageUrl } from '@/utils';
 import { joursAvantScrutin } from '@/lib/echeances';
+import { verdictMajorite } from '@/lib/blocs';
 
 // Hook du « flux en direct » de la campagne : agrège des faits RÉELS (dernier
 // sondage, top listes, mouvements de sièges, cotes/événements, actu, repères) en
@@ -11,13 +12,29 @@ import { joursAvantScrutin } from '@/lib/echeances';
 
 const trunc = (s, n = 58) => (s && s.length > n ? `${s.slice(0, n - 1)}…` : s);
 
-export function useCampaignFlux() {
+/**
+ * @param {{sansProjection?: boolean}} options
+ *   `sansProjection` retire du flux ce que la page affiche déjà en grand juste
+ *   en dessous : l'institut, les quatre premières listes et le verdict de
+ *   majorité. Sur la Home, le bandeau égrenait « Yashar 23 · Likoud 22 ·
+ *   Ensemble 13 · Les Démocrates 11 · aucun camp n'atteint 61 » — puis
+ *   l'hémicycle, à deux cents pixels, affichait exactement les mêmes chiffres et
+ *   le même verdict. Un bandeau en direct doit apporter ce que la page ne montre
+ *   PAS : les mouvements entre sondages, les cotes, l'actu. Sur « Le direct »
+ *   (Paris), où il n'y a pas d'hémicycle, le flux garde tout.
+ */
+export function useCampaignFlux({ sansProjection = false } = {}) {
   const { data: listes = [] } = useQuery({
     queryKey: ['home-listes'],
     queryFn: () => base44.entities.Liste.filter({ is_active: true }),
   });
+  // Clé PROPRE au flux. Elle s'appelait 'home-sondages-latest', comme celle de
+  // la Home — mais avec une limite de 3 là où la Home en demande 8. React Query
+  // déduplique par clé : le premier monté gagnait, l'autre recevait son cache en
+  // silence. Selon l'ordre de montage, la courbe de tendance et le consensus
+  // recevaient donc 8 sondages… ou 3, sans que rien ne le signale.
   const { data: sondages = [] } = useQuery({
-    queryKey: ['home-sondages-latest'],
+    queryKey: ['flux-sondages', 3],
     queryFn: () => base44.entities.SondageSieges.list('-poll_date', 3),
   });
   const { data: parisData } = useQuery({
@@ -38,18 +55,18 @@ export function useCampaignFlux() {
   const rankedListes = [...listesAvecSieges].sort((a, b) => b._seats - a._seats).slice(0, 10);
   const coalitionSeats = listesAvecSieges.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
   const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
-  const nobodyHasMajority = coalitionSeats < 61 && oppositionSeats < 61;
+  const arabSeats = listesAvecSieges.filter(l => l.bloc === 'liste_arabe').reduce((s, l) => s + l._seats, 0);
   const daysLeft = joursAvantScrutin();
 
   const items = [];
   items.push({ emoji: '⏳', text: 'Scrutin', value: `J-${daysLeft}`, valueColor: 'var(--p-gold-text)', to: createPageUrl('Learn') });
 
-  if (latestPoll) {
+  if (latestPoll && !sansProjection) {
     items.push({ emoji: '📊', text: `${latestPoll.institute} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`, to: createPageUrl('Listes') });
     rankedListes.filter(l => l._seats > 0).slice(0, 4).forEach(l =>
       items.push({ emoji: '▪️', text: l.name_fr, value: `${l._seats}`, valueColor: l.color || 'var(--p-text)', to: `${createPageUrl('Liste')}?slug=${l.slug}` }),
     );
-    items.push({ emoji: '⚖️', text: nobodyHasMajority ? "Aucun bloc n'atteint 61" : 'Un bloc franchit 61', to: createPageUrl('Listes') });
+    items.push({ emoji: '⚖️', text: verdictMajorite({ coalition: coalitionSeats, opposition: oppositionSeats, arabes: arabSeats }), to: createPageUrl('Listes') });
   }
 
   // Mouvements — seulement entre deux sondages du MÊME institut (honnêteté).

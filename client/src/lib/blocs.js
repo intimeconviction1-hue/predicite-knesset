@@ -46,3 +46,34 @@ export const BLOC_COLOR = {
   liste_arabe: '#16794A',
   non_alignee: '#5B6472',
 };
+
+/**
+ * La phrase qui dit où en est l'arithmétique de coalition.
+ *
+ * Elle était écrite à trois endroits — le bandeau en direct, le verdict de
+ * l'hémicycle, la carte du fait du jour — et ils ne disaient plus la même chose.
+ * Deux affirmaient « aucun BLOC n'atteint 61 » à quelques centaines de pixels
+ * d'un hémicycle qui affiche désormais TROIS blocs nommés, dont les partis
+ * arabes. Le mot juste est « camp » : les partis arabes sont un bloc, et c'est
+ * justement parce qu'ils n'appartiennent à aucun des deux camps qu'ils font la
+ * balance. La contradiction n'était pas une coquetterie de vocabulaire, elle
+ * défaisait ce que la page venait de démontrer.
+ *
+ * Une seule phrase, un seul endroit — même leçon que BLOC_LABEL, qui avait déjà
+ * été recopié à la main dans la Home et dans l'image partagée.
+ *
+ * @param {{coalition:number, opposition:number, arabes:number}} sieges
+ * @returns {string|null} null s'il n'y a pas encore de sondage à commenter
+ */
+export function verdictMajorite({ coalition = 0, opposition = 0, arabes = 0 } = {}) {
+  if (!coalition && !opposition && !arabes) return null;
+  if (coalition >= 61 || opposition >= 61) {
+    const camp = coalition >= opposition ? BLOC_LABEL.coalition : BLOC_LABEL.opposition;
+    // Première lettre seulement : un toLowerCase() complet donnait
+    // « pro-netanyahou », et le nom perdait sa majuscule au passage.
+    return `Le camp ${camp.charAt(0).toLowerCase()}${camp.slice(1)} franchit la barre des 61 sièges.`;
+  }
+  return arabes > 0
+    ? `Aucun camp n'atteint 61 — les ${arabes} sièges des partis arabes tiennent la balance.`
+    : "Aucun camp n'atteint 61 — la majorité reste à construire.";
+}

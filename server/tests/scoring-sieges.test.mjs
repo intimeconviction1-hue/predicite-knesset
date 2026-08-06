@@ -32,7 +32,7 @@ mock.module('../db/index.js', optionsMock({
 const { validerRepartition, MIN_SIEGES_AU_SEUIL, TOTAL_SIEGES } =
   await import('../functions/repartitionSieges.js');
 const { saveResultatsManuels } = await import('../functions/resultatsManuels.js');
-const { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire } =
+const { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire, scenarioMajorite } =
   await import('../functions/prediciteScoringSieges.js');
 
 const LIKOUD = 'l-likoud';
@@ -241,21 +241,50 @@ test('scoring de bout en bout', async (t) => {
     assert.equal(await pointsDe(ALICE), 170 + 140);
   });
 
-  await t.test('bonus de bloc : crédité une seule fois', async () => {
+  await t.test('bonus de scénario : crédité une seule fois', async () => {
     await scenario();
     await scoreSiegesAndSync();
 
-    // Coalition réelle = Likoud seul = 50 sièges, donc pas de majorité.
-    // Alice prédit 50 → juste. Bob prédit 61 → majorité annoncée à tort.
+    // Résultat réel : Likoud (coalition) 50, Yesh + Petite (opposition) 70.
+    // Le camp anti l'emporte donc AVEC une majorité — ce que l'ancien critère
+    // ne voyait pas : il demandait seulement « coalition ≥ 61 ? » et répondait
+    // « non », traitant cette victoire nette comme une Knesset sans majorité.
+    // Alice prédit 50 / 70 → scénario « anti », juste.
+    // Bob prédit 61 / 59  → scénario « pro », faux.
     const res = await scoreBlocMajoritaire();
-    assert.equal(res.real_coalition_majority, false);
+    assert.equal(res.scenario_reel, 'anti');
     assert.equal(res.users_awarded, 1);
     assert.equal(await pointsDe(ALICE), 560);
     assert.equal(await pointsDe(BOB), 360);
 
     await scoreBlocMajoritaire();
     await scoreBlocMajoritaire();
-    assert.equal(await pointsDe(ALICE), 560, 'le bonus de bloc ne doit pas se cumuler');
+    assert.equal(await pointsDe(ALICE), 560, 'le bonus de scénario ne doit pas se cumuler');
+  });
+
+  await t.test('les trois scénarios sont distingués', async () => {
+    // Ce que l'ancien critère confondait : une majorité adverse et une Knesset
+    // sans majorité donnaient toutes deux « coalition < 61 ».
+    const blocs = new Map([[LIKOUD, 'coalition'], [YESH, 'opposition'], [PETITE, 'liste_arabe']]);
+    const sieges = (a, b, c) => new Map([[LIKOUD, a], [YESH, b], [PETITE, c]]);
+
+    assert.equal(scenarioMajorite(sieges(61, 49, 10), blocs), 'pro');
+    assert.equal(scenarioMajorite(sieges(45, 65, 10), blocs), 'anti');
+    assert.equal(scenarioMajorite(sieges(55, 55, 10), blocs), 'aucun',
+      'les partis arabes tiennent la balance : personne ne gouverne seul');
+    assert.equal(scenarioMajorite(sieges(60, 60, 0), blocs), 'aucun',
+      'à un siège près, ce n\'est toujours pas une majorité');
+    assert.equal(scenarioMajorite(sieges(120, 0, 0), blocs), 'pro');
+  });
+
+  await t.test('une liste hors des deux camps ne fabrique pas de majorité', async () => {
+    // Les partis arabes ne comptent dans aucun camp : c'est tout le sujet du
+    // pivot. Leur ajouter des sièges ne doit jamais faire basculer le scénario.
+    const blocs = new Map([[LIKOUD, 'coalition'], [YESH, 'opposition'], [PETITE, 'liste_arabe']]);
+    const avant = scenarioMajorite(new Map([[LIKOUD, 55], [YESH, 45], [PETITE, 0]]), blocs);
+    const apres = scenarioMajorite(new Map([[LIKOUD, 55], [YESH, 45], [PETITE, 20]]), blocs);
+    assert.equal(avant, 'aucun');
+    assert.equal(apres, 'aucun');
   });
 
   await t.test('refuse de scorer sans résultat final', async () => {

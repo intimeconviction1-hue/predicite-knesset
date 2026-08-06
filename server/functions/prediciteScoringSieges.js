@@ -221,6 +221,50 @@ export async function scoreSiegesAndSync() {
   return { ok: true, users_updated: deltaByUser.size, predictions_scored: preds.length };
 }
 
+/**
+ * Le scénario de majorité qui sort d'une répartition de sièges.
+ *
+ * Remplace la question « le bloc coalition atteint-il 61 ? », qui avait deux
+ * défauts.
+ *
+ * Le premier est un vrai bug, pas une faiblesse : elle n'interrogeait QU'UN
+ * camp. Un joueur qui prévoyait une majorité anti-Netanyahou et un joueur qui
+ * prévoyait une Knesset sans majorité répondaient tous deux « coalition < 61 »
+ * et étaient traités à l'identique — alors qu'ils avaient prédit deux issues
+ * politiques opposées. Le barème ne savait pas les distinguer.
+ *
+ * Le second : elle ne départage personne. Les deux camps tournent autour de 54
+ * dans les sondages d'août 2026, aucun n'approche 61. Le 27 octobre, quasiment
+ * tout le monde aura répondu « non », tout le monde touchera les points, et le
+ * critère n'aura rien classé — un item de barème pour rien.
+ *
+ * Trois issues, donc, et il faut choisir la bonne : majorité pro-Netanyahou,
+ * majorité anti-Netanyahou, ou aucune des deux — le cas où les partis arabes,
+ * ou une recomposition, tiennent la balance. C'est exactement ce que la page
+ * d'accueil enseigne depuis les trois blocs.
+ *
+ * Les clés de bloc restent celles de la base (renommage prévu au gel du
+ * référentiel) : coalition = pro-Netanyahou, opposition + non_alignee = anti,
+ * liste_arabe = pivot. Même regroupement que la Home, pour que le barème récompense
+ * ce que le site montre.
+ *
+ * @param {Map<string, number>} seatsByListe  liste_id → sièges
+ * @param {Map<string, string>} blocById      liste_id → bloc
+ * @returns {'pro'|'anti'|'aucun'}
+ */
+export function scenarioMajorite(seatsByListe, blocById) {
+  let pro = 0;
+  let anti = 0;
+  for (const [liste_id, seats] of seatsByListe.entries()) {
+    const bloc = blocById.get(liste_id);
+    if (bloc === 'coalition') pro += seats || 0;
+    else if (bloc === 'opposition' || bloc === 'non_alignee') anti += seats || 0;
+  }
+  if (pro >= MAJORITY_SEATS) return 'pro';
+  if (anti >= MAJORITY_SEATS) return 'anti';
+  return 'aucun';
+}
+
 export async function scoreBlocMajoritaire() {
   const resultat = (await filterEntity('ResultatSieges', { is_final: true }))[0];
   requireField(!!resultat, 'ResultatSieges (is_final=true) introuvable.');
@@ -229,11 +273,7 @@ export async function scoreBlocMajoritaire() {
   const blocById = new Map(listes.map(l => [l.id, l.bloc]));
   const seatsByListe = new Map((resultat.seats_by_liste || []).map(r => [r.liste_id, r.seats]));
 
-  let coalitionSeats = 0;
-  for (const [liste_id, seats] of seatsByListe.entries()) {
-    if (blocById.get(liste_id) === 'coalition') coalitionSeats += seats;
-  }
-  const realCoalitionMajority = coalitionSeats >= MAJORITY_SEATS;
+  const scenarioReel = scenarioMajorite(seatsByListe, blocById);
 
   const preds = await lireTout('PronosticSieges');
   const byUser = new Map();
@@ -245,11 +285,8 @@ export async function scoreBlocMajoritaire() {
   let usersUpdated = 0;
   let usersAwarded = 0;
   for (const [email, userPreds] of byUser.entries()) {
-    let predictedCoalitionSeats = 0;
-    for (const p of userPreds) {
-      if (blocById.get(p.liste_id) === 'coalition') predictedCoalitionSeats += (p.predicted_seats ?? 0);
-    }
-    const predictedMajority = predictedCoalitionSeats >= MAJORITY_SEATS;
+    const siegesPredits = new Map(userPreds.map(p => [p.liste_id, p.predicted_seats ?? 0]));
+    const scenarioPredit = scenarioMajorite(siegesPredits, blocById);
 
     const up = (await filterEntity('UserProgress', { user_email: email }))[0];
     if (!up) continue;
@@ -257,7 +294,7 @@ export async function scoreBlocMajoritaire() {
     // On applique la DIFFÉRENCE avec ce qui a déjà été crédité, pas le bonus
     // brut : relancer le scoring doit être sans effet, et corriger un résultat
     // saisi par erreur doit reprendre le bonus accordé à tort.
-    const attendu = predictedMajority === realCoalitionMajority ? SCORE.blocBonus : 0;
+    const attendu = scenarioPredit === scenarioReel ? SCORE.blocBonus : 0;
     const dejaCredite = up.bloc_bonus_points ?? 0;
     const delta = attendu - dejaCredite;
 
@@ -273,8 +310,7 @@ export async function scoreBlocMajoritaire() {
 
   return {
     ok: true,
-    real_coalition_seats: coalitionSeats,
-    real_coalition_majority: realCoalitionMajority,
+    scenario_reel: scenarioReel,
     users_awarded: usersAwarded,
     users_updated: usersUpdated,
   };

@@ -41,7 +41,7 @@ const POINTS_RESULTAT = [
   { label: 'À ±1 siège près', pts: '+100', desc: 'Tu tombes à un siège près du résultat final.' },
   { label: 'À ±3 sièges près', pts: '+50', desc: 'Tu tombes à trois sièges près.' },
   { label: 'Seuil bien anticipé', pts: '+30', desc: 'Tu avais bien vu qu\'une liste franchirait — ou non — les 3,25 %.' },
-  { label: 'Majorité bien anticipée', pts: '+50', desc: 'Tu avais identifié le bon scénario : coalition ≥ 61 sièges, ou non.' },
+  { label: 'Le bon scénario', pts: '+50', desc: 'Majorité pro-Netanyahou, majorité anti-Netanyahou, ou aucune des deux — tu avais vu juste.' },
   { label: 'Premier ministre correct', pts: '+100', desc: 'La personnalité pronostiquée est effectivement investie — résolu à l\'investiture, parfois des semaines après.' },
 ];
 

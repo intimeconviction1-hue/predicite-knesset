@@ -4,8 +4,8 @@ import session from 'express-session';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { initDb } from './db/index.js';
-import { creerInjecteurMeta } from './lib/meta-html.js';
+import { initDb, filterEntity } from './db/index.js';
+import { creerInjecteurMeta, metaListe, pagePour } from './lib/meta-html.js';
 import { startPollTracker } from './functions/pollTracker.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
@@ -78,11 +78,28 @@ if (process.env.NODE_ENV === 'production') {
     console.error('[meta] injection désactivée :', e.message);
   }
 
-  app.get('*', (req, res) => {
+  app.get('*', async (req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Not found' });
     if (!htmlPour) return res.sendFile(path.join(clientDist, 'index.html'));
     const origine = `${req.protocol}://${req.get('host')}`;
-    res.type('html').send(htmlPour(req.path, origine));
+
+    // Seule exception au « même document pour tout le monde » : une fiche de
+    // liste. /Liste?slug=likoud doit annoncer « Likoud », pas « Fiche de liste »
+    // — c'est le lien qu'on envoie le plus naturellement (« regarde le Likoud »).
+    // Une seule lecture, sur un slug indexé, et seulement pour cette route.
+    // En cas d'échec on sert l'aperçu générique : un partage moins précis vaut
+    // mieux qu'une page en erreur.
+    let surcharge = null;
+    if (pagePour(req.path) === 'Liste' && req.query.slug) {
+      try {
+        const [liste] = await filterEntity('Liste', { slug: String(req.query.slug) });
+        surcharge = metaListe(liste);
+      } catch (e) {
+        console.error('[meta] fiche de liste illisible :', e.message);
+      }
+    }
+
+    res.type('html').send(htmlPour(req.path, origine, surcharge));
   });
 }
 

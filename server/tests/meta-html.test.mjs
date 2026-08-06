@@ -20,7 +20,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { creerInjecteurMeta, pagePour } from '../lib/meta-html.js';
+import { creerInjecteurMeta, pagePour, metaListe } from '../lib/meta-html.js';
 import { metaPour, NOMS_DE_PAGES } from '../../client/src/lib/titres.js';
 
 const GABARIT = `<!doctype html>
@@ -116,6 +116,42 @@ test('les descriptions tiennent dans ce qu\'un aperçu affiche', () => {
     .filter(({ d }) => d.length > 200)
     .map(({ n, d }) => `${n} (${d.length})`);
   assert.deepEqual(trop, [], `Description(s) trop longue(s) : ${trop.join(', ')}`);
+});
+
+test('une fiche de liste annonce le parti, pas « Fiche de liste »', () => {
+  const surcharge = metaListe({ name_fr: 'Likoud', leader_name: 'Benyamin Netanyahou', current_knesset_seats: 32 });
+  const html = htmlPour('/Liste', ORIGINE, surcharge);
+  assert.match(html, /<title>Likoud — Knesset 2026 \| PrédiCité<\/title>/);
+  assert.equal(compte(html, /<title>/g), 1);
+  assert.match(html, /<meta property="og:title" content="Likoud — Knesset 2026 \| PrédiCité"/);
+  assert.match(html, /Benyamin Netanyahou/);
+  assert.match(html, /32 sièges sortants/);
+});
+
+test('une liste nouvelle le dit au lieu d\'afficher un vide', () => {
+  const m = metaListe({ name_fr: 'Yashar', leader_name: 'Gadi Eisenkot', current_knesset_seats: null });
+  assert.match(m.description, /Liste nouvelle, sans sièges sortants/);
+  assert.doesNotMatch(m.description, /null|undefined|NaN/);
+});
+
+test('sans surcharge, la fiche retombe sur l\'aperçu générique', () => {
+  // Le chemin de repli quand la base est injoignable : un partage moins précis
+  // vaut mieux qu'une page en erreur.
+  assert.equal(metaListe(null), null);
+  assert.equal(metaListe({}), null);
+  const html = htmlPour('/Liste', ORIGINE, null);
+  assert.match(html, /<title>Fiche de liste — PrédiCité<\/title>/);
+});
+
+test('un nom de parti ne peut pas casser le HTML injecté', () => {
+  // La surcharge vient de la BASE, pas d'un fichier du dépôt : elle doit passer
+  // par le même échappement que le reste.
+  const html = htmlPour('/Liste', ORIGINE, metaListe({
+    name_fr: 'Faux" /><script>alert(1)</script>', leader_name: "L'Ami", current_knesset_seats: 1,
+  }));
+  assert.doesNotMatch(html, /<script>alert\(1\)<\/script>/);
+  assert.match(html, /&quot;|&lt;script&gt;/);
+  assert.doesNotMatch(html, /content="[^"]*'[^"]*"/, 'apostrophe non échappée dans un attribut');
 });
 
 test('un gabarit sans <title> échoue bruyamment', () => {

@@ -24,7 +24,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { metaPour } from '../../client/src/lib/titres.js';
+import { metaPour, SUFFIXE } from '../../client/src/lib/titres.js';
 
 // L'image d'aperçu. Format imposé par les réseaux : 1200x630. Générée depuis
 // knesset-hero.jpg (voile bleu institutionnel + liseré tricolore).
@@ -54,6 +54,30 @@ export function pagePour(pathname) {
   // /login est la seule route en minuscules (voir App.jsx).
   if (seg.toLowerCase() === 'login') return 'Login';
   return seg;
+}
+
+/**
+ * Titre et description d'une fiche de liste, à partir de la ligne en base.
+ *
+ * Volontairement fabriqués à partir de champs FACTUELS (nom, dirigeant, sièges
+ * sortants) plutôt que d'un texte libre : un aperçu de partage est l'endroit où
+ * l'on est le plus tenté d'embellir, et c'est celui qu'on ne peut plus corriger
+ * une fois le lien envoyé. `histoire` n'est pas repris — c'est un paragraphe
+ * rédigé, les robots le tronqueraient en plein milieu.
+ *
+ * @param {{name_fr:string, leader_name?:string, current_knesset_seats?:number|null,
+ *          founded_or_merged_note?:string}} liste
+ */
+export function metaListe(liste) {
+  if (!liste?.name_fr) return null;
+  const dirigeant = liste.leader_name ? `Dirigée par ${liste.leader_name}. ` : '';
+  const sortants = liste.current_knesset_seats != null
+    ? `${liste.current_knesset_seats} sièges sortants à la 25ᵉ Knesset.`
+    : 'Liste nouvelle, sans sièges sortants.';
+  return {
+    titre: `${liste.name_fr} — Knesset 2026 | ${SUFFIXE}`,
+    description: `${dirigeant}${sortants} Sa projection en sièges, son histoire et sa place dans l'arithmétique de coalition.`,
+  };
 }
 
 function balises({ titre, description, url }) {
@@ -93,9 +117,22 @@ export function creerInjecteurMeta(clientDist) {
     throw new Error("meta-html : pas de <title> dans index.html — gabarit inattendu, l'injection serait silencieusement inopérante.");
   }
 
-  return function htmlPour(pathname, origine) {
+  /**
+   * @param {string} pathname
+   * @param {string} origine
+   * @param {{titre?:string, description?:string}|null} surcharge
+   *   Métadonnées propres à UNE ressource, quand le chemin seul ne suffit pas :
+   *   /Liste?slug=likoud doit annoncer « Likoud », pas « Fiche de liste ». Le
+   *   nom du parti vit en base, et ce module n'y touche pas — c'est l'appelant
+   *   qui va le chercher et le passe ici. Cette frontière est ce qui permet aux
+   *   tests de tourner sans base, et à l'injection de survivre à une base
+   *   injoignable : sans surcharge, on retombe sur l'aperçu générique.
+   */
+  return function htmlPour(pathname, origine, surcharge = null) {
     const url = new URL(pathname || '/', origine).href;
-    const { titre, description } = metaPour(pagePour(pathname));
+    const base = metaPour(pagePour(pathname));
+    const titre = surcharge?.titre || base.titre;
+    const description = surcharge?.description || base.description;
 
     return brut
       .replace(/<title>[\s\S]*?<\/title>/, `<title>${attr(titre)}</title>`)

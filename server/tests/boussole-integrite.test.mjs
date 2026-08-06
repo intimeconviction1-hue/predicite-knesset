@@ -23,7 +23,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const racine = path.join(__dirname, '..', '..');
@@ -39,21 +39,20 @@ function slugify(str) {
 const seed = JSON.parse(fs.readFileSync(path.join(racine, 'docs', 'KNESSET_SEED_LISTES.json'), 'utf8'));
 const slugsDuSeed = new Set((seed.listes || []).map(l => l.slug || slugify(l.name_fr)));
 
-// STATEMENTS est un littéral JS pur (aucun JSX) : on l'extrait et on l'évalue.
-// Fragile par nature, d'où l'assertion de garde juste après.
-const jsx = fs.readFileSync(path.join(racine, 'client', 'src', 'pages', 'Boussole.jsx'), 'utf8');
-const debut = jsx.indexOf('const STATEMENTS =');
-const fin = jsx.indexOf('// Nombre d', debut);
-assert.ok(debut !== -1 && fin > debut,
-  "Impossible de localiser le tableau STATEMENTS dans Boussole.jsx — si le fichier a été " +
-  'restructuré, corriger ce test plutôt que le supprimer.');
-const STATEMENTS = new Function(
-  `${jsx.slice(debut, fin).trim().replace(/;\s*$/, '')}; return STATEMENTS;`,
-)();
+// Ce test lisait Boussole.jsx et découpait le littéral STATEMENTS à la main
+// (indexOf sur un commentaire). Le 2026-08-04 les données sont sorties dans
+// client/src/lib/boussole-data.js : le repère a disparu, l'assertion de garde a
+// sauté et `npm test` est resté rouge — donc plus personne ne le lisait, et le
+// seul rempart contre un slug fantôme était éteint. On importe désormais le
+// module, qui est du JS pur sans JSX ni dépendance : rien à découper, rien à
+// re-casser au prochain refactor de la page.
+const { STATEMENTS } = await import(
+  pathToFileURL(path.join(racine, 'client', 'src', 'lib', 'boussole-data.js')).href
+);
 
-test('le tableau STATEMENTS a bien été extrait', () => {
+test('le tableau STATEMENTS est bien exporté par boussole-data', () => {
   assert.ok(Array.isArray(STATEMENTS) && STATEMENTS.length >= 10,
-    `Extraction douteuse : ${STATEMENTS?.length} affirmation(s)`);
+    `Import douteux : ${STATEMENTS?.length} affirmation(s)`);
   for (const s of STATEMENTS) {
     assert.ok(typeof s.text === 'string' && Array.isArray(s.pour) && Array.isArray(s.contre),
       `Affirmation malformée : ${JSON.stringify(s).slice(0, 80)}`);

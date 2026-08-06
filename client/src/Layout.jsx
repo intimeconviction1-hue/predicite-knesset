@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import Onboarding from '@/components/knesset/Onboarding';
 import { computeScore } from '@/lib/score';
+import { titrePour } from '@/lib/titres';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -27,6 +28,16 @@ export default function Layout({ children, currentPageName }) {
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
+
+  // Titre d'onglet. Posé ici plutôt que page par page : le Layout est le seul
+  // endroit qui connaisse déjà le nom de la page courante, et une page nouvelle
+  // hérite d'un titre correct sans y penser. Une page qui a besoin d'un titre
+  // dynamique (Liste écrit le nom du parti) garde son propre effet : les effets
+  // enfants s'exécutent avant celui du parent au montage, mais le sien se
+  // redéclenche quand sa donnée arrive, donc c'est bien lui qui gagne.
+  useEffect(() => {
+    document.title = titrePour(currentPageName);
+  }, [currentPageName]);
 
   const { data: userProgress, refetch: refetchProgress } = useQuery({
     queryKey: ['user-progress-header', user?.email],

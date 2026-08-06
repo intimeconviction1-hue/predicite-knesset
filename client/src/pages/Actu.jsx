@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
-import { ChevronRight, Newspaper, ExternalLink, Info } from 'lucide-react';
+import { ChevronRight, ExternalLink, Info } from 'lucide-react';
 import QuizWidget from '@/components/knesset/QuizWidget';
+import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 
 function timeAgo(pubDate) {
   if (!pubDate) return '';
@@ -36,35 +37,32 @@ export default function Actu() {
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
-      <div className="relative overflow-hidden">
-        <div className="p-tricolor"><div /><div /><div /></div>
-        <div className="absolute inset-x-0 top-0 h-[360px] pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16), transparent 62%)',
-        }} />
-        <div className="relative max-w-4xl mx-auto px-4 py-14">
-          <div className="flex items-center gap-2 text-sm mb-6" style={{ color: 'var(--p-text-40)' }}>
-            <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
-            <ChevronRight className="w-3.5 h-3.5" />
-            <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Actu</span>
-          </div>
-          <div className="flex items-center gap-2 mb-3">
-            <Newspaper className="w-4 h-4" style={{ color: 'var(--p-gold-text)' }} />
-            <p className="text-xs font-bold uppercase tracking-[0.2em]" style={{ color: 'var(--p-gold-text)' }}>La campagne en direct</p>
-          </div>
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="p-display text-3xl md:text-5xl mb-4"
-            style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}
-          >
-            Actu Knesset 2026
-          </motion.h1>
-          <p className="p-body text-base md:text-lg max-w-prose" style={{ color: 'var(--p-text-60)' }}>
-            Un flux automatique de vrais médias francophones, complété par quelques résumés PrédiCité traduits de sources israéliennes quand l'info manque en français — toujours signalés et sourcés.
-          </p>
+      {/* Le héros passe au registre Marbre. Actu était la dernière page publique
+          restée à l'ancien modèle : halo doré sur fond clair, titre seul, aucune
+          image. C'est nommé comme anti-pattern dans l'identité (« héros en texte
+          seul » et « le halo doré sur crème est remplacé »), et ça se voyait —
+          onze pages ouvraient sur une photo, celle-ci sur du vide, alors que
+          l'identité fait précisément de la campagne en direct le centre du jeu.
+          Trois photos en fondu croisé plutôt qu'une : c'est la page du feuilleton
+          quotidien, elle a le droit de bouger un peu plus que les autres. */}
+      <CinematicHero
+        size="md"
+        photos={['/images/knesset-hero.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
+        position="center 35%"
+        kicker="La campagne en direct"
+        title={<>L'actu de la <HeroGold>campagne</HeroGold></>}
+        subtitle="Un flux automatique de vrais médias francophones, complété par quelques résumés PrédiCité traduits de sources israéliennes quand l'info manque en français — toujours signalés et sourcés."
+      />
+
+      <div className="max-w-3xl mx-auto px-4 pt-8">
+        <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--p-text-40)' }}>
+          <Link to={createPageUrl('Home')} className="hover:text-[var(--p-text)] transition-colors">Accueil</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span style={{ color: 'var(--p-text-60)' }} aria-current="page">Actu</span>
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-12">
+      <div className="max-w-3xl mx-auto px-4 pt-6 pb-12">
         <div className="flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'rgba(43,92,230,0.06)', border: '1px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
           <p className="max-w-prose">Flux automatique (Google News) rafraîchi régulièrement, plus quelques <b style={{ color: 'var(--p-gold-text)', fontWeight: 600 }}>résumés PrédiCité</b> traduits de sources israéliennes — toujours signalés comme tels et sourcés. Chaque élément renvoie vers l'article d'origine.</p>

@@ -1,4 +1,5 @@
 import { Suspense, lazy } from 'react';
+import { MotionConfig } from 'framer-motion';
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
@@ -56,14 +57,29 @@ const AppRoutes = () => (
   </Routes>
 );
 
+// MotionConfig reducedMotion="user" — le trou d'accessibilité le plus large du
+// site, et le plus invisible. globals.css traite prefers-reduced-motion avec
+// beaucoup de soin (cinq blocs de gardes : blobs, marquee, p-reveal, tracés SVG,
+// hover des cartes), mais tout cela ne vaut que pour les animations CSS.
+// framer-motion, lui, anime en JavaScript : il écrit les transforms image par
+// image, sans jamais consulter transition-duration. Les `motion.*` de dix-sept
+// pages et d'une trentaine de composants continuaient donc de glisser et de
+// zoomer pour quelqu'un qui a demandé à son système d'arrêter le mouvement.
+// Cette ligne le branche partout d'un coup : framer-motion coupe les animations
+// de transform et de layout, et garde les fondus d'opacité — le contenu apparaît
+// toujours, il ne bouge plus. Les composants qui appellent déjà useReducedMotion()
+// (CinematicHero, HeroBackdrop, ConfettiBurst, AnimatedExplainer) restent valides,
+// c'est la même préférence.
 function App() {
   return (
-    <QueryClientProvider client={queryClientInstance}>
-      <Router>
-        <AppRoutes />
-      </Router>
-      <Toaster />
-    </QueryClientProvider>
+    <MotionConfig reducedMotion="user">
+      <QueryClientProvider client={queryClientInstance}>
+        <Router>
+          <AppRoutes />
+        </Router>
+        <Toaster />
+      </QueryClientProvider>
+    </MotionConfig>
   )
 }
 

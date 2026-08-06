@@ -10,6 +10,7 @@ import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 import ShareProjection from '@/components/knesset/ShareProjection';
 import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
 import { TOTAL_SIEGES, MIN_SIEGES_AU_SEUIL } from '@/lib/knesset';
+import { useProjection } from '@/lib/projection';
 
 /**
  * Répartition des 120 sièges — le pronostic principal du jeu.
@@ -69,17 +70,13 @@ export default function MaRepartition() {
     queryFn: () => base44.entities.Liste.filter({ is_active: true }),
   });
 
-  // Le dernier sondage sièges : référence affichée par liste, base du tri, et
-  // source du pré-remplissage. Même requête que Listes/FormeCoalition.
-  const { data: sondages = [] } = useQuery({
-    queryKey: ['sondages-sieges-latest'],
-    queryFn: () => base44.entities.SondageSieges.list('-poll_date', 1),
-  });
-  const dernierSondage = sondages?.[0] || null;
-  const siegesSondage = useMemo(
-    () => new Map((dernierSondage?.seats_by_liste || []).map(s => [s.liste_id, s.seats])),
-    [dernierSondage],
-  );
+  // La projection partagée : référence affichée par liste, base du tri, et
+  // source du pré-remplissage. Elle vaut mieux que le dernier sondage brut pour
+  // ce rôle précis — le pré-remplissage doit être une répartition VALIDE, or un
+  // sondage brut peut créditer une liste de 2 sièges, chiffre que la validation
+  // de cette même page refuse ensuite au joueur. Le bouton « partir de la
+  // projection » ne peut pas proposer un pronostic irrecevable.
+  const { siegesParListe: siegesSondage, provenance, pret: projectionPrete } = useProjection(listes);
 
   // Le serveur ne renvoie que les pronostics de l'utilisateur connecté.
   const { data: existants = [] } = useQuery({
@@ -151,7 +148,7 @@ export default function MaRepartition() {
   // l'utilisateur part donc d'une répartition VALIDE et joue son écart, au lieu
   // de fabriquer 120 sièges depuis une page blanche.
   const partirDuSondage = () => {
-    if (!dernierSondage || deadlineClosed) return;
+    if (!projectionPrete || deadlineClosed) return;
     setSeats(Object.fromEntries(listes.map(l => [l.id, String(siegesSondage.get(l.id) ?? 0)])));
   };
 
@@ -199,9 +196,6 @@ export default function MaRepartition() {
   }
   if (user === undefined || isLoading) return <Centre>Chargement…</Centre>;
 
-  const dateSondage = dernierSondage
-    ? new Date(dernierSondage.poll_date).toLocaleDateString('fr-FR')
-    : null;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 pb-28 md:pb-8">
@@ -241,17 +235,22 @@ export default function MaRepartition() {
       </div>
 
       {/* Le raccourci qui manquait : partir du consensus plutôt que d'une page
-          blanche. Un sondage totalise déjà 120 sièges — le point de départ est
-          donc valide par construction. */}
-      {dernierSondage && !deadlineClosed && (
-        <button
-          type="button"
-          onClick={partirDuSondage}
-          className="p-btn-gold w-full justify-center mb-4"
-        >
-          <Wand2 className="w-4 h-4 mr-2" />
-          Partir du dernier sondage ({dernierSondage.institute}, {dateSondage})
-        </button>
+          blanche. La projection totalise 120 sièges et respecte le seuil — le
+          point de départ est donc valide par construction, ce qu'un sondage brut
+          ne garantissait pas (il peut créditer une liste de 2 sièges, chiffre que
+          la validation d'en dessous refuse). */}
+      {projectionPrete && !deadlineClosed && (
+        <>
+          <button
+            type="button"
+            onClick={partirDuSondage}
+            className="p-btn-gold w-full justify-center mb-2"
+          >
+            <Wand2 className="w-4 h-4 mr-2" />
+            Partir de la projection
+          </button>
+          <p className="text-[11px] mb-4" style={{ color: 'var(--p-text-25)' }}>{provenance}</p>
+        </>
       )}
 
       {/* Compteur collant. `top-2` le glissait SOUS l'en-tête, lui-même collant

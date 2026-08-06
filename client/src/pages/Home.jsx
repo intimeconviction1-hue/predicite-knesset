@@ -24,7 +24,7 @@ import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import { joursAvantScrutin } from '@/lib/echeances';
 import { BLOC_LABEL, verdictMajorite } from '@/lib/blocs';
-
+import { useProjection } from '@/lib/projection';
 
 /**
  * Une liste : ce qu'elle a aujourd'hui, ce que le sondage lui donne, l'écart.
@@ -167,7 +167,13 @@ export default function Home() {
       if (u) {
         const key = `progress_init_${u.email}`;
         if (!sessionStorage.getItem(key)) {
-          try { await base44.functions.invoke('ensureUserProgress', {}); sessionStorage.setItem(key, '1'); } catch (_) {}
+          // Échec silencieux voulu : la création du profil de progression est un
+          // confort, pas une condition d'affichage de la page d'accueil. On ne
+          // marque pas la session comme faite, la tentative se rejouera.
+          try {
+            await base44.functions.invoke('ensureUserProgress', {});
+            sessionStorage.setItem(key, '1');
+          } catch { /* réessai au prochain chargement */ }
         }
       }
     }).catch(() => {});
@@ -199,13 +205,21 @@ export default function Home() {
   });
   const topMarket = parisData?.marches?.[0] || null;
 
-  const latestPoll = sondages?.[0] || null;
-  const seatsByListe = new Map((latestPoll?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
+  // Le plateau vient de la projection partagée : moyenne des 5 derniers
+  // sondages, seuil appliqué, total ramené à 120. La Home lisait le dernier
+  // sondage brut, « Forme ta coalition » la moyenne — et les deux pages
+  // affichaient des sièges différents pour le même parti le même jour.
+  // `sondages` (8) reste chargé à part : il alimente le consensus, dont le sujet
+  // EST le désaccord entre instituts et qu'une moyenne effacerait.
+  const {
+    siegesParListe, pourHemicycle, provenance,
+    pret: projectionPrete, sondages: sondagesProjection,
+  } = useProjection(listes);
   // Sur TOUTES les listes (pas seulement le top 10 affiché plus bas), sinon
   // les blocs coalition/opposition perdent les listes hors classement — et
   // la liste_arabe, qui n'est ni l'un ni l'autre, doit apparaître à part
   // plutôt que d'être silencieusement absente du total.
-  const listesAvecSieges = listes.map(l => ({ ...l, _seats: seatsByListe.get(l.id) ?? 0 }));
+  const listesAvecSieges = listes.map(l => ({ ...l, _seats: siegesParListe.get(l.id) ?? 0 }));
   const rankedListes = [...listesAvecSieges].sort((a, b) => b._seats - a._seats).slice(0, 10);
 
   // Le tableau « ce qui change » prend TOUTES les listes en lice, pas le top 10 :
@@ -224,7 +238,7 @@ export default function Home() {
   // Accroche dynamique — toujours vraie, quel que soit le sondage du jour.
   // La phrase vient de lib/blocs.js : elle était recopiée ici, dans le bandeau
   // en direct et dans la carte du fait du jour, et les trois avaient divergé.
-  const verdict = latestPoll
+  const verdict = projectionPrete
     ? verdictMajorite({ coalition: coalitionSeats, opposition: oppositionSeats, arabes: arabSeats })
     : null;
 
@@ -330,7 +344,7 @@ export default function Home() {
             </div>
           </div>
 
-          <Hemicycle seatsByListe={latestPoll?.seats_by_liste || []} listes={listes} height={250} />
+          <Hemicycle seatsByListe={pourHemicycle} listes={listes} height={250} />
 
           {/* Légende — décode les couleurs de l'hémicycle (chaque parti = une couleur) */}
           {rankedListes.some(l => l._seats > 0) && (
@@ -351,15 +365,16 @@ export default function Home() {
               Composition à venir — le premier sondage sièges apparaîtra ici.
             </p>
           )}
-          <p className="text-center text-[11px] font-mono mt-1" style={{ color: 'var(--p-text-25)' }}>
-            {latestPoll
-              ? `Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`
-              : 'En attente du premier sondage sièges'}
+          {/* La provenance annonce la moyenne, pas un institut : afficher
+              « Projection Channel 13 » sous un hémicycle moyenné attribuerait à
+              un institut des chiffres qu'il n'a pas publiés. */}
+          <p className="text-center text-[11px] mt-1 px-4" style={{ color: 'var(--p-text-25)' }}>
+            {provenance || 'En attente du premier sondage sièges'}
           </p>
           {/* Le moment exact où l'envie naît : on vient de lire l'assemblée
               projetée — « et toi, tu la vois comment ? ». Le geste central du
               produit se propose ICI, pas au fond d'un menu. */}
-          {latestPoll && (
+          {projectionPrete && (
             <div className="flex justify-center items-center gap-3 mt-4 flex-wrap">
               <Link to={createPageUrl('MaRepartition')} className="p-btn-gold-solid gap-2">
                 Compose la tienne — 120 sièges <ArrowRight className="w-4 h-4" />
@@ -369,7 +384,7 @@ export default function Home() {
                 coalition={coalitionSeats}
                 opposition={oppositionSeats}
                 arab={arabSeats}
-                source={`Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`}
+                source={provenance}
               />
             </div>
           )}
@@ -390,15 +405,17 @@ export default function Home() {
 
       {/* Le fait du jour se joue — carte recto/verso (signature « vases
           communicants » : le sondage vérifié se retourne sur son pari + quiz) */}
-      {latestPoll && (
+      {projectionPrete && (
         <div className="p-reveal p-glow-gold max-w-md mx-auto px-4 pt-2 pb-4">
           <p className="text-[10px] font-black uppercase tracking-widest text-center mb-3" style={{ color: 'var(--p-gold-text)' }}>Le fait du jour se joue — retourne la carte</p>
           <RectoVersoCard
-            badge="Sondage · fait vérifié"
-            title={`${latestPoll.institute} · ${new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}`}
+            badge="Sondages · fait vérifié"
+            /* Les chiffres sont ceux de la moyenne : les attribuer à un institut
+               unique lui prêterait une publication qui n'existe pas. */
+            title={`Moyenne des ${sondagesProjection.length} derniers sondages`}
             fact={verdict}
             nums={rankedListes.filter(l => l._seats > 0).slice(0, 2).map(l => ({ n: l._seats, label: l.name_fr }))}
-            source={`Projection ${latestPoll.institute}${latestPoll.publisher_media ? ` (${latestPoll.publisher_media})` : ''}`}
+            source={provenance}
             betQuestion={topMarket?.question}
             betCote={topMarket?.issues?.[0]?.cote?.toFixed(2)}
             betTo={createPageUrl('Paris')}
@@ -471,9 +488,9 @@ export default function Home() {
             {listesQuiChangent.map((l, i) => (
               <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
             ))}
-            {latestPoll && (
-              <p className="text-[10px] mt-3 pt-3 border-t font-mono" style={{ color: 'var(--p-text-25)', borderColor: 'var(--p-border)' }}>
-                Sortants : 25ᵉ Knesset · Projection : {latestPoll.institute} · {new Date(latestPoll.poll_date).toLocaleDateString('fr-FR')}
+            {provenance && (
+              <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'var(--p-text-25)', borderColor: 'var(--p-border)' }}>
+                Sortants : 25ᵉ Knesset. {provenance}
               </p>
             )}
           </div>

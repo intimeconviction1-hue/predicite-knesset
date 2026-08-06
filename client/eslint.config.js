@@ -12,8 +12,13 @@ export default [
       "src/Layout.jsx",
     ],
     ignores: ["src/lib/**/*", "src/components/ui/**/*"],
-    ...pluginJs.configs.recommended,
-    ...pluginReact.configs.flat.recommended,
+    // Les deux presets étaient étalés ICI, au niveau du bloc — mais leur clé
+    // `rules` était ensuite écrasée par le `rules:` explicite plus bas. Résultat :
+    // le dépôt croyait faire tourner les règles recommandées et n'en appliquait
+    // AUCUNE, seulement les six écrites à la main. `no-undef` en particulier ne
+    // tournait pas — c'est ce qui a laissé passer, le 2026-08-07, un
+    // `useProjection` utilisé sans être importé : lint vert, build vert, page
+    // blanche au chargement. Les règles se fusionnent désormais dans `rules`.
     languageOptions: {
       globals: globals.browser,
       parserOptions: {
@@ -35,6 +40,8 @@ export default [
       "unused-imports": pluginUnusedImports,
     },
     rules: {
+      ...pluginJs.configs.recommended.rules,
+      ...pluginReact.configs.flat.recommended.rules,
       "no-unused-vars": "off",
       "react/jsx-uses-vars": "error",
       "react/jsx-uses-react": "error",
@@ -50,6 +57,12 @@ export default [
       ],
       "react/prop-types": "off",
       "react/react-in-jsx-scope": "off",
+      // 70 des 71 erreurs révélées par la fusion des presets. La règle demande
+      // d'écrire &apos; à la place de chaque apostrophe dans du texte JSX : sur
+      // un site intégralement rédigé en français, ça rendrait le source
+      // illisible pour un gain nul (React échappe déjà le texte). Désactivée en
+      // connaissance de cause, pas par facilité — c'est la seule du lot.
+      "react/no-unescaped-entities": "off",
       "react/no-unknown-property": [
         "error",
         { ignore: ["cmdk-input-wrapper", "toast-close"] },

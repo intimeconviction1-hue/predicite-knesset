@@ -8,8 +8,11 @@ import CountUp from '@/components/knesset/CountUp';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
 import { texteLisible } from '@/lib/couleurs';
 
-export default function ListeCard({ liste, latestPoll, index = 0 }) {
-  const projectedSeats = latestPoll?.seats_by_liste?.find(s => s.liste_id === liste.id)?.seats ?? null;
+// `siegesProjetes` vient de la projection partagée (lib/projection.js). La carte
+// recevait avant le dernier sondage brut et allait y pêcher elle-même le chiffre
+// de sa liste — d'où un Likoud à 22 ici et à 25 sur « Forme ta coalition ».
+export default function ListeCard({ liste, siegesProjetes = null, index = 0 }) {
+  const projectedSeats = siegesProjetes;
   const delta = projectedSeats != null && liste.current_knesset_seats != null
     ? projectedSeats - liste.current_knesset_seats
     : null;

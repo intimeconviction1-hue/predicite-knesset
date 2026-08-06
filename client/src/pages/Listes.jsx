@@ -10,6 +10,7 @@ import { createPageUrl } from '@/utils';
 import ListeCard from '@/components/cards/ListeCard';
 import KnessetRulesModule from '@/components/election/KnessetRulesModule';
 import CinematicHero from '@/components/knesset/CinematicHero';
+import { useProjection } from '@/lib/projection';
 
 const BLOC_OPTIONS = [
   { value: 'all', label: 'Tous les blocs' },
@@ -29,11 +30,9 @@ export default function Listes() {
     queryFn: () => base44.entities.Liste.filter({ is_active: true }),
   });
 
-  const { data: sondages = [] } = useQuery({
-    queryKey: ['sondages-sieges-latest'],
-    queryFn: () => base44.entities.SondageSieges.list('-poll_date', 1),
-  });
-  const latestPoll = sondages?.[0] || null;
+  // La projection partagée, pas le dernier sondage brut : les fiches affichaient
+  // Likoud 22 pendant que « Forme ta coalition » en montrait 25.
+  const { siegesParListe, provenance } = useProjection(listes);
 
   const filteredListes = listes.filter(l => {
     const matchesSearch = l.name_fr?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -111,11 +110,18 @@ export default function Listes() {
             <p className="text-sm" style={{ color: 'var(--p-text-40)' }}>Change ta recherche ou tes filtres pour retrouver ta liste.</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredListes.map((liste, index) => (
-              <ListeCard key={liste.id} liste={liste} latestPoll={latestPoll} index={index} />
-            ))}
-          </div>
+          <>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredListes.map((liste, index) => (
+                <ListeCard key={liste.id} liste={liste} siegesProjetes={siegesParListe.get(liste.id)} index={index} />
+              ))}
+            </div>
+            {/* La provenance manquait ici : les cartes affichaient des sièges
+                sans dire d'où ils venaient. */}
+            {provenance && (
+              <p className="text-[11px] text-center mt-6" style={{ color: 'var(--p-text-25)' }}>{provenance}</p>
+            )}
+          </>
         )}
 
         <div className="p-reveal flex items-center justify-center gap-6 mt-12 pt-8 border-t" style={{ borderColor: 'var(--p-border)' }}>

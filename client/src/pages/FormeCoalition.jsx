@@ -6,7 +6,8 @@ import { Landmark, Check, RotateCcw, Trophy, Gauge } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
-import { MAJORITE, TOTAL_SIEGES, MIN_SIEGES_AU_SEUIL, repartirSieges } from '@/lib/knesset';
+import { MAJORITE, TOTAL_SIEGES } from '@/lib/knesset';
+import { useProjection } from '@/lib/projection';
 import { verifierFrictions, plausibility } from '@/lib/frictions';
 
 function plLabel(s) {
@@ -16,38 +17,20 @@ function plLabel(s) {
   return { t: 'Scénario surprise', c: 'var(--p-red)', bg: 'var(--p-red-dim)', fill: 'var(--p-red)' };
 }
 
-// Nombre de sondages moyennés pour composer le plateau. Le dernier sondage seul
-// faisait bouger le plateau d'un jour à l'autre : les Réservistes passaient de 4
-// à 6 sièges selon l'institut publié la veille, ce qui suffit à faire basculer
-// une coalition sans que le joueur ait rien changé. La moyenne rend le plateau
-// stable le temps qu'on y joue.
-//
-// Ce qu'elle ne fait PAS, contrairement à ce qu'on a d'abord cru : ramener
-// Unité nationale (Gantz). Vérifié sur les 20 derniers sondages de prod le
-// 2026-08-06 — Gantz est crédité une fois sur vingt. Il est réellement sous le
-// seuil, ce n'est pas un artefact d'échantillonnage. Son absence du plateau est
-// juste, et la friction likoud/unite-nationale doit rester en sommeil : elle
-// attend un sursaut réel, pas un lissage.
-const NB_SONDAGES_PLATEAU = 5;
-
 export default function FormeCoalition() {
   const gate = useGuestGate();
-  const { data: sondages = [] } = useQuery({ queryKey: ['coal-sondages', NB_SONDAGES_PLATEAU], queryFn: () => base44.entities.SondageSieges.list('-poll_date', NB_SONDAGES_PLATEAU) });
   const { data: listes = [] } = useQuery({ queryKey: ['coal-listes'], queryFn: () => base44.entities.Liste.filter({ is_active: true }) });
 
-  // Plateau = moyenne des derniers sondages, passée par la règle du scrutin
-  // (seuil, puis total ramené à 120) plutôt que par un simple arrondi. Un parti
-  // absent d'un sondage y compte 0 : dans un sondage sièges israélien, ne pas
-  // être crédité, c'est être sous le seuil — pas une donnée manquante.
-  const parties = useMemo(() => {
-    if (!sondages.length || !listes.length) return [];
-    const somme = new Map();
-    for (const s of sondages) for (const x of s.seats_by_liste || []) somme.set(x.liste_id, (somme.get(x.liste_id) || 0) + x.seats);
-    return repartirSieges(listes.map(l => ({
-      id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280',
-      exact: (somme.get(l.id) || 0) / sondages.length,
-    })));
-  }, [listes, sondages]);
+  // Le plateau vient de la projection PARTAGÉE (lib/projection.js) — c'est ici
+  // qu'elle a été inventée, elle sert maintenant tout le site.
+  //
+  // Ce que la moyenne ne répare PAS, contrairement à ce qu'on a d'abord cru :
+  // ramener Unité nationale (Gantz). Vérifié sur les 20 derniers sondages de
+  // prod le 2026-08-06 — Gantz est crédité une fois sur vingt. Il est réellement
+  // sous le seuil, ce n'est pas un artefact d'échantillonnage. Son absence du
+  // plateau est juste, et la friction likoud/unite-nationale doit rester en
+  // sommeil : elle attend un sursaut réel, pas un lissage.
+  const { projection: parties, sondages, provenance } = useProjection(listes);
   const bySlug = useMemo(() => Object.fromEntries(parties.map(p => [p.slug, p])), [parties]);
   // La garde reçoit les listes actives, pas `parties` : voir verifierFrictions.
   useEffect(() => { verifierFrictions(Object.fromEntries(listes.map(l => [l.slug, l]))); }, [listes]);
@@ -70,18 +53,6 @@ export default function FormeCoalition() {
 
   const majPct = (MAJORITE / TOTAL_SIEGES) * 100;
 
-  // Provenance du plateau, affichée sous les cartouches : un chiffre de sièges
-  // sans sa source est exactement ce que ce site s'interdit ailleurs. Le
-  // traitement est annoncé autant que la source — ces sièges sont calculés, pas
-  // relevés, et le joueur doit pouvoir le savoir sans lire le code.
-  const provenance = useMemo(() => {
-    if (!sondages.length) return null;
-    const jour = (d) => new Date(d).toLocaleDateString('fr-FR');
-    const source = sondages.length > 1
-      ? `moyenne des ${sondages.length} derniers sondages (${jour(sondages[sondages.length - 1].poll_date)} — ${jour(sondages[0].poll_date)})`
-      : `sondage ${sondages[0].institute} du ${jour(sondages[0].poll_date)}`;
-    return `Sièges : ${source}, seuil de 3,25 % appliqué (moins de ${MIN_SIEGES_AU_SEUIL} sièges = 0), total ramené à ${TOTAL_SIEGES} au prorata.`;
-  }, [sondages]);
 
   return (
     <MiniJeuShell

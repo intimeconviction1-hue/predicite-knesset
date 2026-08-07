@@ -157,7 +157,23 @@ export default function BarreDeJeu({ jetons = null }) {
   const onglets = (compact) => ONGLETS.map((o) => {
     const actif = estActif(o.name);
     const commun = `relative flex ${compact ? 'flex-col flex-1' : 'flex-row gap-2 px-4'} items-center justify-center transition-colors rounded-xl`;
-    const style = { minHeight: compact ? 52 : 44, background: actif ? 'var(--p-gold-dim)' : 'transparent' };
+    const style = { minHeight: compact ? 52 : 44 };
+
+    // Le fond de l'onglet actif GLISSE d'un onglet à l'autre au lieu de
+    // s'éteindre ici et de se rallumer là-bas. C'est le même élément qui se
+    // déplace (layoutId) : le mouvement raconte la navigation — d'où l'on
+    // vient, où l'on va — là où deux fondus croisés ne racontent rien.
+    // MotionConfig reducedMotion="user" le fige pour qui a coupé le mouvement,
+    // et le fond apparaît alors directement au bon endroit.
+    const surbrillance = actif ? (
+      <motion.span
+        aria-hidden="true"
+        layoutId={compact ? 'dock-actif-mobile' : 'dock-actif-desktop'}
+        className="absolute inset-0 rounded-xl"
+        style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-strong)' }}
+        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+      />
+    ) : null;
 
     if (o.name === '__jeux') {
       return (
@@ -167,7 +183,8 @@ export default function BarreDeJeu({ jetons = null }) {
           aria-haspopup="dialog"
           aria-label={`${o.label} — ${o.aide}`}
           className={commun} style={style}>
-          {contenuOnglet(o, actif || feuille, compact)}
+          {surbrillance}
+          <span className={`relative flex items-center justify-center ${compact ? 'flex-col' : 'flex-row gap-2'}`}>{contenuOnglet(o, actif || feuille, compact)}</span>
         </button>
       );
     }
@@ -176,7 +193,8 @@ export default function BarreDeJeu({ jetons = null }) {
         aria-current={actif ? 'page' : undefined}
         aria-label={`${o.label} — ${o.aide}`}
         className={commun} style={style}>
-        {contenuOnglet(o, actif, compact)}
+        {surbrillance}
+        <span className={`relative flex items-center justify-center ${compact ? 'flex-col' : 'flex-row gap-2'}`}>{contenuOnglet(o, actif, compact)}</span>
       </Link>
     );
   });

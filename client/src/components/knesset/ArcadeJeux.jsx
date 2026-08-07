@@ -71,14 +71,26 @@ export const JEUX = [
 
 function TuileJeu({ jeu }) {
   const Icon = jeu.icon;
+
+  // Le projecteur suit le curseur DANS la tuile : on ne fait que reporter la
+  // position du pointeur dans deux propriétés personnalisées, tout le rendu est
+  // en CSS (.p-spot). Pas d'état React, donc pas de rendu à chaque pixel.
+  const suivrePointeur = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--p-mx', `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty('--p-my', `${e.clientY - r.top}px`);
+  };
+
   return (
     <Link
       to={createPageUrl(jeu.name)}
-      className="group relative flex flex-col rounded-2xl p-4 h-full overflow-hidden transition-transform duration-300 hover:-translate-y-1"
+      onPointerMove={suivrePointeur}
+      className="group p-spot relative !flex flex-col rounded-2xl p-4 h-full overflow-hidden transition-transform duration-300 hover:-translate-y-1 active:translate-y-0 active:scale-[.99]"
       style={{
         background: 'var(--p-card)',
         border: '0.5px solid var(--p-border)',
         boxShadow: 'var(--p-elev-1)',
+        '--p-spot-color': `color-mix(in srgb, ${jeu.couleur} 20%, transparent)`,
       }}
     >
       {/* Lavis de couleur du jeu — chaque jeu a sa teinte, on la reconnaît avant

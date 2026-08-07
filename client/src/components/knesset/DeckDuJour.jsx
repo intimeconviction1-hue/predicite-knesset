@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { createPageUrl } from '@/utils';
-import { PieChart, ShieldCheck, BarChart2, HelpCircle, Layers, Zap } from 'lucide-react';
+import { PieChart, ShieldCheck, BarChart2, Layers, Zap } from 'lucide-react';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
+import { MIN_SIEGES_AU_SEUIL } from '@/lib/knesset';
 
 /**
  * LE DECK DU JOUR — trois faits du jour, trois cartes à retourner.
@@ -21,9 +22,15 @@ import RectoVersoCard from '@/components/knesset/RectoVersoCard';
  *   · carte « projection » → le marché « qui sera en tête au prochain sondage »
  *     (même sujet : le classement des listes) ;
  *   · carte « mouvement »  → un marché dont une issue désigne cette liste-là
- *     (`match_value` = son identifiant, fourni par l'API).
+ *     (`match_value` = son identifiant, fourni par l'API) ;
+ *   · carte « seuil »      → un marché dont la QUESTION nomme cette liste.
  * Sans correspondance, le dos propose les gestes du produit, pas un pari
  * rapproché à la louche.
+ *
+ * ⚠️ Et aucune carte ne redit ce qu'un autre bloc de la Home dit déjà. La
+ * troisième portait sur le désaccord entre instituts — c'est-à-dire, mot pour
+ * mot, le bloc « Consensus des sondages » qui vit un demi-écran plus bas. Elle
+ * porte maintenant sur le seuil de 3,25 %, qui n'apparaît nulle part ailleurs.
  */
 
 const jourCourt = (d) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
@@ -32,7 +39,6 @@ export default function DeckDuJour({
   listesAvecSieges = [],
   verdict,
   sondagesProjection = [],
-  sondages = [],
   marches = [],
   className = '',
 }) {
@@ -118,59 +124,56 @@ export default function DeckDuJour({
       });
     }
 
-    // ── 3. Les instituts s'accordent-ils ? ──────────────────────────────────
-    // Même lecture que le bloc « Consensus » plus bas dans la page, mais sous
-    // sa forme jouable : le désaccord entre instituts est un fait, et savoir le
-    // repérer est exactement ce qu'entraîne « Vrai ou Fake ».
-    const listeById = new Map(listesAvecSieges.map(l => [l.id, l]));
-    const meneurs = sondages.slice(0, 6).map(s => {
-      const top = (s.seats_by_liste || []).slice().sort((a, b) => b.seats - a.seats)[0];
-      const leader = top && listeById.get(top.liste_id);
-      return leader ? { leader, media: s.publisher_media || s.institute } : null;
-    }).filter(Boolean);
+    // ── 3. Qui joue sa survie au seuil ? ────────────────────────────────────
+    //
+    // Cette carte parlait du DÉSACCORD ENTRE INSTITUTS. Elle disait exactement
+    // ce que le bloc « Consensus des sondages » dit un demi-écran plus bas, avec
+    // les mêmes chiffres et presque les mêmes mots : deux fois le même fait sur
+    // la même page, ce n'est pas de l'insistance, c'est du remplissage — et ça
+    // donne l'impression que la Home tourne en rond sur les sondages.
+    //
+    // Le seuil, lui, n'apparaît nulle part ailleurs alors que c'est la règle la
+    // plus brutale du scrutin israélien : 3,25 %, soit 4 sièges. En dessous, une
+    // liste ne perd pas des sièges, elle disparaît. C'est le fait le plus tendu
+    // de la journée, et il a un marché ouvert qui porte dessus.
+    const auSeuil = credites.length ? credites[credites.length - 1] : null;
 
-    if (meneurs.length >= 2) {
-      const compte = new Map();
-      for (const m of meneurs) compte.set(m.leader, (compte.get(m.leader) || 0) + 1);
-      const classement = [...compte.entries()].sort((a, b) => b[1] - a[1]);
-      const accord = classement.length === 1;
+    if (auSeuil && auSeuil._seats <= MIN_SIEGES_AU_SEUIL + 2) {
+      // Un marché qui NOMME cette liste dans sa question. Le rapprochement est
+      // vérifiable à l'œil (« Le Sionisme religieux franchira-t-il le seuil ? »),
+      // il n'est pas déduit d'une proximité de sujet — la règle du site est
+      // qu'un pari ne se rattache jamais à un fait par ressemblance.
+      const marcheSeuil = marches.find(m => typeof m.question === 'string' && m.question.includes(auSeuil.name_fr));
+      const cotesSeuil = marcheSeuil
+        ? marcheSeuil.issues.slice(0, 2).map(i => ({ id: i.id, kicker: 'Franchit le seuil', label: i.label, cote: i.cote, to: parisUrl }))
+        : [];
 
       out.push({
-        cle: 'instituts',
-        badge: 'Instituts · fait vérifié',
-        title: accord
-          ? `${classement[0][0].name_fr} en tête partout`
-          : 'Les instituts ne s’accordent pas',
-        // Deux contraintes sur cette phrase, apprises en la mesurant :
-        //  · elle ne récite PAS les chiffres que les `nums` affichent juste
-        //    dessous (« 4 Likoud · 2 Yashar ») — c'était dit deux fois, et sa
-        //    longueur variait avec le nom des partis, jusqu'à faire déborder
-        //    une carte dont la hauteur est fixe ;
-        //  · elle ne redit pas non plus « c'est normal, effets d'institut » :
-        //    le bloc Consensus, quelques centimètres plus haut sur la Home,
-        //    emploie déjà ces mots-là. Elle porte la LEÇON, qui est justement
-        //    ce que le dos propose d'aller apprendre.
-        fact: accord
-          ? `Un accord aussi net est rare en campagne israélienne. Il ne vaut pas garantie pour autant.`
-          : `Le même jour, deux sondages peuvent désigner deux vainqueurs différents. Savoir lire cet écart, c’est tout l’enjeu.`,
-        nums: classement.slice(0, 2).map(([l, n]) => ({ n, label: l.name_fr })),
-        source: `${meneurs.length} derniers sondages sièges · ${[...new Set(meneurs.map(m => m.media))].slice(0, 3).join(', ')}`,
-        jeuKicker: 'Ce désaccord s’apprend',
-        jeuTitre: 'Sauras-tu repérer le sondage qui ment ?',
-        cotes: [],
+        cle: 'seuil',
+        badge: 'Seuil · fait vérifié',
+        title: `${auSeuil.name_fr} joue sa survie`,
+        fact: `Le seuil de 3,25 % vaut ${MIN_SIEGES_AU_SEUIL} sièges. En dessous, une liste n’en perd pas : elle sort de la Knesset avec zéro.`,
+        nums: [
+          { n: MIN_SIEGES_AU_SEUIL, label: 'le seuil' },
+          { n: auSeuil._seats, label: 'sa projection' },
+        ],
+        source: 'Seuil électoral national, relevé à 3,25 % en 2014',
+        jeuKicker: 'Ce seuil se joue',
+        jeuTitre: marcheSeuil?.question || 'Elle passe, ou elle tombe ?',
+        cotes: cotesSeuil,
+        // Deux actions, pas trois. Avec la question du marché (qui tient sur
+        // trois lignes) et ses deux cotes, une troisième faisait déborder le dos
+        // de 53 px — mesuré. La hauteur d'une carte est fixe par construction :
+        // c'est au contenu de tenir dedans, pas à la carte de s'étirer.
         actions: [
-          { icon: ShieldCheck, label: 'Vrai ou Fake ?', hint: 'Démêle le vrai chiffre du chiffre tordu', to: createPageUrl('VraiOuFake') },
-          { icon: BarChart2, label: 'Comment on lit un sondage', hint: 'Marge d’erreur, effet d’institut, seuil', to: createPageUrl('Methodologie') },
-          // Pas « 10 questions » : le quiz n'a pas de longueur fixe (six thèmes,
-          // trois niveaux, tirage dans la base). Annoncer un nombre rond serait
-          // une promesse que la page ne tient pas.
-          { icon: HelpCircle, label: 'Le quiz de la campagne', hint: 'Six thèmes, trois niveaux — les points comptent', to: createPageUrl('Quiz') },
+          { icon: Layers, label: `La fiche « ${auSeuil.name_fr} »`, hint: 'Programme, chef de file, historique', to: `${createPageUrl('Liste')}?slug=${auSeuil.slug}` },
+          { icon: BarChart2, label: 'Pourquoi un seuil ?', hint: 'Ce que 3,25 % change à une coalition', to: createPageUrl('Learn') },
         ],
       });
     }
 
     return out;
-  }, [listesAvecSieges, verdict, sondagesProjection, sondages, marches, parisUrl]);
+  }, [listesAvecSieges, verdict, sondagesProjection, marches, parisUrl]);
 
   if (!cartes.length) return null;
 

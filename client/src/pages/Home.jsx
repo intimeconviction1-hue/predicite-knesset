@@ -30,15 +30,21 @@ import { useProjection } from '@/lib/projection';
 /**
  * Une liste : ce qu'elle a aujourd'hui, ce que le sondage lui donne, l'écart.
  *
- * Avant, cette ligne n'affichait que la projection — et la page ne montrait
- * NULLE PART la Knesset actuelle. Or une projection ne veut rien dire seule :
- * « Likoud 22 » n'est une information que si l'on sait qu'il en a 32. Tout
- * l'intérêt est dans le mouvement, et c'est justement lui qu'on ne voyait pas.
+ * Une projection ne veut rien dire seule : « Likoud 25 » n'est une information
+ * que si l'on sait qu'il en a 32. Tout l'intérêt est dans le mouvement.
  *
- * Le sortant est un repère SUR la barre (trait vertical), pas une colonne de
- * plus : on lit la longueur actuelle et la longueur projetée d'un seul coup
- * d'œil, et l'écart devient visible avant même d'avoir lu le chiffre. Une liste
- * nouvelle n'a pas de repère — elle part de rien, et cette absence se voit.
+ * 2026-08-07 — la Knesset sortante était un TRAIT DE 2 PIXELS posé sur la
+ * barre. C'est-à-dire, en pratique, rien : sur une piste de 150 px, deux
+ * pixels d'encre ne se lisent pas comme « le Likoud avait 32 sièges », ils se
+ * lisent comme une poussière. Le terme de comparaison de tout le bloc était le
+ * seul élément invisible du bloc.
+ *
+ * Deux pistes superposées le règlent : au-dessus, le SORTANT, hachuré (une
+ * texture dit « c'est le passé » sans avoir à l'écrire) ; en dessous, la
+ * PROJECTION, pleine. L'écart devient une différence de longueur entre deux
+ * traits parallèles — la comparaison la plus facile que l'œil sache faire — et
+ * les deux chiffres sont écrits côte à côte, « 32 → 25 ». Une liste nouvelle
+ * n'a pas de piste haute : cette absence dit qu'elle part de rien.
  */
 function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const belowThreshold = seats === 0;
@@ -56,14 +62,13 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const depart = nouvelle ? 0 : pct(sortant);
   const arrivee = pct(seats || 0);
 
-  // Le segment d'écart reste visible sous la barre une fois le mouvement fini :
-  // on continue de voir d'où l'on vient. Vert si la liste gagne, rouge si elle
-  // perd — la même convention que le chiffre d'écart à droite.
-  const ecart = nouvelle || delta === 0 ? null : {
-    gauche: `${Math.min(depart, arrivee)}%`,
-    largeur: `${Math.abs(arrivee - depart)}%`,
-    couleur: delta > 0 ? 'var(--p-green)' : 'var(--p-red)',
-  };
+  // Hachure de la piste « sortante » : la couleur du parti, mais en texture.
+  // Une texture se distingue d'un aplat même à travers un daltonisme, et même
+  // quand deux partis ont des bleus voisins — ce qui est le cas de quatre des
+  // treize listes.
+  const hachure = `repeating-linear-gradient(135deg,
+    color-mix(in srgb, ${couleur} 62%, transparent) 0 4px,
+    color-mix(in srgb, ${couleur} 16%, transparent) 4px 9px)`;
 
   return (
     <motion.div
@@ -71,88 +76,84 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.04, duration: 0.3 }}
     >
-      {/* `w-full` n'est pas décoratif. La règle de cible tactile de globals.css
-          impose `display: inline-flex` à tout lien autonome : la classe `flex`
-          écrite ici ne gagne pas, et un inline-flex se réduit à son contenu. La
-          barre en `flex-1` n'avait donc AUCUNE largeur à prendre — mesurée à
-          0 px, depuis toujours (le défaut est antérieur à ce bloc). Les barres
-          comparatives de la page d'accueil n'ont jamais été visibles. */}
+      {/* `!block w-full` n'est pas décoratif : globals.css impose
+          `display:inline-flex` à tout lien autonome (plancher tactile de 44 px)
+          avec une spécificité qui bat les classes Tailwind. Sans le `!`, la
+          ligne se réduirait à son contenu et les pistes n'auraient aucune
+          largeur à prendre — c'est exactement le défaut qui a rendu les barres
+          de cette page invisibles pendant des mois. */}
       <Link
         to={`${createPageUrl('Liste')}?slug=${liste.slug}`}
-        className="flex w-full items-center gap-2.5 py-2 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-night-2)]"
+        className="group !block w-full py-2.5 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-night-2)]"
       >
-        <span className="text-xs w-24 sm:w-32 shrink-0 truncate" style={{ color: 'var(--p-text-60)' }}>{liste.name_fr}</span>
+        <span className="flex items-baseline justify-between gap-2 mb-1.5">
+          <span className="text-[12.5px] font-semibold truncate min-w-0" style={{ color: 'var(--p-text)' }}>{liste.name_fr}</span>
 
-        <div className="relative flex-1 min-w-0 h-2.5 rounded-full" style={{ background: 'var(--p-text-10)' }}>
-          {/* Segment d'écart — la trace du chemin parcouru, posée sous la barre.
-              Sous « mouvement réduit », tout est peint directement : pas de
-              whileInView du tout. Le piège évité est net — avec `initial={false}`
-              et une largeur portée uniquement par l'animation, une barre pas
-              encore entrée dans le champ n'aurait EU aucune largeur, et serait
-              restée vide si l'observateur ne se déclenchait jamais. */}
-          {ecart && (
-            reduit ? (
-              <span className="absolute inset-y-0 rounded-full" aria-hidden="true"
-                style={{ left: ecart.gauche, width: ecart.largeur, background: ecart.couleur, opacity: 0.22 }} />
-            ) : (
-              <motion.span
-                className="absolute inset-y-0 rounded-full" aria-hidden="true"
-                style={{ left: ecart.gauche, width: ecart.largeur, background: ecart.couleur }}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 0.22 }}
-                viewport={{ once: true, margin: '-12%' }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.05 }}
-              />
-            )
+          {/* Les deux chiffres CÔTE À CÔTE. Le sortant n'était écrit nulle part :
+              il fallait deviner la longueur d'un trait de 2 px pour reconstituer
+              « 32 ». On lit maintenant la phrase entière : 32 → 25, soit −7. */}
+          <span className="flex items-baseline gap-1.5 flex-shrink-0">
+            {!nouvelle && (
+              <>
+                <span className="text-[11px] font-mono font-semibold" style={{ color: 'var(--p-text-25)' }}>{sortant}</span>
+                <span aria-hidden="true" className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>→</span>
+              </>
+            )}
+            {/* Le chiffre ne s'anime PAS, et c'est délibéré. Un compteur animé
+                affiche son point de DÉPART tant que l'animation n'a pas démarré :
+                la ligne annoncerait « 32 » comme si c'était la projection. Un
+                chiffre faux mais plausible est précisément ce que ce site
+                s'interdit. L'état au repos doit dire le vrai. */}
+            <span className="text-[15px] font-bold font-mono"
+              style={{ color: belowThreshold ? 'var(--p-text-25)' : texteLisible(couleur) }}>
+              {seats}
+            </span>
+            <span className="text-[11px] font-bold font-mono w-11 text-right"
+              style={{ color: nouvelle ? 'var(--p-gold-text)' : delta > 0 ? 'var(--p-green-text)' : delta < 0 ? 'var(--p-red)' : 'var(--p-text-25)' }}>
+              {nouvelle ? 'nouv.' : delta === 0 ? '=' : `${delta > 0 ? '+' : ''}${delta}`}
+            </span>
+          </span>
+        </span>
+
+        {/* Piste haute — LA KNESSET SORTANTE, hachurée. Absente pour une liste
+            nouvelle : rien à comparer, et ce vide est l'information. */}
+        <span className="block relative h-[7px] rounded-full mb-[3px]"
+          style={{ background: nouvelle ? 'transparent' : 'var(--p-text-10)' }}>
+          {!nouvelle && sortant > 0 && (
+            <span className="absolute inset-y-0 left-0 rounded-full" aria-hidden="true"
+              style={{ width: `${pct(sortant)}%`, background: hachure }} />
           )}
+        </span>
+
+        {/* Piste basse — LA PROJECTION, pleine. Elle part de la longueur du
+            sortant et glisse vers la projection : avec la piste hachurée juste
+            au-dessus comme repère fixe, le mouvement se lit littéralement comme
+            un déplacement par rapport au passé.
+            Sous « mouvement réduit », tout est peint directement — une largeur
+            portée uniquement par l'animation laisserait une barre vide si
+            l'observateur ne se déclenchait jamais. */}
+        <span className="block relative h-[11px] rounded-full" style={{ background: 'var(--p-text-10)' }}>
           {reduit ? (
-            <div className="absolute inset-y-0 left-0 rounded-full"
-              style={{ width: `${arrivee}%`, backgroundColor: couleur, opacity: belowThreshold ? 0.3 : 1 }} />
+            <span className="absolute inset-y-0 left-0 rounded-full"
+              style={{ width: `${arrivee}%`, backgroundColor: couleur, opacity: belowThreshold ? 0.35 : 1 }} />
           ) : (
-            <motion.div
-              className="absolute inset-y-0 left-0 rounded-full"
-              style={{ backgroundColor: couleur, opacity: belowThreshold ? 0.3 : 1 }}
+            <motion.span
+              className="absolute inset-y-0 left-0 rounded-full block"
+              style={{ backgroundColor: couleur, opacity: belowThreshold ? 0.35 : 1 }}
               initial={{ width: `${depart}%` }}
               whileInView={{ width: `${arrivee}%` }}
               viewport={{ once: true, margin: '-12%' }}
               transition={{ duration: 0.9, delay: 0.2 + index * 0.05, ease: [0.16, 1, 0.3, 1] }}
             />
           )}
-          {/* Repère du sortant. Le halo le garde lisible aussi bien sur la barre
-              colorée que sur la piste vide — il doit se voir des deux côtés du
-              mouvement, c'est tout son intérêt. */}
-          {!nouvelle && sortant > 0 && (
-            <span
-              className="absolute top-[-3px] bottom-[-3px] w-[2px] rounded-full"
-              style={{
-                left: `calc(${Math.min(100, (sortant / maxSeats) * 100)}% - 1px)`,
-                background: 'var(--p-text)',
-                boxShadow: '0 0 0 1.5px var(--p-card)',
-              }}
-              aria-hidden="true"
-            />
+          {/* Une liste passée sous le seuil garde une trace : sans elle, une
+              barre à zéro est indistinguable d'une barre pas encore chargée. */}
+          {belowThreshold && !nouvelle && (
+            <span className="absolute inset-y-0 left-0 flex items-center pl-1.5 text-[9px] font-bold uppercase tracking-wider"
+              style={{ color: 'var(--p-red)' }}>
+              sous le seuil
+            </span>
           )}
-        </div>
-
-        {/* Le chiffre ne s'anime PAS, et c'est délibéré. J'avais d'abord fait
-            descendre le Likoud de 32 à 22 en même temps que sa barre : joli, et
-            dangereux. Un compteur animé affiche son point de DÉPART tant que
-            l'animation n'a pas démarré — mesuré ici, la ligne annonçait « 32 »
-            comme si c'était la projection. Un chiffre faux mais plausible est
-            précisément ce que ce site s'interdit ; une barre encore immobile
-            n'est qu'une imprécision visuelle. L'état au repos doit dire le vrai,
-            le mouvement n'est qu'un commentaire par-dessus. */}
-        <span className="text-xs font-bold font-mono w-7 text-right shrink-0"
-          style={{ color: belowThreshold ? 'var(--p-text-25)' : texteLisible(couleur) }}>
-          {seats}
-        </span>
-
-        {/* Colonne d'écart resserrée sur mobile : à 375 px, les trois colonnes
-            fixes ne laissaient que 79 px à la barre, qui est justement ce qu'on
-            vient là pour lire. */}
-        <span className="text-[11px] font-bold font-mono w-10 sm:w-[52px] text-right shrink-0"
-          style={{ color: nouvelle ? 'var(--p-gold-text)' : delta > 0 ? 'var(--p-green-text)' : delta < 0 ? 'var(--p-red)' : 'var(--p-text-25)' }}>
-          {nouvelle ? 'nouv.' : delta === 0 ? '=' : `${delta > 0 ? '+' : ''}${delta}`}
         </span>
       </Link>
     </motion.div>
@@ -259,8 +260,14 @@ export default function Home() {
           photo Ken Burns + voile bleu + Menorah + parallaxe. « Campagne en direct ». */}
       <CinematicHero
         size="full"
-        photos={['/images/knesset-hero.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
-        position="center 26%"
+        /* La photo d'ouverture était un cadrage de trottoir : prise depuis la
+           route d'en face, abribus, poubelle, grillage et un passant au premier
+           plan, sous une lumière de midi écrasée — et 60 % de l'image en ciel
+           vide. Sous le voile, il n'en restait rien. Elle cède la place à la vue
+           frontale depuis le parvis (drapeaux, lignes qui convergent vers
+           l'entrée) puis à la vue de trois quarts en lumière rasante. */
+        photos={['/images/knesset-parvis.jpg', '/images/knesset-soir.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
+        position="center 48%"
         badge={{ text: `La campagne en direct · J-${daysLeft}`, live: true }}
         kicker="Élections à la Knesset · 26ᵉ législature · 27 octobre 2026"
         title={<>Le scrutin est à <HeroGold>toi</HeroGold>.</>}
@@ -436,7 +443,6 @@ export default function Home() {
             listesAvecSieges={listesAvecSieges}
             verdict={verdict}
             sondagesProjection={sondagesProjection}
-            sondages={sondages}
             marches={parisData?.marches || []}
           />
         </div>
@@ -501,9 +507,24 @@ export default function Home() {
             Toutes les listes <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
-        <p className="text-xs mb-5" style={{ color: 'var(--p-text-40)' }}>
-          La Knesset sortante face à la projection du jour. Le trait sur la barre marque les sièges d'aujourd'hui.
+        <p className="text-xs mb-3" style={{ color: 'var(--p-text-40)' }}>
+          La Knesset sortante face à la projection du jour, liste par liste.
         </p>
+
+        {/* Légende des deux pistes. Elle montre les textures au lieu de les
+            décrire : « hachuré = sortant » se comprend une fois qu'on l'a vu,
+            jamais quand on le lit. */}
+        <div className="flex items-center gap-5 mb-4 text-[10.5px] flex-wrap" style={{ color: 'var(--p-text-40)' }}>
+          <span className="inline-flex items-center gap-2">
+            <span aria-hidden="true" className="w-8 h-[7px] rounded-full"
+              style={{ background: 'repeating-linear-gradient(135deg, var(--p-text-40) 0 4px, transparent 4px 9px)' }} />
+            Knesset sortante (25<sup>e</sup>)
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span aria-hidden="true" className="w-8 h-[11px] rounded-full" style={{ background: 'var(--p-text-60)' }} />
+            Projection du jour
+          </span>
+        </div>
 
         {listesQuiChangent.length === 0 ? (
           <div className="rounded-2xl p-8 text-center" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>

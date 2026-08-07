@@ -1,4 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap');
+/* Fontes auto-hébergées depuis public/fonts/ — le site ne contacte plus aucun
+   tiers. Le <link> vers fonts.googleapis.com qui vivait ici était le seul :
+   il communiquait l'adresse IP de chaque visiteur à Google à chaque page, et
+   coûtait deux poignées de main DNS+TLS (googleapis, puis gstatic) avant même
+   le premier octet de fonte. Provenance, versions et licences des trois
+   fichiers : public/fonts/LICENCES.md.
+
+   Ne pas remettre d'@import ici : il resérialiserait le chargement derrière le
+   téléchargement et l'analyse de cette feuille. Les @font-face ci-dessous, eux,
+   n'ajoutent aucune requête — ils sont dans la feuille, pas devant elle. Les
+   deux fontes du premier écran sont en plus préchargées depuis index.html, ce
+   qui les fait partir en parallèle de cette feuille au lieu d'attendre son
+   analyse.
+
+   Trois fichiers pour huit déclarations : ce sont des fontes VARIABLES, et
+   Google servait déjà exactement ces trois-là (axe wght 400–800 pour Syne et
+   JetBrains Mono, 100–900 pour Inter). Chaque règle fixe une graisse, le
+   navigateur règle l'axe dessus, et le fichier n'est téléchargé qu'une fois.
+
+   Une graisse par règle, et non la syntaxe de plage `font-weight: 400 800` qui
+   tiendrait en trois règles : la plage rendrait TOUTE graisse demandée, là où
+   cette liste ne rend que celles qui existent vraiment. .p-cote (plus bas) et
+   trois lignes de Leaderboard demandent 700 en mono — aujourd'hui rabattu sur
+   600 faute de mieux. La plage les épaissirait sans que personne l'ait demandé.
+   La liste reproduit donc à l'identique ce que Google servait, y compris ses
+   approximations : Syne 600 reste absent (zéro usage), et les `font-black` du
+   JSX demandent 900, au-delà de l'axe de Syne — ils retombent sur 800.
+
+   Sous-ensemble « latin » seul, tel que Google le découpait : le dépôt a été
+   scanné, il ne contient pas un seul caractère de latin-ext, et ni le
+   cyrillique ni le grec n'ont de raison d'être ici. Les flèches (→), l'exposant
+   ᵉ et les symboles décoratifs sont hors de cette plage — ils l'étaient déjà
+   avant, aucune des variantes servies par Google ne les portait, et ils
+   continuent de retomber sur la fonte système. */
+
+@font-face {
+  font-family: 'Syne'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('/fonts/syne-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Syne'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('/fonts/syne-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Syne'; font-style: normal; font-weight: 800; font-display: swap;
+  src: url('/fonts/syne-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('/fonts/inter-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'JetBrains Mono'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url('/fonts/jetbrains-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 @tailwind base;
 @tailwind components;

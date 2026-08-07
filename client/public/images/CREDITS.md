@@ -60,3 +60,9 @@ donc on ne l'utilise pas.
 | `logos/yashar.png` | Yashar (Gadi Eisenkot) | Non documenté | PD-textlogo | [File:Yashar_party_logo.png](https://commons.wikimedia.org/wiki/File:Yashar_party_logo.png) |
 | `logos/ensemble-bennett-lapid.svg` | Ensemble (Bennett-Lapid / « Together ») | רשימת ביחד (le parti lui-même) | PD-textlogo | [File:Together-logo-29April.svg](https://commons.wikimedia.org/wiki/File:Together-logo-29April.svg) |
 | `logos/unite-nationale.svg` | Unité nationale (Benny Gantz) | Fourni par le parti par e-mail | PD-textlogo | [File:National_Unity_Party_(Israel)_August_2022.svg](https://commons.wikimedia.org/wiki/File:National_Unity_Party_(Israel)_August_2022.svg) |
+
+## Fontes
+
+Les trois fontes du site (Syne, Inter, JetBrains Mono) sont auto-hébergées
+depuis le 7 août 2026 et documentées à part, avec leurs licences OFL :
+[../fonts/LICENCES.md](../fonts/LICENCES.md).

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Scale, Server, Database, Cookie, UserCheck, Type, AlertTriangle } from 'lucide-react';
+import { Scale, Server, Database, Cookie, UserCheck, AlertTriangle } from 'lucide-react';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import { createPageUrl } from '@/utils';
 import { EDITEUR, EDITEUR_RENSEIGNE, HEBERGEUR } from '@/lib/editeur';
@@ -183,17 +183,7 @@ export default function Mentions() {
           </P>
         </Section>
 
-        <Section icon={Type} color="#8A6BBF" titre="Un appel à un service tiers" delai={0.2}>
-          <P>
-            Les polices de caractères du site sont chargées depuis Google Fonts.
-            Concrètement, ton navigateur adresse une requête aux serveurs de Google
-            au chargement de la page, ce qui leur communique ton adresse IP. C'est
-            le seul appel à un tiers effectué par le site, et il est signalé ici
-            faute de pouvoir prétendre le contraire.
-          </P>
-        </Section>
-
-        <Section icon={UserCheck} color="var(--p-green-text)" titre="Durées et droits" delai={0.25}>
+        <Section icon={UserCheck} color="var(--p-green-text)" titre="Durées et droits" delai={0.2}>
           <P>
             <strong style={{ color: 'var(--p-text)' }}>Combien de temps.</strong>{' '}
             Les comptes et les données de jeu sont conservés le temps de la saison
@@ -225,7 +215,7 @@ export default function Mentions() {
           </P>
         </Section>
 
-        <Section icon={Scale} color="var(--p-text-40)" titre="Contenus et sources" delai={0.3}>
+        <Section icon={Scale} color="var(--p-text-40)" titre="Contenus et sources" delai={0.25}>
           <P>
             Les sondages, résultats et éléments factuels affichés proviennent de
             sources identifiées et datées, listées sur la page{' '}

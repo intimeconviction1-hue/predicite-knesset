@@ -4,8 +4,23 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Les fontes sont auto-hébergées (public/fonts/, déclarées dans
+         globals.css) : plus de <link> ni de preconnect vers Google, donc plus
+         d'adresse IP de visiteur envoyée à un tiers, et deux poignées de main
+         DNS+TLS en moins sur le chemin critique.
+         Restent ces deux preload, parce qu'un @font-face ne se découvre qu'une
+         fois globals.css téléchargée ET analysée : ils font partir les fontes
+         en parallèle de la feuille plutôt qu'après elle. Syne porte le H1 du
+         hero et Inter tout le corps de page — c'est le premier écran qui
+         payait le FOUT. JetBrains Mono n'est PAS préchargée : elle ne sert
+         qu'aux compteurs du header, affichés seulement à un joueur connecté
+         (Layout.jsx, `statChips`), et jamais dans le hero. La précharger
+         imposerait 31 ko à un visiteur qui n'en affiche pas un caractère.
+         `crossorigin` est obligatoire même en même origine : une fonte se
+         récupère toujours en mode CORS, et sans lui le préchargement serait
+         ignoré puis refait. -->
+    <link rel="preload" href="/fonts/syne-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
     <meta name="description" content="PrédiCité — pronostiquez les législatives israéliennes (Knesset, 27 octobre 2026), en français." />
     <title>PrédiCité — Knesset 2026</title>
   </head>

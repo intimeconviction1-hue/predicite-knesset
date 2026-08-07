@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { filterEntity, createEntity, updateEntity } from '../db/index.js';
+import { createEntity, updateEntity } from '../db/index.js';
 import { ensureUserProgress } from './miscFunctions.js';
 
 /**
@@ -37,8 +37,6 @@ export const JEUX = Object.freeze(['sens-du-vent', 'vrai-ou-fake', 'boussole', '
 // rendu : on a appris quelque chose, sans que ce soit une preuve de flair.
 export const POINTS_PAR_PARTIE = 10;
 
-const PG_UNIQUE_VIOLATION = '23505';
-
 // Le jour de référence est UTC, comme tout ce qui est daté dans ce dépôt. Le
 // crédit bascule donc à 2h ou 3h du matin en Israël — c'est-à-dire au creux de
 // la nuit, et jamais au milieu d'une session de jeu.
@@ -64,25 +62,25 @@ export async function crediterPartieMiniJeu(user_email, { jeu } = {}) {
   }
 
   const jour = jourUtc();
-  const deja = (await filterEntity('MiniJeuPartie', { user_email, jeu, jour }))[0];
-  if (deja) {
-    return { credite: false, motif: 'deja_credite_aujourdhui', points: 0, points_par_partie: POINTS_PAR_PARTIE };
-  }
 
-  // La ligne est posée AVANT le crédit, et c'est la contrainte UNIQUE — pas le
-  // SELECT ci-dessus — qui empêche de payer deux fois. Le SELECT ne fait que
-  // rendre le cas courant lisible ; entre lui et l'insertion, deux parties
-  // terminées simultanément passeraient toutes les deux. Créditer d'abord puis
-  // marquer inverserait le risque du mauvais côté : on paierait avant de savoir.
-  try {
-    await createEntity('MiniJeuPartie', {
-      id: randomUUID(), user_email, jeu, jour, points: POINTS_PAR_PARTIE,
-    });
-  } catch (e) {
-    if (e?.code === PG_UNIQUE_VIOLATION) {
-      return { credite: false, motif: 'deja_credite_aujourdhui', points: 0, points_par_partie: POINTS_PAR_PARTIE };
-    }
-    throw e;
+  // La ligne est posée AVANT le crédit, et c'est la contrainte UNIQUE qui décide.
+  // ON CONFLICT DO NOTHING, donc : rejouer le même jeu le même jour est le cas
+  // NORMAL — un joueur qui enchaîne trois parties de Vrai ou Fake n'a rien fait
+  // de mal, et doit voir son écran de fin, pas une erreur. Un INSERT sec aurait
+  // renvoyé une violation de contrainte à la deuxième partie, transformant la
+  // règle anti-grind en panne visible.
+  //
+  // Le SELECT préalable a disparu avec lui : il ne servait qu'à éviter cette
+  // exception, et il ouvrait une fenêtre de course entre la lecture et
+  // l'écriture. Une seule requête tranche désormais, et elle tranche juste.
+  // Créditer d'abord puis marquer inverserait le risque du mauvais côté : on
+  // paierait avant de savoir.
+  const ligne = await createEntity('MiniJeuPartie', {
+    id: randomUUID(), user_email, jeu, jour, points: POINTS_PAR_PARTIE,
+  }, { ignoreConflict: true });
+
+  if (!ligne) {
+    return { credite: false, motif: 'deja_credite_aujourdhui', points: 0, points_par_partie: POINTS_PAR_PARTIE };
   }
 
   const up = await ensureUserProgress(user_email);

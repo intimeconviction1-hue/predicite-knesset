@@ -49,6 +49,11 @@ function seed() {
     UserProgress: [
       { id: 'up-1', user_email: JOUEUR, total_points: 0, learning_points: 0 },
     ],
+  }, {
+    // La contrainte du schéma, reproduite : sans elle le mock accepterait les
+    // doublons et ces tests passeraient au vert sur un code qui, en base,
+    // remonte une violation de contrainte au joueur dès sa deuxième partie.
+    MiniJeuPartie: ['user_email', 'jeu', 'jour'],
   });
 }
 
@@ -79,19 +84,53 @@ test('rejouer le même jeu le même jour ne recrédite rien', async () => {
   assert.equal(up.learning_points, POINTS_PAR_PARTIE, 'le bucket ne doit pas doubler');
 });
 
-test('pilonner un jeu ne remplit pas le plafond d\'apprentissage', async () => {
+test('pilonner un jeu ne remplit pas le plafond, et ne renvoie jamais d\'erreur', async () => {
   seed();
   // 40 parties d'affilée : le scénario exact que la contrainte de jour interdit.
   // Sans elle, 40 × 10 = 400 points, soit plus que le plafond de 300 — le bucket
   // entier gagné en quelques minutes, sans rien apprendre.
+  //
+  // Le MONTANT n'est que la moitié de ce qu'il faut vérifier. Rejouer est un
+  // geste parfaitement légitime : les 39 parties suivantes doivent se terminer
+  // normalement, avec un écran de fin qui dit « points du jour déjà pris ». Un
+  // INSERT sec leur aurait renvoyé une violation de contrainte, transformant la
+  // règle anti-grind en panne visible — d'où ON CONFLICT DO NOTHING, et d'où
+  // l'assertion sur chaque retour et pas seulement sur le total.
+  const retours = [];
   for (let i = 0; i < 40; i++) {
-    await crediterPartieMiniJeu(JOUEUR, { jeu: 'sens-du-vent' });
+    retours.push(await crediterPartieMiniJeu(JOUEUR, { jeu: 'sens-du-vent' }));
   }
+
+  assert.equal(retours[0].credite, true, 'la première partie du jour doit créditer');
+
+  const suivantes = retours.slice(1);
+  const anormales = suivantes.filter(
+    r => !r || r.credite !== false || r.motif !== 'deja_credite_aujourdhui' || r.points !== 0,
+  );
+  assert.deepEqual(
+    anormales, [],
+    `${anormales.length} des 39 parties suivantes n'ont pas renvoyé un refus propre : ` +
+    `${JSON.stringify(anormales.slice(0, 3))}. Rejouer doit rester silencieux.`,
+  );
 
   const up = await progression();
   assert.equal(up.learning_points, POINTS_PAR_PARTIE,
     `40 parties ont rapporté ${up.learning_points} points au lieu de ${POINTS_PAR_PARTIE} : ` +
     `la règle d'un crédit par jeu et par jour ne s'applique plus.`);
+});
+
+test('un INSERT sec sur la même journée lèverait bien une violation de contrainte', async () => {
+  // Garde de la garde : si ce test cesse d'échouer, c'est que le mock a perdu la
+  // contrainte — et les assertions ci-dessus ne prouveraient plus rien, puisqu'un
+  // code sans ON CONFLICT y passerait aussi au vert.
+  seed();
+  await crediterPartieMiniJeu(JOUEUR, { jeu: 'boussole' });
+  await assert.rejects(
+    () => db.createEntity('MiniJeuPartie', {
+      id: 'doublon', user_email: JOUEUR, jeu: 'boussole', jour: db._rows('MiniJeuPartie')[0].jour,
+    }),
+    (e) => e.code === '23505',
+  );
 });
 
 test('les quatre jeux se cumulent le même jour', async () => {

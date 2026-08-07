@@ -10,7 +10,15 @@
  */
 import { randomUUID } from 'node:crypto';
 
-export function createMemoryDb(seed = {}) {
+/**
+ * @param {object} [seed]     lignes initiales, par nom d'entité
+ * @param {object} [contraintes]  contraintes d'unicité à reproduire, sous la forme
+ *   { NomEntite: ['colonne', ...] }. Sans elles, `createEntity` accepterait des
+ *   doublons que Postgres refuse, et un test « rejouer ne recrédite pas » pourrait
+ *   passer au vert sur un code qui, en production, remonte une violation de
+ *   contrainte au joueur. Le mock doit refuser ce que la vraie base refuse.
+ */
+export function createMemoryDb(seed = {}, contraintes = {}) {
   const tables = new Map();
   let clock = 0;
 
@@ -57,7 +65,21 @@ export function createMemoryDb(seed = {}) {
       const fin = limit ? debut + Number(limit) : undefined;
       return rows.slice(debut, fin).map(clone);
     },
-    async createEntity(name, payload) {
+    async createEntity(name, payload, { ignoreConflict = false } = {}) {
+      const cles = contraintes[name];
+      if (cles) {
+        const cible = Object.fromEntries(cles.map(c => [c, payload[c]]));
+        const doublon = tableOf(name).find(r => matches(r, cible));
+        if (doublon) {
+          // Deux comportements distincts, comme en base : ON CONFLICT DO NOTHING
+          // renvoie « rien inséré », un INSERT sec lève 23505. Confondre les deux
+          // masquerait exactement le bug qu'on cherche à empêcher.
+          if (ignoreConflict) return null;
+          const e = new Error(`duplicate key value violates unique constraint on ${name}`);
+          e.code = '23505';
+          throw e;
+        }
+      }
       const row = { id: payload.id || randomUUID(), created_at: nextStamp(), ...payload };
       tableOf(name).push(row);
       return clone(row);

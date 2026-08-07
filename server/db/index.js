@@ -166,7 +166,17 @@ export async function filterEntity(entityName, query = {}) {
   return rows.map(r => deserializeRow(cfg, r));
 }
 
-export async function createEntity(entityName, payload) {
+/**
+ * @param {object} [opts]
+ * @param {boolean} [opts.ignoreConflict] — pose ON CONFLICT DO NOTHING et renvoie
+ *   `null` si la ligne existait déjà, au lieu de laisser remonter une violation
+ *   de contrainte. À n'employer que sur une table dont l'unicité EST une règle
+ *   métier normale, et non un accident : un doublon y est un cas prévu, pas une
+ *   erreur à signaler. C'est le cas de mini_jeu_parties, où « déjà crédité
+ *   aujourd'hui » est la réponse attendue plusieurs fois par jour et par joueur —
+ *   la remonter en exception ferait échouer une partie parfaitement valide.
+ */
+export async function createEntity(entityName, payload, { ignoreConflict = false } = {}) {
   const cfg = getConfig(entityName);
   const idColumn = cfg.idColumn || 'id';
   const body = serializeForWrite(cfg, payload);
@@ -175,7 +185,17 @@ export async function createEntity(entityName, payload) {
   const cols = Object.keys(body).map(assertIdent);
   const placeholders = cols.map(() => '?').join(', ');
   const sql = `INSERT INTO ${cfg.table} (${cols.join(', ')}) VALUES (${placeholders})`;
-  await run(sql, cols.map(c => body[c]));
+  const params = cols.map(c => body[c]);
+
+  if (ignoreConflict) {
+    // RETURNING sur le chemin ON CONFLICT uniquement : c'est lui qui distingue
+    // « inséré » de « déjà là », les deux cas étant sans erreur. Les autres
+    // appelants gardent le run() d'origine, inchangé.
+    const insere = await queryOne(`${sql} ON CONFLICT DO NOTHING RETURNING ${idColumn}`, params);
+    if (!insere) return null;
+  } else {
+    await run(sql, params);
+  }
 
   const row = await queryOne(`SELECT * FROM ${cfg.table} WHERE ${idColumn} = ?`, [body[idColumn]]);
   return deserializeRow(cfg, row);

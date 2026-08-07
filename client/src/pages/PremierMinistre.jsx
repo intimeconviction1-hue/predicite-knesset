@@ -213,7 +213,7 @@ export default function PremierMinistre() {
                           style={{ border: selected === c.id ? '2px solid var(--p-gold)' : '1px solid var(--p-border-hover)' }}
                         />
                       ) : (
-                        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>
+                        <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-bg-2)' }}>
                           <Crown className="w-6 h-6" style={{ color: 'var(--p-text-25)' }} />
                         </div>
                       )}
@@ -246,7 +246,7 @@ export default function PremierMinistre() {
                     borderColor: selected === 'autre' ? 'var(--p-gold-strong)' : 'var(--p-border)',
                   }}
                 >
-                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-night-2)' }}>
+                  <div className="w-16 h-16 rounded-full flex items-center justify-center" style={{ background: 'var(--p-bg-2)' }}>
                     <Crown className="w-6 h-6" style={{ color: 'var(--p-text-25)' }} />
                   </div>
                   <p className="text-sm font-semibold" style={{ color: 'var(--p-text-60)' }}>Autre</p>
@@ -265,7 +265,7 @@ export default function PremierMinistre() {
 
           <div className="flex items-start gap-2 mt-4 pt-4 border-t text-xs" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>
             <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" />
-            <p>+100 points si votre pronostic correspond à la personne effectivement investie Premier ministre. Un chef de gouvernement de transition ne compte pas. Si personne n'est investi avant la deadline de résolution, le pronostic bascule automatiquement sur « Autre ».</p>
+            <p>+100 points si ton pronostic correspond à la personne effectivement investie Premier ministre. Un chef de gouvernement de transition ne compte pas. Si personne n'est investi avant la deadline de résolution, le pronostic bascule automatiquement sur « Autre ».</p>
           </div>
         </div>
 
@@ -284,7 +284,7 @@ export default function PremierMinistre() {
                 {bioCandidat.photo_url ? (
                   <img src={bioCandidat.photo_url} alt="" width="80" height="80" className="w-20 h-20 rounded-full object-cover mb-3" style={{ border: '2px solid var(--p-gold)' }} />
                 ) : (
-                  <div className="w-20 h-20 rounded-full flex items-center justify-center mb-3" style={{ background: 'var(--p-night-2)' }}>
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center mb-3" style={{ background: 'var(--p-bg-2)' }}>
                     <Crown className="w-7 h-7" style={{ color: 'var(--p-text-25)' }} />
                   </div>
                 )}

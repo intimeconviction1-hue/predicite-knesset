@@ -130,7 +130,7 @@ export default function Ligues() {
                   value={name} onChange={e => setName(e.target.value)} maxLength={40}
                   placeholder="Nom de ta ligue (ex. Les Politologues)"
                   className="w-full px-3.5 py-2.5 rounded-[10px] text-sm mb-3 outline-none"
-                  style={{ background: 'var(--p-night)', border: '0.5px solid var(--p-border)', color: 'var(--p-text)' }}
+                  style={{ background: 'var(--p-bg)', border: '0.5px solid var(--p-border)', color: 'var(--p-text)' }}
                   onKeyDown={e => e.key === 'Enter' && handleCreate()}
                 />
                 <button onClick={handleCreate} disabled={busy || name.trim().length < 2}
@@ -149,7 +149,7 @@ export default function Ligues() {
                   value={code} onChange={e => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, CODE_LEN))}
                   placeholder={`Code à ${CODE_LEN} caractères`}
                   className="w-full px-3.5 py-2.5 rounded-[10px] text-sm mb-3 outline-none font-mono tracking-[0.3em]"
-                  style={{ background: 'var(--p-night)', border: '0.5px solid var(--p-border)', color: 'var(--p-text)' }}
+                  style={{ background: 'var(--p-bg)', border: '0.5px solid var(--p-border)', color: 'var(--p-text)' }}
                   onKeyDown={e => e.key === 'Enter' && handleJoin()}
                 />
                 <button onClick={handleJoin} disabled={busy || code.length !== CODE_LEN}
@@ -222,7 +222,7 @@ export default function Ligues() {
                 ) : (
                   <div className="space-y-1.5">
                     {(board?.membres || []).map(m => (
-                      <div key={m.rank} className="flex items-center gap-3 px-3 py-2.5 rounded-xl" style={{ background: m.is_you ? 'var(--p-blue-dim)' : 'var(--p-night)', border: m.is_you ? '0.5px solid var(--p-blue-border)' : '0.5px solid transparent' }}>
+                      <div key={m.rank} className="flex items-center gap-3 px-3 py-2.5 rounded-xl" style={{ background: m.is_you ? 'var(--p-blue-dim)' : 'var(--p-bg)', border: m.is_you ? '0.5px solid var(--p-blue-border)' : '0.5px solid transparent' }}>
                         <span className="font-mono font-bold text-sm w-6 text-center flex-shrink-0" style={{ color: m.rank === 1 ? 'var(--p-gold-text)' : 'var(--p-text-40)' }}>
                           {m.rank === 1 ? '★' : m.rank}
                         </span>

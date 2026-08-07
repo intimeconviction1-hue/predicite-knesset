@@ -82,7 +82,7 @@ export default function CinematicHero({
   subtitle,
   actions,
   children,
-  fadeTo = 'var(--p-night)',
+  fadeTo = 'var(--p-bg)',
   menorah = true,
   align = 'center',
   interval = 6000,

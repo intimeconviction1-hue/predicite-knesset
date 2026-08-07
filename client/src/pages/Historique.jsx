@@ -130,7 +130,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
 
               {/* Hémicycle de composition de cette Knesset */}
               {results.length > 0 && (
-                <div className="rounded-xl border p-3" style={{ background: 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
+                <div className="rounded-xl border p-3" style={{ background: 'var(--p-bg-2)', borderColor: 'var(--p-border)' }}>
                   <p className="text-[10px] uppercase tracking-wide text-center mb-1" style={{ color: 'var(--p-text-40)' }}>Composition de la {election.knesset_number}<sup>e</sup> Knesset</p>
                   <Hemicycle
                     seatsByListe={results.map(r => ({ liste_id: r.party_name, seats: r.seats }))}
@@ -235,7 +235,7 @@ export default function Historique() {
         )}
 
         <div className="mt-12 p-reveal">
-          <QuizWidget theme="histoire" title="Testez vos connaissances" />
+          <QuizWidget theme="histoire" title="Teste tes connaissances" />
         </div>
 
         <div className="flex items-center justify-center gap-2 mt-12 pt-6 border-t text-sm text-center" style={{ borderColor: 'var(--p-border)', color: 'var(--p-text-40)' }}>

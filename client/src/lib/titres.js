@@ -21,27 +21,38 @@
 // Les descriptions décrivent ce que la page fait vraiment. Pas de promesse que le
 // produit ne tient pas : c'est la règle d'honnêteté du projet, et un aperçu de
 // partage est justement l'endroit où l'on est tenté d'embellir.
+//
+// TUTOIEMENT, titres ET descriptions. Ce fichier vouvoyait alors que toute
+// l'application tutoie, et parfois dans la MÊME fiche : Paris s'intitulait « Le
+// direct : mise tes jetons » et se décrivait « Misez vos jetons » ; la Boussole
+// demandait « Quel parti te ressemble ? » pour expliquer « de quelle liste vos
+// réponses vous rapprochent ». Or ces deux chaînes s'affichent COLLÉES l'une à
+// l'autre dans un aperçu WhatsApp ou Slack — c'est-à-dire à l'endroit exact que
+// le commentaire ci-dessus décrit comme celui où le partage joue sa crédibilité.
+// Un aperçu qui vouvoie annonce une autre application que celle qui s'ouvre.
+
+import { STATEMENTS } from './boussole-data.js';
 
 export const SUFFIXE = 'PrédiCité';
 
 export const DESCRIPTION_PAR_DEFAUT =
-  "Pronostiquez les législatives israéliennes — Knesset, 27 octobre 2026. Répartissez les 120 sièges, formez des coalitions, suivez la campagne. En français, gratuit, sans mise d'argent.";
+  "Pronostique les législatives israéliennes — Knesset, 27 octobre 2026. Répartis les 120 sièges, forme des coalitions, suis la campagne. En français, gratuit, sans mise d'argent.";
 
 const PAGES = {
   Home: {
     titre: 'Pronostics Knesset 2026',
     description:
-      "Le jeu de pronostics des législatives israéliennes du 27 octobre 2026. Répartissez les 120 sièges, misez sur le Premier ministre, suivez les sondages en direct.",
+      "Le jeu de pronostics des législatives israéliennes du 27 octobre 2026. Répartis les 120 sièges, mise sur le Premier ministre, suis les sondages en direct.",
   },
   MaRepartition: {
     titre: 'Mon pronostic : les 120 sièges',
     description:
-      "Répartissez les 120 sièges de la Knesset entre les listes en lice. Seuil de 3,25 % appliqué, total contraint à 120 — le même exercice que les instituts de sondage.",
+      "Répartis les 120 sièges de la Knesset entre les listes en lice. Seuil de 3,25 % appliqué, total contraint à 120 — le même exercice que les instituts de sondage.",
   },
   Paris: {
     titre: 'Le direct : mise tes jetons',
     description:
-      "Misez vos jetons sur les prochains sondages sièges. Pas d'argent réel : des jetons, un classement, et la campagne comme terrain de jeu.",
+      "Mise tes jetons sur les prochains sondages sièges. Pas d'argent réel : des jetons, un classement, et la campagne comme terrain de jeu.",
   },
   Leaderboard: {
     titre: 'Classement',
@@ -51,24 +62,27 @@ const PAGES = {
   Ligues: {
     titre: 'Ligues privées',
     description:
-      "Créez une ligue privée et comparez vos pronostics sur la Knesset 2026 entre amis, en famille ou entre collègues.",
+      "Crée une ligue privée et compare tes pronostics sur la Knesset 2026 entre amis, en famille ou entre collègues.",
   },
 
   // Mini-jeux
   SensDuVent: {
     titre: 'Le sens du vent',
     description:
-      "Une liste monte-t-elle ou descend-elle ? Devinez la tendance à partir des vrais sondages sièges publiés en Israël.",
+      "Une liste monte-t-elle ou descend-elle ? Devine la tendance à partir des vrais sondages sièges publiés en Israël.",
   },
   FormeCoalition: {
     titre: 'Forme ta coalition',
     description:
-      "Assemblez 61 sièges à partir des sondages réels, puis découvrez la plausibilité de votre coalition — chaque friction entre listes est sourcée.",
+      "Assemble 61 sièges à partir des sondages réels, puis découvre la plausibilité de ta coalition — chaque friction entre listes est sourcée.",
   },
   Boussole: {
     titre: 'Quel parti te ressemble ?',
+    // Le nombre était écrit en toutes lettres (« Dix-neuf affirmations ») alors
+    // que STATEMENTS.length est la source partout ailleurs, page comprise :
+    // ajouter une affirmation rendait l'aperçu de partage faux, en silence.
     description:
-      "Dix-neuf affirmations sur la société, la sécurité et la religion : découvrez de quelle liste israélienne vos réponses vous rapprochent. Toutes les positions sont sourcées.",
+      `${STATEMENTS.length} affirmations sur la société, la sécurité et la religion : découvre de quelle liste israélienne tes réponses te rapprochent. Toutes les positions sont sourcées.`,
   },
   VraiOuFake: {
     titre: 'Vrai ou Fake ?',
@@ -78,7 +92,7 @@ const PAGES = {
   Quiz: {
     titre: 'Quiz',
     description:
-      "Testez ce que vous savez de la Knesset, du scrutin proportionnel israélien et de la campagne 2026.",
+      "Teste ce que tu sais de la Knesset, du scrutin proportionnel israélien et de la campagne 2026.",
   },
 
   // Comprendre
@@ -133,7 +147,7 @@ const PAGES = {
 
   Login: {
     titre: 'Connexion',
-    description: 'Connectez-vous pour déposer vos pronostics et rejoindre le classement.',
+    description: 'Connecte-toi pour déposer tes pronostics et rejoindre le classement.',
   },
   AdminResultats: {
     titre: 'Saisie des résultats',

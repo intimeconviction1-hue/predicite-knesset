@@ -7,7 +7,12 @@ import QuizWidget from '@/components/knesset/QuizWidget';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import AnimatedExplainer, { GAME_STEPS } from '@/components/knesset/AnimatedExplainer';
 import ColonneAlternee from '@/components/knesset/ColonneAlternee';
-import { TITLES } from '@/lib/score';
+import {
+  TITLES,
+  PARTICIPATION_CAP,
+  PARTICIPATION_ENGAGEMENT,
+  PARTICIPATION_JUSTIF_BONUS,
+} from '@/lib/score';
 
 // La colonne alternée : le va-et-vient info ↔ jeu (liens réels, aucune donnée
 // inventée — ce sont des portes de navigation).
@@ -20,18 +25,31 @@ const VA_ET_VIENT = [
   { type: 'jeu', kicker: 'elle se teste', title: 'Un quiz né du contenu', desc: '6 thèmes, de Citoyen à Oracle.', linkLabel: 'Le quiz', to: createPageUrl('Quiz') },
 ];
 
-// Barème EXACT, aligné sur le code serveur (server/functions/*) :
-//  - engagement pronostic : 10 (+50 si justification ≥20 car.)  [prediciteScoringSieges]
-//  - quiz : 10/bonne réponse  [quizScoring]
-//  - streak : 75 tous les 7 jours  [miscFunctions]
-//  - dépouillement sièges : 150 / 100 / 50, +30 seuil, +50 majorité  [prediciteScoringSieges]
-//  - Premier ministre : 100  [resolvePremierMinistre]
+// Barème aligné sur le code serveur (server/functions/*) :
+//  - dépôt d'une répartition complète : 120, versé UNE fois   [prediciteScoringSieges]
+//  - justification (≥ 20 car.) : +50 par liste justifiée      [prediciteScoringSieges]
+//  - quiz : 10 / 25 / 50 selon la difficulté                  [quizScoring]
+//  - série : 75 tous les 7 jours                              [miscFunctions]
+//  - dépouillement sièges : 150 / 100 / 50, +30 seuil, +50 scénario  [prediciteScoringSieges]
+//  - Premier ministre : 100                                   [resolvePremierMinistre]
+//
+// Ce commentaire annonçait « Barème EXACT » et se trompait sur ses deux lignes
+// principales. Il promettait 10 points PAR LISTE pronostiquée — une mécanique
+// retirée précisément parce qu'elle était farmable, et dont prediciteScoringSieges
+// explique longuement la suppression — et 10 points par bonne réponse de quiz,
+// soit cinq fois moins qu'une question experte. La page des règles enseignait donc
+// au joueur une façon de gagner qui n'existait plus.
+//
+// Le mot « EXACT » n'y change rien : c'est une promesse, pas une garantie. Les
+// seuls chiffres qui ne peuvent plus dériver sont ceux importés de lib/score.js
+// ci-dessous. Pour les autres, la règle de maintenance est d'ouvrir les fichiers
+// cités entre crochets — ils ont tous un nom.
 
 // Ce qu'on gagne TOUT DE SUITE, pendant la campagne.
 const POINTS_ENGAGEMENT = [
-  { label: 'Pronostiquer les sièges d\'une liste', pts: '+10', desc: 'Pour chaque liste sur laquelle tu déposes un pronostic. Modifiable jusqu\'à la clôture.' },
-  { label: 'Justifier ton pronostic', pts: '+50', desc: 'Ajoute une justification d\'au moins 20 caractères à ton pronostic.' },
-  { label: 'Bonne réponse à un quiz', pts: '+10', desc: 'Chaque question compte une fois — il y en a des dizaines : règles, histoire, actu.' },
+  { label: 'Déposer ta répartition des 120 sièges', pts: `+${PARTICIPATION_ENGAGEMENT}`, desc: 'Un acte, pas un par liste : la répartition se dépose entière, et les points sont versés une seule fois. Modifiable jusqu\'à la clôture, sans se recréditer.' },
+  { label: 'Justifier ton pronostic', pts: `+${PARTICIPATION_JUSTIF_BONUS}`, desc: 'Par liste justifiée, dès 20 caractères. Payé à la saisie, pas au dépouillement.' },
+  { label: 'Bonne réponse à un quiz', pts: '+10 à +50', desc: 'Selon la difficulté : 10 en découverte, 25 en connaisseur, 50 en expert. Chaque question ne compte qu\'une fois.' },
   { label: '7 jours d\'activité d\'affilée', pts: '+75', desc: 'Bonus de régularité versé automatiquement tous les 7 jours. Le compteur 🔥 apparaît dès le 2e jour.' },
 ];
 
@@ -45,13 +63,19 @@ const POINTS_RESULTAT = [
   { label: 'Premier ministre correct', pts: '+100', desc: 'La personnalité pronostiquée est effectivement investie — résolu à l\'investiture, parfois des semaines après.' },
 ];
 
-// Les 4 sources de points qui composent ton total (pas une formule pondérée cachée :
+// Les 5 sources de points qui composent ton total (pas une formule pondérée cachée :
 // le classement additionne simplement tout ce que tu gagnes).
+//
+// La participation manquait à cette liste, alors qu'elle est chronologiquement le
+// PREMIER revenu du joueur : elle tombe à la saisie, avant tout résultat. Un
+// lecteur des règles pouvait donc voir arriver ses premiers points sans trouver
+// d'où ils venaient.
 const SOURCES = [
   { max: 'jusqu\'à +150', unit: '/ liste', label: 'Précision sièges', desc: 'Le cœur : la justesse de tes pronostics au dépouillement. Sans plafond.', color: '#2B5CE6', icon: Target },
-  { max: '+25 %', unit: 'du gain, en Score', label: 'Paris gagnés', desc: 'Bien parier sur les sondages et les événements fait monter ton Score — pas seulement tes jetons.', color: 'var(--p-blue)', icon: TrendingUp },
+  { max: '+25 %', unit: 'du bénéfice net', label: 'Paris gagnés', desc: 'Sur le gain MOINS ta mise : un pari au hasard ne rapporte rien en moyenne, seul un bon pari fait monter ton Score.', color: 'var(--p-blue)', icon: TrendingUp },
   { max: '+100', unit: 'à l\'investiture', label: 'Premier ministre', desc: 'Un pronostic binaire qui se résout séparément, à l\'investiture.', color: '#6D28D9', icon: Crown },
-  { max: 'plafonnés', unit: 'quiz + régularité', label: 'Apprentissage', desc: 'Quiz (+10) et série (+75) comptent, mais plafonnés : du flair, pas du volume.', color: 'var(--p-gold-text)', icon: PieChart },
+  { max: `jusqu'à +${PARTICIPATION_CAP}`, unit: 'plafonnés', label: 'Participation', desc: 'Déposer ta répartition et la justifier, liste par liste. Tes premiers points — mais plafonnés, pour que personne ne prenne un rang en saisissant davantage.', color: 'var(--p-green-text)', icon: Vote },
+  { max: 'plafonnés', unit: 'quiz + régularité', label: 'Apprentissage', desc: 'Quiz (10 à 50 selon la difficulté) et série (+75) comptent, mais plafonnés : du flair, pas du volume.', color: 'var(--p-gold-text)', icon: PieChart },
 ];
 
 const BADGES = [
@@ -109,7 +133,7 @@ function PointsTable({ title, subtitle, rows, accentIcon: AccentIcon, accentColo
       <div className="rounded-2xl border overflow-hidden p-elev-1" style={{ borderColor: 'var(--p-border)' }}>
         {rows.map((rule, i) => (
           <div key={i} className="grid grid-cols-[1fr_auto] items-center px-5 py-4 border-b last:border-0"
-            style={{ background: i % 2 === 0 ? 'var(--p-card)' : 'var(--p-night-2)', borderColor: 'var(--p-border)' }}>
+            style={{ background: i % 2 === 0 ? 'var(--p-card)' : 'var(--p-bg-2)', borderColor: 'var(--p-border)' }}>
             <div>
               <p className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{rule.label}</p>
               <p className="text-xs mt-0.5" style={{ color: 'var(--p-text-40)' }}>{rule.desc}</p>
@@ -332,7 +356,7 @@ export default function ReglesDuJeu() {
             <div className="flex flex-wrap gap-2">
               {TITLES.map((t) => (
                 <div key={t.label} className="rounded-xl border px-3.5 py-2 flex items-baseline gap-2" style={{ borderColor: `${t.color}55`, background: `${t.color}12` }}>
-                  <span className="text-sm font-black" style={{ color: t.color }}>{t.label}</span>
+                  <span className="text-sm font-black" style={{ color: t.text }}>{t.label}</span>
                   <span className="text-[11px] font-mono" style={{ color: 'var(--p-text-40)' }}>{t.min.toLocaleString('fr-FR')}+ pts</span>
                 </div>
               ))}

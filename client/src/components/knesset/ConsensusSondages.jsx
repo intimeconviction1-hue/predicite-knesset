@@ -56,7 +56,7 @@ export default function ConsensusSondages({ sondages = [], listes = [], max = 6 
             </div>
             <div className="flex flex-wrap gap-2">
               {recents.map((r, i) => (
-                <div key={i} className="inline-flex items-center gap-2 rounded-full px-3 py-1.5" style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)' }}>
+                <div key={i} className="inline-flex items-center gap-2 rounded-full px-3 py-1.5" style={{ background: 'var(--p-bg-2)', border: '0.5px solid var(--p-border)' }}>
                   <span className="text-[11px] font-semibold" style={{ color: 'var(--p-text-60)' }}>{r.media} · {fmt(r.date)}</span>
                   <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: r.leader.color || '#6B7280' }} />
                   <span className="text-[11px] font-bold" style={{ color: r.leader.color ? texteLisible(r.leader.color) : 'var(--p-text)' }}>{r.leader.name_fr}</span>

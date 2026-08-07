@@ -258,7 +258,7 @@ export default function Layout({ children, currentPageName }) {
   );
 
   return (
-    <div className="min-h-screen relative" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen relative" style={{ background: 'var(--p-bg)' }}>
       {/* Fond décoratif fixe — halos de couleur animés (dérive lente) + grain
           léger. Fixe au viewport (pas au document) pour rester présent
           partout, même entre les cartes, quel que soit le défilement. */}
@@ -624,7 +624,7 @@ export default function Layout({ children, currentPageName }) {
       {/* Le pied de page réserve la hauteur du dock : c'est LUI qui allonge, pas
           la page, sinon on verrait une bande de fond nu sous le footer. Le dock
           flotte donc au-dessus de son propre fond, jamais au-dessus d'un lien. */}
-      <footer role="contentinfo" className="border-t border-[rgba(20,32,61,0.08)] mt-auto" style={{ background: 'var(--p-night-2)', color: 'var(--p-text)' }}>
+      <footer role="contentinfo" className="border-t border-[rgba(20,32,61,0.08)] mt-auto" style={{ background: 'var(--p-bg-2)', color: 'var(--p-text)' }}>
         <div className="max-w-7xl mx-auto px-4 pt-10"
           style={{ paddingBottom: 'calc(var(--p-dock-h) + 24px + env(safe-area-inset-bottom, 0px))' }}>
           <div className="grid md:grid-cols-4 gap-8">

@@ -57,7 +57,7 @@ function Chip({ name, label, icon: Icon }) {
   return (
     <Link to={createPageUrl(name)}
       className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-transform hover:-translate-y-0.5"
-      style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)', color: 'var(--p-text)' }}>
+      style={{ background: 'var(--p-bg-2)', border: '0.5px solid var(--p-border)', color: 'var(--p-text)' }}>
       <Icon className="w-3.5 h-3.5" style={{ color: 'var(--p-text-40)' }} /> {label}
     </Link>
   );

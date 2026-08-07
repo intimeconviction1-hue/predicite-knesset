@@ -7,7 +7,7 @@ export default function PageNotFound() {
   const pageName = location.pathname.substring(1);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'var(--p-night)' }}>
+    <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'var(--p-bg)' }}>
       <div className="max-w-md w-full text-center">
         <Compass className="w-10 h-10 mx-auto mb-5" style={{ color: 'var(--p-gold)' }} />
 

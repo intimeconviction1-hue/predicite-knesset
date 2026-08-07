@@ -74,7 +74,7 @@ export default function RegleResolution({ market, listeById, className = '' }) {
       </summary>
 
       <div className="mt-2.5 rounded-xl px-3.5 py-3 space-y-2 text-[12px] leading-relaxed"
-        style={{ background: 'var(--p-night)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-60)' }}>
+        style={{ background: 'var(--p-bg)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-60)' }}>
         <p><b style={{ color: 'var(--p-text)' }}>Quand&nbsp;:</b> {r.quand}</p>
         <p><b style={{ color: 'var(--p-text)' }}>Sur quoi&nbsp;:</b> {r.comment}</p>
         <p><b style={{ color: 'var(--p-text)' }}>Par qui&nbsp;:</b> {r.qui}</p>

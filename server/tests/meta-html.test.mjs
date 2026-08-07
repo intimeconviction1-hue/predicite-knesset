@@ -22,6 +22,7 @@ import path from 'node:path';
 
 import { creerInjecteurMeta, pagePour, metaListe } from '../lib/meta-html.js';
 import { metaPour, NOMS_DE_PAGES } from '../../client/src/lib/titres.js';
+import { STATEMENTS } from '../../client/src/lib/boussole-data.js';
 
 const GABARIT = `<!doctype html>
 <html lang="fr">
@@ -61,7 +62,11 @@ test('la description est remplacée, pas doublée', () => {
   const html = htmlPour('/Boussole', ORIGINE);
   assert.equal(compte(html, /<meta name="description"/g), 1);
   assert.doesNotMatch(html, /Description d&#39;origine|Description d'origine/);
-  assert.match(html, /dix-neuf affirmations|Dix-neuf affirmations/i);
+  // Le compte est DÉRIVÉ, ici comme dans titres.js. Il y était écrit en toutes
+  // lettres (« Dix-neuf affirmations ») et cette assertion le figeait à
+  // l'identique : ajouter une affirmation à la Boussole rendait l'aperçu de
+  // partage faux, et le test l'aurait défendu au lieu de le signaler.
+  assert.match(html, new RegExp(`${STATEMENTS.length} affirmations`));
 });
 
 test('og:image est une URL absolue', () => {

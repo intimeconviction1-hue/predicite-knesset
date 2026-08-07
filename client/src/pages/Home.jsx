@@ -84,7 +84,7 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
           de cette page invisibles pendant des mois. */}
       <Link
         to={`${createPageUrl('Liste')}?slug=${liste.slug}`}
-        className="group !block w-full py-2.5 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-night-2)]"
+        className="group !block w-full py-2.5 px-2 -mx-2 rounded-lg transition-colors hover:bg-[var(--p-bg-2)]"
       >
         <span className="flex items-baseline justify-between gap-2 mb-1.5">
           <span className="text-[12.5px] font-semibold truncate min-w-0" style={{ color: 'var(--p-text)' }}>{liste.name_fr}</span>
@@ -548,7 +548,7 @@ export default function Home() {
             proposé nulle part. C'est pourtant ici qu'on vient de voir ce qui
             bouge — le moment où l'on a un avis. */}
         <div className="mt-10 rounded-2xl px-6 py-8 text-center relative overflow-hidden"
-          style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-gold-border)' }}>
+          style={{ background: 'var(--p-bg-2)', border: '0.5px solid var(--p-gold-border)' }}>
           <div className="p-tricolor absolute inset-x-0 top-0"><div /><div /><div /></div>
           <p className="text-[11px] font-black uppercase tracking-widest mb-2" style={{ color: 'var(--p-gold-text)' }}>À toi</p>
           <h3 className="text-xl md:text-2xl font-black mb-2" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)', letterSpacing: '-0.02em' }}>

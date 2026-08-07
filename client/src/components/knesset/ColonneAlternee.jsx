@@ -20,7 +20,7 @@ export default function ColonneAlternee({ items = [] }) {
           const accentText = isInfo ? 'var(--p-blue)' : 'var(--p-gold-text)';
           return (
             <div key={i} className="relative rounded-2xl p-4 transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)', borderLeft: `3px solid ${accent}` }}>
-              <span className="absolute w-3 h-3 rounded-full" style={{ left: '-1.68rem', top: '1.15rem', background: accent, border: '2px solid var(--p-night)' }} />
+              <span className="absolute w-3 h-3 rounded-full" style={{ left: '-1.68rem', top: '1.15rem', background: accent, border: '2px solid var(--p-bg)' }} />
               <div className="text-[9px] font-mono uppercase tracking-widest mb-1" style={{ color: accentText }}>
                 {isInfo ? '◆ Marbre · info' : '◆ Jeu'} · {it.kicker}
               </div>

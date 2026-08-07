@@ -50,16 +50,25 @@ export const NB_SONDAGES_PLATEAU = 5;
  *   provenance: string|null,
  * }}
  */
-export function useProjection(listes = []) {
-  const { data: sondages = [] } = useQuery({
+export function useProjection(listes = [], { listesChargent = false } = {}) {
+  const { data: sondages = [], isPending } = useQuery({
     queryKey: ['projection-sondages', NB_SONDAGES_PLATEAU],
     queryFn: () => base44.entities.SondageSieges.list('-poll_date', NB_SONDAGES_PLATEAU),
   });
 
+  // « Ça charge » et « il n'y a rien » sont deux états différents, et les
+  // confondre fait mentir la page. Sur le tier gratuit de Render, l'instance
+  // s'endort après quinze minutes et met une cinquantaine de secondes à se
+  // réveiller : pendant tout ce temps, un premier visiteur voyait un hémicycle
+  // vide, trois blocs à 0 et la phrase « en attente du premier sondage sièges ».
+  // Il y a 160 sondages en base. C'est donc l'état le plus VU du site qui
+  // affirmait le contraire de la vérité.
+  const chargement = isPending || listesChargent;
+
   return useMemo(() => {
     const dernier = sondages[0] || null;
     if (!sondages.length || !listes.length) {
-      return { sondages, dernier, pret: false, siegesParListe: new Map(), projection: [], pourHemicycle: [], provenance: null };
+      return { sondages, dernier, pret: false, chargement, siegesParListe: new Map(), projection: [], pourHemicycle: [], provenance: null };
     }
 
     // Un parti absent d'un sondage y compte 0 : dans un sondage sièges
@@ -88,6 +97,7 @@ export function useProjection(listes = []) {
       sondages,
       dernier,
       pret: true,
+      chargement: false,
       siegesParListe,
       projection,
       pourHemicycle: projection.map(p => ({ liste_id: p.id, seats: p.seats })),
@@ -96,5 +106,5 @@ export function useProjection(listes = []) {
       // le code.
       provenance: `Sièges : ${source}, seuil de 3,25 % appliqué (moins de ${MIN_SIEGES_AU_SEUIL} sièges = 0), total ramené à ${TOTAL_SIEGES} au prorata.`,
     };
-  }, [sondages, listes]);
+  }, [sondages, listes, chargement]);
 }

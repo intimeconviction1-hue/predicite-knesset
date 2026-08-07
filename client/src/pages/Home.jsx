@@ -179,7 +179,7 @@ export default function Home() {
     }).catch(() => {});
   }, []);
 
-  const { data: listes = [] } = useQuery({
+  const { data: listes = [], isPending: listesChargent } = useQuery({
     queryKey: ['home-listes'],
     queryFn: () => base44.entities.Liste.filter({ is_active: true }),
   });
@@ -213,8 +213,8 @@ export default function Home() {
   // EST le désaccord entre instituts et qu'une moyenne effacerait.
   const {
     siegesParListe, pourHemicycle, provenance,
-    pret: projectionPrete, sondages: sondagesProjection,
-  } = useProjection(listes);
+    pret: projectionPrete, chargement: projectionCharge, sondages: sondagesProjection,
+  } = useProjection(listes, { listesChargent });
   // Sur TOUTES les listes (pas seulement le top 10 affiché plus bas), sinon
   // les blocs coalition/opposition perdent les listes hors classement — et
   // la liste_arabe, qui n'est ni l'un ni l'autre, doit apparaître à part
@@ -323,12 +323,23 @@ export default function Home() {
                 et il était le moins lisible. Ils restent plus petits que les deux
                 camps, parce qu'ils le sont ; mais dans la même famille, avec le
                 même traitement, pour que la somme se fasse à l'œil. */}
+            {/* Pendant le chargement, un tiret — jamais un zéro. Un « 0 » en
+                36 px de haut est un CHIFFRE : il annonce que le camp
+                pro-Netanyahou n'a aucun siège. C'est ce que voyait tout premier
+                visiteur pendant les cinquante secondes de réveil de l'instance
+                Render, trois zéros et « en attente du premier sondage » alors
+                que la base en contient 160. L'état le plus vu du site affirmait
+                le contraire de la vérité. */}
             <div className="text-left">
               <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-blue)' }}>{BLOC_LABEL.coalition}</p>
-              <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-blue)' }}><CountUp value={coalitionSeats} /></p>
+              <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: projectionCharge ? 'var(--p-text-25)' : 'var(--p-blue)' }}>
+                {projectionCharge ? '—' : <CountUp value={coalitionSeats} />}
+              </p>
             </div>
             <div className="text-center pb-0.5">
-              {arabSeats > 0 && (
+              {projectionCharge ? (
+                <p className="text-[10px] font-bold uppercase tracking-wide animate-pulse" style={{ color: 'var(--p-text-25)' }}>Chargement…</p>
+              ) : arabSeats > 0 && (
                 <>
                   <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-green-text)' }}>{BLOC_LABEL.liste_arabe}</p>
                   <p className="text-2xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-green-text)' }}><CountUp value={arabSeats} delay={400} /></p>
@@ -340,7 +351,9 @@ export default function Home() {
             </div>
             <div className="text-right">
               <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-red)' }}>{BLOC_LABEL.opposition}</p>
-              <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-red)' }}><CountUp value={oppositionSeats} delay={200} /></p>
+              <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: projectionCharge ? 'var(--p-text-25)' : 'var(--p-red)' }}>
+                {projectionCharge ? '—' : <CountUp value={oppositionSeats} delay={200} />}
+              </p>
             </div>
           </div>
 
@@ -358,7 +371,16 @@ export default function Home() {
             </div>
           )}
 
-          {verdict ? (
+          {/* Trois états, pas deux. « Composition à venir — le premier sondage
+              apparaîtra ici » est vrai le jour du lancement, et faux tout le
+              reste du temps : le dire pendant un chargement, c'est annoncer
+              qu'aucun sondage n'existe alors qu'il y en a 160. La phrase est
+              gardée pour le seul cas où elle est exacte. */}
+          {projectionCharge ? (
+            <p className="text-center text-[13px] mt-1 animate-pulse" style={{ color: 'var(--p-text-40)' }}>
+              Chargement de la projection…
+            </p>
+          ) : verdict ? (
             <p className="text-center text-sm mt-1" style={{ color: 'var(--p-text-60)' }}>{verdict}</p>
           ) : (
             <p className="text-center text-[13px] mt-1" style={{ color: 'var(--p-text-40)' }}>
@@ -369,7 +391,7 @@ export default function Home() {
               « Projection Channel 13 » sous un hémicycle moyenné attribuerait à
               un institut des chiffres qu'il n'a pas publiés. */}
           <p className="text-center text-[11px] mt-1 px-4" style={{ color: 'var(--p-text-25)' }}>
-            {provenance || 'En attente du premier sondage sièges'}
+            {provenance || (projectionCharge ? '' : 'En attente du premier sondage sièges')}
           </p>
           {/* Le moment exact où l'envie naît : on vient de lire l'assemblée
               projetée — « et toi, tu la vois comment ? ». Le geste central du

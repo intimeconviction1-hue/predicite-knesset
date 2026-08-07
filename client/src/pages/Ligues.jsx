@@ -6,6 +6,7 @@ import { Users, Trophy, Plus, Share2, Check, Crown, LogOut, ArrowRight } from 'l
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
 import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 import { createPageUrl } from '@/utils';
+import { urlDePartage } from '@/lib/carte-partage';
 
 // Longueur du code d'invitation — doit rester alignée avec CODE_LEN côté serveur
 // (server/functions/ligues.js).
@@ -85,7 +86,12 @@ export default function Ligues() {
   }
 
   function copyInvite(inviteCode) {
-    const url = `${window.location.origin}${createPageUrl('Ligues')}?code=${inviteCode}`;
+    // `via=ligue` marque la provenance du clic pour le compteur d'audience, qui
+    // ne pose ni cookie ni identifiant (voir server/routes/audience.js) : c'est
+    // la seule façon de savoir si l'invitation entre amis ramène réellement du
+    // monde. Le paramètre n'apparaît pas dans le canonical de la page, donc il
+    // ne crée pas d'URL concurrente pour les moteurs.
+    const url = urlDePartage(`${createPageUrl('Ligues')}?code=${inviteCode}`, 'ligue');
     navigator.clipboard?.writeText(url).then(() => {
       setCopied(true); setTimeout(() => setCopied(false), 2000);
     }).catch(() => {});

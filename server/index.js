@@ -4,14 +4,17 @@ import session from 'express-session';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { initDb, filterEntity } from './db/index.js';
+import { initDb, filterEntity, queryEntity } from './db/index.js';
 import { creerInjecteurMeta, metaListe, pagePour } from './lib/meta-html.js';
+import { robotsTxt, sitemapXml } from './lib/sitemap.js';
+import { metaPour } from '../client/src/lib/titres.js';
 import { startPollTracker } from './functions/pollTracker.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
 import functionsRouter from './routes/functions.js';
 import actuRouter from './routes/actu.js';
 import parisRouter from './routes/paris.js';
+import audienceRouter from './routes/audience.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 8788;
@@ -52,8 +55,34 @@ app.use('/api/entities', entitiesRouter);
 app.use('/api/functions', functionsRouter);
 app.use('/api/actu', actuRouter);
 app.use('/api/paris', parisRouter);
+app.use('/api/audience', audienceRouter);
 
 app.get('/api/health', (req, res) => res.json({ ok: true, now: new Date().toISOString() }));
+
+// ── Ce par quoi un moteur découvre le site ────────────────────────────────────
+// Servis dynamiquement plutôt que déposés dans client/public : le sitemap doit
+// énumérer les fiches de liste, qui vivent en base, et les deux fichiers doivent
+// annoncer l'origine de la requête pour suivre un changement de domaine sans
+// repasser dans le code. Déclarés AVANT le catch-all, sinon celui-ci leur
+// répondrait du HTML. Voir lib/sitemap.js.
+const origineDe = req => `${req.protocol}://${req.get('host')}`;
+
+app.get('/robots.txt', (req, res) => {
+  res.type('text/plain').set('Cache-Control', 'public, max-age=86400').send(robotsTxt(origineDe(req)));
+});
+
+app.get('/sitemap.xml', async (req, res) => {
+  // Une base injoignable ne doit pas produire une 500 : un moteur qui reçoit une
+  // erreur sur le sitemap espace ses visites suivantes, et on perdrait plus que
+  // les treize fiches de liste absentes.
+  let listes = [];
+  try {
+    listes = await queryEntity('Liste', { where: { is_active: true }, sort: 'slug' });
+  } catch (e) {
+    console.error('[sitemap] listes illisibles, sitemap réduit aux pages statiques :', e.message);
+  }
+  res.type('application/xml').set('Cache-Control', 'public, max-age=3600').send(sitemapXml(origineDe(req), listes));
+});
 
 // En production, servir le build Vite (client/dist) directement depuis Express.
 // En dev, le frontend tourne séparément (vite) et proxy /api vers ce serveur —
@@ -98,6 +127,17 @@ if (process.env.NODE_ENV === 'production') {
         console.error('[meta] fiche de liste illisible :', e.message);
       }
     }
+
+    // Le code de statut d'une URL qui n'existe pas. Le client affiche déjà
+    // PageNotFound pour une route inconnue (voir App.jsx), mais le serveur, lui,
+    // répondait 200 : pour un moteur, une adresse inventée était donc une page
+    // valide de plus. C'est le « soft 404 », et il coûte double au moment où l'on
+    // diffuse — les URL fautives qui circulent (une lettre en trop dans un
+    // message, un lien tronqué par un client mail) entrent dans l'index comme des
+    // pages vides et diluent le site. Le HTML reste le même : c'est bien la page
+    // « introuvable » qu'on veut afficher, on cesse seulement de prétendre
+    // qu'elle a été trouvée.
+    if (!metaPour(pagePour(req.path)).connue) res.status(404);
 
     res.type('html').send(htmlPour(req.path, origine, surcharge));
   });

@@ -427,3 +427,25 @@ UPDATE listes SET bloc = 'sans_camp'       WHERE bloc = 'non_alignee';
 -- garde alors la version en ligne, et la ligne fautive se corrige à la main.
 ALTER TABLE listes ADD CONSTRAINT listes_bloc_check
   CHECK (bloc IN ('pro_netanyahou','anti_netanyahou','partis_arabes','sans_camp'));
+
+-- ── Mesure d'audience ────────────────────────────────────────────────────────
+-- Un compteur, et rien d'autre. Pas d'adresse IP, pas d'identifiant de
+-- visiteur, pas d'horodatage plus fin que la journée, aucune colonne reliant une
+-- vue à un compte. Ce qui est stocké ici ne permet donc de reconstituer aucun
+-- parcours individuel — c'est ce qui le dispense de bandeau de consentement, et
+-- ce que la page /Mentions affirme. Toute colonne ajoutée ici doit être relue à
+-- cette aune.
+--
+-- `via` porte la provenance déclarée par un lien partagé (?via=boussole,
+-- ?via=ligue…). C'est ce qui répond à la seule question qu'une campagne de
+-- diffusion se pose vraiment : laquelle de ces cartes ramène du monde. Chaîne
+-- vide quand la visite ne vient pas d'un lien marqué.
+CREATE TABLE IF NOT EXISTS audience_vues (
+  jour TEXT NOT NULL,                    -- 'YYYY-MM-DD', UTC
+  page TEXT NOT NULL,                    -- nom de page connu de titres.js
+  via  TEXT NOT NULL DEFAULT '',
+  vues INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (jour, page, via)
+);
+
+CREATE INDEX IF NOT EXISTS idx_audience_jour ON audience_vues(jour);

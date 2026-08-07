@@ -14,6 +14,7 @@ import Onboarding from '@/components/knesset/Onboarding';
 import BarreDeJeu from '@/components/knesset/BarreDeJeu';
 import { computeScore } from '@/lib/score';
 import { titrePour } from '@/lib/titres';
+import { useMesureAudience } from '@/lib/useMesureAudience';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -39,6 +40,12 @@ export default function Layout({ children, currentPageName }) {
   useEffect(() => {
     document.title = titrePour(currentPageName);
   }, [currentPageName]);
+
+  // Compteur de fréquentation : un jour, une page, une provenance, et rien qui
+  // permette de reconnaître qui que ce soit. Posé ici parce que le Layout est le
+  // seul endroit traversé par toutes les pages — et parce qu'il connaît déjà le
+  // nom de page, seule valeur envoyée. Voir lib/useMesureAudience.js.
+  useMesureAudience(currentPageName);
 
   const { data: userProgress, refetch: refetchProgress } = useQuery({
     queryKey: ['user-progress-header', user?.email],
@@ -172,7 +179,7 @@ export default function Layout({ children, currentPageName }) {
                   className="flex items-start gap-2.5 px-4 py-2 text-sm transition-colors hover:bg-[rgba(20,32,61,0.05)]"
                   style={{ color: active ? activeColor : 'var(--p-text-60)', background: active ? 'rgba(20,32,61,0.06)' : 'transparent' }}>
                   <Icon className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'var(--p-text-25)' }} />
-                  <span className="leading-tight">{item.label}{item.hint ? <span className="block text-[10px]" style={{ color: 'var(--p-text-25)' }}>{item.hint}</span> : null}</span>
+                  <span className="leading-tight">{item.label}{item.hint ? <span className="block text-[10px]" style={{ color: 'var(--p-text-40)' }}>{item.hint}</span> : null}</span>
                 </Link>
               );
             })}
@@ -309,11 +316,12 @@ export default function Layout({ children, currentPageName }) {
         Aller au contenu principal
       </a>
 
-      {/* Bandeau bleu/blanc/bleu — motif drapeau israélien */}
-      <div className="h-0.5 w-full flex fixed top-0 z-[60]">
-        <div className="w-1/3 h-full bg-[#0038B8]" />
-        <div className="w-1/3 h-full bg-white" />
-        <div className="w-1/3 h-full bg-[#0038B8]" />
+      {/* Bandeau bleu/blanc/bleu — motif drapeau israélien.
+          Le motif était redessiné ici à la main alors que `.p-tricolor` le décrit
+          déjà et sert 9 fois ailleurs : deux définitions du même bandeau, dont
+          une seule aurait suivi un changement de teinte. */}
+      <div className="p-tricolor fixed top-0 z-[60]">
+        <div /><div /><div />
       </div>
 
       {/* ── Desktop Header ── */}
@@ -630,7 +638,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <div className="bg-[#0038B8] rounded-md p-1.5">
+                <div className="bg-[var(--p-tricolor-blue)] rounded-md p-1.5">
                   <Vote className="w-4 h-4 text-white" />
                 </div>
                 <span className="font-bold" style={{ color: 'var(--p-text)' }}>Knesset 2026</span>
@@ -665,7 +673,8 @@ export default function Layout({ children, currentPageName }) {
               <p className="font-semibold mb-3 text-sm uppercase tracking-wide" style={{ color: 'var(--p-text)' }}>Transparence</p>
               <ul className="space-y-2 text-sm" style={{ color: 'var(--p-text-60)' }}>
                 <li><Link to={createPageUrl('Methodologie')} className="hover:text-[var(--p-text)] transition-colors">Sources & Méthodologie</Link></li>
-                <li><Link to={createPageUrl('Leaderboard')} className="hover:text-[var(--p-text)] transition-colors">Classement</Link></li>
+                <li><Link to={createPageUrl('ReglesDuJeu')} className="hover:text-[var(--p-text)] transition-colors">Comment ça marche</Link></li>
+                <li><Link to={createPageUrl('Mentions')} className="hover:text-[var(--p-text)] transition-colors">Mentions légales & données</Link></li>
               </ul>
             </div>
           </div>
@@ -674,7 +683,7 @@ export default function Layout({ children, currentPageName }) {
             <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>
               © 2026 · Knesset 2026 · Plateforme neutre et pédagogique · Aucun parti politique associé
             </p>
-            <p className="text-xs" style={{ color: 'var(--p-text-25)' }}>
+            <p className="text-xs" style={{ color: 'var(--p-text-40)' }}>
               Élections : 27 octobre 2026
             </p>
           </div>

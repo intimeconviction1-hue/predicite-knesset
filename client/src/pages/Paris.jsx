@@ -5,7 +5,10 @@ import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { Info, ArrowRight } from 'lucide-react';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
-import CoteTile, { formatCote } from '@/components/knesset/CoteTile';
+import CoteTile, { formatCote, formatProba } from '@/components/knesset/CoteTile';
+import CourbeCote from '@/components/knesset/CourbeCote';
+import RegleResolution from '@/components/knesset/RegleResolution';
+import MesPositions from '@/components/knesset/MesPositions';
 import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
@@ -27,6 +30,9 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
   const issue = market.issues.find(i => i.id === selected);
   const cote = issue?.cote || 0;
   const gain = Math.round(mise * cote);
+  // Deux instantanés au moins sur une même issue = la cote a bougé au moins une
+  // fois, donc il y a une courbe à montrer.
+  const aUneHistoire = market.issues.some(i => (i.historique || []).length >= 2);
   const canBet = issue && mise <= (jetons ?? 0) && mise >= MISE_MIN;
   const plafond = Math.max(MISE_MIN, Math.min(MISE_MAX, jetons ?? MISE_MAX));
 
@@ -77,6 +83,28 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
           />
         ))}
       </div>
+
+      {/* L'histoire du marché. Une cote seule ne dit que le présent ; la courbe
+          dit d'où elle vient. Elle ne s'affiche qu'à partir de deux points
+          réels : une ligne plate tracée sur un marché où personne n'a misé
+          laisserait croire à une stabilité observée. */}
+      {aUneHistoire ? (
+        <div className="mt-4 pt-4" style={{ borderTop: '0.5px dashed var(--p-border)' }}>
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>
+              Ce que le marché a pensé
+            </span>
+            <span className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>
+              {market.pool_total} jetons misés
+            </span>
+          </div>
+          <CourbeCote issues={market.issues} />
+        </div>
+      ) : (
+        <p className="text-[11px] mt-3" style={{ color: 'var(--p-text-25)' }}>
+          Personne n’a encore misé sur ce marché : les probabilités sont celles des sondages, elles n’ont pas encore bougé.
+        </p>
+      )}
 
       {/* widget de mise */}
       <div className="mt-4 pt-4" style={{ borderTop: '0.5px dashed var(--p-border)' }}>
@@ -151,8 +179,9 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
         {aConfirmer && (
           <div className="mt-3 rounded-xl px-4 py-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text)' }}>
-              Tu mises <b className="p-mono">{mise}</b> jetons sur «&nbsp;{issue?.label}&nbsp;»
-              à la cote <b className="p-mono">{formatCote(cote)}</b> → gain potentiel <b className="p-mono" style={{ color: 'var(--p-green-text)' }}>{gain}</b>.
+              Tu mises <b className="p-mono">{mise}</b> jetons sur «&nbsp;{issue?.label}&nbsp;»,
+              que le marché donne à <b className="p-mono">{formatProba(cote)}</b> (cote <b className="p-mono">×{formatCote(cote)}</b>)
+              → gain potentiel <b className="p-mono" style={{ color: 'var(--p-green-text)' }}>{gain}</b>.
             </p>
             <p className="text-[11px] mt-1" style={{ color: 'var(--p-text-40)' }}>
               La cote est verrouillée à cet instant. Une mise ne s'annule pas.
@@ -168,7 +197,14 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
           </div>
         )}
 
-        {mise > (jetons ?? 0) && <p role="alert" className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>Pas assez de jetons pour cette mise.</p>}
+        {/* Uniquement pour qui a un solde. Un visiteur non connecté a `jetons`
+            à null : la comparaison le déclarait « pas assez de jetons » alors
+            qu'il n'a pas encore de compte — un reproche adressé à quelqu'un qui
+            n'a rien fait de mal, sous un bouton qui lui propose de se
+            connecter. */}
+        {loggedIn && mise > (jetons ?? 0) && (
+          <p role="alert" className="text-xs mt-2" style={{ color: 'var(--p-red)' }}>Pas assez de jetons pour cette mise.</p>
+        )}
         {/* Le retour d'une mise était un <p> de 12px sous le bouton pendant que
             les confettis occupaient tout l'écran : la célébration criait,
             l'information chuchotait. */}
@@ -185,6 +221,14 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
             {msg.text}
           </div>
         )}
+      </div>
+
+      {/* La règle du jeu, publiée. Elle vivait dans le serveur (resolver_kind,
+          resolver_args) et voyageait déjà dans la charge utile de l'API sans
+          jamais être montrée : le site créditait chaque sondage mais taisait la
+          règle qui décide qui gagne. */}
+      <div className="mt-4 pt-3" style={{ borderTop: '0.5px dashed var(--p-border)' }}>
+        <RegleResolution market={market} listeById={listeById} />
       </div>
 
       {/* Se renseigner : fiches des listes en jeu (marchés « rang ») */}
@@ -231,7 +275,11 @@ export default function Paris() {
   });
   const listeById = new Map(listes.map(l => [l.id, l]));
 
-  const onPlaced = () => { refetchJetons(); refetchMarches(); };
+  // Une mise change trois choses d'un coup : le solde, les cotes du marché, et
+  // la liste de ses propres paris. Le compteur force la troisième à se recharger
+  // (elle n'a pas de refetch propre, elle vit dans son composant).
+  const [rafraichissement, setRafraichissement] = useState(0);
+  const onPlaced = () => { refetchJetons(); refetchMarches(); setRafraichissement(n => n + 1); };
   const flux = useCampaignFlux();
 
   return (
@@ -255,8 +303,20 @@ export default function Paris() {
       <div className="max-w-3xl mx-auto px-4 py-8 p-glow-gold">
         <div className="p-reveal flex items-start gap-2 mb-6 text-xs rounded-lg p-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-border)', color: 'var(--p-text-40)' }}>
           <Info className="w-3.5 h-3.5 flex-shrink-0 mt-0.5" style={{ color: 'var(--p-blue)' }} />
-          <p>La cote s'ouvre sur la probabilité des sondages puis bouge selon les mises de tous : parier tôt et à contre-courant paie plus. La cote est verrouillée à l'instant où tu mises.</p>
+          {/* Le pourcentage n'est pas une seconde façon de dire la cote : c'est
+              la MÊME grandeur, et le lecteur doit pouvoir le vérifier lui-même.
+              D'où la division écrite en toutes lettres. */}
+          <p>
+            Le pourcentage, c’est ce que le marché croit ; la cote, c’est ce que ça paie —
+            l’un est l’inverse de l’autre&nbsp;: <b style={{ color: 'var(--p-text-60)' }}>1 ÷ 1,54 = 65 %</b>.
+            Chaque cote s’ouvre sur la probabilité des sondages puis bouge selon les mises de tous : parier tôt
+            et à contre-courant paie plus. Ta cote est verrouillée à l’instant où tu mises.
+          </p>
         </div>
+
+        {/* Mes paris — au-dessus des marchés : quand on revient, la première
+            question n'est pas « sur quoi miser ? » mais « où en est ma mise ? ». */}
+        <MesPositions actif={!!user} cleRafraichissement={rafraichissement} />
 
         {user === false && (
           <div className="p-reveal rounded-xl border p-4 mb-4 flex items-center justify-between gap-3 flex-wrap" style={{ background: 'var(--p-gold-dim)', borderColor: 'var(--p-gold-border)' }}>

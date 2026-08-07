@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { createPageUrl } from '@/utils';
-import { PieChart, ShieldCheck, BarChart2, Layers, Zap } from 'lucide-react';
+import { PieChart, BarChart2, Layers, Zap } from 'lucide-react';
 import RectoVersoCard from '@/components/knesset/RectoVersoCard';
 import { MIN_SIEGES_AU_SEUIL } from '@/lib/knesset';
 

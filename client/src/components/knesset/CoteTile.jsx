@@ -29,6 +29,43 @@ export function formatCote(c) {
   return n.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+/**
+ * LA PROBABILITÉ, pas la cote.
+ *
+ * Le moteur de cotes est déjà probabiliste (server/functions/parisSondages.js) :
+ *
+ *     cote_i = (K + R) / (K·Pᵢ + Rᵢ)
+ *
+ * ce qui est exactement l'inverse de la probabilité courante du marché. Le site
+ * calculait donc la probabilité et n'affichait que son inverse — alors que
+ * « 65 % » se lit sans rien connaître aux paris, quand « ×1,54 » demande de
+ * savoir qu'on divise 1 par 1,54. Sur une plateforme civique en français dont
+ * une bonne moitié des visiteurs n'a jamais mis les pieds sur un site de paris,
+ * ce n'est pas un détail de présentation.
+ *
+ * On dérive la probabilité de la cote AFFICHÉE (arrondie), pas de la valeur
+ * brute : le lecteur doit pouvoir vérifier lui-même que 1 ÷ 1,54 fait bien 65 %.
+ * Vérifié sur les cotes en ligne : Likoud ×1,54 → 65 %, Yashar ×2,85 → 35 %,
+ * somme 100,0 %.
+ */
+export function probabiliteDepuisCote(cote) {
+  const n = Number(cote);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return 1 / n;
+}
+
+// Espace fine insécable avant le %, comme le veut la typographie française.
+// Écrite en séquence d'échappement et non en caractère littéral : eslint refuse
+// les espaces « irrégulières » dans le source, et une espace fine au milieu d'un
+// gabarit est invisible à la relecture — donc impossible à repérer si un
+// copier-coller la remplace un jour par une espace ordinaire.
+const FINE_INSECABLE = '\u202F';
+
+export function formatProba(cote) {
+  const p = probabiliteDepuisCote(cote);
+  return p == null ? '—' : `${Math.round(p * 100)}${FINE_INSECABLE}%`;
+}
+
 // Combien de temps la flèche « ça vient de bouger » reste affichée. Assez long
 // pour être vu par quelqu'un qui lisait autre chose, assez court pour ne pas
 // rester à l'écran une fois l'information périmée.
@@ -60,9 +97,9 @@ const REGISTRES = {
 };
 
 const TAILLES = {
-  sm: { pad: 'px-3 py-2.5', cote: 'text-base', label: 'text-[12px]', min: 48 },
-  md: { pad: 'px-3.5 py-3', cote: 'text-xl', label: 'text-[13px]', min: 58 },
-  lg: { pad: 'px-4 py-3.5', cote: 'text-2xl', label: 'text-sm', min: 66 },
+  sm: { pad: 'px-3 py-2.5', cote: 'text-base', coteSecondaire: 'text-[10px]', label: 'text-[12px]', min: 50 },
+  md: { pad: 'px-3.5 py-3', cote: 'text-xl', coteSecondaire: 'text-[11px]', label: 'text-[13px]', min: 60 },
+  lg: { pad: 'px-4 py-3.5', cote: 'text-2xl', coteSecondaire: 'text-xs', label: 'text-sm', min: 68 },
 };
 
 export default function CoteTile({
@@ -76,6 +113,9 @@ export default function CoteTile({
   registre = 'clair',
   taille = 'md',
   disabled = false,
+  // La probabilité peut se taire là où la place manque vraiment (bandeau
+  // défilant) — mais nulle part où l'on décide de miser.
+  montrerProba = true,
   className = '',
 }) {
   const r = REGISTRES[registre] || REGISTRES.clair;
@@ -118,9 +158,19 @@ export default function CoteTile({
              prefers-reduced-motion, contrairement au flash qui l'accompagne. */
           <Fleche className="w-3.5 h-3.5" style={{ color: couleurSens }} aria-hidden="true" />
         )}
-        <span className={`p-cote leading-none ${t.cote}`} style={{ color: selected ? r.coteActive : r.cote }}>
-          <span className="text-[0.62em] font-semibold align-middle" style={{ opacity: 0.55 }}>×</span>
-          {formatCote(cote)}
+        <span className="text-right leading-none">
+          {/* La probabilité en premier et en grand, la cote en dessous : l'une
+              se lit, l'autre sert à calculer un gain. */}
+          {montrerProba && (
+            <span className={`p-cote block ${t.cote}`} style={{ color: selected ? r.coteActive : r.cote }}>
+              {formatProba(cote)}
+            </span>
+          )}
+          <span className={`p-cote block ${montrerProba ? `mt-0.5 ${t.coteSecondaire}` : t.cote}`}
+            style={{ color: montrerProba ? r.kicker : (selected ? r.coteActive : r.cote) }}>
+            <span className="text-[0.7em] font-semibold align-middle" style={{ opacity: 0.7 }}>×</span>
+            {formatCote(cote)}
+          </span>
         </span>
       </span>
     </>
@@ -141,10 +191,11 @@ export default function CoteTile({
   };
 
   // La cote est lue à voix haute avec son libellé : un lecteur d'écran qui
-  // annonce « ×1,54 » seul ne dit sur quoi porte le pari.
-  const etiquette = `${label}${kicker ? ` (${kicker})` : ''} — cote ${formatCote(cote)}${
-    sens === 'up' ? ', en hausse' : sens === 'down' ? ', en baisse' : ''
-  }`;
+  // annonce « ×1,54 » seul ne dit sur quoi porte le pari. Et la probabilité
+  // passe en premier à l'oreille comme à l'œil.
+  const etiquette = `${label}${kicker ? ` (${kicker})` : ''} — ${
+    montrerProba ? `${formatProba(cote)} de chances selon le marché, ` : ''
+  }cote ${formatCote(cote)}${sens === 'up' ? ', en hausse' : sens === 'down' ? ', en baisse' : ''}`;
 
   if (to) {
     return <Link to={to} className={classes} style={style} aria-label={etiquette}>{contenu}</Link>;

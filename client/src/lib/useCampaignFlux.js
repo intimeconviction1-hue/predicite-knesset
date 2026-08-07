@@ -3,7 +3,7 @@ import { base44 } from '@/api/client';
 import { createPageUrl } from '@/utils';
 import { joursAvantScrutin } from '@/lib/echeances';
 import { verdictMajorite } from '@/lib/blocs';
-import { formatCote } from '@/components/knesset/CoteTile';
+import { formatProba } from '@/components/knesset/CoteTile';
 
 // Hook du « flux en direct » de la campagne : agrège des faits RÉELS (dernier
 // sondage, top listes, mouvements de sièges, cotes/événements, actu, repères) en
@@ -91,7 +91,9 @@ export function useCampaignFlux({ sansProjection = false } = {}) {
     (m.issues || []).slice(0, m.type === 'evenement' ? 2 : 1).forEach((iss, idx) => items.push({
       emoji: idx > 0 ? '↔️' : (m.type === 'evenement' ? '🗳️' : '⚡'),
       text: idx > 0 ? iss.label : trunc(m.question),
-      value: `×${formatCote(iss.cote)}`,
+      // Dans un bandeau qui défile, on n'a le temps de lire qu'un chiffre :
+      // c'est la probabilité, pas la cote.
+      value: formatProba(iss.cote),
       valueColor: 'var(--p-blue)',
       to: createPageUrl('Paris'),
     }));

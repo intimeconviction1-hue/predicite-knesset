@@ -21,7 +21,7 @@
 // relatif, et server/tests/plafond-participation.test.mjs importe ce module tel
 // quel pour confronter ses plafonds à ceux du serveur. Sans le `.js`, le test
 // ne peut pas charger le fichier qu'il est censé verrouiller.
-import { texteLisible } from './couleurs.js';
+import { texteLisible, melange } from './couleurs.js';
 
 // Le quiz paie selon la difficulté (server/functions/quizScoring.js) :
 // 10 en découverte, 25 en connaisseur, 50 en expert. Le plafond se remplit donc
@@ -86,11 +86,34 @@ export function computeScore(p) {
 // du produit, rendu dans la couleur la moins lisible de l'application.
 //
 // `texteLisible` fonce juste assez en préservant la teinte : l'or d'Oracle reste
-// de l'or (#887023, 4.78:1) et le cyan de Connaisseur reste du cyan (#0b7db1,
-// 4.58:1). Les cinq valeurs obtenues restent distinctes entre elles — condition
-// nécessaire, sans quoi deux paliers voisins s'afficheraient dans la même
-// couleur et l'échelle cesserait de se lire comme une progression.
-const avecTexte = (t) => ({ ...t, text: texteLisible(t.color) });
+// de l'or, le cyan de Connaisseur reste du cyan. Les cinq valeurs obtenues
+// restent distinctes entre elles — condition nécessaire, sans quoi deux paliers
+// voisins s'afficheraient dans la même couleur et l'échelle cesserait de se lire
+// comme une progression.
+//
+// LE FOND DE MESURE EST LA PASTILLE, PAS LA CARTE. C'est le piège qui a fait
+// rater le diagnostic une première fois : mesurer contre --p-card donnait
+// Citoyen à 4,76:1, jugé conforme, alors que le badge du classement le rend à
+// 4,24:1 — sous AA. Le texte n'est jamais posé sur du blanc ici, mais sur une
+// teinte de sa PROPRE couleur, donc sur un fond plus sombre que la carte.
+//
+// On dérive donc contre le pire fond réellement produit par les quatre sites de
+// rendu, et non contre une marge de sécurité arbitraire : une cible « 5,5:1
+// contre blanc » semble suffisante et ne l'est pas (4,33:1 mesuré au pire), et
+// une cible plus haute encore assombrirait toutes les couleurs de PARTIS, qui
+// n'ont pas ce problème — elles sont posées sur des surfaces pleines.
+//
+// Les quatre sites, vérifiés : ReglesDuJeu et Quiz posent `${color}12`,
+// Leaderboard `${color}18`, ProgressionPalier n'utilise `color` qu'en bordure et
+// en dégradé. Les pastilles de Quiz et du Leaderboard vivent dans une carte
+// blanche, celles de ReglesDuJeu dans une <section> sur le fond de page.
+const PASTILLE_ALPHA_MAX = 0x18 / 255;   // la teinte la plus opaque des quatre sites
+const PASTILLE_FOND_MIN = '#EDF1F9';     // --p-bg, la surface la plus sombre sous une pastille
+
+const avecTexte = (t) => ({
+  ...t,
+  text: texteLisible(t.color, { fond: melange(t.color, PASTILLE_ALPHA_MAX, PASTILLE_FOND_MIN) }),
+});
 
 export const TITLES = [
   { min: 0, label: 'Citoyen', color: '#64748B' },

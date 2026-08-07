@@ -35,6 +35,28 @@ const toHex = ([r, g, b]) =>
   '#' + [r, g, b].map(c => Math.max(0, Math.min(255, Math.round(c))).toString(16).padStart(2, '0')).join('');
 
 /**
+ * Aplatit `couleur` posée à `alpha` sur `fond`, et rend la couleur OPAQUE
+ * équivalente.
+ *
+ * Sert à mesurer un contraste réel. Les pastilles de palier posent leur texte
+ * sur `${couleur}12` ou `${couleur}18` — une teinte de leur PROPRE couleur, donc
+ * un fond plus sombre que la carte. Un ratio calculé contre le blanc y est
+ * systématiquement surestimé : Citoyen affichait 4,76:1 sur --p-card et n'en
+ * faisait que 4,24 sur la pastille du classement, sous le seuil AA.
+ *
+ * @param {string} couleur  hex de la teinte posée
+ * @param {number} alpha    0–1 (0x12 = 0.071, 0x18 = 0.094 dans nos pastilles)
+ * @param {string} fond     hex de la surface en dessous
+ * @returns {string} hex opaque
+ */
+export function melange(couleur, alpha, fond) {
+  const [r, g, b] = hexToRgb(couleur);
+  const [R, G, B] = hexToRgb(fond);
+  const a = Math.max(0, Math.min(1, alpha));
+  return toHex([r * a + R * (1 - a), g * a + G * (1 - a), b * a + B * (1 - a)]);
+}
+
+/**
  * Rend `couleur` lisible comme texte sur `fond`.
  * @param {string} couleur - hex du parti (ex. "#F59E0B")
  * @param {object} [opts]

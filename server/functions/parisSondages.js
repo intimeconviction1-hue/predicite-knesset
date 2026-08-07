@@ -14,7 +14,7 @@ const DEFAULT_K = 800;
 const WEEKLY_JETONS = 500;
 const JETONS_CAP = 2000;
 const MISE_MIN = 10, MISE_MAX = 500;
-const SCORE_ON_WIN_RATIO = 0.25;   // le score gagné = 25 % du gain en jetons
+const SCORE_ON_WIN_RATIO = 0.25;   // le score gagné = 25 % du BÉNÉFICE net en jetons
 const LEADER_MIN_MEAN = 10;        // pré-filtre : listes assez hautes pour le tirage
 const MIN_ISSUE_PROB = 0.01;       // on n'offre pas d'issue à moins de 1 % de chance
 const MAX_COTE = 25;               // plafond (évite les cotes absurdes sur quasi-0)
@@ -34,6 +34,30 @@ export function coteFor(prob_open, pool_reel, pool_total, K = DEFAULT_K) {
   const denom = K * Math.max(prob_open, 1e-6) + pool_reel;
   const raw = (K + pool_total) / denom;
   return Math.min(MAX_COTE, Math.max(1.01, Math.round(raw * 100) / 100));
+}
+
+/**
+ * Score crédité à une mise gagnante — sur le BÉNÉFICE, pas sur le gain brut.
+ *
+ * La cote est un pari-mutuel à prior SANS MARGE : à pools vides, Σ 1/cote_i = 1,
+ * donc l'espérance de gain d'une mise vaut exactement la mise, quel que soit le
+ * pari. Créditer `gain_pot` versait par conséquent 0,25 × mise en espérance à
+ * TOUT LE MONDE — le parieur avisé et le parieur au hasard, à volume égal,
+ * gagnaient autant. Ce n'était pas un pari, mais une conversion de jetons en
+ * points à taux fixe : 500 jetons par semaine sur onze semaines, soit ~1 375
+ * points attendus sans plafond, quand la participation est bornée à 720 et
+ * l'apprentissage à 300.
+ *
+ * Sur le net, l'espérance retombe à zéro pour qui n'a pas d'information, et ne
+ * devient positive qu'avec un edge réel sur le prior sondage. C'est ce que
+ * client/src/lib/score.js promet déjà en toutes lettres : « bien parier fait
+ * monter ton Score » — et non « parier ».
+ *
+ * Les jetons, eux, restent payés au brut : c'est la monnaie du jeu, pas le rang.
+ */
+function scoreForWin(mise) {
+  const benefice = (mise.gain_pot ?? 0) - (mise.mise ?? 0);
+  return Math.round(Math.max(0, benefice) * SCORE_ON_WIN_RATIO);
 }
 
 // Moyenne des sièges par liste sur les derniers sondages.
@@ -295,10 +319,18 @@ export async function placerMise(user_email, body) {
 
 // Catalogue de propositions (semi-auto) : événements de campagne connus, à
 // ouvrir d'un clic par l'admin. À enrichir depuis l'actu au fil de l'eau.
+//
+// Toute proposition doit porter sur une échéance ENCORE OUVERTE : l'admin ne
+// voit que cette liste, et un marché déjà tranché par le calendrier ne peut plus
+// être parié — il ne resterait qu'à le résoudre à la main, sans qu'aucun joueur
+// ait eu de raison d'y miser. Le premier item était « Le Likoud tiendra-t-il ses
+// primaires le 4 août comme prévu ? », proposé en tête de liste bien après le
+// 4 août. Les dates ci-dessous sont donc à relire au fil de la campagne, la
+// prochaine butée étant le dépôt des listes du 9 septembre.
 export function proposerMarchesEvenements() {
   return [
-    { question: 'Le Likoud tiendra-t-il ses primaires le 4 août comme prévu ?', issues: [{ label: 'Oui', prob_open: 0.8 }, { label: 'Non', prob_open: 0.2 }] },
     { question: "Une nouvelle fusion de listes sera-t-elle annoncée avant le dépôt du 9 septembre ?", issues: [{ label: 'Oui', prob_open: 0.5 }, { label: 'Non', prob_open: 0.5 }] },
+    { question: "Le nombre de listes déposées le 9 septembre dépassera-t-il celui de 2022 ?", issues: [{ label: 'Oui', prob_open: 0.5 }, { label: 'Non', prob_open: 0.5 }] },
     { question: 'Le Sionisme religieux franchira-t-il le seuil au prochain sondage ?', issues: [{ label: 'Oui', prob_open: 0.5 }, { label: 'Non', prob_open: 0.5 }] },
     { question: 'Une personnalité quittera-t-elle sa liste (défection) avant le scrutin ?', issues: [{ label: 'Oui', prob_open: 0.45 }, { label: 'Non', prob_open: 0.55 }] },
   ];
@@ -345,7 +377,7 @@ export async function resolveMarcheManuel(marche_id, winning_issue_id) {
       if (up) {
         await updateEntity('UserProgress', up.id, {
           jetons: (up.jetons ?? 0) + mise.gain_pot,
-          total_points: (up.total_points ?? 0) + Math.round(mise.gain_pot * SCORE_ON_WIN_RATIO),
+          total_points: (up.total_points ?? 0) + scoreForWin(mise),
         });
         paid++;
       }
@@ -400,7 +432,7 @@ export async function resolveByPoll(sondage_id) {
         if (up) {
           await updateEntity('UserProgress', up.id, {
             jetons: (up.jetons ?? 0) + mise.gain_pot,
-            total_points: (up.total_points ?? 0) + Math.round(mise.gain_pot * SCORE_ON_WIN_RATIO),
+            total_points: (up.total_points ?? 0) + scoreForWin(mise),
           });
           paid++;
         }

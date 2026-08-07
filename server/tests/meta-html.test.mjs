@@ -87,9 +87,32 @@ test('og:url et canonical suivent la page demandée, pas la racine', () => {
 test('l\'origine vient de la requête, pas d\'un domaine en dur', () => {
   // Le jour où le site prend un vrai nom de domaine, les aperçus doivent suivre
   // sans qu'on ait à repasser dans le code.
-  const html = htmlPour('/Home', 'https://predicite.fr');
-  assert.match(html, /content="https:\/\/predicite\.fr\/Home"/);
+  const html = htmlPour('/Actu', 'https://predicite.fr');
+  assert.match(html, /content="https:\/\/predicite\.fr\/Actu"/);
   assert.match(html, /content="https:\/\/predicite\.fr\/images\/og-predicite\.jpg"/);
+});
+
+test('« /Home » se déclare canonique sous « / »', () => {
+  // Home répond à deux URL : « / » parce qu'elle est mainPage, « /Home » parce
+  // qu'elle est aussi une entrée de PAGES (voir pages.config.js). Sans cette
+  // normalisation, chacune se déclare canonique de son côté et le moteur voit
+  // deux pages identiques — sur la page la plus partagée du site.
+  for (const chemin of ['/', '/Home']) {
+    const html = htmlPour(chemin, ORIGINE);
+    assert.match(html, /<link rel="canonical" href="https:\/\/predicite-knesset\.onrender\.com\/"/, `depuis ${chemin}`);
+    assert.match(html, /<meta property="og:url" content="https:\/\/predicite-knesset\.onrender\.com\/"/, `depuis ${chemin}`);
+  }
+});
+
+test('le canonical d\'une fiche de liste garde le slug', () => {
+  // Il ne le gardait pas : le serveur ne passe que req.path à l'injecteur, donc
+  // les treize fiches annonçaient toutes « /Liste » comme URL canonique. Treize
+  // pages se déclarant être la même — un moteur n'en garde qu'une.
+  const html = htmlPour('/Liste', ORIGINE, metaListe({ name_fr: 'Likoud', slug: 'likoud', current_knesset_seats: 32 }));
+  assert.match(html, /<link rel="canonical" href="https:\/\/predicite-knesset\.onrender\.com\/Liste\?slug=likoud"/);
+  assert.match(html, /<meta property="og:url" content="https:\/\/predicite-knesset\.onrender\.com\/Liste\?slug=likoud"/);
+  // L'image reste absolue et servie depuis la racine, pas depuis /Liste.
+  assert.match(html, /<meta property="og:image" content="https:\/\/predicite-knesset\.onrender\.com\/images\/og-predicite\.jpg"/);
 });
 
 test('les apostrophes françaises ne referment pas les attributs', () => {

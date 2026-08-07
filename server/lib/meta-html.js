@@ -57,6 +57,22 @@ export function pagePour(pathname) {
 }
 
 /**
+ * Le chemin canonique d'une page — l'URL unique sous laquelle elle doit être
+ * connue.
+ *
+ * Home est la seule dont le chemin n'est pas son nom. Elle répond à DEUX URL
+ * (« / » parce qu'elle est `mainPage`, et « /Home » parce qu'elle est aussi une
+ * entrée de `PAGES` — voir pages.config.js), et un visiteur qui clique dans la
+ * navigation atterrit sur l'une ou l'autre selon le lien. Sans cette
+ * normalisation, chacune se déclare canonique de son côté : un moteur voit deux
+ * pages au contenu identique et répartit le crédit entre les deux, au lieu de
+ * tout donner à l'accueil.
+ */
+export function cheminCanonique(nomDePage) {
+  return nomDePage === 'Home' ? '/' : `/${nomDePage}`;
+}
+
+/**
  * Titre et description d'une fiche de liste, à partir de la ligne en base.
  *
  * Volontairement fabriqués à partir de champs FACTUELS (nom, dirigeant, sièges
@@ -77,6 +93,12 @@ export function metaListe(liste) {
   return {
     titre: `${liste.name_fr} — Knesset 2026 | ${SUFFIXE}`,
     description: `${dirigeant}${sortants} Sa projection en sièges, son histoire et sa place dans l'arithmétique de coalition.`,
+    // Le slug fait partie de l'identité de l'URL, et il vivait hors du canonical.
+    // Le serveur ne passait que `req.path` : les treize fiches annonçaient donc
+    // toutes « /Liste » comme URL canonique, c'est-à-dire treize pages se
+    // déclarant être la même. Un moteur qui lit ça n'en garde qu'une, et le
+    // sitemap qui les énumère ne sert plus à rien.
+    chemin: liste.slug ? `/Liste?slug=${encodeURIComponent(liste.slug)}` : null,
   };
 }
 
@@ -120,17 +142,24 @@ export function creerInjecteurMeta(clientDist) {
   /**
    * @param {string} pathname
    * @param {string} origine
-   * @param {{titre?:string, description?:string}|null} surcharge
+   * @param {{titre?:string, description?:string, chemin?:string}|null} surcharge
    *   Métadonnées propres à UNE ressource, quand le chemin seul ne suffit pas :
    *   /Liste?slug=likoud doit annoncer « Likoud », pas « Fiche de liste ». Le
    *   nom du parti vit en base, et ce module n'y touche pas — c'est l'appelant
    *   qui va le chercher et le passe ici. Cette frontière est ce qui permet aux
    *   tests de tourner sans base, et à l'injection de survivre à une base
    *   injoignable : sans surcharge, on retombe sur l'aperçu générique.
+   *   `chemin` porte l'URL canonique quand elle ne se déduit pas du nom de page.
    */
   return function htmlPour(pathname, origine, surcharge = null) {
-    const url = new URL(pathname || '/', origine).href;
-    const base = metaPour(pagePour(pathname));
+    const page = pagePour(pathname);
+    // L'URL canonique se DÉDUIT du nom de page ; elle ne recopie pas le chemin
+    // demandé. C'est ce qui neutralise d'un coup les variantes d'une même page :
+    // « /Home » qui doit se dire « / », et — le jour où on marquera les liens
+    // partagés — les « ?via=… » qui feraient croire à autant de pages
+    // différentes qu'il y a eu de partages.
+    const url = new URL(surcharge?.chemin || cheminCanonique(page), origine).href;
+    const base = metaPour(page);
     const titre = surcharge?.titre || base.titre;
     const description = surcharge?.description || base.description;
 

@@ -61,6 +61,14 @@ export const BLOC_COLOR = {
   sans_camp: '#5B6472',
 };
 
+// Repli quand une liste n'a pas de couleur en base. Traînait en dur dans une
+// dizaine de fichiers — dont trois où il alimente texteLisible() ou un canvas,
+// qui ne savent lire ni l'un ni l'autre un var(). D'où une constante JS et non
+// un token CSS : c'est la seule forme qui marche dans les trois contextes.
+// À ne pas confondre avec BLOC_COLOR.sans_camp (#5B6472), qui dit « ce parti
+// n'a pas de camp » — celui-ci dit « on ne connaît pas sa couleur ».
+export const COULEUR_PARTI_INCONNU = '#6B7280';
+
 /**
  * Le camp d'un bloc dans la course aux 61 sièges — 'pro', 'anti', ou null.
  *

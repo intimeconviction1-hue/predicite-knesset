@@ -7,6 +7,7 @@ import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
 import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
+import ShareCoalition from '@/components/knesset/ShareCoalition';
 import { MAJORITE, TOTAL_SIEGES } from '@/lib/knesset';
 import { useProjection } from '@/lib/projection';
 import { verifierFrictions, plausibility } from '@/lib/frictions';
@@ -160,6 +161,22 @@ export default function FormeCoalition() {
                 qui termine la partie ici, pas une manche finale comme dans les
                 trois autres jeux. */}
             {result && <GainMiniJeu gain={gate.gain} isGuest={gate.isGuest} />}
+
+            {/* La carte n'apparaît qu'après le verdict : avant, la plausibilité
+                n'est pas encore révélée à l'écran, et on ne peut pas partager un
+                chiffre que le joueur lui-même n'a pas vu. */}
+            {result && (
+              <div className="flex justify-center mb-4">
+                <ShareCoalition
+                  listes={selected.map(slug => bySlug[slug]).filter(Boolean)}
+                  total={result.total}
+                  majorite={MAJORITE}
+                  totalSieges={TOTAL_SIEGES}
+                  score={result.score}
+                  libelle={plLabel(result.score).t}
+                />
+              </div>
+            )}
 
             <div className="flex items-center gap-3">
               <button onClick={check} disabled={selected.length === 0 || revele}

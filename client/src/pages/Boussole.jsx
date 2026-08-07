@@ -9,6 +9,8 @@ import { texteLisible } from '@/lib/couleurs';
 import TrialWall from '@/components/knesset/TrialWall';
 import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
+import ShareBoussole from '@/components/knesset/ShareBoussole';
+import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 
 // SOLIDITÉ D'UN SCORE — borne inférieure de l'intervalle de Wilson à 95 %.
 //
@@ -201,7 +203,7 @@ export default function Boussole() {
               <div className="flex flex-col items-center gap-1 mb-1">
                 {exAequo.map(m => (
                   <div key={m.slug} className="inline-flex items-center gap-2.5">
-                    <span className="w-4 h-4 rounded-full shrink-0" style={{ background: m.liste.color || '#6B7280' }} />
+                    <span className="w-4 h-4 rounded-full shrink-0" style={{ background: m.liste.color || COULEUR_PARTI_INCONNU }} />
                     <span className={`p-display ${exAequo.length > 1 ? 'text-xl' : 'text-2xl'}`}
                       style={{ color: m.liste.color ? texteLisible(m.liste.color) : 'var(--p-text)' }}>{m.liste.name_fr}</span>
                   </div>
@@ -228,7 +230,7 @@ export default function Boussole() {
                       </span>
                     </div>
                     <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--p-text-10)' }}>
-                      <div className="h-full rounded-full" style={{ width: `${m.pct}%`, background: m.liste.color || '#6B7280' }} />
+                      <div className="h-full rounded-full" style={{ width: `${m.pct}%`, background: m.liste.color || COULEUR_PARTI_INCONNU }} />
                     </div>
                   </div>
                 ))}
@@ -239,8 +241,9 @@ export default function Boussole() {
                 <button onClick={start} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm" style={{ background: 'transparent', border: '0.5px solid var(--p-border-hover)', color: 'var(--p-text-60)' }}>
                   <RotateCcw className="w-4 h-4" /> Refaire
                 </button>
+                <ShareBoussole exAequo={exAequo} matches={matches} statements={STATEMENTS.length} />
               </div>
-              <p className="text-[10px] mt-4 leading-relaxed" style={{ color: 'var(--p-text-25)' }}>
+              <p className="text-[10px] mt-4 leading-relaxed" style={{ color: 'var(--p-text-40)' }}>
                 Résultat indicatif, basé sur {STATEMENTS.length} affirmations. Ni un conseil de vote, ni une position de PrédiCité.<br />
                 Le pourcentage est calculé sur les seules affirmations où le parti se positionne : c'est le
                 nombre affiché après la barre. Une réponse catégorique y pèse deux fois plus qu'une réponse

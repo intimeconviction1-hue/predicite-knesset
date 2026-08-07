@@ -5,6 +5,7 @@ import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
 import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
+import ShareScore from '@/components/knesset/ShareScore';
 
 const ROUNDS = 7;
 
@@ -127,6 +128,13 @@ export default function VraiOuFake() {
                 <button onClick={start} className="p-btn-ghost gap-2">
                   <RotateCcw className="w-4 h-4" /> Rejouer
                 </button>
+                <ShareScore
+                  titre="Vrai ou Fake ?" kicker="PRÉDICITÉ · VRAI OU FAKE ?"
+                  chemin="/VraiOuFake" via="vrai-ou-fake" nomFichier="mon-score-vrai-ou-fake.png"
+                  score={score} total={ROUNDS} serie={best}
+                  source="Affirmations sur le système électoral israélien, la Knesset et la campagne 2026"
+                  defi={`${score} sur ${ROUNDS} à « Vrai ou Fake ? » sur la politique israélienne. Tu fais mieux ?`}
+                />
               </div>
             </motion.div>
           )}

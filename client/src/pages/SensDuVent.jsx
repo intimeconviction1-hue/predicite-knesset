@@ -9,6 +9,8 @@ import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
 import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
+import ShareScore from '@/components/knesset/ShareScore';
+import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 
 const ROUNDS = 5;
 const fr = (d) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
@@ -148,7 +150,7 @@ export default function SensDuVent() {
                   {q.inst}{q.media ? ` · ${q.media}` : ''} · sondage du {fr(q.from)} → {fr(q.to)}
                 </p>
                 <div className="flex items-center justify-center gap-2.5 mb-1">
-                  <span className="w-3.5 h-3.5 rounded-full" style={{ background: q.liste.color || '#6B7280' }} />
+                  <span className="w-3.5 h-3.5 rounded-full" style={{ background: q.liste.color || COULEUR_PARTI_INCONNU }} />
                   <span className="p-title text-xl">{q.liste.name_fr}</span>
                 </div>
                 <p className="p-body text-sm mb-5">était à <b className="font-mono" style={{ color: 'var(--p-text)' }}>{q.prev}</b> sièges. Au sondage suivant, il a…</p>
@@ -201,6 +203,13 @@ export default function SensDuVent() {
                   style={{ background: 'transparent', border: '0.5px solid var(--p-border-hover)', color: 'var(--p-text-60)' }}>
                   <RotateCcw className="w-4 h-4" /> Rejouer
                 </button>
+                <ShareScore
+                  titre="Le sens du vent" kicker="PRÉDICITÉ · LE SENS DU VENT"
+                  chemin="/SensDuVent" via="sens-du-vent" nomFichier="mon-score-sens-du-vent.png"
+                  score={score} total={ROUNDS} serie={best}
+                  source="Manches jouées sur de vrais sondages sièges publiés en Israël"
+                  defi={`${score} sur ${ROUNDS} à deviner la tendance des sondages israéliens. Tu sens mieux le vent que moi ?`}
+                />
               </div>
               <div className="mt-4">
                 <Link to={createPageUrl('Paris')} className="text-xs font-semibold" style={{ color: 'var(--p-blue)' }}>

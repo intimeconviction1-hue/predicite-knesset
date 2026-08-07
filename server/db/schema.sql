@@ -270,6 +270,31 @@ CREATE TABLE IF NOT EXISTS paris_mises (
 CREATE INDEX IF NOT EXISTS idx_mises_user ON paris_mises(user_email);
 CREATE INDEX IF NOT EXISTS idx_mises_marche ON paris_mises(marche_id);
 
+-- Historique des cotes — l'inspiration Polymarket : sous chaque marché, la
+-- courbe de la probabilité au fil du temps. C'est ce qui transforme un pari en
+-- récit (« il était à 40 % avant les primaires ») ; une cote seule ne dit que
+-- le présent.
+--
+-- Pourquoi un instantané suffit à être EXACT et non un échantillon : dans
+-- cote_i = (K + R) / (K·Pᵢ + Rᵢ), seuls Rᵢ et R varient, et ils ne varient qu'à
+-- la prise d'un pari. La cote ne bouge donc à aucun autre moment — un
+-- instantané à l'ouverture du marché puis un après chaque mise reconstitue la
+-- courbe COMPLÈTE, sans tâche planifiée et sans point interpolé.
+--
+-- On stocke la cote et non la probabilité brute : c'est la valeur ARRONDIE qui
+-- a été montrée au joueur, et la page en dérive la probabilité (1/cote). Un
+-- graphique qui contredirait d'un dixième de point le chiffre affiché juste
+-- au-dessus serait une petite trahison de plus qu'on peut s'éviter.
+CREATE TABLE IF NOT EXISTS paris_cotes_snapshots (
+  id TEXT PRIMARY KEY,
+  marche_id TEXT NOT NULL REFERENCES paris_marches(id),
+  issue_id TEXT NOT NULL REFERENCES paris_issues(id),
+  cote REAL NOT NULL,
+  pool_total INTEGER NOT NULL DEFAULT 0,      -- volume misé sur le marché à cet instant
+  created_at TEXT NOT NULL DEFAULT (now_iso())
+);
+CREATE INDEX IF NOT EXISTS idx_snapshots_marche ON paris_cotes_snapshots(marche_id, created_at);
+
 -- ───────────────────────────────────────────────────────────────────────────
 -- Ligues privées : classements entre amis, sur invitation par code court.
 -- Rétention : jouer « contre ses potes » plutôt que contre des inconnus.

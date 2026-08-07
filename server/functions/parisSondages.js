@@ -103,6 +103,9 @@ export async function openMancheRang() {
       match_value: id, prob_open: probs.get(id) || 0, pool_reel: 0,
     });
   }
+  // Premier point de la courbe : la cote d'ouverture, celle que dit le sondage
+  // avant qu'aucun joueur n'ait misé.
+  await snapshotMarche(marcheId);
   return { marche_id: marcheId, manche, issues: candidateIds.length };
 }
 
@@ -126,24 +129,111 @@ export async function ensureWeeklyJetons(user_email) {
   return { ...up, jetons, jetons_semaine: wk };
 }
 
+// ── Historique des cotes ─────────────────────────────────────────────────────
+// La cote ne bouge QU'à la prise d'un pari (K et Pᵢ sont figés à l'ouverture,
+// seuls Rᵢ et R évoluent). Un instantané à l'ouverture puis un après chaque mise
+// reconstitue donc la courbe complète — pas d'échantillonnage périodique, pas de
+// point interpolé, aucune tâche planifiée à surveiller.
+//
+// Écriture en SQL direct : la table est en ajout seul et n'a ni lecture par id
+// ni champ JSON ; la faire passer par ENTITY_CONFIG n'apporterait rien et
+// obligerait à déclarer une entité que le front n'utilise jamais telle quelle.
+const MAX_POINTS_HISTORIQUE = 200;
+
+export async function snapshotMarche(marche_id) {
+  const marche = (await filterEntity('ParisMarche', { id: marche_id }))[0];
+  if (!marche) return;
+  const issues = await filterEntity('ParisIssue', { marche_id });
+  if (!issues.length) return;
+  const poolTotal = issues.reduce((s, i) => s + (i.pool_reel || 0), 0);
+  for (const i of issues) {
+    const cote = coteFor(i.prob_open, i.pool_reel || 0, poolTotal, marche.liquidity_k || DEFAULT_K);
+    await pool.query(
+      'INSERT INTO paris_cotes_snapshots (id, marche_id, issue_id, cote, pool_total) VALUES ($1,$2,$3,$4,$5)',
+      [uuid(), marche_id, i.id, cote, poolTotal],
+    );
+  }
+}
+
 // Marchés ouverts + cotes courantes (pour l'affichage). Chaque issue reçoit sa
-// cote calculée sur les pools actuels.
+// cote calculée sur les pools actuels, et son historique de cotes.
 export async function getOpenMarketsWithCotes() {
   const marches = (await listEntity('ParisMarche', { sort: '-manche', limit: 20 })).filter(m => m.status === 'open');
   const out = [];
   for (const m of marches) {
     const issues = await filterEntity('ParisIssue', { marche_id: m.id });
     const poolTotal = issues.reduce((s, i) => s + (i.pool_reel || 0), 0);
+
+    const snaps = await pool.query(
+      'SELECT issue_id, cote, created_at FROM paris_cotes_snapshots WHERE marche_id = $1 ORDER BY created_at ASC LIMIT $2',
+      [m.id, MAX_POINTS_HISTORIQUE],
+    );
+    const parIssue = new Map();
+    for (const s of snaps.rows) {
+      if (!parIssue.has(s.issue_id)) parIssue.set(s.issue_id, []);
+      parIssue.get(s.issue_id).push({ t: s.created_at, cote: Number(s.cote) });
+    }
+
     out.push({
       ...m,
+      pool_total: poolTotal,
       issues: issues.map(i => ({
         id: i.id, label: i.label, match_value: i.match_value,
         pool_reel: i.pool_reel || 0,
         cote: coteFor(i.prob_open, i.pool_reel || 0, poolTotal, m.liquidity_k || DEFAULT_K),
+        historique: parIssue.get(i.id) || [],
       })).sort((a, b) => a.cote - b.cote),
     });
   }
   return out;
+}
+
+// Les paris d'un joueur — ses positions ouvertes et ses paris déjà tranchés.
+//
+// Cette fonction n'existait pas. `paris_mises` était écrite à chaque mise et
+// relue uniquement par le résolveur : un joueur misait, voyait des confettis,
+// et son pari disparaissait de sa vue. Il n'apprenait qu'il avait gagné que
+// parce que son solde de jetons avait bougé.
+//
+// La cote affichée est celle VERROUILLÉE à la prise du pari (colonne `cote` de
+// la mise), jamais la cote courante du marché : c'est celle-là qui décidera du
+// gain, et la montrer bouger après coup ferait croire à un pari qu'on n'a pas
+// pris.
+export async function listerMises(user_email) {
+  const { rows } = await pool.query(
+    `SELECT mi.id, mi.mise, mi.cote, mi.gain_pot, mi.statut, mi.created_at,
+            ma.id AS marche_id, ma.question, ma.type, ma.status AS marche_status,
+            iss.label AS issue_label
+       FROM paris_mises   mi
+       JOIN paris_marches ma  ON ma.id  = mi.marche_id
+       JOIN paris_issues  iss ON iss.id = mi.issue_id
+      WHERE mi.user_email = $1
+      ORDER BY mi.created_at DESC
+      LIMIT 60`,
+    [user_email],
+  );
+
+  const mises = rows.map(r => ({
+    id: r.id, mise: Number(r.mise), cote: Number(r.cote), gain_pot: Number(r.gain_pot),
+    statut: r.statut, created_at: r.created_at,
+    marche_id: r.marche_id, question: r.question, type: r.type, marche_status: r.marche_status,
+    issue_label: r.issue_label,
+  }));
+
+  const enJeu = mises.filter(m => m.statut === 'en_jeu');
+  const gagnes = mises.filter(m => m.statut === 'gagne');
+  return {
+    mises,
+    resume: {
+      en_jeu: enJeu.length,
+      mise_engagee: enJeu.reduce((s, m) => s + m.mise, 0),
+      gain_potentiel: enJeu.reduce((s, m) => s + m.gain_pot, 0),
+      gagnes: gagnes.length,
+      perdus: mises.filter(m => m.statut === 'perdu').length,
+      // Gains réellement encaissés — jamais une projection sur les paris ouverts.
+      jetons_gagnes: gagnes.reduce((s, m) => s + m.gain_pot, 0),
+    },
+  };
 }
 
 // Place une mise : débite les jetons (conditionnel), verrouille la cote, crée la
@@ -187,6 +277,14 @@ export async function placerMise(user_email, body) {
     await pool.query('UPDATE user_progress SET jetons = jetons + $1 WHERE user_email = $2', [mise, user_email]);
     throw e;
   }
+
+  // Nouveau point sur la courbe — APRÈS l'écriture du pool, donc la cote
+  // enregistrée est bien celle qui vaut désormais pour le joueur suivant.
+  // Hors du try/catch volontairement : un instantané manquant ne doit jamais
+  // faire échouer une mise déjà débitée et enregistrée. La courbe perdrait un
+  // point, le joueur perdrait ses jetons — ce n'est pas le même prix.
+  try { await snapshotMarche(marche.id); } catch { /* la mise, elle, est passée */ }
+
   return { ok: true, cote, gain_pot, mise };
 }
 
@@ -223,6 +321,7 @@ export async function openMarcheEvenement({ question, issues, liquidity_k = DEFA
       match_value: iss.match_value || iss.label, prob_open: p || 1 / issues.length, pool_reel: 0,
     });
   }
+  await snapshotMarche(marcheId);
   return { marche_id: marcheId, manche, issues: issues.length };
 }
 

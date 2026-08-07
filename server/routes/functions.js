@@ -9,7 +9,7 @@ import { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire } fro
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
 import { ensureUserProgress, updateStreakAndBadges, getUserBadges } from '../functions/miscFunctions.js';
 import { submitQuizAnswer } from '../functions/quizScoring.js';
-import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll, proposerMarchesEvenements, openMarcheEvenement, resolveMarcheManuel } from '../functions/parisSondages.js';
+import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll, proposerMarchesEvenements, openMarcheEvenement, resolveMarcheManuel, listerMises } from '../functions/parisSondages.js';
 import { getDefiSerie, startDefiSerie } from '../functions/defisQuiz.js';
 import { createLigue, joinLigue, myLigues, ligueLeaderboard, leaveLigue } from '../functions/ligues.js';
 
@@ -75,6 +75,9 @@ router.post('/:name', requireAuth, async (req, res) => {
         if (body.action === 'listMarches') return res.json({ marches: await getOpenMarketsWithCotes() });
         if (body.action === 'ensureJetons') return res.json(await ensureWeeklyJetons(req.user.email));
         if (body.action === 'placerMise') return res.json(await placerMise(req.user.email, body));
+        // Ses propres paris, et rien d'autre : l'e-mail vient du jeton
+        // d'authentification (req.user), jamais du corps de la requête.
+        if (body.action === 'mesMises') return res.json(await listerMises(req.user.email));
         if (body.action === 'openManche') {
           if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
           return res.json(await openMancheRang());

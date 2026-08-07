@@ -145,6 +145,12 @@ const PAGES = {
       "Les 25 élections israéliennes de 1949 à 2022, avec la composition réelle de la Knesset issue de chaque scrutin — sourcée élection par élection.",
   },
 
+  Mentions: {
+    titre: 'Mentions légales & données personnelles',
+    description:
+      "Qui édite PrédiCité, où le site est hébergé, ce qu'il collecte et pourquoi, combien de temps, et comment exercer tes droits. Aucun traceur publicitaire.",
+  },
+
   Login: {
     titre: 'Connexion',
     description: 'Connecte-toi pour déposer tes pronostics et rejoindre le classement.',

@@ -76,6 +76,7 @@ const FormeCoalition = lazy(() => import('./pages/FormeCoalition'));
 const Boussole = lazy(() => import('./pages/Boussole'));
 const VraiOuFake = lazy(() => import('./pages/VraiOuFake'));
 const MaRepartition = lazy(() => import('./pages/MaRepartition'));
+const Mentions = lazy(() => import('./pages/Mentions'));
 const AdminResultats = lazy(() => import('./pages/AdminResultats'));
 
 // NB : AdminSync, ElectionNight, FinalRecap, Leagues, PollMap, Predictions,
@@ -106,6 +107,7 @@ export const PAGES = {
     "Boussole": Boussole,
     "VraiOuFake": VraiOuFake,
     "MaRepartition": MaRepartition,
+    "Mentions": Mentions,
     // Écran admin du soir du scrutin — volontairement absent de la navigation,
     // accessible par /AdminResultats et réservé aux admins côté serveur.
     "AdminResultats": AdminResultats,

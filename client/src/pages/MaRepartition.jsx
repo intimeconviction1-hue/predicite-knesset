@@ -36,13 +36,60 @@ import { useProjection } from '@/lib/projection';
  *   3. l'écart s'affiche par liste : c'est là que se gagne le score.
  * Et la validation, qui rendait un encadré gris pour l'acte le plus coûteux du
  * produit, est devenue le moment fort qu'elle aurait toujours dû être.
+ *
+ * 2026-08-07 — le mur de connexion est passé APRÈS le pronostic.
+ *
+ * Cet écran est le geste fondateur du produit, et il était le seul à être
+ * verrouillé : les quatre mini-jeux, qui ne décident de rien, s'ouvraient sans
+ * compte, tandis que la répartition — ce pour quoi le site existe — renvoyait un
+ * écran de connexion avant d'avoir montré quoi que ce soit. Les trois appels à
+ * l'action de la Home y menaient, ainsi que l'étape 1 de l'introduction : le
+ * parcours d'activation demandait donc de s'inscrire pour voir, au lieu de faire
+ * voir pour donner envie de s'inscrire.
+ *
+ * Un invité compose désormais ses 120 sièges en état React, sans une seule
+ * écriture. La connexion n'est demandée qu'au moment de SAUVEGARDER, formulée en
+ * perte (« Sauvegarder ma répartition ») et non en droit d'entrée. La validation
+ * serveur n'a pas bougé d'un octet : seul le moment du mur a changé.
+ *
+ * Corollaire indispensable : `redirectToLogin` quitte la page. Sans brouillon,
+ * déplacer le mur ne ferait que déplacer la perte — l'invité reviendrait devant
+ * quinze champs vides après avoir fait tout le travail, ce qui est pire que le
+ * mur d'avant. Le brouillon est donc écrit en localStorage à chaque frappe et
+ * relu au montage.
  */
 
+// Brouillon local d'un pronostic non encore déposé. Purement un confort de
+// navigation : ce qui fait foi reste PronosticSieges côté serveur.
+const BROUILLON_KEY = 'predicite_repartition_brouillon';
+
+function lireBrouillon() {
+  try {
+    const brut = localStorage.getItem(BROUILLON_KEY);
+    if (!brut) return null;
+    const d = JSON.parse(brut);
+    if (!d || typeof d !== 'object') return null;
+    return {
+      seats: d.seats && typeof d.seats === 'object' ? d.seats : {},
+      justifs: d.justifs && typeof d.justifs === 'object' ? d.justifs : {},
+    };
+  } catch {
+    // localStorage indisponible (mode privé) ou contenu corrompu : on repart
+    // d'une page vierge, jamais d'une exception au montage de la page.
+    return null;
+  }
+}
 
 export default function MaRepartition() {
   const [user, setUser] = useState(undefined);
-  const [seats, setSeats] = useState({});
-  const [justifs, setJustifs] = useState({});
+  // Lu UNE fois, au montage : les initialiseurs de useState s'exécutent dans
+  // l'ordre, `brouillon` est donc déjà résolu quand `seats` s'initialise.
+  const [brouillon] = useState(lireBrouillon);
+  const [seats, setSeats] = useState(() => brouillon?.seats ?? {});
+  const [justifs, setJustifs] = useState(() => brouillon?.justifs ?? {});
+  const [brouillonRestaure, setBrouillonRestaure] = useState(
+    () => Object.keys(brouillon?.seats ?? {}).length > 0,
+  );
   const [ouverte, setOuverte] = useState(null);      // liste dont l'analyse est dépliée
   const [feedback, setFeedback] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,7 +132,21 @@ export default function MaRepartition() {
     enabled: !!user?.email,
   });
 
+  // Le brouillon suit la saisie, frappe par frappe. C'est lui qui rend le mur
+  // déplaçable : entre le clic sur « Sauvegarder » et le retour de connexion, la
+  // page est détruite et remontée, et seul localStorage traverse ce trajet.
+  useEffect(() => {
+    if (deadlineClosed) return;
+    try {
+      if (!Object.keys(seats).length) localStorage.removeItem(BROUILLON_KEY);
+      else localStorage.setItem(BROUILLON_KEY, JSON.stringify({ seats, justifs }));
+    } catch { /* quota ou mode privé : le brouillon est un confort, pas une garantie */ }
+  }, [seats, justifs, deadlineClosed]);
+
   // Pré-remplit une seule fois, à l'arrivée des pronostics déjà déposés.
+  // Le garde `Object.keys(s).length` protège aussi le brouillon restauré : un
+  // pronostic serveur plus ancien ne doit pas écraser ce que le joueur vient de
+  // composer avant de se connecter.
   useEffect(() => {
     if (!existants.length) return;
     setSeats(s => (Object.keys(s).length ? s : Object.fromEntries(
@@ -153,6 +214,8 @@ export default function MaRepartition() {
   };
 
   const soumettre = async () => {
+    // Le mur, à sa place : après le travail, pas avant. Le brouillon vient
+    // d'être écrit par l'effet ci-dessus, la connexion peut emporter la page.
     if (!user) { base44.auth.redirectToLogin(window.location.href); return; }
     setIsSubmitting(true);
     setFeedback(null);
@@ -171,6 +234,10 @@ export default function MaRepartition() {
         points: res.participation_points,
       });
       setCelebre(c => c + 1);
+      // Déposé : le brouillon n'a plus de raison d'être, et le garder ferait
+      // réapparaître un « brouillon restauré » trompeur à la prochaine visite.
+      setBrouillonRestaure(false);
+      try { localStorage.removeItem(BROUILLON_KEY); } catch { /* rien à nettoyer */ }
     } catch (err) {
       if (err?.status === 403) setDeadlineClosed(true);
       const details = err?.response?.data?.validation?.errors;
@@ -184,16 +251,11 @@ export default function MaRepartition() {
     }
   };
 
-  if (user === null) {
-    return (
-      <Centre>
-        <p className="mb-4">Connecte-toi pour déposer ta répartition.</p>
-        <button onClick={() => base44.auth.redirectToLogin(window.location.href)} className="p-btn-deep">
-          Se connecter
-        </button>
-      </Centre>
-    );
-  }
+  // Plus d'écran de connexion ici : un invité compose sa répartition comme
+  // n'importe qui, et ne rencontre le mur qu'en appuyant sur « Sauvegarder ».
+  // `user === undefined` reste un état de chargement — l'authentification est
+  // encore en vol, et afficher la page en supposant l'un ou l'autre ferait
+  // clignoter le libellé du bouton.
   if (user === undefined || isLoading) return <Centre>Chargement…</Centre>;
 
 
@@ -224,6 +286,18 @@ export default function MaRepartition() {
           ? 'Pronostics clôturés'
           : <span>Clôture : <strong>{formatLocalDeadline(deadlineUtc)}</strong></span>}
       </div>
+
+      {/* Dire que le brouillon a été retrouvé, plutôt que de le restaurer en
+          silence : un joueur qui revient de la page de connexion doit VOIR que
+          son travail a survécu au trajet, sinon il refait ses arbitrages par
+          méfiance. C'est la moitié visible de la promesse du bouton. */}
+      {brouillonRestaure && feedback?.type !== 'ok' && (
+        <div role="status" className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs mb-6"
+          style={{ background: 'var(--p-green-dim)', color: 'var(--p-green-text)' }}>
+          <PenLine className="w-3.5 h-3.5 flex-shrink-0" />
+          <span>Ta répartition en cours a été retrouvée{user ? ' — il ne reste qu’à la valider.' : '.'}</span>
+        </div>
+      )}
 
       <div className="p-card p-4 mb-6">
         <Hemicycle seatsByListe={apercu} listes={listes} height={210} />
@@ -498,8 +572,17 @@ export default function MaRepartition() {
             ? 'Enregistrement…'
             : restants !== 0
               ? `Encore ${Math.abs(restants)} siège(s) à ajuster`
-              : 'Valider ma répartition'}
+              // Formulation en PERTE pour l'invité : à cet instant il a composé
+              // 120 sièges, et le mot « sauvegarder » désigne ce qu'il risque de
+              // perdre. « Se connecter » désignait un droit d'entrée, c'est-à-dire
+              // un coût, avant qu'il n'ait rien à protéger.
+              : user ? 'Valider ma répartition' : 'Sauvegarder ma répartition'}
         </button>
+        {!user && (
+          <p className="max-w-3xl mx-auto text-[11px] text-center mt-2" style={{ color: 'var(--p-text-40)' }}>
+            Compte gratuit — ta répartition est conservée pendant la connexion.
+          </p>
+        )}
       </div>
 
       <p className="text-center text-xs mt-6">

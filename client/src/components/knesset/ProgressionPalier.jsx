@@ -46,8 +46,8 @@ export default function ProgressionPalier({ progress, compact = false }) {
       <ConfettiBurst trigger={celebrate} />
       <div className="flex items-center justify-between gap-3 mb-2.5 flex-wrap">
         <div className="flex items-center gap-2">
-          <Trophy className="w-4 h-4" style={{ color: title.color }} />
-          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: title.color }}>
+          <Trophy className="w-4 h-4" style={{ color: title.text }} />
+          <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: title.text }}>
             {justLeveled ? 'Nouveau palier !' : 'Ta progression'}
           </span>
           {justLeveled && <Sparkles className="w-3.5 h-3.5" style={{ color: 'var(--p-gold-text)' }} />}
@@ -56,7 +56,7 @@ export default function ProgressionPalier({ progress, compact = false }) {
       </div>
 
       <div className="flex items-baseline gap-2 mb-2">
-        <span className="text-lg font-black" style={{ fontFamily: 'var(--font-display)', color: title.color }}>{title.label}</span>
+        <span className="text-lg font-black" style={{ fontFamily: 'var(--font-display)', color: title.text }}>{title.label}</span>
         {next && <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>→ {next.label}</span>}
       </div>
 
@@ -68,8 +68,8 @@ export default function ProgressionPalier({ progress, compact = false }) {
 
       <p className="text-xs mt-2" style={{ color: 'var(--p-text-60)' }}>
         {next
-          ? <>Plus que <b style={{ color: 'var(--p-text)' }}>{reste.toLocaleString('fr-FR')} pts</b> avant <b style={{ color: next.color }}>{next.label}</b>.</>
-          : <>Palier maximal atteint — tu es <b style={{ color: title.color }}>Oracle</b>.</>}
+          ? <>Plus que <b style={{ color: 'var(--p-text)' }}>{reste.toLocaleString('fr-FR')} pts</b> avant <b style={{ color: next.text }}>{next.label}</b>.</>
+          : <>Palier maximal atteint — tu es <b style={{ color: title.text }}>Oracle</b>.</>}
       </p>
     </div>
   );

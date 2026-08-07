@@ -141,7 +141,7 @@ export default function Quiz() {
               <React.Fragment key={t.label}>
                 {i > 0 && <span className="flex-shrink-0" style={{ color: 'var(--p-text-25)' }}>→</span>}
                 <div className="rounded-lg px-2.5 py-1.5 flex-shrink-0 text-center" style={{ background: `${t.color}12`, border: `1px solid ${t.color}40` }}>
-                  <div className="text-xs font-black" style={{ color: t.color }}>{t.label}</div>
+                  <div className="text-xs font-black" style={{ color: t.text }}>{t.label}</div>
                   <div className="text-[9px] font-mono" style={{ color: 'var(--p-text-40)' }}>{t.min.toLocaleString('fr-FR')}+ pts</div>
                 </div>
               </React.Fragment>

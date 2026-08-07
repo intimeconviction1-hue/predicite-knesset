@@ -15,6 +15,19 @@ export const CODE_LEN = 8;
 const MAX_LIGUES_PAR_USER = 20;
 const NAME_MIN = 2, NAME_MAX = 40;
 
+// Plafonds du SCORE — les MÊMES que client/src/lib/score.js, qui les applique au
+// classement général. Le serveur est déployé sans le dossier client : il ne peut
+// pas importer ce module, d'où la duplication. Elle était déjà là, mais en
+// chiffres nus noyés dans le SQL ; nommée ici, elle est au moins visible, et
+// server/tests/plafond-participation.test.mjs casse le jour où l'une des deux
+// copies dérive de l'autre.
+//
+// PARTICIPATION_CAP valait 720, calibré sur douze listes quand le référentiel en
+// compte treize actives : la treizième justification était écrêtée en silence.
+export const LEARNING_CAP = 300;
+export const REGULARITY_CAP = 900;
+export const PARTICIPATION_CAP = 770;   // 120 d'engagement + 13 listes actives × 50
+
 function randomCode() {
   let out = '';
   for (let i = 0; i < CODE_LEN; i++) {
@@ -116,16 +129,22 @@ export async function ligueLeaderboard(user_email, body) {
   // user_email ne sert qu'au drapeau is_you et n'est jamais renvoyé au client.
   //
   // SCORE unique = même formule que le classement général (client lib/score.js) :
-  // précision (total − quiz − régularité − participation, = pronostics + 25 %
-  // des gains de paris) + quiz plafonné à 300 + régularité plafonnée à 900
-  // + participation plafonnée à 720. On classe là-dessus.
+  // précision (total − quiz − régularité − participation, = pronostics + 25 % du
+  // BÉNÉFICE NET des paris) + quiz, régularité et participation plafonnés aux
+  // trois constantes ci-dessus. On classe là-dessus.
+  //
+  // Les plafonds sont interpolés depuis ces constantes et non réécrits à la
+  // main : ils étaient en dur dans le SQL, donc invisibles à toute recherche
+  // portant sur leur nom, et c'est exactement comme ça qu'un 720 a survécu à
+  // l'arrivée de la treizième liste. Entiers de notre propre code, jamais une
+  // entrée utilisateur : l'interpolation est sans risque d'injection.
   const rows = await queryAll(
     `SELECT lm.user_email,
             COALESCE(up.total_points, 0)        AS total_points,
             (GREATEST(COALESCE(up.total_points, 0) - COALESCE(up.learning_points, 0) - COALESCE(up.regularity_points, 0) - COALESCE(up.participation_points, 0), 0)
-              + LEAST(COALESCE(up.learning_points, 0), 300)
-              + LEAST(COALESCE(up.regularity_points, 0), 900)
-              + LEAST(COALESCE(up.participation_points, 0), 720))  AS score,
+              + LEAST(COALESCE(up.learning_points, 0), ${LEARNING_CAP})
+              + LEAST(COALESCE(up.regularity_points, 0), ${REGULARITY_CAP})
+              + LEAST(COALESCE(up.participation_points, 0), ${PARTICIPATION_CAP}))  AS score,
             COALESCE(up.predictions_count, 0)   AS predictions_count,
             COALESCE(up.correct_predictions, 0) AS correct_predictions,
             COALESCE(NULLIF(up.display_name, ''), 'Joueur ' || substr(md5(lm.user_email), 1, 4)) AS name

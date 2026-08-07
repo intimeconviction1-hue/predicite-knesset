@@ -62,7 +62,7 @@ export default function Leaderboard() {
     <div className="min-h-screen" style={{ background: 'transparent' }}>
 
       {/* Header */}
-      <div style={{ background: 'var(--p-night-2)', borderBottom: '0.5px solid var(--p-border)' }}>
+      <div style={{ background: 'var(--p-bg-2)', borderBottom: '0.5px solid var(--p-border)' }}>
         <div className="max-w-4xl mx-auto px-4 py-12">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-3 mb-3">
@@ -113,7 +113,7 @@ export default function Leaderboard() {
                   {(() => {
                     const t = titleForScore(getScore(currentUserProgress));
                     return (
-                      <span className="inline-block text-[10px] font-black uppercase tracking-widest mt-1 px-2 py-0.5 rounded-full" style={{ color: t.color, background: `${t.color}18`, border: `1px solid ${t.color}40` }}>{t.label}</span>
+                      <span className="inline-block text-[10px] font-black uppercase tracking-widest mt-1 px-2 py-0.5 rounded-full" style={{ color: t.text, background: `${t.color}18`, border: `1px solid ${t.color}40` }}>{t.label}</span>
                     );
                   })()}
                 </div>
@@ -264,7 +264,7 @@ export default function Leaderboard() {
             </div>
           </div>
 
-          <div style={{ background: 'var(--p-night)' }}>
+          <div style={{ background: 'var(--p-bg)' }}>
             {isLoading ? (
               [...Array(8)].map((_, i) => (
                 <div key={i} className="p-4" style={{ borderBottom: '0.5px solid var(--p-border)' }}>

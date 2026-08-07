@@ -24,7 +24,7 @@ import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import { joursAvantScrutin } from '@/lib/echeances';
-import { BLOC_LABEL, verdictMajorite } from '@/lib/blocs';
+import { BLOC_LABEL, verdictMajorite, campDe } from '@/lib/blocs';
 import { useProjection } from '@/lib/projection';
 
 /**
@@ -233,15 +233,18 @@ export default function Home() {
   // Likoud (32 sortants pour 23 au plus haut projeté) sortirait de la piste.
   const maxSeats = Math.max(20, ...listesAvecSieges.map(l => Math.max(l._seats, l.current_knesset_seats ?? 0)));
 
-  const coalitionSeats = listesAvecSieges.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
-  const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
-  const arabSeats = listesAvecSieges.filter(l => l.bloc === 'liste_arabe').reduce((s, l) => s + l._seats, 0);
+  // Le regroupement en camps vient de lib/blocs.js : il etait recopie ici, dans
+  // useCampaignFlux, dans MaRepartition et dans le bareme serveur.
+  const sommeCamp = (camp) => listesAvecSieges.filter(l => campDe(l.bloc) === camp).reduce((s, l) => s + l._seats, 0);
+  const proSeats = sommeCamp('pro');
+  const antiSeats = sommeCamp('anti');
+  const arabSeats = listesAvecSieges.filter(l => l.bloc === 'partis_arabes').reduce((s, l) => s + l._seats, 0);
 
   // Accroche dynamique — toujours vraie, quel que soit le sondage du jour.
   // La phrase vient de lib/blocs.js : elle était recopiée ici, dans le bandeau
   // en direct et dans la carte du fait du jour, et les trois avaient divergé.
   const verdict = projectionPrete
-    ? verdictMajorite({ coalition: coalitionSeats, opposition: oppositionSeats, arabes: arabSeats })
+    ? verdictMajorite({ pro: proSeats, anti: antiSeats, arabes: arabSeats })
     : null;
 
   const daysLeft = joursAvantScrutin();
@@ -339,9 +342,9 @@ export default function Home() {
                 que la base en contient 160. L'état le plus vu du site affirmait
                 le contraire de la vérité. */}
             <div className="text-left">
-              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-blue)' }}>{BLOC_LABEL.coalition}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-blue)' }}>{BLOC_LABEL.pro_netanyahou}</p>
               <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: projectionCharge ? 'var(--p-text-25)' : 'var(--p-blue)' }}>
-                {projectionCharge ? '—' : <CountUp value={coalitionSeats} />}
+                {projectionCharge ? '—' : <CountUp value={proSeats} />}
               </p>
             </div>
             <div className="text-center pb-0.5">
@@ -349,7 +352,7 @@ export default function Home() {
                 <p className="text-[10px] font-bold uppercase tracking-wide animate-pulse" style={{ color: 'var(--p-text-25)' }}>Chargement…</p>
               ) : arabSeats > 0 && (
                 <>
-                  <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-green-text)' }}>{BLOC_LABEL.liste_arabe}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-green-text)' }}>{BLOC_LABEL.partis_arabes}</p>
                   <p className="text-2xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-green-text)' }}><CountUp value={arabSeats} delay={400} /></p>
                 </>
               )}
@@ -358,9 +361,9 @@ export default function Home() {
               </p>
             </div>
             <div className="text-right">
-              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-red)' }}>{BLOC_LABEL.opposition}</p>
+              <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-red)' }}>{BLOC_LABEL.anti_netanyahou}</p>
               <p className="text-4xl font-black font-mono leading-none mt-1" style={{ color: projectionCharge ? 'var(--p-text-25)' : 'var(--p-red)' }}>
-                {projectionCharge ? '—' : <CountUp value={oppositionSeats} delay={200} />}
+                {projectionCharge ? '—' : <CountUp value={antiSeats} delay={200} />}
               </p>
             </div>
           </div>
@@ -411,8 +414,8 @@ export default function Home() {
               </Link>
               <ShareProjection
                 seatsByListe={rankedListes.filter(l => l._seats > 0).map(l => ({ seats: l._seats, color: l.color, name: l.name_fr }))}
-                coalition={coalitionSeats}
-                opposition={oppositionSeats}
+                pro={proSeats}
+                anti={antiSeats}
                 arab={arabSeats}
                 source={provenance}
               />

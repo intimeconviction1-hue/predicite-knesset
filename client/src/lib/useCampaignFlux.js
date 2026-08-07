@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/client';
 import { createPageUrl } from '@/utils';
 import { joursAvantScrutin } from '@/lib/echeances';
-import { verdictMajorite } from '@/lib/blocs';
+import { verdictMajorite, campDe } from '@/lib/blocs';
 import { formatProba } from '@/components/knesset/CoteTile';
 
 // Hook du « flux en direct » de la campagne : agrège des faits RÉELS (dernier
@@ -54,9 +54,10 @@ export function useCampaignFlux({ sansProjection = false } = {}) {
   const seatsByListe = new Map((latestPoll?.seats_by_liste || []).map(s => [s.liste_id, s.seats]));
   const listesAvecSieges = listes.map(l => ({ ...l, _seats: seatsByListe.get(l.id) ?? 0 }));
   const rankedListes = [...listesAvecSieges].sort((a, b) => b._seats - a._seats).slice(0, 10);
-  const coalitionSeats = listesAvecSieges.filter(l => l.bloc === 'coalition').reduce((s, l) => s + l._seats, 0);
-  const oppositionSeats = listesAvecSieges.filter(l => l.bloc === 'opposition' || l.bloc === 'non_alignee').reduce((s, l) => s + l._seats, 0);
-  const arabSeats = listesAvecSieges.filter(l => l.bloc === 'liste_arabe').reduce((s, l) => s + l._seats, 0);
+  const sommeCamp = (camp) => listesAvecSieges.filter(l => campDe(l.bloc) === camp).reduce((s, l) => s + l._seats, 0);
+  const proSeats = sommeCamp('pro');
+  const antiSeats = sommeCamp('anti');
+  const arabSeats = listesAvecSieges.filter(l => l.bloc === 'partis_arabes').reduce((s, l) => s + l._seats, 0);
   const daysLeft = joursAvantScrutin();
 
   const items = [];
@@ -67,7 +68,7 @@ export function useCampaignFlux({ sansProjection = false } = {}) {
     rankedListes.filter(l => l._seats > 0).slice(0, 4).forEach(l =>
       items.push({ emoji: '▪️', text: l.name_fr, value: `${l._seats}`, valueColor: l.color || 'var(--p-text)', to: `${createPageUrl('Liste')}?slug=${l.slug}` }),
     );
-    items.push({ emoji: '⚖️', text: verdictMajorite({ coalition: coalitionSeats, opposition: oppositionSeats, arabes: arabSeats }), to: createPageUrl('Listes') });
+    items.push({ emoji: '⚖️', text: verdictMajorite({ pro: proSeats, anti: antiSeats, arabes: arabSeats }), to: createPageUrl('Listes') });
   }
 
   // Mouvements — seulement entre deux sondages du MÊME institut (honnêteté).

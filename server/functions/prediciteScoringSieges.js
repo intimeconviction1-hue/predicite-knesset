@@ -1,6 +1,11 @@
 import { filterEntity, createEntity, updateEntity } from '../db/index.js';
 import { lireTout } from '../lib/lireTout.js';
 import { validerRepartition, MIN_SIEGES_AU_SEUIL, TOTAL_SIEGES } from './repartitionSieges.js';
+// Import d'un module CLIENT, assumé : c'est déjà ce que fait server/lib/meta-html.js
+// avec titres.js, le dépôt est déployé entier, et blocs.js est du JS pur sans
+// dépendance. Dupliquer le regroupement en camps ici serait la garantie qu'il
+// diverge un jour de ce que le site affiche — ce qu'il faisait déjà.
+import { campDe } from '../../client/src/lib/blocs.js';
 
 /**
  * Deux monnaies distinctes, et c'est volontaire.
@@ -219,10 +224,14 @@ export async function scoreSiegesAndSync() {
  * ou une recomposition, tiennent la balance. C'est exactement ce que la page
  * d'accueil enseigne depuis les trois blocs.
  *
- * Les clés de bloc restent celles de la base (renommage prévu au gel du
- * référentiel) : coalition = pro-Netanyahou, opposition + non_alignee = anti,
- * liste_arabe = pivot. Même regroupement que la Home, pour que le barème récompense
- * ce que le site montre.
+ * Le regroupement en camps ne vit plus ici : il est importé de
+ * client/src/lib/blocs.js, seul endroit où il soit écrit. Il était recopié
+ * verbatim dans ce fichier, dans useCampaignFlux, dans la Home et dans
+ * MaRepartition — quatre copies d'une même règle, dont c'est le barème qui
+ * décidait vraiment. Le barème et l'affichage ne peuvent plus diverger.
+ *
+ * Depuis le 2026-08-07, `sans_camp` (ex-`non_alignee`) ne compte plus dans le
+ * camp anti-Netanyahou : voir CAMP_DE dans blocs.js.
  *
  * @param {Map<string, number>} seatsByListe  liste_id → sièges
  * @param {Map<string, string>} blocById      liste_id → bloc
@@ -232,9 +241,9 @@ export function scenarioMajorite(seatsByListe, blocById) {
   let pro = 0;
   let anti = 0;
   for (const [liste_id, seats] of seatsByListe.entries()) {
-    const bloc = blocById.get(liste_id);
-    if (bloc === 'coalition') pro += seats || 0;
-    else if (bloc === 'opposition' || bloc === 'non_alignee') anti += seats || 0;
+    const camp = campDe(blocById.get(liste_id));
+    if (camp === 'pro') pro += seats || 0;
+    else if (camp === 'anti') anti += seats || 0;
   }
   if (pro >= MAJORITY_SEATS) return 'pro';
   if (anti >= MAJORITY_SEATS) return 'anti';

@@ -49,7 +49,7 @@ export default function Hemicycle({ seatsByListe = [], listes = [], height = 240
     if (!hasData) return Array(TOTAL_SEATS).fill({ color: NEUTRAL_COLOR, name: null });
 
     const byListeId = new Map(listes.map(l => [l.id, l]));
-    const blocOrder = { coalition: 0, non_alignee: 1, liste_arabe: 1, opposition: 2 };
+    const blocOrder = { pro_netanyahou: 0, sans_camp: 1, partis_arabes: 1, anti_netanyahou: 2 };
 
     const enriched = seatsByListe
       .filter(s => s.seats > 0)

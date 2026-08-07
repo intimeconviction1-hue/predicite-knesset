@@ -16,11 +16,19 @@ const MAX_LIGUES_PAR_USER = 20;
 const NAME_MIN = 2, NAME_MAX = 40;
 
 // Plafonds du SCORE — les MÊMES que client/src/lib/score.js, qui les applique au
-// classement général. Le serveur est déployé sans le dossier client : il ne peut
-// pas importer ce module, d'où la duplication. Elle était déjà là, mais en
-// chiffres nus noyés dans le SQL ; nommée ici, elle est au moins visible, et
-// server/tests/plafond-participation.test.mjs casse le jour où l'une des deux
-// copies dérive de l'autre.
+// classement général.
+//
+// La note précédente justifiait cette copie par « le serveur est déployé sans le
+// dossier client ». C'est FAUX : server/lib/meta-html.js importe
+// client/src/lib/titres.js à l'exécution, et functions/prediciteScoringSieges.js
+// importe blocs.js depuis le 2026-08-07 — le dépôt est déployé entier. La
+// duplication n'a donc pas la raison qu'on lui prêtait ; ce qui la tient encore,
+// c'est qu'elle alimente une requête SQL et non du JS, donc qu'il faudrait de
+// toute façon interpoler des valeurs. À reprendre : importer les trois plafonds
+// de score.js supprimerait la copie pour de bon.
+//
+// En attendant, server/tests/plafond-participation.test.mjs casse le jour où
+// l'une des deux copies dérive de l'autre.
 //
 // PARTICIPATION_CAP valait 720, calibré sur douze listes quand le référentiel en
 // compte treize actives : la treizième justification était écrêtée en silence.

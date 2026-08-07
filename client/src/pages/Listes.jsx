@@ -20,10 +20,10 @@ import { useProjection } from '@/lib/projection';
 // partagée. À chaque fois, la cause est la même : une valeur recopiée.
 const BLOC_OPTIONS = [
   { value: 'all', label: 'Tous les blocs' },
-  { value: 'coalition', label: BLOC_LABEL.coalition },
-  { value: 'opposition', label: BLOC_LABEL.opposition },
-  { value: 'liste_arabe', label: BLOC_LABEL.liste_arabe },
-  { value: 'non_alignee', label: BLOC_LABEL.non_alignee },
+  { value: 'pro_netanyahou', label: BLOC_LABEL.pro_netanyahou },
+  { value: 'anti_netanyahou', label: BLOC_LABEL.anti_netanyahou },
+  { value: 'partis_arabes', label: BLOC_LABEL.partis_arabes },
+  { value: 'sans_camp', label: BLOC_LABEL.sans_camp },
 ];
 
 export default function Listes() {

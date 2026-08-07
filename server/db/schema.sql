@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS listes (
   slug TEXT UNIQUE NOT NULL,
   ballot_letters TEXT,
   leader_name TEXT,
-  bloc TEXT NOT NULL CHECK (bloc IN ('coalition','opposition','liste_arabe','non_alignee')),
+  bloc TEXT NOT NULL CHECK (bloc IN ('pro_netanyahou','anti_netanyahou','partis_arabes','sans_camp')),
   color TEXT,
   founded_or_merged_note TEXT,
   is_active INTEGER NOT NULL DEFAULT 1,
@@ -377,3 +377,53 @@ CREATE TABLE IF NOT EXISTS actu_breves (
   created_at TEXT NOT NULL DEFAULT (now_iso())
 );
 CREATE INDEX IF NOT EXISTS idx_actu_breves_date ON actu_breves(pub_date);
+
+-- ── Migration : les clés de bloc rejoignent les libellés ────────────────────
+-- Les libellés avaient été réécrits le 2026-08-04 (client/src/lib/blocs.js) en
+-- laissant les clés derrière : « coalition » et « opposition » décrivent la 25e
+-- Knesset et ne désigneront plus rien le 28 octobre au matin. Le CREATE TABLE
+-- ci-dessus est en IF NOT EXISTS : sur une base déjà installée il ne fait rien,
+-- d'où ce bloc, qui seul touche la production.
+--
+-- 'non_alignee' devient 'sans_camp' AVEC un changement d'ARITHMÉTIQUE : il
+-- comptait jusqu'ici dans le camp anti-Netanyahou, ce qu'aucun commentaire ne
+-- justifiait et que son propre nom contredit — une liste non alignée versée
+-- d'office à un camp est une contradiction dans les termes. Aucune liste ne le
+-- porte aujourd'hui, la bascule est donc sans effet sur les données : c'est la
+-- RÈGLE qu'elle corrige, avant que le dépôt du 9 septembre ne la rende vivante.
+--
+-- La contrainte est retrouvée par le catalogue plutôt que par son nom supposé.
+-- « listes_bloc_check » est le nom qu'engendre un CHECK de colonne anonyme, mais
+-- la table de production a hérité de lignes que ce dépôt n'a jamais écrites
+-- (Base44) : rien ne garantit qu'elle ait été créée par ce fichier, ni qu'elle
+-- porte ce nom, ni même qu'elle porte une contrainte. Un DROP ... IF EXISTS sur
+-- le mauvais nom ne ferait rien, l'ancienne contrainte survivrait, et c'est
+-- l'UPDATE suivant qui échouerait — au démarrage du serveur, qui fait
+-- process.exit(1). Le catalogue ne se trompe pas de nom.
+--
+-- Idempotent : au second démarrage le DO retrouve la contrainte neuve et la
+-- retire, les UPDATE ne touchent aucune ligne, l'ADD la repose à l'identique.
+DO $$
+DECLARE nom text;
+BEGIN
+  SELECT conname INTO nom
+    FROM pg_constraint
+   WHERE conrelid = 'listes'::regclass
+     AND contype = 'c'
+     AND pg_get_constraintdef(oid) LIKE '%bloc%'
+   LIMIT 1;
+  IF nom IS NOT NULL THEN
+    EXECUTE format('ALTER TABLE listes DROP CONSTRAINT %I', nom);
+  END IF;
+END $$;
+
+UPDATE listes SET bloc = 'pro_netanyahou'  WHERE bloc = 'coalition';
+UPDATE listes SET bloc = 'anti_netanyahou' WHERE bloc = 'opposition';
+UPDATE listes SET bloc = 'partis_arabes'   WHERE bloc = 'liste_arabe';
+UPDATE listes SET bloc = 'sans_camp'       WHERE bloc = 'non_alignee';
+
+-- Volontairement SANS fourre-tout final : une valeur inconnue ici doit faire
+-- échouer le déploiement, pas être réécrite en douce vers 'sans_camp'. Render
+-- garde alors la version en ligne, et la ligne fautive se corrige à la main.
+ALTER TABLE listes ADD CONSTRAINT listes_bloc_check
+  CHECK (bloc IN ('pro_netanyahou','anti_netanyahou','partis_arabes','sans_camp'));

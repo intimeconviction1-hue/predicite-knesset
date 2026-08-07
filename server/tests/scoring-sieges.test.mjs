@@ -48,9 +48,9 @@ function seed() {
     Liste: [
       // name_fr, comme la colonne réelle de la table listes : un seed qui
       // invente « name » masquerait une erreur de nom de colonne côté serveur.
-      { id: LIKOUD, name_fr: 'Likoud', bloc: 'coalition', is_active: true },
-      { id: YESH, name_fr: 'Yesh Atid', bloc: 'opposition', is_active: true },
-      { id: PETITE, name_fr: 'Petite Liste', bloc: 'opposition', is_active: true },
+      { id: LIKOUD, name_fr: 'Likoud', bloc: 'pro_netanyahou', is_active: true },
+      { id: YESH, name_fr: 'Yesh Atid', bloc: 'anti_netanyahou', is_active: true },
+      { id: PETITE, name_fr: 'Petite Liste', bloc: 'anti_netanyahou', is_active: true },
     ],
     CampaignSettings: [
       { id: 'global', key: 'global', predictions_deadline_utc: '2099-01-01T00:00:00Z' },
@@ -141,7 +141,7 @@ test('contrainte de somme sur les 120 sièges', async (t) => {
 
   await t.test('refuse après la clôture', async () => {
     db = createMemoryDb({
-      Liste: [{ id: LIKOUD, name_fr: 'Likoud', bloc: 'coalition', is_active: true }],
+      Liste: [{ id: LIKOUD, name_fr: 'Likoud', bloc: 'pro_netanyahou', is_active: true }],
       CampaignSettings: [{ id: 'global', key: 'global', predictions_deadline_utc: '2020-01-01T00:00:00Z' }],
       UserProgress: [{ id: 'up-alice', user_email: ALICE, total_points: 0 }],
     });
@@ -265,7 +265,7 @@ test('scoring de bout en bout', async (t) => {
   await t.test('les trois scénarios sont distingués', async () => {
     // Ce que l'ancien critère confondait : une majorité adverse et une Knesset
     // sans majorité donnaient toutes deux « coalition < 61 ».
-    const blocs = new Map([[LIKOUD, 'coalition'], [YESH, 'opposition'], [PETITE, 'liste_arabe']]);
+    const blocs = new Map([[LIKOUD, 'pro_netanyahou'], [YESH, 'anti_netanyahou'], [PETITE, 'partis_arabes']]);
     const sieges = (a, b, c) => new Map([[LIKOUD, a], [YESH, b], [PETITE, c]]);
 
     assert.equal(scenarioMajorite(sieges(61, 49, 10), blocs), 'pro');
@@ -280,7 +280,7 @@ test('scoring de bout en bout', async (t) => {
   await t.test('une liste hors des deux camps ne fabrique pas de majorité', async () => {
     // Les partis arabes ne comptent dans aucun camp : c'est tout le sujet du
     // pivot. Leur ajouter des sièges ne doit jamais faire basculer le scénario.
-    const blocs = new Map([[LIKOUD, 'coalition'], [YESH, 'opposition'], [PETITE, 'liste_arabe']]);
+    const blocs = new Map([[LIKOUD, 'pro_netanyahou'], [YESH, 'anti_netanyahou'], [PETITE, 'partis_arabes']]);
     const avant = scenarioMajorite(new Map([[LIKOUD, 55], [YESH, 45], [PETITE, 0]]), blocs);
     const apres = scenarioMajorite(new Map([[LIKOUD, 55], [YESH, 45], [PETITE, 20]]), blocs);
     assert.equal(avant, 'aucun');

@@ -37,7 +37,7 @@ function seatPositions(total, cx, cy, rInner, rOuter, rows) {
   return pts;
 }
 
-function buildImage({ seatsByListe, coalition, opposition, arab, source }) {
+function buildImage({ seatsByListe, pro, anti, arab, source }) {
   const W = 1200, H = 630;
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
@@ -89,22 +89,22 @@ function buildImage({ seatsByListe, coalition, opposition, arab, source }) {
   // petit : ce sont eux le pivot, et ils étaient réduits à une mention.
   ctx.font = '800 40px system-ui, sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#2B5CE6'; ctx.fillText(`${coalition}`, 150, 470);
+  ctx.fillStyle = '#2B5CE6'; ctx.fillText(`${pro}`, 150, 470);
   ctx.textAlign = 'right';
-  ctx.fillStyle = '#C8102E'; ctx.fillText(`${opposition}`, W - 150, 470);
+  ctx.fillStyle = '#C8102E'; ctx.fillText(`${anti}`, W - 150, 470);
   ctx.font = '600 18px system-ui, sans-serif';
   ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(20,32,61,0.7)';
-  ctx.fillText(BLOC_LABEL.coalition.toUpperCase(), 150, 495);
+  ctx.fillText(BLOC_LABEL.pro_netanyahou.toUpperCase(), 150, 495);
   ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(20,32,61,0.7)';
-  ctx.fillText(BLOC_LABEL.opposition.toUpperCase(), W - 150, 495);
+  ctx.fillText(BLOC_LABEL.anti_netanyahou.toUpperCase(), W - 150, 495);
   if (arab > 0) {
     ctx.textAlign = 'center';
-    ctx.fillStyle = BLOC_COLOR.liste_arabe;
+    ctx.fillStyle = BLOC_COLOR.partis_arabes;
     ctx.font = '800 28px system-ui, sans-serif';
     ctx.fillText(`${arab}`, cx, 470);
     ctx.font = '600 15px system-ui, sans-serif';
     ctx.fillStyle = 'rgba(20,32,61,0.7)';
-    ctx.fillText(BLOC_LABEL.liste_arabe.toUpperCase(), cx, 493);
+    ctx.fillText(BLOC_LABEL.partis_arabes.toUpperCase(), cx, 493);
   }
 
   // Pied : source + site
@@ -117,16 +117,16 @@ function buildImage({ seatsByListe, coalition, opposition, arab, source }) {
   return canvas;
 }
 
-export default function ShareProjection({ seatsByListe = [], coalition = 0, opposition = 0, arab = 0, source, className = '' }) {
+export default function ShareProjection({ seatsByListe = [], pro = 0, anti = 0, arab = 0, source, className = '' }) {
   const [state, setState] = useState('idle'); // idle | shared | downloaded | copied
 
   const total = seatsByListe.reduce((s, l) => s + (l.seats || 0), 0);
   if (!total) return null;
 
   const handle = async () => {
-    const canvas = buildImage({ seatsByListe, coalition, opposition, arab, source });
+    const canvas = buildImage({ seatsByListe, pro, anti, arab, source });
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    const shareText = `Ma projection pour la Knesset 2026 : coalition ${coalition} · opposition ${opposition}. Fais la tienne sur PrédiCité.`;
+    const shareText = `Ma projection pour la Knesset 2026 : ${BLOC_LABEL.pro_netanyahou} ${pro} · ${BLOC_LABEL.anti_netanyahou} ${anti}. Fais la tienne sur PrédiCité.`;
     const url = 'https://' + SITE;
 
     // 1) Partage natif avec image (mobile surtout)

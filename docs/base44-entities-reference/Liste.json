@@ -9,7 +9,7 @@
     "leader_name": { "type": "string", "description": "Tête de liste actuelle" },
     "bloc": {
       "type": "string",
-      "enum": ["coalition", "opposition", "liste_arabe", "non_alignee"],
+      "enum": ["pro_netanyahou", "anti_netanyahou", "partis_arabes", "sans_camp"],
       "description": "Classification descriptive vis-à-vis de la coalition sortante, jamais un jugement de valeur"
     },
     "color": { "type": "string", "description": "Couleur hex pour les graphiques, ex. #0038B8" },

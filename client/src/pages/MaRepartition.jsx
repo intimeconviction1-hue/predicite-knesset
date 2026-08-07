@@ -11,6 +11,7 @@ import ShareProjection from '@/components/knesset/ShareProjection';
 import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
 import { TOTAL_SIEGES, MIN_SIEGES_AU_SEUIL } from '@/lib/knesset';
 import { useProjection } from '@/lib/projection';
+import { BLOC_LABEL, campDe } from '@/lib/blocs';
 
 /**
  * Répartition des 120 sièges — le pronostic principal du jeu.
@@ -186,14 +187,17 @@ export default function MaRepartition() {
   });
   const peutValider = restants === 0 && impossibles.length === 0 && !deadlineClosed;
 
-  // Blocs de MA répartition — repris à l'identique de la Home pour que le même
-  // mot désigne partout la même somme (non_alignee compte avec l'opposition).
+  // Blocs de MA répartition. Le regroupement vient de lib/blocs.js, seul endroit
+  // où il soit écrit : il était recopié ici, dans la Home, dans useCampaignFlux
+  // et dans le barème serveur, et le commentaire d'origine annonçait ici que
+  // « non_alignee compte avec l'opposition » — une règle que la migration du
+  // 2026-08-07 a précisément supprimée. Quatre copies, dont une déjà fausse.
   const blocs = useMemo(() => {
-    const somme = (test) => listes.filter(test).reduce((s, l) => s + valeur(l.id), 0);
+    const sommeCamp = (camp) => listes.filter(l => campDe(l.bloc) === camp).reduce((s, l) => s + valeur(l.id), 0);
     return {
-      coalition:  somme(l => l.bloc === 'coalition'),
-      opposition: somme(l => l.bloc === 'opposition' || l.bloc === 'non_alignee'),
-      arabe:      somme(l => l.bloc === 'liste_arabe'),
+      pro:   sommeCamp('pro'),
+      anti:  sommeCamp('anti'),
+      arabe: listes.filter(l => l.bloc === 'partis_arabes').reduce((s, l) => s + valeur(l.id), 0),
     };
   }, [listes, seats]);
 
@@ -302,9 +306,9 @@ export default function MaRepartition() {
       <div className="p-card p-4 mb-6">
         <Hemicycle seatsByListe={apercu} listes={listes} height={210} />
         <div className="flex items-center justify-center gap-5 mt-2 text-[11px]" style={{ color: 'var(--p-text-60)' }}>
-          <span>Coalition <b className="p-mono" style={{ color: 'var(--p-text)' }}>{blocs.coalition}</b></span>
-          <span>Opposition <b className="p-mono" style={{ color: 'var(--p-text)' }}>{blocs.opposition}</b></span>
-          {blocs.arabe > 0 && <span>Listes arabes <b className="p-mono" style={{ color: 'var(--p-text)' }}>{blocs.arabe}</b></span>}
+          <span>{BLOC_LABEL.pro_netanyahou} <b className="p-mono" style={{ color: 'var(--p-text)' }}>{blocs.pro}</b></span>
+          <span>{BLOC_LABEL.anti_netanyahou} <b className="p-mono" style={{ color: 'var(--p-text)' }}>{blocs.anti}</b></span>
+          {blocs.arabe > 0 && <span>{BLOC_LABEL.partis_arabes} <b className="p-mono" style={{ color: 'var(--p-text)' }}>{blocs.arabe}</b></span>}
         </div>
       </div>
 
@@ -502,9 +506,9 @@ export default function MaRepartition() {
           <div className="px-5 py-4">
             <div className="grid grid-cols-3 gap-3 text-center mb-4">
               {[
-                { label: 'Coalition', value: blocs.coalition },
-                { label: 'Opposition', value: blocs.opposition },
-                { label: 'Listes arabes', value: blocs.arabe },
+                { label: BLOC_LABEL.pro_netanyahou, value: blocs.pro },
+                { label: BLOC_LABEL.anti_netanyahou, value: blocs.anti },
+                { label: BLOC_LABEL.partis_arabes, value: blocs.arabe },
               ].map(b => (
                 <div key={b.label}>
                   <p className="p-mono text-2xl" style={{ color: 'var(--p-text)' }}>{b.value}</p>
@@ -525,8 +529,8 @@ export default function MaRepartition() {
                   .filter(l => valeur(l.id) > 0)
                   .map(l => ({ seats: valeur(l.id), color: l.color, name: l.name_fr }))
                   .sort((a, b) => b.seats - a.seats)}
-                coalition={blocs.coalition}
-                opposition={blocs.opposition}
+                pro={blocs.pro}
+                anti={blocs.anti}
                 arab={blocs.arabe}
                 source="Ma répartition · PrédiCité"
               />

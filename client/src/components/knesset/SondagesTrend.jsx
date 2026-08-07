@@ -59,7 +59,7 @@ export default function SondagesTrend() {
   if (!trend) return null;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-4">
+    <div className="p-reveal max-w-2xl mx-auto px-4 py-4">
       <div className="p-card p-5">
         <div className="flex items-center gap-2 mb-1">
           <TrendingUp className="w-4 h-4" style={{ color: 'var(--p-blue)' }} />

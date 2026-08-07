@@ -263,27 +263,35 @@ export default function Layout({ children, currentPageName }) {
           léger. Fixe au viewport (pas au document) pour rester présent
           partout, même entre les cartes, quel que soit le défilement. */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        {/* Photo institutionnelle en toile de fond, très discrète — visible surtout
-            sur les côtés gauche/droit au-delà de la colonne de contenu centrée. */}
+        {/* Photo institutionnelle en toile de fond — visible surtout sur les
+            côtés gauche/droit au-delà de la colonne de contenu centrée.
+            Elle était à 0.1 d'opacité sous 35 % de désaturation, c'est-à-dire
+            invisible : on payait le chargement d'une photo de 226 Ko pour un
+            gris légèrement sale. Remontée à 0.17, presque plus désaturée, avec
+            un gain de contraste — assez pour qu'on RECONNAISSE le bâtiment,
+            assez peu pour que le texte des cartes reste posé sur du calme. */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: "url('/images/knesset-hero.jpg')",
+          backgroundImage: "url('/images/knesset-parvis.jpg')",
           backgroundSize: 'cover',
-          backgroundPosition: 'center 30%',
-          opacity: 0.1,
-          filter: 'grayscale(35%)',
+          backgroundPosition: 'center 42%',
+          opacity: 0.17,
+          filter: 'grayscale(10%) contrast(1.06) saturate(1.08)',
         }} />
         <div className="p-bg-blob-a" style={{
           position: 'absolute', top: '-14%', left: '-10%', width: '54vw', height: '54vw', maxWidth: 700, maxHeight: 700,
           borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.15, filter: 'blur(85px)',
         }} />
+        {/* Halos bleus allégés (0.28 → 0.20, 0.24 → 0.17) : posés par-dessus la
+            photo, ils la repeignaient en bleu uni dès qu'on remontait son
+            opacité. Un halo doit colorer l'air, pas recouvrir le décor. */}
         <div className="p-bg-blob-b" style={{
           position: 'absolute', top: '0%', right: '-14%', width: '48vw', height: '48vw', maxWidth: 640, maxHeight: 640,
-          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.28, filter: 'blur(85px)',
+          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.20, filter: 'blur(85px)',
         }} />
         <div className="p-bg-blob-c" style={{
           position: 'absolute', top: '40%', left: '6%', width: '44vw', height: '44vw', maxWidth: 580, maxHeight: 580,
-          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.24, filter: 'blur(85px)',
+          borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.17, filter: 'blur(85px)',
         }} />
         <div className="p-bg-blob-d" style={{
           position: 'absolute', bottom: '-16%', right: '-8%', width: '52vw', height: '52vw', maxWidth: 680, maxHeight: 680,
@@ -493,7 +501,7 @@ export default function Layout({ children, currentPageName }) {
               )}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2.5 rounded-lg hover:bg-[rgba(20,32,61,0.05)] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+                className="p-2.5 rounded-lg hover:bg-[rgba(20,32,61,0.05)] active:bg-[rgba(20,32,61,0.1)] transition-colors min-w-[48px] min-h-[48px] flex items-center justify-center"
                 aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
                 aria-expanded={isMobileMenuOpen}
               >
@@ -518,10 +526,19 @@ export default function Layout({ children, currentPageName }) {
                 exit={{ opacity: 0, height: 0 }}
                 className="border-t border-[rgba(20,32,61,0.06)] overflow-hidden"
               >
-                <div className="p-3 space-y-0.5">
+                {/* Le menu compte dix-huit entrées : déplié, il mesure plus haut
+                    qu'un écran de téléphone. Il passait donc SOUS le dock de jeu,
+                    qui est fixé en bas — les dernières entrées (Actu, Historique,
+                    Méthodo, Connexion) étaient recouvertes et injoignables. Il a
+                    maintenant sa propre hauteur maximale et son propre
+                    défilement, calculés sur la hauteur du dock. */}
+                <div
+                  className="p-3 space-y-0.5 overflow-y-auto overscroll-contain"
+                  style={{ maxHeight: 'calc(100svh - 3.5rem - var(--p-dock-h) - 1.5rem)' }}
+                >
                   <Link
                     to={createPageUrl('Home')}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-lg text-[15px] font-medium transition-colors ${
                       isActive('Home') ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-gold-text)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
                     }`}
                   >
@@ -531,7 +548,7 @@ export default function Layout({ children, currentPageName }) {
 
                   <Link
                     to={createPageUrl('ReglesDuJeu')}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-lg text-[15px] font-semibold transition-colors ${
                       isActive('ReglesDuJeu') ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-gold-text)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
                     }`}
                   >
@@ -546,7 +563,7 @@ export default function Layout({ children, currentPageName }) {
                       <Link
                         key={item.name}
                         to={createPageUrl(item.name)}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-lg text-[15px] font-medium transition-colors ${
                           isActive(item.name) ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-blue-deep)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
                         }`}
                       >
@@ -563,7 +580,7 @@ export default function Layout({ children, currentPageName }) {
                       <Link
                         key={item.name}
                         to={createPageUrl(item.name)}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        className={`flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-lg text-[15px] font-medium transition-colors ${
                           isActive(item.name) ? 'bg-[rgba(20,32,61,0.08)] text-[var(--p-gold-text)]' : 'text-[var(--p-text-60)] hover:bg-[rgba(20,32,61,0.05)] hover:text-[var(--p-text)]'
                         }`}
                       >

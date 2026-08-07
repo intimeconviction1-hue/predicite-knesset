@@ -26,7 +26,7 @@ export default function ConsensusSondages({ sondages = [], listes = [], max = 6 
   const fmt = (d) => new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 
   return (
-    <div className="max-w-2xl mx-auto px-4 pb-4">
+    <div className="p-reveal max-w-2xl mx-auto px-4 pb-4">
       <div className="p-card p-4 md:p-5">
         <div className="flex items-center gap-2 mb-3">
           <Users className="w-4 h-4" style={{ color: 'var(--p-text-40)' }} />

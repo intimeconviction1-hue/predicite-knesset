@@ -199,6 +199,13 @@
    gardent leur cible de 44px. `.p-inline` est l'échappatoire manuelle. */
 button, [role="button"],
 a:not(p a, li a, span a, .p-prose a, .p-inline) { min-height: 44px; display: inline-flex; align-items: center; }
+
+/* `touch-action: manipulation` supprime le délai de ~300 ms que les navigateurs
+   mobiles s'accordent pour voir si le doigt allait faire un double-tap (zoom).
+   Sans lui, chaque appui du site répond en retard : ce n'est pas « difficile à
+   cliquer » au sens de la cible, c'est mou — et sur une nav où l'on enchaîne
+   les appuis, la sensation est celle d'un lien qui ne prend pas. */
+button, [role="button"], a, input[type="range"], label { touch-action: manipulation; }
 :focus-visible { outline: 2px solid var(--p-blue); outline-offset: 2px; border-radius: 4px; }
 
 .skip-to-content { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; z-index:-999; }
@@ -508,6 +515,21 @@ a:not(p a, li a, span a, .p-prose a, .p-inline) { min-height: 44px; display: inl
 .p-flip-face   { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; }
 .p-flip-back   { transform:rotateY(180deg); }
 
+/* ── Projecteur qui suit le curseur. Sur une grille de tuiles identiques, c'est
+   ce qui dit « celle-ci » sans rien changer aux autres : la lumière se déplace
+   avec la main, la tuile survolée prend un peu de sa propre couleur.
+   Réservé aux dispositifs de pointage réels — au doigt, un survol persistant
+   laisserait une tuile éclairée après le tap, ce qui désigne le mauvais
+   élément. ── */
+@media (hover: hover) and (pointer: fine) {
+  .p-spot::before {
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    opacity:0; transition:opacity .35s var(--p-ease);
+    background:radial-gradient(200px circle at var(--p-mx, 50%) var(--p-my, 50%), var(--p-spot-color, rgba(43,92,230,.18)), transparent 62%);
+  }
+  .p-spot:hover::before { opacity:1; }
+}
+
 /* ── Rail horizontal (deck de cartes, tuiles de jeux) : la barre de défilement
    native coupait le bas des cartes sur Windows. On la masque, mais JAMAIS sans
    contrepartie — la carte suivante dépasse toujours du bord (largeur en vw),
@@ -539,4 +561,5 @@ a:not(p a, li a, span a, .p-prose a, .p-inline) { min-height: 44px; display: inl
   .p-sheen::after { display:none !important; }
   .p-cote-up, .p-cote-down { animation:none !important; }
   .p-live-dot { animation:none !important; }
+  .p-spot::before { display:none !important; }
 }

@@ -33,7 +33,12 @@ const PUBLIC_READ = new Set([
 
 // Lecture réservée au propriétaire : le filtre user_email est imposé par le
 // serveur, il ne vient jamais de la query string.
-const OWNER_SCOPED = new Set(['PronosticSieges', 'PronosticPM', 'QuizReponse', 'ParisMise']);
+// MiniJeuPartie suit QuizReponse, son analogue exact : c'est un journal d'activité
+// nominatif. Sans cette ligne, l'entité serait lisible par n'importe quel compte
+// SANS filtre imposé — readGuard n'exige alors qu'une session, et la réponse
+// dirait qui a joué à quoi, quel jour. L'écriture, elle, reste admin par défaut :
+// les points se gagnent par /api/functions, jamais en POSTant la ligne soi-même.
+const OWNER_SCOPED = new Set(['PronosticSieges', 'PronosticPM', 'QuizReponse', 'ParisMise', 'MiniJeuPartie']);
 
 // Seule écriture autorisée à un joueur connecté sur cette route.
 const USER_WRITABLE = new Set(['PronosticPM']);

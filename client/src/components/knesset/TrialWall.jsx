@@ -1,9 +1,16 @@
 import React from 'react';
 import { base44 } from '@/api/client';
-import { Lock, ArrowRight, Trophy, Coins } from 'lucide-react';
+import { Lock, ArrowRight, Trophy, Coins, Sparkles } from 'lucide-react';
 
 // Mur d'inscription — s'affiche quand un invité a épuisé ses parties d'essai.
 // Ton positif (« tu as testé, la suite est gratuite »), pas punitif.
+//
+// Ce mur a longtemps annoncé « ton score sauvegardé + le classement » alors que
+// les quatre mini-jeux qu'il bloque n'écrivaient rien côté serveur : le visiteur
+// créait un compte pour obtenir ce qu'il avait déjà, c'est-à-dire rien. Les
+// parties sont désormais créditées (server/functions/miniJeux.js) et l'argument
+// est chiffré plutôt que vague — 10 points par jeu et par jour, ce qui est
+// vérifiable par le joueur dès l'écran de fin suivant.
 export default function TrialWall({ plays = 0 }) {
   return (
     <div className="p-card p-6 md:p-7 text-center">
@@ -18,8 +25,12 @@ export default function TrialWall({ plays = 0 }) {
 
       <div className="flex flex-col gap-2.5 mb-6 text-left max-w-xs mx-auto">
         <div className="flex items-center gap-2.5">
+          <Sparkles className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--p-green-text)' }} />
+          <span className="p-body text-sm" style={{ color: 'var(--p-text)' }}><b>10 points</b> par jeu terminé, chaque jour</span>
+        </div>
+        <div className="flex items-center gap-2.5">
           <Trophy className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--p-gold-text)' }} />
-          <span className="p-body text-sm" style={{ color: 'var(--p-text)' }}>Ton score sauvegardé + le classement</span>
+          <span className="p-body text-sm" style={{ color: 'var(--p-text)' }}>Ta place au classement général</span>
         </div>
         <div className="flex items-center gap-2.5">
           <Coins className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--p-blue)' }} />

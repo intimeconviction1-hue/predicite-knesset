@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TrendingUp, TrendingDown, Wind, RotateCcw, ArrowRight, Trophy, Flame } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
+import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
 
 const ROUNDS = 5;
@@ -95,7 +96,7 @@ export default function SensDuVent() {
 
   const next = () => {
     if (idx + 1 >= rounds.length) {
-      gate.record();          // +1 partie « découverte » (invités only ; alimente le mur)
+      gate.terminerPartie('sens-du-vent');   // compte la partie ET la crédite si connecté
       setPhase('done');
     } else { setIdx(i => i + 1); setReveal(null); }
   };
@@ -194,17 +195,8 @@ export default function SensDuVent() {
               <p className="p-display text-4xl mb-1">{score}<span className="text-2xl" style={{ color: 'var(--p-text-40)' }}> / {ROUNDS}</span></p>
               <p className="p-body text-sm mb-5">Meilleure série : <b className="font-mono" style={{ color: 'var(--p-orange-text)' }}>{best} 🔥</b></p>
 
-              {/* Mur d'inscription (accroche) — le vrai gating arrivera avec le mode essai */}
-              <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
-                <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>
-                  Tu as joué en <b>mode découverte</b>. Crée ton compte (gratuit) pour <b>sauver ton score</b>, miser tes jetons et grimper au classement.
-                </p>
-              </div>
+              <GainMiniJeu gain={gate.gain} isGuest={gate.isGuest} />
               <div className="flex items-center justify-center gap-3 flex-wrap">
-                <button onClick={() => base44.auth.redirectToLogin()} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-bold text-sm text-white"
-                  style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
-                  Créer mon compte <ArrowRight className="w-4 h-4" />
-                </button>
                 <button onClick={start} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm"
                   style={{ background: 'transparent', border: '0.5px solid var(--p-border-hover)', color: 'var(--p-text-60)' }}>
                   <RotateCcw className="w-4 h-4" /> Rejouer

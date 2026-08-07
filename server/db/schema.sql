@@ -130,6 +130,31 @@ CREATE TABLE IF NOT EXISTS quiz_reponses (
   UNIQUE(user_email, question_id)
 );
 
+-- Parties de MINI-JEUX déjà créditées. Une ligne = un jeu, un joueur, un jour.
+--
+-- Les quatre mini-jeux (Le sens du vent, Vrai ou Fake, la Boussole, Forme ta
+-- coalition) ne rapportaient rien : ils appelaient un compteur localStorage et
+-- s'arrêtaient là, y compris pour un joueur connecté. Le mur d'inscription qui
+-- les bloque au bout de trois parties promettait pourtant « ton score sauvegardé
+-- + le classement » — la promesse était donc fausse au moment exact où on la
+-- faisait, sur le geste de conversion.
+--
+-- La contrainte d'unicité EST la règle anti-grind, et elle est indispensable :
+-- contrairement au quiz, dont chaque QUESTION ne compte qu'une fois, un mini-jeu
+-- se rejoue à l'infini. Sans elle, enchaîner des parties remplirait le plafond
+-- d'apprentissage (300, voir client/src/lib/score.js) en une dizaine de minutes,
+-- sans rien apprendre. Un jeu par jour, quatre jeux : le plafond se remplit en
+-- une semaine de visites — ce qui récompense le retour, pas le pilonnage.
+CREATE TABLE IF NOT EXISTS mini_jeu_parties (
+  id TEXT PRIMARY KEY,
+  user_email TEXT NOT NULL,
+  jeu TEXT NOT NULL,
+  jour TEXT NOT NULL,                  -- 'AAAA-MM-JJ' en UTC
+  points INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (now_iso()),
+  UNIQUE(user_email, jeu, jour)
+);
+
 CREATE TABLE IF NOT EXISTS campaign_settings (
   key TEXT PRIMARY KEY,
   predictions_deadline_utc TEXT,

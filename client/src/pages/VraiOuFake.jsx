@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Check, X, RotateCcw, ArrowRight, Trophy, Flame } from 'lucide-react';
-import { base44 } from '@/api/client';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
+import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell, { JaugeManche } from '@/components/knesset/MiniJeuShell';
 
 const ROUNDS = 7;
@@ -55,7 +55,7 @@ export default function VraiOuFake() {
     else setStreak(0);
   };
   const next = () => {
-    if (idx + 1 >= rounds.length) { gate.record(); setPhase('done'); }
+    if (idx + 1 >= rounds.length) { gate.terminerPartie('vrai-ou-fake'); setPhase('done'); }
     else { setIdx(i => i + 1); setReveal(null); }
   };
 
@@ -122,13 +122,8 @@ export default function VraiOuFake() {
               <p className="text-[11px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--p-text-40)' }}>Ton résultat</p>
               <p className="p-display text-4xl mb-1">{score}<span className="text-2xl" style={{ color: 'var(--p-text-40)' }}> / {ROUNDS}</span></p>
               <p className="p-body text-sm mb-5">Meilleure série : <b className="font-mono" style={{ color: 'var(--p-orange-text)' }}>{best} 🔥</b></p>
-              <div className="rounded-xl p-4 mb-4" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
-                <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>Crée ton compte (gratuit) pour <b>sauver ton score</b> et grimper au classement.</p>
-              </div>
+              <GainMiniJeu gain={gate.gain} isGuest={gate.isGuest} />
               <div className="flex items-center justify-center gap-3 flex-wrap">
-                <button onClick={() => base44.auth.redirectToLogin()} className="p-btn-primary gap-2">
-                  Créer mon compte <ArrowRight className="w-4 h-4" />
-                </button>
                 <button onClick={start} className="p-btn-ghost gap-2">
                   <RotateCcw className="w-4 h-4" /> Rejouer
                 </button>

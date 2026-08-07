@@ -65,6 +65,7 @@ export const ENTITY_CONFIG = {
   KnessetHistorique: { table: 'knesset_historique', jsonFields: ['results'] },
   QuizQuestion: { table: 'quiz_questions', jsonFields: ['choices'] },
   QuizReponse: { table: 'quiz_reponses', boolFields: ['is_correct'] },
+  MiniJeuPartie: { table: 'mini_jeu_parties' },
   PronosticSieges: { table: 'pronostics_sieges', boolFields: ['predicted_above_threshold', 'is_correct'], hasUpdatedAt: true },
   CandidatPM: { table: 'candidats_pm', boolFields: ['is_active'] },
   PronosticPM: { table: 'pronostics_pm' },

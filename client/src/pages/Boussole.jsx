@@ -7,6 +7,7 @@ import { useGuestGate } from '@/lib/useGuestGate';
 import { STATEMENTS, COUVERTURE } from '@/lib/boussole-data';
 import { texteLisible } from '@/lib/couleurs';
 import TrialWall from '@/components/knesset/TrialWall';
+import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
 
 // SOLIDITÉ D'UN SCORE — borne inférieure de l'intervalle de Wilson à 95 %.
@@ -45,7 +46,7 @@ const DEGRES = [
   { v: -0.5, label: 'Plutôt non', aria: "Plutôt pas d'accord", Icone: ThumbsDown, fort: false,
     bg: 'var(--p-red-dim)',   bord: 'rgba(200,16,46,0.18)', teinte: 'var(--p-red)',      texte: 'var(--p-red)' },
   { v: 0,    label: 'Neutre',      aria: 'Sans opinion',        Icone: Minus,      fort: false,
-    bg: 'var(--p-night-2)',   bord: 'var(--p-border)',      teinte: 'var(--p-text-40)',  texte: 'var(--p-text-60)' },
+    bg: 'var(--p-bg-2)',   bord: 'var(--p-border)',      teinte: 'var(--p-text-40)',  texte: 'var(--p-text-60)' },
   { v: 0.5,  label: 'Plutôt oui', aria: "Plutôt d'accord",     Icone: ThumbsUp,   fort: false,
     bg: 'var(--p-green-dim)', bord: 'rgba(26,140,85,0.18)', teinte: 'var(--p-green)',    texte: 'var(--p-green-text)' },
   { v: 1,    label: 'Tout à fait', aria: "Tout à fait d'accord", Icone: ThumbsUp,  fort: true,
@@ -124,7 +125,7 @@ export default function Boussole() {
   };
   const answer = (v) => {
     const na = [...answers]; na[idx] = v; setAnswers(na);
-    if (idx + 1 >= STATEMENTS.length) { gate.record(); setPhase('done'); }
+    if (idx + 1 >= STATEMENTS.length) { gate.terminerPartie('boussole'); setPhase('done'); }
     else setIdx(idx + 1);
   };
 
@@ -172,7 +173,7 @@ export default function Boussole() {
               </div>
               {/* Cinq degrés plutôt que trois : l'intensité de l'accord porte de
                   l'information que le binaire jetait. Cinq et non onze, parce
-                  qu'un curseur 0-10 sur 13 questions ajoute un geste de réglage
+                  qu'un curseur 0-10 sur chaque affirmation ajoute un geste de réglage
                   PUIS une validation à chaque écran — ici tout se joue en un tap.
                   Le calcul accepte n'importe quelle granularité : passer au
                   curseur ne demanderait que de changer les valeurs ci-dessous. */}
@@ -233,13 +234,8 @@ export default function Boussole() {
                 ))}
               </div>
 
-              <div className="rounded-xl p-3 mb-4" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
-                <p className="p-body text-sm" style={{ color: 'var(--p-text)' }}>Crée ton compte pour <b>garder ton profil</b>, jouer et grimper au classement.</p>
-              </div>
+              <GainMiniJeu gain={gate.gain} isGuest={gate.isGuest} />
               <div className="flex items-center justify-center gap-3 flex-wrap">
-                <button onClick={() => base44.auth.redirectToLogin()} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-bold text-sm text-white" style={{ background: 'var(--p-blue)', boxShadow: '0 8px 20px -8px rgba(43,92,230,0.6)' }}>
-                  Créer mon compte <ArrowRight className="w-4 h-4" />
-                </button>
                 <button onClick={start} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] font-semibold text-sm" style={{ background: 'transparent', border: '0.5px solid var(--p-border-hover)', color: 'var(--p-text-60)' }}>
                   <RotateCcw className="w-4 h-4" /> Refaire
                 </button>

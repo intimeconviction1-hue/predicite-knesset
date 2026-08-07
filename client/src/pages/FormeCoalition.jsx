@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Landmark, Check, RotateCcw, Trophy, Gauge } from 'lucide-react';
 import { useGuestGate } from '@/lib/useGuestGate';
 import TrialWall from '@/components/knesset/TrialWall';
+import GainMiniJeu from '@/components/knesset/GainMiniJeu';
 import MiniJeuShell from '@/components/knesset/MiniJeuShell';
 import { MAJORITE, TOTAL_SIEGES } from '@/lib/knesset';
 import { useProjection } from '@/lib/projection';
@@ -49,7 +50,7 @@ export default function FormeCoalition() {
 
   const toggle = (slug) => { setResult(null); setSelected(sel => sel.includes(slug) ? sel.filter(s => s !== slug) : [...sel, slug]); };
   const reset = () => { setSelected([]); setResult(null); };
-  const check = () => { gate.record(); setResult({ majority: total >= MAJORITE, total, score }); };
+  const check = () => { gate.terminerPartie('forme-coalition'); setResult({ majority: total >= MAJORITE, total, score }); };
 
   const majPct = (MAJORITE / TOTAL_SIEGES) * 100;
 
@@ -100,7 +101,7 @@ export default function FormeCoalition() {
                 return (
                   <button key={p.slug} onClick={() => toggle(p.slug)} aria-pressed={on}
                     className="inline-flex items-center gap-1.5 rounded-full pl-2 pr-2.5 py-1.5 transition-all"
-                    style={{ background: on ? 'var(--p-blue-dim)' : 'var(--p-night-2)', border: `1px solid ${on ? 'var(--p-blue)' : 'var(--p-border)'}`, opacity: on ? 1 : 0.82 }}>
+                    style={{ background: on ? 'var(--p-blue-dim)' : 'var(--p-bg-2)', border: `1px solid ${on ? 'var(--p-blue)' : 'var(--p-border)'}`, opacity: on ? 1 : 0.82 }}>
                     <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: p.color }} />
                     <span className="text-xs font-semibold" style={{ color: 'var(--p-text)' }}>{p.name}</span>
                     <span className="text-xs font-mono font-bold" style={{ color: 'var(--p-text-40)' }}>{p.seats}</span>
@@ -115,7 +116,7 @@ export default function FormeCoalition() {
                 liste des frictions EST la réponse, l'afficher pendant la
                 sélection revenait à donner le résultat avant le clic. */}
             {revele && active.length > 0 && (
-              <div className="rounded-xl p-3 mb-4" style={{ background: 'var(--p-night-2)', border: '0.5px solid var(--p-border)' }}>
+              <div className="rounded-xl p-3 mb-4" style={{ background: 'var(--p-bg-2)', border: '0.5px solid var(--p-border)' }}>
                 <p className="text-[10px] font-bold uppercase tracking-widest mb-1.5" style={{ color: 'var(--p-text-40)' }}>Ce qui rend cette coalition moins probable</p>
                 {active.slice(0, 4).map((f, i) => (
                   <div key={i} className="flex items-center justify-between gap-2 text-xs py-0.5">
@@ -154,6 +155,11 @@ export default function FormeCoalition() {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Le gain ne s'affiche qu'une fois le verdict rendu : c'est « Vérifier »
+                qui termine la partie ici, pas une manche finale comme dans les
+                trois autres jeux. */}
+            {result && <GainMiniJeu gain={gate.gain} isGuest={gate.isGuest} />}
 
             <div className="flex items-center gap-3">
               <button onClick={check} disabled={selected.length === 0 || revele}

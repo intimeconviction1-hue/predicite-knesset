@@ -9,6 +9,7 @@ import { submitRepartitionSieges, scoreSiegesAndSync, scoreBlocMajoritaire } fro
 import { resolvePremierMinistre, autoResolveIfExpired } from '../functions/resolvePremierMinistre.js';
 import { ensureUserProgress, updateStreakAndBadges, getUserBadges } from '../functions/miscFunctions.js';
 import { submitQuizAnswer } from '../functions/quizScoring.js';
+import { crediterPartieMiniJeu } from '../functions/miniJeux.js';
 import { getOpenMarketsWithCotes, placerMise, ensureWeeklyJetons, openMancheRang, resolveByPoll, proposerMarchesEvenements, openMarcheEvenement, resolveMarcheManuel, listerMises } from '../functions/parisSondages.js';
 import { getDefiSerie, startDefiSerie } from '../functions/defisQuiz.js';
 import { createLigue, joinLigue, myLigues, ligueLeaderboard, leaveLigue } from '../functions/ligues.js';
@@ -40,6 +41,17 @@ router.post('/:name', requireAuth, async (req, res) => {
 
       case 'submitQuizAnswer':
         return res.json(await submitQuizAnswer(req.user.email, body));
+
+      // Mini-jeux : une partie terminée vaut des points d'apprentissage. Passe
+      // par requireAuth comme tout ce routeur — un invité reçoit 401, ce qui est
+      // le comportement voulu : il joue, il n'accumule pas. Le client ne tente
+      // même pas l'appel tant qu'il n'a pas de session.
+      case 'miniJeux': {
+        if (body.action === 'partieTerminee') {
+          return res.json(await crediterPartieMiniJeu(req.user.email, body));
+        }
+        return res.status(400).json({ error: 'action inconnue' });
+      }
 
       case 'prediciteScoringSieges': {
         if (body.action === 'submitRepartition') {

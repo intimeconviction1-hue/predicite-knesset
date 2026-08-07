@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
 import Onboarding from '@/components/knesset/Onboarding';
+import BarreDeJeu from '@/components/knesset/BarreDeJeu';
 import { computeScore } from '@/lib/score';
 import { titrePour } from '@/lib/titres';
 
@@ -596,9 +597,19 @@ export default function Layout({ children, currentPageName }) {
       {/* Onboarding « premier pronostic » — modale au tout premier passage */}
       <Onboarding />
 
+      {/* Le dock de jeu — présent sur toutes les pages. Le geste fondateur
+          (répartir les 120 sièges) et les cotes vivaient jusqu'ici au fond d'un
+          menu déroulant : depuis le bas d'une fiche de liste, il fallait remonter
+          tout le défilement puis ouvrir le burger pour jouer. */}
+      <BarreDeJeu jetons={userProgress?.jetons ?? null} />
+
       {/* Footer */}
+      {/* Le pied de page réserve la hauteur du dock : c'est LUI qui allonge, pas
+          la page, sinon on verrait une bande de fond nu sous le footer. Le dock
+          flotte donc au-dessus de son propre fond, jamais au-dessus d'un lien. */}
       <footer role="contentinfo" className="border-t border-[rgba(20,32,61,0.08)] mt-auto" style={{ background: 'var(--p-night-2)', color: 'var(--p-text)' }}>
-        <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="max-w-7xl mx-auto px-4 pt-10"
+          style={{ paddingBottom: 'calc(var(--p-dock-h) + 24px + env(safe-area-inset-bottom, 0px))' }}>
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-3">

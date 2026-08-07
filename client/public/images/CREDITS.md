@@ -6,7 +6,10 @@ libre. Redimensionnées/compressées pour le web (JPEG qualité 78, largeur max
 
 | Fichier | Page | Sujet | Auteur | Licence | Source |
 |---|---|---|---|---|---|
-| `knesset-hero.jpg` | Home | Bâtiment de la Knesset | (non documenté — importé avant ce fichier de crédits) | CC0 (indiqué) | Wikimedia Commons |
+| `knesset-parvis.jpg` | Home (héros principal), fond de site | Knesset vue de face depuis le parvis, drapeaux | Clema12 | CC BY-SA 4.0 | [File:Knesset front side - 2022.jpg](https://commons.wikimedia.org/wiki/File:Knesset_front_side_-_2022.jpg) |
+| `knesset-soir.jpg` | Home, Paris (rotation du héros) | Knesset de trois quarts, lumière rasante, panoramique | Shlomo Spitzer (שלמה שפיצר) | CC BY 2.5 | [File:Knesset Building Jerusalem Avney Moreshet 9331685f.jpg](https://commons.wikimedia.org/wiki/File:Knesset_Building_Jerusalem_Avney_Moreshet_9331685f.jpg) |
+| `knesset-archive.jpg` | Historique | Knesset et passants, vers 1980 | Leifern | CC BY-SA 3.0 | [File:Knesset in Jerusalem Israel.jpg](https://commons.wikimedia.org/wiki/File:Knesset_in_Jerusalem_Israel.jpg) |
+| `knesset-hero.jpg` | (retiré des héros le 07/08 — cadrage de trottoir : abribus, poubelle et grillage au premier plan) | Bâtiment de la Knesset | (non documenté — importé avant ce fichier de crédits) | CC0 (indiqué) | Wikimedia Commons |
 | `listes-hero.jpg` | Listes | Hémicycle, vue intérieure | בית השלום | Libre avec attribution (redistribution/usage commercial permis) | [Knesset Hall.JPG](https://commons.wikimedia.org/wiki/File:Knesset_Hall.JPG) |
 | `liste-hero.jpg` | Liste | Bâtiment de la Knesset, extérieur jour | ד"ר אבישי טייכר (Avishai Teicher), via PikiWiki Israel | CC BY 2.5 | [File:PikiWiki_Israel_14023_Knesset_in_Jerusalem.JPG](https://commons.wikimedia.org/wiki/File:PikiWiki_Israel_14023_Knesset_in_Jerusalem.JPG) |
 | `pm-hero.jpg` | PremierMinistre | Statue de la Menorah devant la Knesset, de nuit | Barak Shacked, via PikiWiki Israel | CC BY 2.5 | [File:PikiWiki_Israel_42502_Menorah_Statue_night_shoot.jpg](https://commons.wikimedia.org/wiki/File:PikiWiki_Israel_42502_Menorah_Statue_night_shoot.jpg) |

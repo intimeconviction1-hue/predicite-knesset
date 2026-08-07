@@ -26,7 +26,7 @@ export default function Voter() {
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <CinematicHero
         size="md"
-        photos={['/images/knesset-hero.jpg']}
+        photos={['/images/knesset-parvis.jpg']}
         position="center 30%"
         kicker="Passer à l'acte · côté électeur"
         title="Comment on vote"

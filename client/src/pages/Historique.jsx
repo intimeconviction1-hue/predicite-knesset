@@ -200,9 +200,11 @@ export default function Historique() {
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
+      {/* Une page d'histoire mérite une photo d'époque : la Knesset vers 1980,
+          voitures et passants compris. */}
       <CinematicHero
         size="md"
-        photos={['/images/knesset-hero.jpg']}
+        photos={['/images/knesset-archive.jpg']}
         position="center 30%"
         kicker="Depuis 1949"
         title="L'histoire des Knesset"

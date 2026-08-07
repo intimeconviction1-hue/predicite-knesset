@@ -14,7 +14,7 @@ import HeroBackdrop from '@/components/knesset/HeroBackdrop';
 // Utilisation :
 //   <CinematicHero
 //     size="lg"
-//     photos={['/images/knesset-hero.jpg', ...]}
+//     photos={['/images/knesset-parvis.jpg', ...]}
 //     position="center 26%"
 //     badge={{ text: `La campagne en direct · J-${d}`, live: true }}
 //     kicker="Élections à la Knesset · 25ᵉ législature"
@@ -48,13 +48,25 @@ export function HeroGold({ children }) {
 //  - 'marbre' (défaut) : voile BLEU institutionnel — l'info, l'élection, l'histoire
 //  - 'jeu'             : voile AMBRÉ/or — les pages où l'on joue (paris, quiz,
 //                        ligues, classement). Même grammaire, énergie différente.
+// Le voile était UN aplat très dense (0.93 en haut, 0.78 à 30 %, 0.60 au
+// milieu) : il rendait le texte lisible en effaçant la photo. On ne voyait plus
+// ni la pierre de Jérusalem, ni les drapeaux, ni le ciel — juste du bleu.
+//
+// Il se décompose maintenant en DEUX couches, comme sur une affiche de cinéma :
+//   · le VOILE, léger, qui pose l'ambiance et assure le fondu vers le clair ;
+//   · le SCRIM, une ombre elliptique posée seulement SOUS LE TEXTE, là où la
+//     lisibilité se joue vraiment.
+// Le blanc du titre garde ainsi 8:1 de contraste même sur la partie la plus
+// claire d'une photo, et la photo reste une photo partout ailleurs.
 const REGISTRES = {
   marbre: {
-    voile: 'linear-gradient(180deg, rgba(3,14,52,0.93) 0%, rgba(5,30,104,0.78) 30%, rgba(8,40,122,0.60) 52%, rgba(237,241,249,0.5) 74%, FADE 92%)',
+    voile: 'linear-gradient(180deg, rgba(2,10,36,0.72) 0%, rgba(4,20,74,0.40) 24%, rgba(6,30,98,0.22) 46%, rgba(10,44,124,0.30) 62%, rgba(237,241,249,0.55) 82%, FADE 95%)',
+    scrim: 'radial-gradient(78% 54% at 50% 46%, rgba(1,7,26,0.62) 0%, rgba(1,7,26,0.34) 46%, transparent 72%)',
     kicker: '#9fc0ff',
   },
   jeu: {
-    voile: 'linear-gradient(180deg, rgba(30,20,2,0.91) 0%, rgba(92,64,10,0.76) 30%, rgba(120,86,16,0.56) 52%, rgba(237,241,249,0.5) 74%, FADE 92%)',
+    voile: 'linear-gradient(180deg, rgba(26,17,2,0.74) 0%, rgba(74,50,8,0.42) 24%, rgba(104,72,14,0.24) 46%, rgba(120,86,16,0.32) 62%, rgba(237,241,249,0.55) 82%, FADE 95%)',
+    scrim: 'radial-gradient(78% 54% at 50% 46%, rgba(20,12,0,0.62) 0%, rgba(20,12,0,0.34) 46%, transparent 72%)',
     kicker: '#ffd77a',
   },
 };
@@ -95,18 +107,23 @@ export default function CinematicHero({
         <HeroBackdrop images={photos} position={position} interval={interval} />
       </motion.div>
 
-      {/* voile bleu institutionnel : sombre en haut (texte blanc lisible),
-          photo visible au milieu, fondu vers le clair avant le contenu */}
+      {/* 1. Voile d'ambiance — léger, et fondu vers le clair avant le contenu */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: reg.voile.replace('FADE', fadeTo),
       }} />
-      {/* vignette cinéma */}
+      {/* 2. Scrim de lisibilité — l'ombre douce posée seulement sous le texte.
+             C'est LUI qui rend le blanc lisible, pas le voile : il travaille sur
+             un huitième de la surface au lieu de la totalité, donc la photo
+             survit partout ailleurs. */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: reg.scrim }} />
+      {/* 3. Vignette cinéma — resserrée sur les bords, plus franche qu'avant :
+             c'est elle qui donne l'impression d'objectif photographique. */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: 'radial-gradient(120% 92% at 50% 12%, transparent 42%, rgba(0,10,40,0.34) 100%)',
+        background: 'radial-gradient(125% 95% at 50% 18%, transparent 38%, rgba(0,8,32,0.46) 100%)',
       }} />
-      {/* grain fin */}
+      {/* 4. Grain argentique fin */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        opacity: 0.05, backgroundImage: 'radial-gradient(rgba(255,255,255,0.9) 0.5px, transparent 0.5px)', backgroundSize: '3px 3px',
+        opacity: 0.06, backgroundImage: 'radial-gradient(rgba(255,255,255,0.9) 0.5px, transparent 0.5px)', backgroundSize: '3px 3px',
       }} />
 
       {/* Menorah de l'État en filigrane */}

@@ -14,6 +14,12 @@ export default function HeroBackdrop({
   interval = 6000,   // durée d'affichage par image (ms)
   fade = 1600,       // durée du fondu croisé (ms)
   position = 'center 26%',
+  // Étalonnage. Les photos libres de Wikimedia sont prises en plein midi de
+  // Jérusalem : ciel délavé, pierre grise, contraste écrasé. Un léger gain de
+  // contraste et de saturation, plus une pointe de chaleur, leur rend le relief
+  // qu'un capteur en plein soleil aplatit — c'est ce que fait un étalonneur, et
+  // c'est ce qui sépare une photo d'illustration d'une image de film.
+  filtre = 'contrast(1.1) saturate(1.14) brightness(0.97)',
 }) {
   const [active, setActive] = useState(0);
   // Lue de façon synchrone A L'INITIALISATION : dans un useEffect, le premier
@@ -35,6 +41,10 @@ export default function HeroBackdrop({
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
       {images.map((src, i) => {
         const isActive = i === active;
+        // Le sens du panoramique alterne d'une image à l'autre. Un Ken Burns
+        // qui zoome toujours de la même façon finit par se voir comme un effet ;
+        // alterné, il se lit comme un mouvement de caméra.
+        const sens = i % 2 === 0 ? 1 : -1;
         return (
           <div
             key={src}
@@ -44,14 +54,16 @@ export default function HeroBackdrop({
               backgroundImage: `url('${src}')`,
               backgroundSize: 'cover',
               backgroundPosition: position,
+              filter: filtre,
               opacity: isActive ? 1 : 0,
-              transition: `opacity ${fade}ms ease-in-out`,
-              // Ken Burns : l'image active dérive/zoome lentement ; les autres
-              // reviennent à l'échelle neutre pendant qu'elles sont invisibles.
-              transform: isActive && !reduced ? 'scale(1.08)' : 'scale(1)',
+              // Ken Burns : l'image active zoome ET panoramique lentement ; les
+              // autres reviennent au repos pendant qu'elles sont invisibles.
+              transform: isActive && !reduced
+                ? `scale(1.12) translate(${sens * 1.4}%, ${sens * -0.9}%)`
+                : 'scale(1) translate(0, 0)',
               transitionProperty: 'opacity, transform',
               transitionDuration: `${fade}ms, ${interval + fade}ms`,
-              transitionTimingFunction: 'ease-in-out, ease-out',
+              transitionTimingFunction: 'ease-in-out, cubic-bezier(.22,.61,.36,1)',
               willChange: 'opacity, transform',
             }}
           />

@@ -236,11 +236,13 @@ export default function Paris() {
 
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
+      {/* La lumière rasante de fin de journée va avec le voile ambré du registre
+          Jeu ; le plein midi de l'ancienne photo le contredisait. */}
       <CinematicHero
         registre="jeu"
         size="sm"
-        photos={['/images/knesset-hero.jpg']}
-        position="center 30%"
+        photos={['/images/knesset-soir.jpg']}
+        position="center 46%"
         badge={{ text: 'La campagne en direct', live: true }}
         kicker="Paris · cotes · événements · flux"
         title={<>Le <HeroGold>direct</HeroGold></>}

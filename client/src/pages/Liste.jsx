@@ -97,7 +97,10 @@ export default function ListePage() {
   const listeBets = (parisData?.marches || [])
     .map(m => {
       const iss = (m.issues || []).find(i => i.match_value === liste?.id);
-      return iss ? { question: m.question, cote: iss.cote.toFixed(2), to: createPageUrl('Paris') } : null;
+      // La cote reste un NOMBRE jusqu'à l'affichage : c'est <CoteTile> qui la
+      // met en forme (et qui, pour cela, doit pouvoir la comparer à la
+      // précédente pour signaler un mouvement).
+      return iss ? { question: m.question, label: iss.label, cote: iss.cote, to: createPageUrl('Paris') } : null;
     })
     .filter(Boolean)
     .slice(0, 3);

@@ -60,7 +60,9 @@ export default function PremierMinistre() {
     .slice(0, 3)
     .map(m => {
       const iss = (m.issues || []).find(i => candListeIds.has(i.match_value)) || m.issues[0];
-      return { question: m.question, cote: iss.cote.toFixed(2), to: createPageUrl('Paris') };
+      // Cote en NOMBRE : la mise en forme (et le signal de mouvement) appartient
+      // à <CoteTile>.
+      return { question: m.question, label: iss.label, cote: iss.cote, to: createPageUrl('Paris') };
     });
 
   // Deep-link depuis une fiche liste (?candidat=ID) : ouvre la bio du candidat.

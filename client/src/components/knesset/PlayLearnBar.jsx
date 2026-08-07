@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Zap, HelpCircle, ArrowRight } from 'lucide-react';
+import CoteTile from '@/components/knesset/CoteTile';
 
 // Barre « joue-le / apprends-le » : la mécanique des vases communicants rendue
 // permanente et cliquable. Posée sur une fiche (liste, PM, événement…), elle
@@ -31,12 +32,14 @@ export default function PlayLearnBar({
       {subtitle && <p className="text-xs mb-3" style={{ color: 'var(--p-text-60)' }}>{subtitle}</p>}
 
       {hasBets ? (
+        /* Même tuile que le hub des paris et le terrain de jeu. La ligne
+           précédente n'affichait que la question et la cote : on pariait sans
+           savoir sur QUELLE issue (« Likoud » ou « Yashar » ?). Le libellé de
+           l'issue est désormais la ligne principale, la question la surligne. */
         <div className="space-y-2 mb-3">
           {bets.map((b, i) => (
-            <Link key={i} to={b.to} className="flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 transition-transform hover:-translate-y-0.5" style={{ background: 'var(--p-card)', border: '0.5px solid var(--p-border)' }}>
-              <span className="text-sm font-semibold" style={{ color: 'var(--p-text)' }}>{b.question}</span>
-              <span className="font-mono font-bold text-sm flex-shrink-0" style={{ color: 'var(--p-blue)' }}>×{b.cote}</span>
-            </Link>
+            <CoteTile key={i} registre="clair" taille="md" to={b.to}
+              kicker={b.question} label={b.label || b.question} cote={b.cote} />
           ))}
         </div>
       ) : (

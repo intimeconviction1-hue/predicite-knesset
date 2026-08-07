@@ -5,6 +5,7 @@ import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { Info, ArrowRight } from 'lucide-react';
 import CinematicHero, { HeroGold } from '@/components/knesset/CinematicHero';
+import CoteTile, { formatCote } from '@/components/knesset/CoteTile';
 import ConfettiBurst from '@/components/knesset/ConfettiBurst';
 import LiveTicker from '@/components/knesset/LiveTicker';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
@@ -58,27 +59,23 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
       </div>
       <h3 className="p-title text-lg mb-4">{market.question}</h3>
 
-      {/* issues avec cotes */}
+      {/* Les cotes. Elles passent par <CoteTile>, la même brique que le terrain
+          de jeu et le dos des cartes : une seule grammaire de cote sur tout le
+          site, et le mouvement (▲/▼ + flash) offert par-dessus — jusqu'ici, une
+          cote qui bougeait sous les yeux du joueur ne le signalait nulle part,
+          alors que c'est exactement ce qui fait vivre un marché. */}
       <div className="grid gap-2.5" style={{ gridTemplateColumns: `repeat(${Math.min(market.issues.length, 2)}, minmax(0,1fr))` }}>
-        {market.issues.map(iss => {
-          const sel = iss.id === selected;
-          return (
-            <button
-              key={iss.id}
-              onClick={() => setSelected(iss.id)}
-              className="text-left rounded-xl px-3.5 py-3 transition-colors"
-              style={{
-                background: sel ? 'var(--p-blue-dim)' : 'var(--p-card)',
-                border: `0.5px solid ${sel ? 'var(--p-blue)' : 'var(--p-border)'}`,
-              }}
-            >
-              <div className="text-xs font-semibold mb-1 truncate" style={{ color: 'var(--p-text-60)' }}>{iss.label}</div>
-              <div className="font-mono font-bold text-2xl leading-none" style={{ color: sel ? 'var(--p-blue)' : 'var(--p-text)' }}>
-                {iss.cote.toFixed(2)}<span className="text-xs font-semibold" style={{ color: 'var(--p-text-40)' }}> ×</span>
-              </div>
-            </button>
-          );
-        })}
+        {market.issues.map(iss => (
+          <CoteTile
+            key={iss.id}
+            registre="clair"
+            taille="lg"
+            label={iss.label}
+            cote={iss.cote}
+            selected={iss.id === selected}
+            onClick={() => { setSelected(iss.id); setAConfirmer(false); }}
+          />
+        ))}
       </div>
 
       {/* widget de mise */}
@@ -155,7 +152,7 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
           <div className="mt-3 rounded-xl px-4 py-3" style={{ background: 'var(--p-blue-dim)', border: '0.5px solid var(--p-blue-border)' }}>
             <p className="text-sm leading-relaxed" style={{ color: 'var(--p-text)' }}>
               Tu mises <b className="p-mono">{mise}</b> jetons sur «&nbsp;{issue?.label}&nbsp;»
-              à la cote <b className="p-mono">{cote.toFixed(2)}</b> → gain potentiel <b className="p-mono" style={{ color: 'var(--p-green-text)' }}>{gain}</b>.
+              à la cote <b className="p-mono">{formatCote(cote)}</b> → gain potentiel <b className="p-mono" style={{ color: 'var(--p-green-text)' }}>{gain}</b>.
             </p>
             <p className="text-[11px] mt-1" style={{ color: 'var(--p-text-40)' }}>
               La cote est verrouillée à cet instant. Une mise ne s'annule pas.

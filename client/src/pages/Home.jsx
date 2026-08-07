@@ -15,8 +15,9 @@ import LiveTicker from '@/components/knesset/LiveTicker';
 import ConsensusSondages from '@/components/knesset/ConsensusSondages';
 import HomeIntro from '@/components/knesset/HomeIntro';
 import SondagesTrend from '@/components/knesset/SondagesTrend';
-import RectoVersoCard from '@/components/knesset/RectoVersoCard';
+import DeckDuJour from '@/components/knesset/DeckDuJour';
 import TerrainDeJeu from '@/components/knesset/TerrainDeJeu';
+import ArcadeJeux from '@/components/knesset/ArcadeJeux';
 import ProgressionPalier from '@/components/knesset/ProgressionPalier';
 import { computeScore } from '@/lib/score';
 import { texteLisible } from '@/lib/couleurs';
@@ -197,13 +198,13 @@ export default function Home() {
   });
 
 
-  // Cotes en direct (marchés publics) pour le teaser d'accueil.
+  // Cotes en direct (marchés publics) : elles alimentent le deck du jour (dos
+  // des cartes) et le terrain de jeu.
   const { data: parisData } = useQuery({
     queryKey: ['home-paris'],
     queryFn: () => base44.paris.marches(),
     staleTime: 60 * 1000,
   });
-  const topMarket = parisData?.marches?.[0] || null;
 
   // Le plateau vient de la projection partagée : moyenne des 5 derniers
   // sondages, seuil appliqué, total ramené à 120. La Home lisait le dernier
@@ -425,23 +426,18 @@ export default function Home() {
           les derniers s'accordent sur le leader, ou s'ils divergent (honnêteté). */}
       <ConsensusSondages sondages={sondages} listes={listes} />
 
-      {/* Le fait du jour se joue — carte recto/verso (signature « vases
-          communicants » : le sondage vérifié se retourne sur son pari + quiz) */}
+      {/* Le deck du jour — trois cartes recto/verso (signature « vases
+          communicants » : chaque fait vérifié se retourne sur ce qu'il permet de
+          jouer). Il n'y en avait qu'UNE, toujours la même : un seul
+          retournement possible, donc jamais l'habitude de retourner. */}
       {projectionPrete && (
-        <div className="p-reveal p-glow-gold max-w-md mx-auto px-4 pt-2 pb-4">
-          <p className="text-[10px] font-black uppercase tracking-widest text-center mb-3" style={{ color: 'var(--p-gold-text)' }}>Le fait du jour se joue — retourne la carte</p>
-          <RectoVersoCard
-            badge="Sondages · fait vérifié"
-            /* Les chiffres sont ceux de la moyenne : les attribuer à un institut
-               unique lui prêterait une publication qui n'existe pas. */
-            title={`Moyenne des ${sondagesProjection.length} derniers sondages`}
-            fact={verdict}
-            nums={rankedListes.filter(l => l._seats > 0).slice(0, 2).map(l => ({ n: l._seats, label: l.name_fr }))}
-            source={provenance}
-            betQuestion={topMarket?.question}
-            betCote={topMarket?.issues?.[0]?.cote?.toFixed(2)}
-            betTo={createPageUrl('Paris')}
-            quizTo={createPageUrl('Quiz')}
+        <div className="p-glow-gold pt-2 pb-5">
+          <DeckDuJour
+            listesAvecSieges={listesAvecSieges}
+            verdict={verdict}
+            sondagesProjection={sondagesProjection}
+            sondages={sondages}
+            marches={parisData?.marches || []}
           />
         </div>
       )}
@@ -464,6 +460,14 @@ export default function Home() {
           />
         </div>
       )}
+
+      {/* L'arcade — les cinq jeux courts, à plat. Ils n'existaient que dans un
+          menu déroulant : trois clics et une lecture pour découvrir qu'on peut
+          jouer. Ils arrivent juste après le terrain de jeu, qui vient de
+          promettre « tout ce qui bouge se joue » — voici avec quoi. */}
+      <div className="p-reveal pt-4 pb-5">
+        <ArcadeJeux />
+      </div>
 
       {/* Ta progression vers le palier suivant (joueur connecté) — juste après
           le terrain de jeu : on vient de voir ce qui se joue, voici où tu en es. */}

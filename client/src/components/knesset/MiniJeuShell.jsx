@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
+import ArcadeJeux from '@/components/knesset/ArcadeJeux';
 
 /**
  * Cadre commun des mini-jeux (SensDuVent, VraiOuFake, Boussole, FormeCoalition).
@@ -32,6 +34,10 @@ export default function MiniJeuShell({
   largeur = 'md',
   children,
 }) {
+  // Le jeu courant se déduit de l'URL — les quatre pages n'ont donc rien à
+  // déclarer, et une cinquième héritera de la sortie de partie sans y penser.
+  const jeuCourant = useLocation().pathname.replace(/^\//, '');
+
   return (
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <div className="p-tricolor"><div /><div /><div /></div>
@@ -52,8 +58,17 @@ export default function MiniJeuShell({
         </div>
       </div>
 
-      <div className={`${LARGEURS[largeur] || LARGEURS.md} mx-auto px-4 pb-16`}>
+      <div className={`${LARGEURS[largeur] || LARGEURS.md} mx-auto px-4 pb-10`}>
         {children}
+      </div>
+
+      {/* Sortie de partie. Un mini-jeu se terminait sur lui-même : la seule
+          issue était le bouton « retour » du navigateur ou le menu déroulant du
+          header — c'est-à-dire, en pratique, la fin de la visite. On enchaîne
+          sur les autres jeux, celui qu'on vient de finir en moins. */}
+      <div className="pb-16">
+        <hr className="p-hairline-gold max-w-5xl mx-auto mb-8" />
+        <ArcadeJeux compact titre="Enchaîne" exclure={jeuCourant} />
       </div>
     </div>
   );

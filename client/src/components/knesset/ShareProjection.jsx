@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { Share2, Check, Download } from 'lucide-react';
+import React from 'react';
 import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
+import BoutonPartage from '@/components/knesset/BoutonPartage';
+import { nouvelleCarte, entete, pied, LARGEUR, ENCRE_FORTE } from '@/lib/carte-partage';
 
-// Partage « mon hémicycle » : génère une VRAIE image (canvas, 1200×630, format
-// carte sociale) de la projection en sièges, aux couleurs de la marque, puis
-// propose le partage natif (navigator.share avec fichier) ou, à défaut, le
-// téléchargement + copie du lien. Aucune donnée inventée : on ne dessine que les
-// sièges réellement passés en props.
-
-const SITE = 'predicite-knesset.onrender.com';
+// Partage « mon hémicycle » : une vraie image (canvas, 1200×630, format carte
+// sociale) de la projection en sièges, aux couleurs de la marque. Aucune donnée
+// inventée : on ne dessine que les sièges réellement passés en props.
+//
+// Le fond, le liseré, l'en-tête, le pied et la remise de l'image viennent du kit
+// commun (lib/carte-partage.js) : ce fichier ne décrit plus que ce qu'il est
+// seul à savoir dessiner — un hémicycle et trois totaux.
 
 // Place `total` sièges en demi-cercle et renvoie les positions, ordonnées de la
 // gauche vers la droite pour un remplissage couleur cohérent.
@@ -38,31 +39,12 @@ function seatPositions(total, cx, cy, rInner, rOuter, rows) {
 }
 
 function buildImage({ seatsByListe, pro, anti, arab, source }) {
-  const W = 1200, H = 630;
-  const canvas = document.createElement('canvas');
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
-
-  // Fond : bandeau bleu institutionnel en haut → blanc froid.
-  const g = ctx.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, '#001B6B'); g.addColorStop(0.42, '#0038B8'); g.addColorStop(0.62, '#3f66d6'); g.addColorStop(0.9, '#EDF1F9');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-
-  // liseré tricolore
-  ctx.fillStyle = '#0038B8'; ctx.fillRect(0, 0, W, 6);
-  ctx.fillStyle = '#fff'; ctx.fillRect(W / 3, 0, W / 3, 6);
-  ctx.fillStyle = '#0038B8'; ctx.fillRect(2 * W / 3, 0, W / 3, 6);
-
-  // Titre
-  ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
-  ctx.font = '700 30px system-ui, sans-serif';
-  ctx.fillText('PRÉDICITÉ · PROJECTION KNESSET 2026', W / 2, 62);
-  ctx.font = '800 46px system-ui, sans-serif';
-  ctx.fillText('Ma composition de la Knesset', W / 2, 112);
+  const { canvas, ctx } = nouvelleCarte();
+  entete(ctx, { kicker: 'PRÉDICITÉ · PROJECTION KNESSET 2026', titre: 'Ma composition de la Knesset' });
 
   // Hémicycle
   const total = seatsByListe.reduce((s, l) => s + (l.seats || 0), 0);
-  const cx = W / 2, cy = 400, rInner = 96, rOuter = 250, rows = 6;
+  const cx = LARGEUR / 2, cy = 400, rInner = 96, rOuter = 250, rows = 6;
   const pts = total > 0 ? seatPositions(total, cx, cy, rInner, rOuter, rows) : [];
   const colors = [];
   seatsByListe.forEach(l => { for (let i = 0; i < (l.seats || 0); i++) colors.push(l.color || '#94a3b8'); });
@@ -75,6 +57,7 @@ function buildImage({ seatsByListe, pro, anti, arab, source }) {
 
   // ligne de majorité 61 (repère central)
   if (total > 0) {
+    ctx.textAlign = 'center';
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
     ctx.font = '700 16px system-ui, sans-serif';
     ctx.fillText('MAJORITÉ 61', cx, cy - rOuter - 14);
@@ -91,81 +74,39 @@ function buildImage({ seatsByListe, pro, anti, arab, source }) {
   ctx.textAlign = 'left';
   ctx.fillStyle = '#2B5CE6'; ctx.fillText(`${pro}`, 150, 470);
   ctx.textAlign = 'right';
-  ctx.fillStyle = '#C8102E'; ctx.fillText(`${anti}`, W - 150, 470);
+  ctx.fillStyle = '#C8102E'; ctx.fillText(`${anti}`, LARGEUR - 150, 470);
   ctx.font = '600 18px system-ui, sans-serif';
-  ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(20,32,61,0.7)';
+  ctx.textAlign = 'left'; ctx.fillStyle = ENCRE_FORTE;
   ctx.fillText(BLOC_LABEL.pro_netanyahou.toUpperCase(), 150, 495);
-  ctx.textAlign = 'right'; ctx.fillStyle = 'rgba(20,32,61,0.7)';
-  ctx.fillText(BLOC_LABEL.anti_netanyahou.toUpperCase(), W - 150, 495);
+  ctx.textAlign = 'right'; ctx.fillStyle = ENCRE_FORTE;
+  ctx.fillText(BLOC_LABEL.anti_netanyahou.toUpperCase(), LARGEUR - 150, 495);
   if (arab > 0) {
     ctx.textAlign = 'center';
     ctx.fillStyle = BLOC_COLOR.partis_arabes;
     ctx.font = '800 28px system-ui, sans-serif';
     ctx.fillText(`${arab}`, cx, 470);
     ctx.font = '600 15px system-ui, sans-serif';
-    ctx.fillStyle = 'rgba(20,32,61,0.7)';
+    ctx.fillStyle = ENCRE_FORTE;
     ctx.fillText(BLOC_LABEL.partis_arabes.toUpperCase(), cx, 493);
   }
 
-  // Pied : source + site
-  ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(20,32,61,0.55)';
-  ctx.font = '500 17px system-ui, sans-serif';
-  if (source) ctx.fillText(source, W / 2, 560);
-  ctx.fillStyle = '#7A5F1A'; ctx.font = '700 19px system-ui, sans-serif';
-  ctx.fillText(`Joue ta projection sur ${SITE}`, W / 2, 592);
-
+  pied(ctx, { source });
   return canvas;
 }
 
 export default function ShareProjection({ seatsByListe = [], pro = 0, anti = 0, arab = 0, source, className = '' }) {
-  const [state, setState] = useState('idle'); // idle | shared | downloaded | copied
-
   const total = seatsByListe.reduce((s, l) => s + (l.seats || 0), 0);
   if (!total) return null;
 
-  const handle = async () => {
-    const canvas = buildImage({ seatsByListe, pro, anti, arab, source });
-    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-    const shareText = `Ma projection pour la Knesset 2026 : ${BLOC_LABEL.pro_netanyahou} ${pro} · ${BLOC_LABEL.anti_netanyahou} ${anti}. Fais la tienne sur PrédiCité.`;
-    const url = 'https://' + SITE;
-
-    // 1) Partage natif avec image (mobile surtout)
-    if (blob && navigator.canShare) {
-      const file = new File([blob], 'ma-projection-knesset.png', { type: 'image/png' });
-      if (navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({ files: [file], title: 'Ma projection Knesset 2026', text: shareText });
-          setState('shared'); setTimeout(() => setState('idle'), 2500);
-          return;
-        } catch { /* annulé → on tente les fallbacks */ }
-      }
-    }
-    // 2) Fallback : téléchargement de l'image + copie du lien
-    try {
-      const dl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = dl; a.download = 'ma-projection-knesset.png';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(dl), 4000);
-      try { await navigator.clipboard.writeText(`${shareText} ${url}`); } catch { /* clipboard indispo */ }
-      setState('downloaded'); setTimeout(() => setState('idle'), 2500);
-    } catch {
-      setState('idle');
-    }
-  };
-
-  const label = state === 'shared' ? 'Partagé !'
-    : state === 'downloaded' ? 'Image enregistrée'
-    : 'Partager ma projection';
-  const Icon = state === 'idle' ? Share2 : state === 'downloaded' ? Download : Check;
-
   return (
-    <button
-      onClick={handle}
-      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-[10px] font-semibold text-[13px] transition-transform hover:-translate-y-0.5 ${className}`}
-      style={{ background: 'var(--p-blue-dim)', color: 'var(--p-blue)', border: '0.5px solid var(--p-blue-border)' }}
-    >
-      <Icon className="w-4 h-4" /> {label}
-    </button>
+    <BoutonPartage
+      construire={() => buildImage({ seatsByListe, pro, anti, arab, source })}
+      texte={`Ma projection pour la Knesset 2026 : ${BLOC_LABEL.pro_netanyahou} ${pro} · ${BLOC_LABEL.anti_netanyahou} ${anti}. Fais la tienne sur PrédiCité.`}
+      chemin="/MaRepartition"
+      via="projection"
+      nomFichier="ma-projection-knesset.png"
+      label="Partager ma projection"
+      className={className}
+    />
   );
 }

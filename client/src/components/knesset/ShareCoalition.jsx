@@ -13,7 +13,7 @@ import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 // qui circulerait seul se lirait comme une prévision, ce qu'il n'est pas.
 
 
-function construire({ listes, total, majorite, totalSieges, score, libelle }) {
+export function construire({ listes, total, majorite, totalSieges, score, libelle }) {
   const { canvas, ctx } = nouvelleCarte();
   entete(ctx, { kicker: 'PRÉDICITÉ · FORME TA COALITION', titre: 'Ma coalition pour la Knesset' });
 

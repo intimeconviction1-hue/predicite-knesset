@@ -12,7 +12,7 @@ import { nouvelleCarte, entete, pied, panneau, LARGEUR, ENCRE_FORTE } from '@/li
 const VERT = '#1A8C55';
 const ROUGE = '#C8102E';
 
-function construire({ titre, kicker, score, total, serie, source }) {
+export function construire({ titre, kicker, score, total, serie, source }) {
   const { canvas, ctx } = nouvelleCarte();
   entete(ctx, { kicker, titre });
 

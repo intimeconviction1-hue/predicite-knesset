@@ -23,7 +23,7 @@ import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 // le texte sombre du classement y perdrait son contraste.
 const HAUTEUR_PANNEAU_MIN = 372;
 
-function construire({ exAequo, matches, statements }) {
+export function construire({ exAequo, matches, statements }) {
   const { canvas, ctx } = nouvelleCarte();
   entete(ctx, { kicker: 'PRÉDICITÉ · BOUSSOLE POLITIQUE', titre: 'Le parti qui me ressemble' });
 
@@ -50,6 +50,13 @@ function construire({ exAequo, matches, statements }) {
     ctx.arc(xPastille, y - taille * 0.32, rayon, 0, Math.PI * 2);
     ctx.fillStyle = m.liste.color || COULEUR_PARTI_INCONNU;
     ctx.fill();
+    // Un liseré clair autour de la pastille. Sans lui, les partis dont la
+    // couleur est un bleu nuit — le Likoud le premier — disparaissent purement
+    // et simplement dans le dégradé, à l'endroit le plus important de l'image.
+    // Le contour ne change rien aux couleurs vives et sauve les sombres.
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+    ctx.stroke();
     ctx.fillStyle = '#fff';
     ctx.textAlign = 'center';
     ctx.fillText(nom, LARGEUR / 2 + rayon + 7, y);
@@ -77,13 +84,22 @@ function construire({ exAequo, matches, statements }) {
     ctx.fillStyle = ENCRE_FORTE;
     ctx.fillText(m.liste.name_fr, 176, y);
 
+    // Le dénominateur est calé sur le bord INTÉRIEUR du panneau, et le
+    // pourcentage se place à sa gauche. Écrit dans l'autre sens, il partait de
+    // 34 px après le pourcentage et débordait du panneau blanc : « 87 % /11 »
+    // laissait le « /11 » retomber sur le dégradé, hors de son cadre. C'est
+    // précisément le chiffre qui empêche de lire « 87 % » comme une certitude,
+    // donc celui qu'on ne peut pas laisser s'échapper de l'image.
+    const droite = LARGEUR - 176;
     ctx.textAlign = 'right';
-    ctx.font = '700 16px system-ui, sans-serif';
-    ctx.fillStyle = ENCRE_FORTE;
-    ctx.fillText(`${m.pct} %`, LARGEUR - 176, y);
     ctx.font = '500 13px system-ui, sans-serif';
     ctx.fillStyle = ENCRE;
-    ctx.fillText(`/${m.rel}`, LARGEUR - 176 + 34, y);
+    const denominateur = `/${m.rel}`;
+    ctx.fillText(denominateur, droite, y);
+    const largeurDenominateur = ctx.measureText(denominateur).width;
+    ctx.font = '700 16px system-ui, sans-serif';
+    ctx.fillStyle = ENCRE_FORTE;
+    ctx.fillText(`${m.pct} %`, droite - largeurDenominateur - 7, y);
 
     // La barre, sous le libellé.
     const xBarre = 176, largeurBarre = LARGEUR - 352 - 60;

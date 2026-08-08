@@ -1,6 +1,7 @@
 import express from 'express';
 import { queryEntity, createEntity, updateEntity, deleteEntity, ENTITY_CONFIG } from '../db/index.js';
 import { requireAuth, requireAdmin } from '../middleware/auth.js';
+import { repondreErreur } from '../lib/erreur-http.js';
 
 const router = express.Router();
 
@@ -127,7 +128,7 @@ router.get('/:name', readGuard, async (req, res) => {
     const rows = await queryEntity(req.params.name, { where, sort: _sort, limit: _limit });
     res.json(projeter(req, req.params.name, rows));
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    repondreErreur(res, e, 'entities');
   }
 });
 
@@ -138,7 +139,7 @@ router.post('/:name', writeGuard, async (req, res) => {
     const row = await createEntity(req.params.name, payload);
     res.status(201).json(row);
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    repondreErreur(res, e, 'entities');
   }
 });
 
@@ -156,7 +157,7 @@ router.put('/:name/:id', writeGuard, async (req, res) => {
     const row = await updateEntity(req.params.name, req.params.id, payload);
     res.json(row);
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    repondreErreur(res, e, 'entities');
   }
 });
 
@@ -166,7 +167,7 @@ router.delete('/:name/:id', requireAdmin, async (req, res) => {
     const result = await deleteEntity(req.params.name, req.params.id);
     res.json(result);
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    repondreErreur(res, e, 'entities');
   }
 });
 

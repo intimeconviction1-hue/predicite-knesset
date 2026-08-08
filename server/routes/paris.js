@@ -3,6 +3,7 @@
 // Miser reste réservé aux connectés (via /api/functions/parisSondages).
 import express from 'express';
 import { getOpenMarketsWithCotes } from '../functions/parisSondages.js';
+import { repondreErreur } from '../lib/erreur-http.js';
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.get('/', async (req, res) => {
   try {
     res.json({ marches: await getOpenMarketsWithCotes() });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    repondreErreur(res, e, 'paris');
   }
 });
 

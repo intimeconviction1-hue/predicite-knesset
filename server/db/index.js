@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { RequeteInvalide } from '../lib/erreur-http.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -79,7 +80,7 @@ export const ENTITY_CONFIG = {
 
 function getConfig(entityName) {
   const cfg = ENTITY_CONFIG[entityName];
-  if (!cfg) throw new Error(`Entité inconnue : ${entityName}`);
+  if (!cfg) throw new RequeteInvalide(`Entité inconnue : ${entityName}`);
   return cfg;
 }
 
@@ -92,7 +93,7 @@ function getConfig(entityName) {
 const IDENT_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
 function assertIdent(name) {
   if (typeof name !== 'string' || !IDENT_RE.test(name)) {
-    throw new Error(`Nom de colonne invalide : ${name}`);
+    throw new RequeteInvalide(`Nom de colonne invalide : ${name}`);
   }
   return name;
 }
@@ -132,7 +133,7 @@ function serializeForWrite(cfg, payload) {
 // de laisser passer un NaN qui casserait la requete.
 function assertEntier(valeur, nom) {
   const n = Number(valeur);
-  if (!Number.isInteger(n) || n < 0) throw new Error(`${nom} invalide : ${valeur}`);
+  if (!Number.isInteger(n) || n < 0) throw new RequeteInvalide(`${nom} invalide : ${valeur}`);
   return n;
 }
 
@@ -233,7 +234,9 @@ export async function queryEntity(entityName, { where = {}, sort, limit } = {}) 
     const col = assertIdent(desc ? sort.slice(1) : sort);
     sql += ` ORDER BY ${col} ${desc ? 'DESC' : 'ASC'}`;
   }
-  if (limit) sql += ` LIMIT ${Number(limit)}`;
+  // Aligné sur listEntity : un `_limit=abc` doit dire « limit invalide », pas
+  // partir en LIMIT NaN et revenir en erreur de syntaxe Postgres.
+  if (limit) sql += ` LIMIT ${assertEntier(limit, 'limit')}`;
 
   const values = keys.map(k => ((cfg.boolFields || []).includes(k) ? (where[k] ? 1 : 0) : where[k]));
   const rows = await queryAll(sql, values);

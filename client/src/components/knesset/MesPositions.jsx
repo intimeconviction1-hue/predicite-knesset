@@ -52,11 +52,11 @@ function Ligne({ m }) {
         <span className="flex items-center gap-3">
           <span>
             <span className="p-mono" style={{ color: 'var(--p-text)' }}>{m.mise}</span> jetons
-            <span className="mx-1.5" style={{ color: 'var(--p-text-25)' }}>à</span>
+            <span className="mx-1.5" style={{ color: 'var(--p-text-40)' }}>à</span>
             <span className="p-mono" style={{ color: 'var(--p-text)' }}>×{formatCote(m.cote)}</span>
-            <span className="ml-1" style={{ color: 'var(--p-text-25)' }}>({formatProba(m.cote)})</span>
+            <span className="ml-1" style={{ color: 'var(--p-text-40)' }}>({formatProba(m.cote)})</span>
           </span>
-          <span className="p-mono font-bold" style={{ color: m.statut === 'perdu' ? 'var(--p-text-25)' : 'var(--p-green-text)' }}>
+          <span className="p-mono font-bold" style={{ color: m.statut === 'perdu' ? 'var(--p-text-40)' : 'var(--p-green-text)' }}>
             {m.statut === 'gagne' ? '+' : m.statut === 'en_jeu' ? '→ ' : ''}{m.statut === 'perdu' ? '—' : m.gain_pot}
           </span>
         </span>

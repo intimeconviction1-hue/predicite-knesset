@@ -8,9 +8,10 @@ import { texteLisible } from '@/lib/couleurs';
 import {
   ChevronLeft, Users, TrendingUp, CheckCircle, Lock, Clock, Trophy, ExternalLink, Landmark
 } from 'lucide-react';
-import KnessetRulesModule from '@/components/election/KnessetRulesModule';
+import ModuleExplicatif from '@/components/election/ModuleExplicatif';
+import reglesKnesset from '@/components/election/regles-knesset';
 import BallotChip from '@/components/knesset/BallotChip';
-import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
+import { BLOC_LABEL, BLOC_COLOR, COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 import TrendChart from '@/components/knesset/TrendChart';
 import PlayLearnBar from '@/components/knesset/PlayLearnBar';
 import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
@@ -143,7 +144,7 @@ export default function ListePage() {
         </Link>
 
         {/* Bandeau photo — bâtiment de la Knesset (libre, Wikimedia Commons) */}
-        <div className="relative overflow-hidden rounded-2xl mb-4 h-28" style={{ backgroundImage: "url('/images/liste-hero.jpg')", backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
+        <div className="relative overflow-hidden rounded-2xl mb-4 h-28" style={{ backgroundImage: "url('/images/liste-hero.webp')", backgroundSize: 'cover', backgroundPosition: 'center 40%' }}>
           <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(5,10,24,0.2) 0%, rgba(5,10,24,0.4) 100%)' }} />
         </div>
 
@@ -166,7 +167,7 @@ export default function ListePage() {
               {liste.ballot_letters && <BallotChip letters={liste.ballot_letters} size="lg" />}
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || '#6B7280' }} />
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: liste.color || COULEUR_PARTI_INCONNU }} />
                   <h1 className="text-2xl font-black" style={{ fontFamily: 'var(--font-display)', color: 'var(--p-text)' }}>{liste.name_fr}</h1>
                 </div>
                 <p className="text-sm" style={{ color: 'var(--p-text-60)' }}>{liste.leader_name}{liste.name_he ? ` · ${liste.name_he}` : ''}</p>
@@ -182,7 +183,7 @@ export default function ListePage() {
               </div>
             </div>
             {(() => {
-              const blocColor = BLOC_COLOR[liste.bloc] || '#6B7280';
+              const blocColor = BLOC_COLOR[liste.bloc] || COULEUR_PARTI_INCONNU;
               return (
                 <span
                   className="text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full"
@@ -222,7 +223,7 @@ export default function ListePage() {
               {latest ? (
                 <p className="text-xl font-bold font-mono" style={{ color: liste.color ? texteLisible(liste.color) : 'var(--p-gold-text)' }}>{latest.seats} sièges</p>
               ) : (
-                <p className="text-sm font-medium" style={{ color: 'var(--p-text-25)' }}>Pas encore de sondage</p>
+                <p className="text-sm font-medium" style={{ color: 'var(--p-text-40)' }}>Pas encore de sondage</p>
               )}
             </div>
           </div>
@@ -260,7 +261,7 @@ export default function ListePage() {
                   }}>
                     {flat ? '= stable' : `${up ? '▲ +' : '▼ '}${up ? delta : Math.abs(delta)}`}
                   </div>
-                  <p className="text-[10px] mt-1.5" style={{ color: 'var(--p-text-25)' }}>vs sondage précédent</p>
+                  <p className="text-[10px] mt-1.5" style={{ color: 'var(--p-text-40)' }}>vs sondage précédent</p>
                 </div>
               );
             })()}
@@ -307,7 +308,7 @@ export default function ListePage() {
                   <div className="flex items-center gap-2">
                     <span className="font-mono font-bold" style={{ color: 'var(--p-text)' }}>{h.seats} sièges</span>
                     {h.source_url && (
-                      <a href={h.source_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--p-text-25)' }}>
+                      <a href={h.source_url} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--p-text-40)' }}>
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
@@ -410,7 +411,7 @@ export default function ListePage() {
           </div>
         </motion.div>
 
-        <KnessetRulesModule compact />
+        <ModuleExplicatif {...reglesKnesset} compact />
 
         <div className="p-reveal flex items-center justify-center gap-6 mt-8">
           <Link to={createPageUrl('PremierMinistre')} className="text-sm hover:text-[var(--p-text)] transition-colors flex items-center gap-1.5" style={{ color: 'var(--p-text-40)' }}>

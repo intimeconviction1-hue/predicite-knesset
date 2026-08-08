@@ -5,7 +5,7 @@ import { TrendingUp, TrendingDown, ChevronRight, ArrowRight } from 'lucide-react
 import Tooltip from '@/components/shared/Tooltip';
 import BallotChip from '@/components/knesset/BallotChip';
 import CountUp from '@/components/knesset/CountUp';
-import { BLOC_LABEL, BLOC_COLOR } from '@/lib/blocs';
+import { BLOC_LABEL, BLOC_COLOR, COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 import { texteLisible } from '@/lib/couleurs';
 
 // `siegesProjetes` vient de la projection partagée (lib/projection.js). La carte
@@ -16,7 +16,7 @@ export default function ListeCard({ liste, siegesProjetes = null, index = 0 }) {
   const delta = projectedSeats != null && liste.current_knesset_seats != null
     ? projectedSeats - liste.current_knesset_seats
     : null;
-  const blocColor = BLOC_COLOR[liste.bloc] || '#6B7280';
+  const blocColor = BLOC_COLOR[liste.bloc] || COULEUR_PARTI_INCONNU;
   const belowThreshold = projectedSeats === 0;
 
   return (
@@ -100,7 +100,7 @@ export default function ListeCard({ liste, siegesProjetes = null, index = 0 }) {
               ) : (
                 <span className="text-2xl font-black" style={{ fontFamily: 'monospace', color: texteLisible(liste.color || blocColor) }}>
                   {projectedSeats != null ? <CountUp value={projectedSeats} duration={800} /> : '—'}
-                  <span className="text-xs font-normal" style={{ color: 'var(--p-text-25)' }}> / 120</span>
+                  <span className="text-xs font-normal" style={{ color: 'var(--p-text-40)' }}> / 120</span>
                 </span>
               )}
             </div>

@@ -32,7 +32,7 @@ export default function Methodologie() {
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <CinematicHero
         size="sm"
-        photos={['/images/methodologie-hero.jpg']}
+        photos={['/images/methodologie-hero.webp']}
         position="center 30%"
         badge={{ text: 'Vérifié en continu · zéro donnée inventée', live: false }}
         title="Sources & Méthodologie"

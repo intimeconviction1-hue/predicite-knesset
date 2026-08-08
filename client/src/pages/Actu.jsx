@@ -47,7 +47,7 @@ export default function Actu() {
           quotidien, elle a le droit de bouger un peu plus que les autres. */}
       <CinematicHero
         size="md"
-        photos={['/images/knesset-parvis.jpg', '/images/knesset-soir.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
+        photos={['/images/knesset-parvis.webp', '/images/knesset-soir.webp', '/images/listes-hero.webp', '/images/pm-hero.webp']}
         position="center 35%"
         kicker="La campagne en direct"
         title={<>L'actu de la <HeroGold>campagne</HeroGold></>}

@@ -3,6 +3,7 @@ import { base44 } from '@/api/client';
 import { useQuery } from '@tanstack/react-query';
 import { TrendingUp } from 'lucide-react';
 import TrendChartMulti from '@/components/knesset/TrendChartMulti';
+import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 
 const BUCKET_DAYS = 14;   // on moyenne par quinzaine pour lisser le bruit inter-instituts
 const TOP_N = 6;
@@ -37,7 +38,7 @@ function buildTrend(polls, listes) {
     return {
       id,
       name: l?.name_fr || '?',
-      color: l?.color || '#6B7280',
+      color: l?.color || COULEUR_PARTI_INCONNU,
       latest: (latest.seats_by_liste || []).find(s => s.liste_id === id)?.seats ?? null,
       values: idxs.map(bi => {
         const bk = buckets.get(bi);
@@ -65,7 +66,7 @@ export default function SondagesTrend() {
           <TrendingUp className="w-4 h-4" style={{ color: 'var(--p-blue)' }} />
           <span className="text-[11px] font-black uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>Tendance des sondages</span>
         </div>
-        <p className="text-[11px] mb-3" style={{ color: 'var(--p-text-25)' }}>Sièges par liste au fil de la campagne · moyenne par quinzaine, tous instituts.</p>
+        <p className="text-[11px] mb-3" style={{ color: 'var(--p-text-40)' }}>Sièges par liste au fil de la campagne · moyenne par quinzaine, tous instituts.</p>
 
         <TrendChartMulti series={trend.series} labels={trend.labels} height={200} />
 

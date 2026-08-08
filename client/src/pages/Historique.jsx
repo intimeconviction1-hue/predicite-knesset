@@ -52,7 +52,7 @@ function EvolutionChart({ elections }) {
         <text x={W - padR} y={majorityY - 5} textAnchor="end" fontSize="9" fill="var(--p-gold-text)">majorité (61)</text>
 
         {[0, 20, 40, 60].map(v => (
-          <text key={v} x={padL - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="var(--p-text-25)">{v}</text>
+          <text key={v} x={padL - 6} y={y(v) + 3} textAnchor="end" fontSize="9" fill="var(--p-text-40)">{v}</text>
         ))}
 
         <path d={linePath('first')} fill="none" stroke="var(--p-gold)" strokeWidth="2" />
@@ -63,7 +63,7 @@ function EvolutionChart({ elections }) {
             <circle cx={x(i)} cy={y(d.first)} r="2.5" fill="var(--p-gold)" />
             <circle cx={x(i)} cy={y(d.second)} r="2.5" fill="var(--p-blue)" opacity="0.7" />
             {(i === 0 || i === perElection.length - 1 || i % 4 === 0) && (
-              <text x={x(i)} y={H - padB + 14} textAnchor="middle" fontSize="8" fill="var(--p-text-25)">{d.knesset_number}e</text>
+              <text x={x(i)} y={H - padB + 14} textAnchor="middle" fontSize="8" fill="var(--p-text-40)">{d.knesset_number}e</text>
             )}
           </g>
         ))}
@@ -99,7 +99,7 @@ function ElectionCard({ election, index, slugByName, duree }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h3 className="p-title text-sm" style={{ color: 'var(--p-text)' }}>{election.name}</h3>
-            <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>
+            <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>
               {new Date(election.election_date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
             </span>
           </div>
@@ -204,7 +204,7 @@ export default function Historique() {
           voitures et passants compris. */}
       <CinematicHero
         size="md"
-        photos={['/images/knesset-archive.jpg']}
+        photos={['/images/knesset-archive.webp']}
         position="center 30%"
         kicker="Depuis 1949"
         title="L'histoire des Knesset"

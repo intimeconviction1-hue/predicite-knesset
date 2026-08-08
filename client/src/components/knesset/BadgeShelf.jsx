@@ -81,8 +81,8 @@ export default function BadgeShelf() {
         <span className="text-[11px] font-black uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>
           Tes badges
         </span>
-        <span className="font-mono text-xs font-bold" style={{ color: acquis > 0 ? 'var(--p-gold-text)' : 'var(--p-text-25)' }}>
-          {acquis}<span style={{ color: 'var(--p-text-25)' }}>/{total}</span>
+        <span className="font-mono text-xs font-bold" style={{ color: acquis > 0 ? 'var(--p-gold-text)' : 'var(--p-text-40)' }}>
+          {acquis}<span style={{ color: 'var(--p-text-40)' }}>/{total}</span>
         </span>
       </div>
 

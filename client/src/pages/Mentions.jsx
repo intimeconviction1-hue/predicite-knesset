@@ -74,7 +74,7 @@ export default function Mentions() {
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <CinematicHero
         size="sm"
-        photos={['/images/knesset-parvis.jpg']}
+        photos={['/images/knesset-parvis.webp']}
         position="center 40%"
         kicker="Mentions légales · Données personnelles"
         title="Qui édite ce site, et ce qu'il sait de toi"

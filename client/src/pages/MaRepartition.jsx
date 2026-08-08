@@ -327,7 +327,7 @@ export default function MaRepartition() {
             <Wand2 className="w-4 h-4 mr-2" />
             Partir de la projection
           </button>
-          <p className="text-[11px] mb-4" style={{ color: 'var(--p-text-25)' }}>{provenance}</p>
+          <p className="text-[11px] mb-4" style={{ color: 'var(--p-text-40)' }}>{provenance}</p>
         </>
       )}
 

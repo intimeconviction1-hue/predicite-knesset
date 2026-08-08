@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 import { ArrowRight, Users } from 'lucide-react';
-import KnessetRulesModule from '@/components/election/KnessetRulesModule';
-import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
+import ModuleExplicatif from '@/components/election/ModuleExplicatif';
+import reglesKnesset from '@/components/election/regles-knesset';
+import reglesCoalition from '@/components/election/regles-coalition';
 import QuizWidget from '@/components/knesset/QuizWidget';
 import Hemicycle from '@/components/knesset/Hemicycle';
 import CountUp from '@/components/knesset/CountUp';
@@ -23,7 +24,7 @@ export default function Learn() {
     <div className="min-h-screen" style={{ background: 'transparent' }}>
       <CinematicHero
         size="md"
-        photos={['/images/learn-hero.jpg']}
+        photos={['/images/learn-hero.webp']}
         position="center 30%"
         kicker="Comprendre avant de pronostiquer"
         title="Les législatives israéliennes, expliquées"
@@ -43,7 +44,7 @@ export default function Learn() {
           style={{ border: '0.5px solid rgba(245,240,232,0.08)' }}
         >
           <div className="absolute inset-0" style={{
-            backgroundImage: "url('/images/listes-hero.jpg')",
+            backgroundImage: "url('/images/listes-hero.webp')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }} />
@@ -117,7 +118,7 @@ export default function Learn() {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4 }}
         >
-          <KnessetRulesModule />
+          <ModuleExplicatif {...reglesKnesset} />
         </motion.div>
 
         {/* « De la voix au siège » — explainer ANIMÉ (se joue comme une vidéo) */}
@@ -136,7 +137,7 @@ export default function Learn() {
           viewport={{ once: true, margin: '-10%' }}
           transition={{ duration: 0.4, delay: 0.08 }}
         >
-          <CoalitionRulesModule />
+          <ModuleExplicatif {...reglesCoalition} />
         </motion.div>
 
         {/* Le calendrier — frise visuelle des grandes étapes du scrutin */}

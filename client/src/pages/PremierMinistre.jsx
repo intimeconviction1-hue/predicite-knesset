@@ -6,7 +6,8 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Crown, ChevronLeft, CheckCircle, Clock, Lock, Info } from 'lucide-react';
 import Modale from '@/components/knesset/Modale';
-import CoalitionRulesModule from '@/components/election/CoalitionRulesModule';
+import ModuleExplicatif from '@/components/election/ModuleExplicatif';
+import reglesCoalition from '@/components/election/regles-coalition';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import PlayLearnBar from '@/components/knesset/PlayLearnBar';
 import { FALLBACK_DEADLINE_UTC, formatLocalDeadline } from '@/lib/echeances';
@@ -113,7 +114,7 @@ export default function PremierMinistre() {
         {/* Hero cinématique institutionnel (composant maison CinematicHero) */}
         <CinematicHero
           size="md"
-          photos={['/images/pm-hero.jpg']}
+          photos={['/images/pm-hero.webp']}
           position="center 22%"
           title={<>Qui sera <span className="p-gradient-gold">Premier ministre</span> ?</>}
           subtitle="Ce pronostic ne se résout pas le soir du scrutin, mais au moment de l'investiture officielle du prochain gouvernement — parfois plusieurs semaines, voire plusieurs mois plus tard."
@@ -269,7 +270,7 @@ export default function PremierMinistre() {
           </div>
         </div>
 
-        <CoalitionRulesModule />
+        <ModuleExplicatif {...reglesCoalition} />
       </div>
 
       {bioCandidat && (

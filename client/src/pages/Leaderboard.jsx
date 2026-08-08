@@ -164,17 +164,17 @@ export default function Leaderboard() {
               className="flex flex-col items-center"
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2"
-                style={{ background: 'rgba(176,184,200,0.15)', border: '0.5px solid rgba(176,184,200,0.3)', color: 'var(--p-silver-text)', fontFamily: 'var(--font-display)' }}>
+                style={{ background: 'var(--p-silver-dim)', border: '0.5px solid var(--p-silver-brd)', color: 'var(--p-silver-text)', fontFamily: 'var(--font-display)' }}>
                 {nomAffiche(topThree[1]).charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium truncate max-w-[90px] text-center" style={{ color: 'var(--p-text-60)' }}>
                 {nomAffiche(topThree[1])}
               </p>
               <p className="p-mono text-sm" style={{ color: 'var(--p-silver-text)' }}>
-                <CountUp value={getScore(topThree[1])} duration={900} delay={200} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[1])}</span>
+                <CountUp value={getScore(topThree[1])} duration={900} delay={200} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>{getScoreLabel(topThree[1])}</span>
               </p>
               <div className="w-20 h-16 rounded-t-lg mt-2 flex items-center justify-center"
-                style={{ background: 'rgba(176,184,200,0.08)', border: '0.5px solid rgba(176,184,200,0.15)' }}>
+                style={{ background: 'rgba(176,184,200,0.08)', border: '0.5px solid var(--p-silver-dim)' }}>
                 <Medal className="w-6 h-6" style={{ color: 'var(--p-silver-text)' }} />
               </div>
             </motion.div>
@@ -195,7 +195,7 @@ export default function Leaderboard() {
                 {nomAffiche(topThree[0])}
               </p>
               <p className="p-mono text-base" style={{ color: 'var(--p-gold-text)' }}>
-                <CountUp value={getScore(topThree[0])} duration={900} delay={100} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[0])}</span>
+                <CountUp value={getScore(topThree[0])} duration={900} delay={100} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>{getScoreLabel(topThree[0])}</span>
               </p>
               <div className="w-24 h-24 rounded-t-lg mt-2 flex items-center justify-center"
                 style={{ background: 'var(--p-gold-dim)', border: '0.5px solid var(--p-gold-border)' }}>
@@ -211,17 +211,17 @@ export default function Leaderboard() {
               className="flex flex-col items-center"
             >
               <div className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold mb-2"
-                style={{ background: 'rgba(205,127,50,0.15)', border: '0.5px solid rgba(205,127,50,0.3)', color: 'var(--p-bronze-text)', fontFamily: 'var(--font-display)' }}>
+                style={{ background: 'var(--p-bronze-dim)', border: '0.5px solid var(--p-bronze-brd)', color: 'var(--p-bronze-text)', fontFamily: 'var(--font-display)' }}>
                 {nomAffiche(topThree[2]).charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium truncate max-w-[90px] text-center" style={{ color: 'var(--p-text-60)' }}>
                 {nomAffiche(topThree[2])}
               </p>
               <p className="p-mono text-sm" style={{ color: 'var(--p-bronze-text)' }}>
-                <CountUp value={getScore(topThree[2])} duration={900} delay={300} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(topThree[2])}</span>
+                <CountUp value={getScore(topThree[2])} duration={900} delay={300} formatter={formatFr} /> <span className="text-xs" style={{ color: 'var(--p-text-40)' }}>{getScoreLabel(topThree[2])}</span>
               </p>
               <div className="w-20 h-12 rounded-t-lg mt-2 flex items-center justify-center"
-                style={{ background: 'rgba(205,127,50,0.08)', border: '0.5px solid rgba(205,127,50,0.15)' }}>
+                style={{ background: 'rgba(205,127,50,0.08)', border: '0.5px solid var(--p-bronze-dim)' }}>
                 <Medal className="w-6 h-6" style={{ color: 'var(--p-bronze-text)' }} />
               </div>
             </motion.div>
@@ -255,7 +255,7 @@ export default function Leaderboard() {
 
           {/* En-tête */}
           <div className="px-4 py-3 flex items-center justify-between text-[10px] uppercase tracking-widest"
-            style={{ background: 'var(--p-card)', borderBottom: '0.5px solid var(--p-border)', color: 'var(--p-text-25)' }}>
+            style={{ background: 'var(--p-card)', borderBottom: '0.5px solid var(--p-border)', color: 'var(--p-text-40)' }}>
             <span>Analyste citoyen</span>
             <div className="flex items-center gap-8">
               <span className="hidden md:block">Précision</span>
@@ -300,7 +300,7 @@ export default function Leaderboard() {
                       position === 1 ? <Crown className="w-5 h-5" style={{ color: 'var(--p-gold)' }} />
                       : <Medal className="w-5 h-5" style={{ color: getMedalColor(position) }} />
                     ) : (
-                      <span className="text-sm font-bold" style={{ color: 'var(--p-text-25)', fontFamily: 'var(--font-mono)' }}>{position}</span>
+                      <span className="text-sm font-bold" style={{ color: 'var(--p-text-40)', fontFamily: 'var(--font-mono)' }}>{position}</span>
                     )}
                   </div>
 
@@ -344,7 +344,7 @@ export default function Leaderboard() {
                     <p className="font-bold p-mono" style={{ color: isCurrentUser ? 'var(--p-gold-text)' : 'var(--p-text)' }}>
                       <CountUp value={getScore(player)} duration={700} delay={index * 20} formatter={formatFr} />
                     </p>
-                    <p className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>{getScoreLabel(player)}</p>
+                    <p className="text-[10px]" style={{ color: 'var(--p-text-40)' }}>{getScoreLabel(player)}</p>
                   </div>
                 </motion.div>
               );

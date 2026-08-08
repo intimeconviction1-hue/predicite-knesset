@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 import ListeCard from '@/components/cards/ListeCard';
-import KnessetRulesModule from '@/components/election/KnessetRulesModule';
+import ModuleExplicatif from '@/components/election/ModuleExplicatif';
+import reglesKnesset from '@/components/election/regles-knesset';
 import CinematicHero from '@/components/knesset/CinematicHero';
 import { useProjection } from '@/lib/projection';
 
@@ -52,7 +53,7 @@ export default function Listes() {
       {/* Header cinématique */}
       <CinematicHero
         size="md"
-        photos={['/images/listes-hero.jpg']}
+        photos={['/images/listes-hero.webp']}
         position="center 30%"
         title={<>Listes en lice — <span className="p-gradient-gold">Knesset 2026</span></>}
         subtitle={<>{listes.length} listes suivies · Scrutin du 27 octobre 2026 · Sondages sièges mis à jour régulièrement</>}
@@ -69,7 +70,7 @@ export default function Listes() {
 
       {showRules && (
         <div className="max-w-4xl mx-auto px-4 pt-8">
-          <KnessetRulesModule />
+          <ModuleExplicatif {...reglesKnesset} />
         </div>
       )}
 
@@ -86,7 +87,7 @@ export default function Listes() {
                 /* h-11 : la règle de cible tactile de globals.css ne vise que
                    les boutons et les liens, pas les champs de formulaire. Ces
                    deux-là restaient à 40 px. */
-                className="h-11 pl-10 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-25)]"
+                className="h-11 pl-10 bg-transparent border-[var(--p-border-hover)] text-[var(--p-text)] placeholder:text-[var(--p-text-40)]"
               />
             </div>
             {/* <select> natif plutôt que le Select de Radix. Cette page en était
@@ -140,7 +141,7 @@ export default function Listes() {
             {/* La provenance manquait ici : les cartes affichaient des sièges
                 sans dire d'où ils venaient. */}
             {provenance && (
-              <p className="text-[11px] text-center mt-6" style={{ color: 'var(--p-text-25)' }}>{provenance}</p>
+              <p className="text-[11px] text-center mt-6" style={{ color: 'var(--p-text-40)' }}>{provenance}</p>
             )}
           </>
         )}

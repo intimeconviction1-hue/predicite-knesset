@@ -123,9 +123,11 @@
     /* Thème clair depuis 2026-07-25 (Simon : le sombre "faisait lourd", pas
        assez d'institution/lumiere/espoir). Les noms de tokens avaient alors été
        CONSERVÉS (--p-night, --p-night-2) pour que tout le reste du code continue
-       de marcher sans y toucher — seules les VALEURS changeaient, vers
-       --p-learn-bg/--p-learn-card/--p-ink qui existaient déjà, jamais branchés
-       ailleurs que BallotChip. */
+       de marcher sans y toucher — seules les VALEURS changeaient, vers la famille
+       --p-learn-* et --p-ink qui existaient déjà, jamais branchés ailleurs que
+       BallotChip. (La famille --p-learn-* a été retirée le 2026-08-07 : ses
+       valeurs avaient été recopiées dans --p-bg/--p-card, et plus personne ne
+       lisait les originales.) */
     /* 2026-07-28 (Simon : « enlever ce beige ») — bascule du crème chaud vers
        un blanc froid bleuté (identité Israël bleu/blanc). Mêmes noms de tokens,
        seules les valeurs changent. */
@@ -141,11 +143,6 @@
     --p-bg:           #EDF1F9;
     --p-bg-2:         #E2E9F6;
     --p-card:         #FFFFFF;
-    --p-learn-bg:     #EDF1F9;
-    --p-learn-card:   #FFFFFF;
-    --p-learn-border: rgba(5, 10, 24, 0.08);
-    --p-learn-text:   #050A18;
-    --p-learn-muted:  rgba(5, 10, 24, 0.5);
     --p-gold:         #D4AF37;
     /* Échelle de l'or transparent. Elle n'existait qu'à moitié : `dim` et
        `border` étaient définis, mais l'or teinté était RÉÉCRIT à la main dans
@@ -184,12 +181,17 @@
     --p-green-text:   #16794A;
     /* Médailles du podium et alertes orange : les valeurs décoratives d'origine
        échouent toutes en texte (argent 1.99:1, bronze 3.14:1, orange 2.80:1).
-       Chaque famille a donc une valeur de remplissage et une valeur de texte. */
+       Chaque famille a donc une valeur de remplissage et une valeur de texte.
+       Orange n'a plus que sa valeur de texte : le remplissage #F97316 n'était lu
+       nulle part, ni par un token ni en dur (vérifié le 2026-08-07). */
     --p-silver:       #B0B8C8;
+    --p-silver-dim:   rgba(176, 184, 200, 0.15);  /* fond de médaille d'argent */
+    --p-silver-brd:   rgba(176, 184, 200, 0.3);
     --p-silver-text:  #64748B;   /* 4.76:1 */
     --p-bronze:       #CD7F32;
+    --p-bronze-dim:   rgba(205, 127, 50, 0.15);   /* fond de médaille de bronze */
+    --p-bronze-brd:   rgba(205, 127, 50, 0.3);
     --p-bronze-text:  #A96326;   /* 4.67:1 */
-    --p-orange:       #F97316;
     --p-orange-text:  #C2410C;   /* 5.18:1 */
     /* Le cyan des explicatifs (#0EA5E9) ne faisait que 2.77:1 : illisible en
        texte, sous le seuil même pour une icône. */
@@ -237,28 +239,21 @@
   }
 }
 
-/* Halos de fond du Layout (voir .p-bg-blob-*) — dérive lente et douce,
-   coupée automatiquement par la règle prefers-reduced-motion ci-dessus. */
-@keyframes p-blob-a {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(5vw, 4vh) scale(1.12); }
-}
-@keyframes p-blob-b {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(-4vw, 5vh) scale(1.08); }
-}
-@keyframes p-blob-c {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(4vw, -4vh) scale(1.1); }
-}
-@keyframes p-blob-d {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%      { transform: translate(-3vw, -5vh) scale(1.15); }
-}
-.p-bg-blob-a { animation: p-blob-a 26s ease-in-out infinite; }
-.p-bg-blob-b { animation: p-blob-b 33s ease-in-out infinite; }
-.p-bg-blob-c { animation: p-blob-c 29s ease-in-out infinite; }
-.p-bg-blob-d { animation: p-blob-d 37s ease-in-out infinite; }
+/* Les halos de fond du Layout DÉRIVAIENT — quatre keyframes de 26 à 37 s, en
+   boucle infinie. Retiré le 2026-08-07, et la raison n'est pas seulement le coût
+   des halos eux-mêmes.
+   Le header colle au haut de l'écran avec `backdrop-filter: blur(18px)
+   saturate(1.4)` (--p-header-blur). Un backdrop-filter doit relire et reflouter
+   ce qui passe DERRIÈRE lui ; tant que le décor bouge, ce résultat ne peut être
+   mis en cache d'une frame à l'autre. Quatre disques de 44 à 54 vw, floutés à
+   85 px, qui dérivaient en permanence, obligeaient donc le navigateur à refaire
+   ce flou en continu — pendant qu'on lit un article, écran immobile.
+   Les halos sont désormais fixes : les dégradés et le flou restent (c'est là
+   qu'est 90 % de l'effet), la source du backdrop-filter devient stable, et le
+   navigateur peut enfin la garder en cache. Personne ne perçoit consciemment une
+   dérive de période 30 s ; tout le monde perçoit une batterie qui chauffe.
+   Les styles des halos vivent en inline dans Layout.jsx — il ne reste donc rien
+   à déclarer ici, et les classes .p-bg-blob-* ont été retirées avec l'animation. */
 
 /* Bandeau live défilant (LiveTicker) — le flux d'infos réelles de la campagne
    qui défile en continu. La piste contient deux copies identiques ; translater
@@ -315,14 +310,14 @@ button, [role="button"], a, input[type="range"], label { touch-action: manipulat
   background:linear-gradient(180deg, rgba(255,255,255,.55), transparent 42%); opacity:.7; }
 .p-card:hover { border-color:var(--p-border-hover); box-shadow:var(--p-elev-2); transform:translateY(-2px); }
 .p-card-alert { border-left:2px solid var(--p-red); border-radius:0 12px 12px 0; }
-.p-learn-card { background:var(--p-learn-card); border:0.5px solid var(--p-learn-border); border-radius:12px; color:var(--p-learn-text); }
 
 .p-badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:20px; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; border:0.5px solid; min-height:auto; }
 .p-badge-gold    { background:var(--p-gold-dim);  color:var(--p-gold-text); border-color:var(--p-gold-border); }
 .p-badge-blue    { background:var(--p-blue-dim);  color:var(--p-blue);      border-color:var(--p-blue-border); }
-.p-badge-red     { background:var(--p-red-dim);   color:var(--p-red);       border-color:rgba(200,16,46,0.3); }
-.p-badge-green   { background:var(--p-green-dim); color:#16794A;            border-color:rgba(26,140,85,0.3); }
-.p-badge-neutral { background:var(--p-text-10);   color:var(--p-text-40); border-color:var(--p-border); }
+/* Les variantes -red, -green et -neutral ont été retirées le 2026-08-07 : zéro
+   usage dans tout le JSX. À noter pour la suite — le vrai problème n'est pas
+   qu'elles étaient mortes, c'est que des badges continuent d'être redessinés en
+   style inline ailleurs. Les recréer si un besoin réel apparaît. */
 
 /* Boutons : dégradé vertical léger (jamais plat) + halo coloré au survol, et un
    retour tactile à l'enfoncement (:active). Le halo est porté par box-shadow —
@@ -355,9 +350,6 @@ button, [role="button"], a, input[type="range"], label { touch-action: manipulat
 .p-btn-gold-solid:active { transform:translateY(0) scale(.985); }
 .p-btn-ghost { background:transparent; color:var(--p-text-60); border:0.5px solid var(--p-border-hover); padding:10px 20px; border-radius:8px; font-family:var(--font-body); font-size:13px; cursor:pointer; transition:color 0.15s, border-color 0.15s; }
 .p-btn-ghost:hover { color:var(--p-text); border-color:var(--p-text-40); }
-
-.p-tension-bar { height:4px; border-radius:2px; background:var(--p-text-10); overflow:hidden; }
-.p-tension-fill { height:100%; border-radius:2px; transition:width 0.4s ease; }
 
 .p-tricolor { height:2px; width:100%; display:flex; }
 .p-tricolor > div:nth-child(1) { flex:1; background:var(--p-tricolor-blue); }
@@ -402,8 +394,6 @@ button, [role="button"], a, input[type="range"], label { touch-action: manipulat
 
   /* Surfaces de marque */
   --p-grad-gold:   linear-gradient(135deg, #ffe08a 0%, #D4AF37 55%, #a97e22 100%);
-  --p-grad-night:  linear-gradient(160deg, #101a30 0%, #0B1120 55%, #080d18 100%);
-  --p-grad-paper:  linear-gradient(180deg, var(--p-bg) 0%, var(--p-bg-2) 100%);
 
   --p-glass-bg:    rgba(255,255,255,.62);
   --p-glass-brd:   rgba(255,255,255,.70);
@@ -513,14 +503,10 @@ button, [role="button"], a, input[type="range"], label { touch-action: manipulat
 }
 @keyframes p-trend-draw-in { from { --p-draw-o: 1; } to { --p-draw-o: 0; } }
 
-/* ── Tracé de courbe (SVG) : la ligne se dessine à l'entrée. On l'applique à un
-   <path> dont on a défini stroke-dasharray/offset = longueur. ── */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .p-draw { animation:p-draw-in linear both; animation-timeline:view(); animation-range:entry 10% cover 40%; }
-  }
-}
-@keyframes p-draw-in { from { stroke-dashoffset:var(--p-len, 1000); } to { stroke-dashoffset:0; } }
+/* `.p-draw` (+ ses keyframes et --p-len) a été retiré le 2026-08-07 : zéro usage.
+   C'était la première version du tracé de courbe, remplacée par `.p-trend-draw`
+   ci-dessus, qui anime une propriété personnalisée sur le <svg> au lieu du
+   <path> — la seule des deux qui marche de façon fiable. */
 
 /* ═══════════════════════════════════════════════════════════════════════════
    REGISTRE JEU — 2026-08-07
@@ -635,7 +621,6 @@ button, [role="button"], a, input[type="range"], label { touch-action: manipulat
    est neutralisé et le contenu reste pleinement visible. ── */
 @media (prefers-reduced-motion: reduce) {
   .p-reveal { animation:none !important; opacity:1 !important; transform:none !important; }
-  .p-draw   { animation:none !important; stroke-dashoffset:0 !important; }
   .p-trend-draw { animation:none !important; }
   .p-trend-line { stroke-dasharray:none !important; stroke-dashoffset:0 !important; }
   .p-gradient-gold { animation:none !important; }

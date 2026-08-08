@@ -6,7 +6,7 @@ import { Check } from 'lucide-react';
 // que la page Méthodologie) : dissolution effective, deadline PrédiCité déjà
 // utilisée ailleurs dans l'app (Liste.jsx/PremierMinistre.jsx), jour du
 // scrutin fixé par la loi. L'investiture n'a pas de date : elle dépend des
-// négociations de coalition post-scrutin (voir CoalitionRulesModule).
+// négociations de coalition post-scrutin (voir election/regles-coalition.js).
 const MILESTONES = [
   { id: 'dissolution', label: 'Dissolution de la Knesset', date: '2026-07-17', dateLabel: '17 juillet 2026' },
   { id: 'campagne', label: 'Campagne électorale', date: null, dateLabel: 'En cours' },

@@ -94,14 +94,14 @@ function MarketCard({ market, jetons, onPlaced, listeById, loggedIn }) {
             <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: 'var(--p-text-40)' }}>
               Ce que le marché a pensé
             </span>
-            <span className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>
+            <span className="text-[10px]" style={{ color: 'var(--p-text-40)' }}>
               {market.pool_total} jetons misés
             </span>
           </div>
           <CourbeCote issues={market.issues} />
         </div>
       ) : (
-        <p className="text-[11px] mt-3" style={{ color: 'var(--p-text-25)' }}>
+        <p className="text-[11px] mt-3" style={{ color: 'var(--p-text-40)' }}>
           Personne n’a encore misé sur ce marché : les probabilités sont celles des sondages, elles n’ont pas encore bougé.
         </p>
       )}
@@ -289,7 +289,7 @@ export default function Paris() {
       <CinematicHero
         registre="jeu"
         size="sm"
-        photos={['/images/knesset-soir.jpg']}
+        photos={['/images/knesset-soir.webp']}
         position="center 46%"
         badge={{ text: 'La campagne en direct', live: true }}
         kicker="Paris · cotes · événements · flux"

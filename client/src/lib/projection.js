@@ -31,6 +31,7 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/client';
 import { repartirSieges, MIN_SIEGES_AU_SEUIL, TOTAL_SIEGES } from '@/lib/knesset';
+import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 
 // Nombre de sondages moyennés. Cinq couvre environ une semaine de publications
 // en pleine campagne : assez pour lisser l'effet d'institut, assez court pour
@@ -81,7 +82,7 @@ export function useProjection(listes = [], { listesChargent = false } = {}) {
     }
 
     const projection = repartirSieges(listes.map(l => ({
-      id: l.id, slug: l.slug, name: l.name_fr, color: l.color || '#6B7280',
+      id: l.id, slug: l.slug, name: l.name_fr, color: l.color || COULEUR_PARTI_INCONNU,
       exact: (somme.get(l.id) || 0) / sondages.length,
     })));
 

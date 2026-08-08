@@ -86,7 +86,7 @@ export default function RectoVersoCard({
           <span aria-hidden="true" className="absolute top-0 right-0 pointer-events-none"
             style={{
               width: 44, height: 44,
-              background: 'linear-gradient(225deg, var(--p-gold-bright) 0%, #D4AF37 48%, transparent 49%)',
+              background: 'linear-gradient(225deg, var(--p-gold-bright) 0%, var(--p-gold) 48%, transparent 49%)',
               opacity: 0.9,
             }} />
 

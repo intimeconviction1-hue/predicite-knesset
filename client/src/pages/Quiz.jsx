@@ -124,7 +124,7 @@ export default function Quiz() {
       <CinematicHero
         registre="jeu"
         size="md"
-        photos={['/images/learn-hero.jpg']}
+        photos={['/images/learn-hero.webp']}
         position="center 30%"
         kicker="Apprendre en s'amusant"
         title={<>Le <span className="p-gradient-gold">quiz</span> de la campagne</>}

@@ -106,7 +106,7 @@ export default function Ligues() {
       <CinematicHero
         registre="jeu"
         size="sm"
-        photos={['/images/listes-hero.jpg']}
+        photos={['/images/listes-hero.webp']}
         position="center 30%"
         kicker="Jeu de points · entre amis"
         title={<>Tes <HeroGold>ligues</HeroGold> privées</>}

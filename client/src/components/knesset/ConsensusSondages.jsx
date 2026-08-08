@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Users, AlertTriangle, Check } from 'lucide-react';
 import { texteLisible } from '@/lib/couleurs';
+import { COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 
 // « Consensus des sondages » — honnêteté avant fausse précision. L'hémicycle
 // n'affiche qu'UN sondage (le plus récent) ; ici on regarde les derniers et on
@@ -58,7 +59,7 @@ export default function ConsensusSondages({ sondages = [], listes = [], max = 6 
               {recents.map((r, i) => (
                 <div key={i} className="inline-flex items-center gap-2 rounded-full px-3 py-1.5" style={{ background: 'var(--p-bg-2)', border: '0.5px solid var(--p-border)' }}>
                   <span className="text-[11px] font-semibold" style={{ color: 'var(--p-text-60)' }}>{r.media} · {fmt(r.date)}</span>
-                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: r.leader.color || '#6B7280' }} />
+                  <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: r.leader.color || COULEUR_PARTI_INCONNU }} />
                   <span className="text-[11px] font-bold" style={{ color: r.leader.color ? texteLisible(r.leader.color) : 'var(--p-text)' }}>{r.leader.name_fr}</span>
                 </div>
               ))}

@@ -152,7 +152,7 @@ export default function ReglesDuJeu() {
 
       <CinematicHero
         size="md"
-        photos={['/images/regles-hero.jpg']}
+        photos={['/images/regles-hero.webp']}
         position="center 30%"
         kicker="Comment ça marche"
         title="Les règles, en clair"
@@ -189,7 +189,7 @@ export default function ReglesDuJeu() {
               <b>Comment on gagne ?</b> Tu marques des points en jouant, puis — le soir du 27 octobre — selon la <b>justesse de tes prédictions</b>. Le total te classe : le meilleur pronostiqueur l'emporte.
             </p>
           </div>
-          <p className="text-center text-[11px] font-bold uppercase tracking-widest mt-8" style={{ color: 'var(--p-text-25)' }}>Le détail, pour aller plus loin ↓</p>
+          <p className="text-center text-[11px] font-bold uppercase tracking-widest mt-8" style={{ color: 'var(--p-text-40)' }}>Le détail, pour aller plus loin ↓</p>
         </section>
 
         <section id="boucle">
@@ -343,7 +343,7 @@ export default function ReglesDuJeu() {
               >
                 <Icon className="w-5 h-5 mb-2" style={{ color }} />
                 <div className="text-2xl font-black leading-none" style={{ fontFamily: "'JetBrains Mono',monospace", color }}>{max}</div>
-                <div className="text-[10px] mb-2" style={{ color: 'var(--p-text-25)' }}>{unit}</div>
+                <div className="text-[10px] mb-2" style={{ color: 'var(--p-text-40)' }}>{unit}</div>
                 <div className="font-bold text-sm mb-1" style={{ color: 'var(--p-text)' }}>{label}</div>
                 <div className="text-xs leading-relaxed" style={{ color: 'var(--p-text-40)' }}>{desc}</div>
               </motion.div>

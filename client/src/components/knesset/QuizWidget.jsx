@@ -87,7 +87,7 @@ export default function QuizWidget({ theme, title }) {
             {title || 'Quiz éclair'}
           </span>
         </div>
-        <span className="text-[10px] font-semibold" style={{ color: 'var(--p-text-25)' }}>+{niveau.pts} pts{user ? '' : ' si logué'}</span>
+        <span className="text-[10px] font-semibold" style={{ color: 'var(--p-text-40)' }}>+{niveau.pts} pts{user ? '' : ' si logué'}</span>
       </div>
 
       {/* Sélecteur de difficulté */}

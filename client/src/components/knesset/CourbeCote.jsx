@@ -53,7 +53,7 @@ export default function CourbeCote({ issues = [], hauteur = 96, className = '' }
 
         {/* Repère du 50 % — la ligne d'équilibre d'un marché */}
         <line x1={mL} x2={W - mR} y1={yAt(0.5)} y2={yAt(0.5)} stroke="var(--p-text-10)" strokeWidth="1" strokeDasharray="3 4" />
-        <text x={W - mR + 4} y={yAt(0.5) + 3} fontSize="8" fontFamily="'JetBrains Mono', monospace" fill="var(--p-text-25)">50 %</text>
+        <text x={W - mR + 4} y={yAt(0.5) + 3} fontSize="8" fontFamily="'JetBrains Mono', monospace" fill="var(--p-text-40)">50 %</text>
 
         {series.map((s) => {
           const n = s.points.length;

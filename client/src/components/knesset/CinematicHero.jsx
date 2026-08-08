@@ -14,7 +14,7 @@ import HeroBackdrop from '@/components/knesset/HeroBackdrop';
 // Utilisation :
 //   <CinematicHero
 //     size="lg"
-//     photos={['/images/knesset-parvis.jpg', ...]}
+//     photos={['/images/knesset-parvis.webp', ...]}
 //     position="center 26%"
 //     badge={{ text: `La campagne en direct · J-${d}`, live: true }}
 //     kicker="Élections à la Knesset · 25ᵉ législature"
@@ -67,7 +67,7 @@ const REGISTRES = {
   jeu: {
     voile: 'linear-gradient(180deg, rgba(26,17,2,0.74) 0%, rgba(74,50,8,0.42) 24%, rgba(104,72,14,0.24) 46%, rgba(120,86,16,0.32) 62%, rgba(237,241,249,0.55) 82%, FADE 95%)',
     scrim: 'radial-gradient(78% 54% at 50% 46%, rgba(20,12,0,0.62) 0%, rgba(20,12,0,0.34) 46%, transparent 72%)',
-    kicker: '#ffd77a',
+    kicker: 'var(--p-gold-bright)',
   },
 };
 

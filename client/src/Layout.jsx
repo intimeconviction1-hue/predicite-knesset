@@ -266,9 +266,12 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen relative" style={{ background: 'var(--p-bg)' }}>
-      {/* Fond décoratif fixe — halos de couleur animés (dérive lente) + grain
-          léger. Fixe au viewport (pas au document) pour rester présent
-          partout, même entre les cartes, quel que soit le défilement. */}
+      {/* Fond décoratif fixe — halos de couleur + grain léger. Fixe au viewport
+          (pas au document) pour rester présent partout, même entre les cartes,
+          quel que soit le défilement.
+          Les halos ne dérivent plus depuis le 2026-08-07 : le header collant
+          les relit à travers un backdrop-filter, qui ne peut rien mettre en
+          cache tant que son arrière-plan bouge. Voir globals.css. */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
         {/* Photo institutionnelle en toile de fond — visible surtout sur les
             côtés gauche/droit au-delà de la colonne de contenu centrée.
@@ -279,28 +282,28 @@ export default function Layout({ children, currentPageName }) {
             assez peu pour que le texte des cartes reste posé sur du calme. */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: "url('/images/knesset-parvis.jpg')",
+          backgroundImage: "url('/images/knesset-parvis.webp')",
           backgroundSize: 'cover',
           backgroundPosition: 'center 42%',
           opacity: 0.17,
           filter: 'grayscale(10%) contrast(1.06) saturate(1.08)',
         }} />
-        <div className="p-bg-blob-a" style={{
+        <div style={{
           position: 'absolute', top: '-14%', left: '-10%', width: '54vw', height: '54vw', maxWidth: 700, maxHeight: 700,
           borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.15, filter: 'blur(85px)',
         }} />
         {/* Halos bleus allégés (0.28 → 0.20, 0.24 → 0.17) : posés par-dessus la
             photo, ils la repeignaient en bleu uni dès qu'on remontait son
             opacité. Un halo doit colorer l'air, pas recouvrir le décor. */}
-        <div className="p-bg-blob-b" style={{
+        <div style={{
           position: 'absolute', top: '0%', right: '-14%', width: '48vw', height: '48vw', maxWidth: 640, maxHeight: 640,
           borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.20, filter: 'blur(85px)',
         }} />
-        <div className="p-bg-blob-c" style={{
+        <div style={{
           position: 'absolute', top: '40%', left: '6%', width: '44vw', height: '44vw', maxWidth: 580, maxHeight: 580,
           borderRadius: '9999px', background: 'var(--p-blue)', opacity: 0.17, filter: 'blur(85px)',
         }} />
-        <div className="p-bg-blob-d" style={{
+        <div style={{
           position: 'absolute', bottom: '-16%', right: '-8%', width: '52vw', height: '52vw', maxWidth: 680, maxHeight: 680,
           borderRadius: '9999px', background: 'var(--p-gold)', opacity: 0.14, filter: 'blur(85px)',
         }} />

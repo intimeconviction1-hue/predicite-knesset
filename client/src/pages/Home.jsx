@@ -24,7 +24,7 @@ import { texteLisible } from '@/lib/couleurs';
 import { useCampaignFlux } from '@/lib/useCampaignFlux';
 import CountUp from '@/components/knesset/CountUp';
 import { joursAvantScrutin } from '@/lib/echeances';
-import { BLOC_LABEL, verdictMajorite, campDe } from '@/lib/blocs';
+import { BLOC_LABEL, verdictMajorite, campDe, COULEUR_PARTI_INCONNU } from '@/lib/blocs';
 import { useProjection } from '@/lib/projection';
 
 /**
@@ -51,7 +51,7 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
   const sortant = liste.current_knesset_seats;
   const nouvelle = sortant == null;
   const delta = nouvelle ? null : seats - sortant;
-  const couleur = liste.color || '#6B7280';
+  const couleur = liste.color || COULEUR_PARTI_INCONNU;
   const reduit = useReducedMotion();
 
   // La barre part de la position ACTUELLE et se déplace vers la projection :
@@ -95,7 +95,7 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
           <span className="flex items-baseline gap-1.5 flex-shrink-0">
             {!nouvelle && (
               <>
-                <span className="text-[11px] font-mono font-semibold" style={{ color: 'var(--p-text-25)' }}>{sortant}</span>
+                <span className="text-[11px] font-mono font-semibold" style={{ color: 'var(--p-text-40)' }}>{sortant}</span>
                 <span aria-hidden="true" className="text-[10px]" style={{ color: 'var(--p-text-25)' }}>→</span>
               </>
             )}
@@ -105,11 +105,11 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
                 chiffre faux mais plausible est précisément ce que ce site
                 s'interdit. L'état au repos doit dire le vrai. */}
             <span className="text-[15px] font-bold font-mono"
-              style={{ color: belowThreshold ? 'var(--p-text-25)' : texteLisible(couleur) }}>
+              style={{ color: belowThreshold ? 'var(--p-text-40)' : texteLisible(couleur) }}>
               {seats}
             </span>
             <span className="text-[11px] font-bold font-mono w-11 text-right"
-              style={{ color: nouvelle ? 'var(--p-gold-text)' : delta > 0 ? 'var(--p-green-text)' : delta < 0 ? 'var(--p-red)' : 'var(--p-text-25)' }}>
+              style={{ color: nouvelle ? 'var(--p-gold-text)' : delta > 0 ? 'var(--p-green-text)' : delta < 0 ? 'var(--p-red)' : 'var(--p-text-40)' }}>
               {nouvelle ? 'nouv.' : delta === 0 ? '=' : `${delta > 0 ? '+' : ''}${delta}`}
             </span>
           </span>
@@ -162,6 +162,25 @@ function ListeSnapshotRow({ liste, seats, maxSeats, index }) {
 
 export default function Home() {
   const [user, setUser] = useState(null);
+
+  // Première visite — décide OÙ s'insère HomeIntro (voir plus bas).
+  //
+  // Le critère naturel serait « déconnecté », mais `user` vient d'un appel
+  // réseau : il vaut null pendant les premières frames pour TOUT LE MONDE, y
+  // compris un joueur connecté. Poser la condition dessus ferait apparaître le
+  // bloc en haut de page puis sauter huit sections plus bas dès que l'auth
+  // répond — un saut de contenu bien pire que le défaut qu'on corrige.
+  // localStorage répond avant la première peinture, donc aucun saut. Et c'est
+  // le critère le plus juste : ce qu'on veut savoir, ce n'est pas si la
+  // personne a un compte, c'est si elle a déjà vu cette page.
+  // En navigation privée stricte, l'accès jette : on retombe alors sur l'ordre
+  // par défaut, celui du visiteur qui revient — le comportement documenté.
+  const [premiereVisite] = useState(() => {
+    try { return !localStorage.getItem('predicite_deja_venu'); } catch { return false; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem('predicite_deja_venu', '1'); } catch { /* navigation privée */ }
+  }, []);
 
   useEffect(() => {
     base44.auth.me().then(async (u) => {
@@ -269,7 +288,7 @@ export default function Home() {
            vide. Sous le voile, il n'en restait rien. Elle cède la place à la vue
            frontale depuis le parvis (drapeaux, lignes qui convergent vers
            l'entrée) puis à la vue de trois quarts en lumière rasante. */
-        photos={['/images/knesset-parvis.jpg', '/images/knesset-soir.jpg', '/images/listes-hero.jpg', '/images/pm-hero.jpg']}
+        photos={['/images/knesset-parvis.webp', '/images/knesset-soir.webp', '/images/listes-hero.webp', '/images/pm-hero.webp']}
         position="center 48%"
         badge={{ text: `La campagne en direct · J-${daysLeft}`, live: true }}
         kicker="Élections à la Knesset · 26ᵉ législature · 27 octobre 2026"
@@ -301,9 +320,9 @@ export default function Home() {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
             className="mt-6 inline-flex items-center gap-3 px-4 py-2.5 rounded-xl"
             style={{ background: 'rgba(255,255,255,0.10)', border: '0.5px solid rgba(255,255,255,0.20)' }}>
-            <Trophy className="w-3.5 h-3.5" style={{ color: '#ffd77a' }} />
+            <Trophy className="w-3.5 h-3.5" style={{ color: 'var(--p-gold-bright)' }} />
             <span className="text-sm text-white">Bonjour {firstName} ·</span>
-            <span className="font-bold text-sm font-mono" style={{ color: '#ffd77a' }}>
+            <span className="font-bold text-sm font-mono" style={{ color: 'var(--p-gold-bright)' }}>
               {computeScore(progress).toLocaleString('fr-FR')} pts
             </span>
           </motion.div>
@@ -316,6 +335,14 @@ export default function Home() {
 
       {/* Flux « en direct » de la campagne — défile juste sous le héros */}
       <LiveTicker items={tickerItems} />
+
+      {/* Orientation, PREMIÈRE VISITE seulement. Quelqu'un qui arrive d'un lien
+          partagé et ne sait pas ce qu'est la Knesset trouvait « comprendre en
+          30 secondes » sous huit modules de données. Il l'a maintenant tout de
+          suite. Le visiteur qui revient, lui, garde l'ordre d'origine — la
+          donnée d'abord — parce que ce choix reste le bon pour qui sait déjà où
+          il est. Le bloc n'est rendu qu'à UN seul endroit, jamais aux deux. */}
+      {premiereVisite && <HomeIntro />}
 
       {/* Bloc hémicycle — sur fond clair, juste sous le hero. La Home empilait
           16 blocs (un sommaire déroulé, pas une composition) : l'hémicycle est
@@ -349,14 +376,14 @@ export default function Home() {
             </div>
             <div className="text-center pb-0.5">
               {projectionCharge ? (
-                <p className="text-[10px] font-bold uppercase tracking-wide animate-pulse" style={{ color: 'var(--p-text-25)' }}>Chargement…</p>
+                <p className="text-[10px] font-bold uppercase tracking-wide animate-pulse" style={{ color: 'var(--p-text-40)' }}>Chargement…</p>
               ) : arabSeats > 0 && (
                 <>
                   <p className="text-[10px] font-bold uppercase tracking-wide" style={{ color: 'var(--p-green-text)' }}>{BLOC_LABEL.partis_arabes}</p>
                   <p className="text-2xl font-black font-mono leading-none mt-1" style={{ color: 'var(--p-green-text)' }}><CountUp value={arabSeats} delay={400} /></p>
                 </>
               )}
-              <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'var(--p-text-25)' }}>
+              <p className="text-[10px] uppercase tracking-wide mt-1.5" style={{ color: 'var(--p-text-40)' }}>
                 120 sièges · <span className="font-semibold" style={{ color: 'var(--p-gold-text)' }}>majorité 61</span>
               </p>
             </div>
@@ -375,7 +402,7 @@ export default function Home() {
             <div className="flex flex-wrap justify-center gap-x-3 gap-y-1.5 mt-2 mb-2 px-2">
               {rankedListes.filter(l => l._seats > 0).map(l => (
                 <span key={l.id} className="inline-flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--p-text-60)' }}>
-                  <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: l.color || '#6B7280' }} />
+                  <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: l.color || COULEUR_PARTI_INCONNU }} />
                   {l.name_fr} <span className="font-mono font-bold" style={{ color: 'var(--p-text)' }}>{l._seats}</span>
                 </span>
               ))}
@@ -401,7 +428,7 @@ export default function Home() {
           {/* La provenance annonce la moyenne, pas un institut : afficher
               « Projection Channel 13 » sous un hémicycle moyenné attribuerait à
               un institut des chiffres qu'il n'a pas publiés. */}
-          <p className="text-center text-[11px] mt-1 px-4" style={{ color: 'var(--p-text-25)' }}>
+          <p className="text-center text-[11px] mt-1 px-4" style={{ color: 'var(--p-text-40)' }}>
             {provenance || (projectionCharge ? '' : 'En attente du premier sondage sièges')}
           </p>
           {/* Le moment exact où l'envie naît : on vient de lire l'assemblée
@@ -488,8 +515,9 @@ export default function Home() {
 
       {/* Orientation : « comprendre en 30 secondes ». Arrive une fois la
           démonstration faite — la donnée, puis le jeu, puis seulement
-          l'explication de ce qu'est cette plateforme. */}
-      <HomeIntro />
+          l'explication de ce qu'est cette plateforme. Ordre conservé pour qui
+          revient ; à la première visite, le bloc est monté sous le hero. */}
+      {!premiereVisite && <HomeIntro />}
 
       {/* Ce qui change — le bloc s'appelait « Dernière projection sièges » et
           réaffichait, une hauteur d'écran plus bas, exactement le tableau que la
@@ -539,7 +567,7 @@ export default function Home() {
               <ListeSnapshotRow key={l.id} liste={l} seats={l._seats} maxSeats={maxSeats} index={i} />
             ))}
             {provenance && (
-              <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'var(--p-text-25)', borderColor: 'var(--p-border)' }}>
+              <p className="text-[10px] mt-3 pt-3 border-t" style={{ color: 'var(--p-text-40)', borderColor: 'var(--p-border)' }}>
                 Sortants : 25ᵉ Knesset. {provenance}
               </p>
             )}

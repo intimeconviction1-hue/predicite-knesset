@@ -449,3 +449,26 @@ CREATE TABLE IF NOT EXISTS audience_vues (
 );
 
 CREATE INDEX IF NOT EXISTS idx_audience_jour ON audience_vues(jour);
+
+-- ── Liens de connexion (magic link) ─────────────────────────────────────────
+-- Le jeton n'est JAMAIS stocké en clair : seule son empreinte SHA-256 vit ici,
+-- comme un mot de passe. Un jeton en clair dans cette table serait une session
+-- ouverte pour quiconque la lit — sauvegarde, journal de requêtes, capture
+-- d'écran d'un client SQL. Ce qui circule par e-mail est le seul exemplaire.
+--
+-- `return_to` est fixé À LA DEMANDE, pas au retour, et validé à ce moment-là.
+-- L'URL sur laquelle on clique ne porte donc que le jeton : elle ne peut pas
+-- être bricolée pour renvoyer ailleurs, et le lien reste court, ce qui compte
+-- pour un message qu'un client mail va découper.
+CREATE TABLE IF NOT EXISTS liens_connexion (
+  token_hash TEXT PRIMARY KEY,
+  email      TEXT NOT NULL,
+  full_name  TEXT,
+  return_to  TEXT NOT NULL DEFAULT '/',
+  expire_le  TEXT NOT NULL,
+  utilise_le TEXT,
+  cree_le    TEXT NOT NULL DEFAULT (now_iso())
+);
+
+-- Sert au limiteur de débit, qui compte les demandes récentes par adresse.
+CREATE INDEX IF NOT EXISTS idx_liens_email ON liens_connexion(email, cree_le);

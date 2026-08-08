@@ -59,8 +59,16 @@ export const base44 = {
 
   auth: {
     me: () => request('GET', '/api/auth/me'),
-    // admin_key n'est envoyée que par le formulaire de connexion admin ; elle
-    // n'est jamais stockée côté client, seulement transmise à la connexion.
+
+    // La connexion des joueurs : on demande un lien, et c'est le clic dans
+    // l'e-mail qui ouvre la session (le serveur redirige, voir routes/auth.js).
+    // Rien ne revient ici qui vaille session — d'où l'absence de retour utile.
+    demanderLien: (email, full_name, return_to) =>
+      request('POST', '/api/auth/demander-lien', { email, full_name, return_to }),
+
+    // Réservée aux administrateurs depuis le 2026-08-07 : elle répond 403 avec
+    // le code `lien_requis` pour toute autre adresse. admin_key n'est jamais
+    // stockée côté client, seulement transmise à la connexion.
     login: (email, full_name, admin_key) =>
       request('POST', '/api/auth/login', { email, full_name, admin_key }),
     logout: () => request('POST', '/api/auth/logout'),

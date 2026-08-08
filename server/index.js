@@ -9,6 +9,7 @@ import { creerInjecteurMeta, metaListe, pagePour } from './lib/meta-html.js';
 import { robotsTxt, sitemapXml } from './lib/sitemap.js';
 import { metaPour } from '../client/src/lib/titres.js';
 import { startPollTracker } from './functions/pollTracker.js';
+import { verifierEnvoi } from './lib/courriel.js';
 import authRouter from './routes/auth.js';
 import entitiesRouter from './routes/entities.js';
 import functionsRouter from './routes/functions.js';
@@ -149,6 +150,12 @@ initDb()
       console.log(`PrédiCité (Knesset) — serveur sur http://localhost:${PORT}`);
       // Traque les sondages en continu (LLM + web_search), throttlé.
       startPollTracker();
+      // Le SMTP est vérifié au démarrage : depuis que la connexion des joueurs
+      // passe par un lien envoyé par e-mail, un mot de passe d'application
+      // expiré ou un port bloqué empêche toute inscription — et cela ne se voit
+      // nulle part sur le site. Autant l'apprendre dans les journaux de
+      // déploiement plutôt que par quelqu'un qui n'arrive pas à entrer.
+      verifierEnvoi();
     });
   })
   .catch(e => {

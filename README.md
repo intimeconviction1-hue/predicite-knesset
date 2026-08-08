@@ -102,8 +102,14 @@ Postgres : la donnée vit hors du serveur web, qui peut donc rester stateless.
 
 ## Points d'attention avant d'aller plus loin
 
-- **Auth minimale** (email seul) — à durcir avant toute ouverture au-delà d'un
-  usage personnel/petit cercle.
+- **Connexion par lien e-mail** depuis le 2026-08-07. Les joueurs reçoivent un
+  lien valable 20 minutes, à usage unique ; il n'y a plus de mot de passe, et
+  taper l'adresse de quelqu'un d'autre n'ouvre plus sa session. **Cela rend
+  `SMTP_HOST`/`SMTP_USER`/`SMTP_PASS`/`MAIL_FROM` obligatoires en production** :
+  sans elles, personne ne peut créer de compte. Le serveur teste le SMTP au
+  démarrage et l'écrit dans les journaux. Les admins, eux, entrent toujours par
+  `ADMIN_KEY` — volontairement indépendant de l'e-mail, pour ne pas dépendre d'un
+  envoi le soir du scrutin. Voir `server/.env.example`.
 - **`resultatsKnessetCollector` ne fait pas de vrai parsing** — le site
   officiel de la 26e Knesset n'était pas structuré au moment de l'écriture.
   Voir `server/functions/resultatsKnessetCollector.js`.
